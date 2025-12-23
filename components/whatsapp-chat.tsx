@@ -3079,6 +3079,11 @@ export function WhatsAppChat() {
     }))
   }
 
+  const handleStartChat = () => {
+    setCurrentSlide(null)
+    setShowChat(true)
+  }
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4 gap-16">
       {/* Slide Content */}
@@ -3099,12 +3104,14 @@ export function WhatsAppChat() {
               </p>
             </div>
 
-            <button
-              onClick={() => setCurrentSlide(1)}
-              className="px-12 py-4 bg-gray-900 text-white text-sm font-medium tracking-wide uppercase rounded-sm hover:bg-cyan-600 transition-colors cursor-pointer"
-            >
-              Start
-            </button>
+            <div className="pl-8">
+              <button
+                onClick={() => setCurrentSlide(1)}
+                className="px-12 py-4 bg-gray-900 text-white text-sm font-medium tracking-wide uppercase rounded-sm hover:bg-cyan-600 transition-colors cursor-pointer"
+              >
+                Start
+              </button>
+            </div>
           </div>
         )}
 
@@ -3118,47 +3125,52 @@ export function WhatsAppChat() {
               </h1>
             </div>
             
-            <div className="space-y-8 mb-16">
+            <div className="pl-8 space-y-8 mb-16">
               <p className="text-xl font-light text-gray-800 leading-relaxed">
                 To explore and validate directional UX concepts that inform <span className="font-bold">durable guidelines</span> for <span className="font-bold">clarity</span>, <span className="font-bold">consistency</span>, and <span className="font-bold">scalability</span> across the Félix experience.
               </p>
 
-              <div className="border-l-2 border-gray-300 pl-6">
-                <p className="text-base font-medium text-gray-900 mb-4">
-                  This work is intentionally exploratory, not prescriptive. It is designed to:
-                </p>
+              <div className="relative">
+                <div className="absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-300"></div>
+                <div>
+                  <p className="text-base font-medium text-gray-900 mb-4">
+                    This work is intentionally exploratory, not prescriptive. It is designed to:
+                  </p>
 
-                <ul className="space-y-3 text-base text-gray-700">
-                  <li className="flex">
-                    <span className="text-cyan-600 mr-4">—</span>
-                    <span>Test UX hypotheses against real product problems</span>
-                  </li>
-                  <li className="flex">
-                    <span className="text-cyan-600 mr-4">—</span>
-                    <span>Align design exploration with roadmap priorities</span>
-                  </li>
-                  <li className="flex">
-                    <span className="text-cyan-600 mr-4">—</span>
-                    <span>Identify patterns that can inform system-level UX guidelines</span>
-                  </li>
-                  <li className="flex">
-                    <span className="text-cyan-600 mr-4">—</span>
-                    <span>Surface UX principles that can guide a long-term north star</span>
-                  </li>
-                  <li className="flex">
-                    <span className="text-cyan-600 mr-4">—</span>
-                    <span>Enable productive discussion and iteration before committing to solutions</span>
-                  </li>
-                </ul>
+                  <ul className="space-y-3 text-base text-gray-700">
+                    <li className="flex">
+                      <span className="text-cyan-600 mr-4">—</span>
+                      <span>Test UX hypotheses against real product problems</span>
+                    </li>
+                    <li className="flex">
+                      <span className="text-cyan-600 mr-4">—</span>
+                      <span>Align design exploration with roadmap priorities</span>
+                    </li>
+                    <li className="flex">
+                      <span className="text-cyan-600 mr-4">—</span>
+                      <span>Identify patterns that can inform system-level UX guidelines</span>
+                    </li>
+                    <li className="flex">
+                      <span className="text-cyan-600 mr-4">—</span>
+                      <span>Surface UX principles that can guide a long-term north star</span>
+                    </li>
+                    <li className="flex">
+                      <span className="text-cyan-600 mr-4">—</span>
+                      <span>Enable productive discussion and iteration before committing to solutions</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <button
-              onClick={() => setCurrentSlide(2)}
-              className="px-12 py-4 bg-gray-900 text-white text-sm font-medium tracking-wide uppercase rounded-sm hover:bg-cyan-600 transition-colors cursor-pointer"
-            >
-              Next
-            </button>
+            <div className="pl-8">
+              <button
+                onClick={() => setCurrentSlide(2)}
+                className="px-12 py-4 bg-gray-900 text-white text-sm font-medium tracking-wide uppercase rounded-sm hover:bg-cyan-600 transition-colors cursor-pointer"
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
 
@@ -3172,7 +3184,7 @@ export function WhatsAppChat() {
               </h1>
             </div>
             
-            <div className="space-y-8 mb-16">
+            <div className="pl-8 space-y-8 mb-16">
               <p className="text-xl font-light text-gray-800 leading-relaxed">
                 UX guidelines turn exploration into scale.
               </p>
@@ -3181,45 +3193,53 @@ export function WhatsAppChat() {
                 They codify proven patterns, reduce rework, and allow teams to ship faster—without sacrificing quality or consistency.
               </p>
 
-              <div className="border-l-2 border-gray-300 pl-6">
-                <p className="text-base font-medium text-gray-900 mb-4">
-                  This prototype is an input to the UX guidelines, not an output. It helps us:
-                </p>
+              <div className="relative">
+                <div className="absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-300"></div>
+                <div>
+                  <p className="text-base font-medium text-gray-900 mb-4">
+                    This prototype is an input to the UX guidelines, not an output. It helps us:
+                  </p>
 
-                <ul className="space-y-3 text-base text-gray-700">
-                  <li className="flex">
-                    <span className="text-cyan-600 mr-4">—</span>
-                    <span>Validate which patterns actually improve clarity and speed</span>
-                  </li>
-                  <li className="flex">
-                    <span className="text-cyan-600 mr-4">—</span>
-                    <span>Identify where structure is required vs. where flexibility is allowed</span>
-                  </li>
-                  <li className="flex">
-                    <span className="text-cyan-600 mr-4">—</span>
-                    <span>Extract reusable interaction, copy, and flow rules</span>
-                  </li>
-                  <li className="flex">
-                    <span className="text-cyan-600 mr-4">—</span>
-                    <span>Pressure-test principles against real constraints (WhatsApp, compliance, edge cases)</span>
-                  </li>
-                </ul>
+                  <ul className="space-y-3 text-base text-gray-700">
+                    <li className="flex">
+                      <span className="text-cyan-600 mr-4">—</span>
+                      <span>Validate which patterns actually improve clarity and speed</span>
+                    </li>
+                    <li className="flex">
+                      <span className="text-cyan-600 mr-4">—</span>
+                      <span>Identify where structure is required vs. where flexibility is allowed</span>
+                    </li>
+                    <li className="flex">
+                      <span className="text-cyan-600 mr-4">—</span>
+                      <span>Extract reusable interaction, copy, and flow rules</span>
+                    </li>
+                    <li className="flex">
+                      <span className="text-cyan-600 mr-4">—</span>
+                      <span>Pressure-test principles against real constraints (WhatsApp, compliance, edge cases)</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
 
-              <div className="border-l-2 border-cyan-500 pl-6 py-4 bg-gray-50">
-                <p className="text-base font-medium text-gray-900 leading-relaxed">
-                  The goal is not this exact UI.<br />
-                  The goal is durable guidance teams can apply repeatedly across the product.
-                </p>
+              <div className="relative">
+                <div className="absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500"></div>
+                <div className="py-4 bg-gray-50">
+                  <p className="text-base font-medium text-gray-900 leading-relaxed">
+                    The goal is not this exact UI.<br />
+                    The goal is durable guidance teams can apply repeatedly across the product.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <button
-              onClick={() => setCurrentSlide(3)}
-              className="px-12 py-4 bg-gray-900 text-white text-sm font-medium tracking-wide uppercase rounded-sm hover:bg-cyan-600 transition-colors cursor-pointer"
-            >
-              Next
-            </button>
+            <div className="pl-8">
+              <button
+                onClick={() => setCurrentSlide(3)}
+                className="px-12 py-4 bg-gray-900 text-white text-sm font-medium tracking-wide uppercase rounded-sm hover:bg-cyan-600 transition-colors cursor-pointer"
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
 
@@ -3233,138 +3253,159 @@ export function WhatsAppChat() {
               </h1>
             </div>
             
-            <div className="space-y-10">
-              <div className={
-                prototypeComplete
-                  ? "transition-opacity duration-500 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "bankCard"
-                  ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "sendMoney" 
-                    ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6" 
-                    : userHasSentMessage 
-                      ? "transition-opacity duration-500 border-l-2 border-cyan-500 pl-6" 
-                      : "transition-opacity duration-500 opacity-100 border-l-2 border-gray-200 pl-6"
-              }>
-                <h2 className="text-xl font-medium text-gray-900 mb-1">
-                  Conversational Transactions, Not Transactional Experiences
-                </h2>
-                <p className="text-base font-light text-gray-600">
-                  Warm, human, and respectful conversational UX, not a mechanical one.
-                </p>
+            <div className="pl-8 space-y-10">
+              <div className="relative">
+                <div className={
+                  prototypeComplete
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                    : currentFlow === "bankCard"
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500"
+                    : currentFlow === "sendMoney" 
+                      ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500" 
+                      : userHasSentMessage 
+                        ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500 transition-colors duration-500" 
+                        : "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                }></div>
+                <div>
+                  <h2 className="text-xl font-medium text-gray-900 mb-1">
+                    Conversational Transactions, Not Transactional Experiences
+                  </h2>
+                  <p className="text-base font-light text-gray-600">
+                    Warm, human, and respectful conversational UX, not a mechanical one.
+                  </p>
+                </div>
               </div>
 
-              <div className={
-                prototypeComplete
-                  ? "transition-opacity duration-500 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "bankCard"
-                  ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "sendMoney" 
-                    ? "transition-opacity duration-500 border-l-2 border-cyan-500 pl-6" 
-                    : userHasSentMessage 
-                      ? "transition-opacity duration-500 border-l-2 border-cyan-500 pl-6" 
-                      : "transition-opacity duration-500 opacity-100 border-l-2 border-gray-200 pl-6"
-              }>
-                <h2 className="text-xl font-medium text-gray-900 mb-1">
-                  Guide Initial Transfers. Accelerate the Next Ones.
-                </h2>
-                <p className="text-base font-light text-gray-600">
-                  Learning first for new users, speed for returning ones.
-                </p>
+              <div className="relative">
+                <div className={
+                  prototypeComplete
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                    : currentFlow === "bankCard"
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500"
+                    : currentFlow === "sendMoney" 
+                      ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500 transition-colors duration-500" 
+                      : userHasSentMessage 
+                        ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500 transition-colors duration-500" 
+                        : "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                }></div>
+                <div>
+                  <h2 className="text-xl font-medium text-gray-900 mb-1">
+                    Guide Initial Transfers. Accelerate the Next Ones.
+                  </h2>
+                  <p className="text-base font-light text-gray-600">
+                    Learning first for new users, speed for returning ones.
+                  </p>
+                </div>
               </div>
 
-              <div className={
-                prototypeComplete
-                  ? "transition-opacity duration-500 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "bankCard"
-                  ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "sendMoney" 
-                    ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6" 
-                    : userHasSentMessage 
-                      ? "transition-opacity duration-500 border-l-2 border-gray-200 pl-6" 
-                      : "transition-opacity duration-500 opacity-100 border-l-2 border-gray-200 pl-6"
-              }>
-                <h2 className="text-xl font-medium text-gray-900 mb-1">
-                  Reveal What's Possible, When It's Useful
-                </h2>
-                <p className="text-base font-light text-gray-600">
-                  Surface capabilities in context—teaching through use, not promotion.
-                </p>
+              <div className="relative">
+                <div className={
+                  prototypeComplete
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                    : currentFlow === "bankCard"
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500"
+                    : currentFlow === "sendMoney" 
+                      ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500" 
+                      : userHasSentMessage 
+                        ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500" 
+                        : "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                }></div>
+                <div>
+                  <h2 className="text-xl font-medium text-gray-900 mb-1">
+                    Reveal What's Possible, When It's Useful
+                  </h2>
+                  <p className="text-base font-light text-gray-600">
+                    Surface capabilities in context—teaching through use, not promotion.
+                  </p>
+                </div>
               </div>
 
-              <div className={
-                prototypeComplete
-                  ? "transition-opacity duration-500 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "bankCard"
-                  ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "sendMoney" 
-                    ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6" 
-                    : userHasSentMessage 
-                      ? "transition-opacity duration-500 border-l-2 border-cyan-500 pl-6" 
-                      : "transition-opacity duration-500 opacity-100 border-l-2 border-gray-200 pl-6"
-              }>
-                <h2 className="text-xl font-medium text-gray-900 mb-1">
-                  Taps First. Type When You Want.
-                </h2>
-                <p className="text-base font-light text-gray-600">
-                  Structured for speed and accuracy, open to natural language.
-                </p>
+              <div className="relative">
+                <div className={
+                  prototypeComplete
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                    : currentFlow === "bankCard"
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500"
+                    : currentFlow === "sendMoney" 
+                      ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500" 
+                      : userHasSentMessage 
+                        ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500 transition-colors duration-500" 
+                        : "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                }></div>
+                <div>
+                  <h2 className="text-xl font-medium text-gray-900 mb-1">
+                    Taps First. Type When You Want.
+                  </h2>
+                  <p className="text-base font-light text-gray-600">
+                    Structured for speed and accuracy, open to natural language.
+                  </p>
+                </div>
               </div>
 
-              <div className={
-                prototypeComplete
-                  ? "transition-opacity duration-500 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "bankCard"
-                  ? "transition-opacity duration-500 border-l-2 border-cyan-500 pl-6"
-                  : currentFlow === "sendMoney" 
-                    ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6" 
-                    : userHasSentMessage 
-                      ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6" 
-                      : "transition-opacity duration-500 opacity-100 border-l-2 border-gray-200 pl-6"
-              }>
-                <h2 className="text-xl font-medium text-gray-900 mb-1">
-                  Always Help Move the User Forward
-                </h2>
-                <p className="text-base font-light text-gray-600">
-                  No dead ends. Every interaction should offer a clear next step.
-                </p>
+              <div className="relative">
+                <div className={
+                  prototypeComplete
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                    : currentFlow === "bankCard"
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500 transition-colors duration-500"
+                    : currentFlow === "sendMoney" 
+                      ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500" 
+                      : userHasSentMessage 
+                        ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500" 
+                        : "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                }></div>
+                <div>
+                  <h2 className="text-xl font-medium text-gray-900 mb-1">
+                    Always Help Move the User Forward
+                  </h2>
+                  <p className="text-base font-light text-gray-600">
+                    No dead ends. Every interaction should offer a clear next step.
+                  </p>
+                </div>
               </div>
 
-              <div className={
-                prototypeComplete
-                  ? "transition-opacity duration-500 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "bankCard"
-                  ? "transition-opacity duration-500 border-l-2 border-cyan-500 pl-6"
-                  : currentFlow === "sendMoney" 
-                    ? "transition-opacity duration-500 border-l-2 border-cyan-500 pl-6" 
-                    : userHasSentMessage 
-                      ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6" 
-                      : "transition-opacity duration-500 opacity-100 border-l-2 border-gray-200 pl-6"
-              }>
-                <h2 className="text-xl font-medium text-gray-900 mb-1">
-                  Catch Errors Before They Happen
-                </h2>
-                <p className="text-base font-light text-gray-600">
-                  Validate early. Confirm only when it matters most.
-                </p>
+              <div className="relative">
+                <div className={
+                  prototypeComplete
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                    : currentFlow === "bankCard"
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500 transition-colors duration-500"
+                    : currentFlow === "sendMoney" 
+                      ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500 transition-colors duration-500" 
+                      : userHasSentMessage 
+                        ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500" 
+                        : "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                }></div>
+                <div>
+                  <h2 className="text-xl font-medium text-gray-900 mb-1">
+                    Catch Errors Before They Happen
+                  </h2>
+                  <p className="text-base font-light text-gray-600">
+                    Validate early. Confirm only when it matters most.
+                  </p>
+                </div>
               </div>
 
-              <div className={
-                prototypeComplete
-                  ? "transition-opacity duration-500 border-l-2 border-gray-200 pl-6"
-                  : currentFlow === "bankCard"
-                  ? "transition-opacity duration-500 border-l-2 border-cyan-500 pl-6"
-                  : currentFlow === "sendMoney" 
-                    ? "transition-opacity duration-500 border-l-2 border-cyan-500 pl-6" 
-                    : userHasSentMessage 
-                      ? "transition-opacity duration-500 opacity-30 border-l-2 border-gray-200 pl-6" 
-                      : "transition-opacity duration-500 opacity-100 border-l-2 border-gray-200 pl-6"
-              }>
-                <h2 className="text-xl font-medium text-gray-900 mb-1">
-                  Structured Without Showing the Structure
-                </h2>
-                <p className="text-base font-light text-gray-600">
-                  Capture clean, reliable inputs without breaking conversational flow.
-                </p>
+              <div className="relative">
+                <div className={
+                  prototypeComplete
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                    : currentFlow === "bankCard"
+                    ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500 transition-colors duration-500"
+                    : currentFlow === "sendMoney" 
+                      ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-cyan-500 transition-colors duration-500" 
+                      : userHasSentMessage 
+                        ? "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 opacity-30 transition-opacity duration-500" 
+                        : "absolute -left-8 top-0 bottom-0 w-0.5 bg-gray-200 transition-colors duration-500"
+                }></div>
+                <div>
+                  <h2 className="text-xl font-medium text-gray-900 mb-1">
+                    Structured Without Showing the Structure
+                  </h2>
+                  <p className="text-base font-light text-gray-600">
+                    Capture clean, reliable inputs without breaking conversational flow.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

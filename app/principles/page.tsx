@@ -31,11 +31,11 @@ export default function PrinciplesPage() {
             {/* Principle 2 */}
             <div className="space-y-4">
               <h2 className="text-2xl text-gray-900 font-medium">
-                Simple for Beginners. Accelerate with Familiarity.
+                Guide Beginners. Accelerate Regulars.
               </h2>
               <div className="border-l-2 border-gray-300 pl-4 py-2">
                 <p className="text-base text-gray-900 leading-relaxed">
-                  Guide first-time users with explanation and reassurance. As familiarity grows, remove steps and friction, never control or understanding.
+                  Guide new users with explanation to build trust. As they grow familiar, get them there faster, never removing control or understanding.
                 </p>
               </div>
               <div className="bg-gray-50 border-l-2 border-cyan-500 pl-4 py-3">

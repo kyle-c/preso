@@ -15,11 +15,11 @@ export default function GuidelinesPage() {
           <div className="pl-8 space-y-8 mb-16">
             <div className="space-y-6">
               <p className="text-xl text-gray-900 leading-relaxed">
-                Remittances aren't transactions—they're <span className="font-bold">acts of presence</span>. When someone sends money through Félix, they're <span className="font-bold">showing up for family</span> back home. When they build credit here, they're ensuring <span className="font-bold">future presence</span>—the ability to <span className="font-bold">stay available</span> for the people they love.
+                Remittances aren't transactions, they're <span className="font-bold">acts of presence</span>. When someone sends money through Félix, they're <span className="font-bold">showing up for family</span> back home. When they build credit here, they're ensuring <span className="font-bold">future presence</span>, the ability to <span className="font-bold">stay available</span> for the people they love.
               </p>
 
               <p className="text-base text-gray-900 leading-relaxed">
-                But presence isn't just about today—it's about building the <span className="font-bold">capability to show up tomorrow</span>.
+                But presence isn't just about today, it's about building the <span className="font-bold">capability to show up tomorrow</span>.
               </p>
 
               <p className="text-base text-gray-900 leading-relaxed">
@@ -27,7 +27,7 @@ export default function GuidelinesPage() {
               </p>
 
               <p className="text-base text-gray-900 leading-relaxed">
-                Félix <span className="font-bold">grows with users</span>—from their first send home to comprehensive financial management across borders. We <span className="font-bold">meet people where they are</span>, then <span className="font-bold">gradually reveal new possibilities</span> as they're ready. <span className="font-bold">Future presence</span> requires <span className="font-bold">capability across your entire financial life</span>, and we're here for that <span className="font-bold">full journey</span>.
+                Félix <span className="font-bold">grows with users</span>, from their first send home to comprehensive financial management across borders. We <span className="font-bold">meet people where they are</span>, then <span className="font-bold">gradually reveal new possibilities</span> as they're ready. <span className="font-bold">Future presence</span> requires <span className="font-bold">capability across your entire financial life</span>, and we're here for that <span className="font-bold">full journey</span>.
               </p>
 
               <div>

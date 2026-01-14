@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export default function PrinciplesPage() {
   return (
     <div className="min-h-screen bg-white p-8">
@@ -35,7 +37,7 @@ export default function PrinciplesPage() {
               </h2>
               <div className="border-l-2 border-gray-300 pl-4 py-2">
                 <p className="text-base text-gray-900 leading-relaxed">
-                  Guide new users with explanation to build trust. As they grow familiar, get them there faster, never removing control or understanding.
+                  Guide new users with simple explanation to build trust. As they grow familiar, get them there faster, never removing control or understanding.
                 </p>
               </div>
               <div className="bg-gray-50 border-l-2 border-cyan-500 pl-4 py-3">
@@ -95,6 +97,15 @@ export default function PrinciplesPage() {
                 </p>
               </div>
             </div>
+          </div>
+
+          <div className="pl-8 mt-12">
+            <Link
+              href="/guidelines"
+              className="inline-block text-base text-gray-900 hover:text-cyan-600 transition-colors"
+            >
+              ← Back to Guidelines
+            </Link>
           </div>
         </div>
       </div>

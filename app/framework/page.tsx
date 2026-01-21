@@ -112,7 +112,7 @@ export default function FrameworkPage() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="sticky top-0 z-40 border-b bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="border-l-4 border-cyan-500 pl-4">
               <p className="text-xs font-bold text-cyan-600 uppercase mb-1">Designing for Presence</p>
@@ -130,7 +130,7 @@ export default function FrameworkPage() {
         </div>
       </header>
 
-      <div className="flex max-w-7xl mx-auto">
+      <div className="flex">
         {/* Sidebar Navigation */}
         <aside className="hidden lg:block w-64 flex-shrink-0 border-r bg-gray-50 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto">
           <nav className="p-6 space-y-1">
@@ -157,7 +157,7 @@ export default function FrameworkPage() {
 
         {/* Main Content */}
         <main className="flex-1 min-w-0">
-          <div className="max-w-3xl mx-auto px-6 py-16">
+          <div className="max-w-3xl mx-auto px-6 py-16 lg:px-12">
             {/* Introduction */}
             <div className="mb-20">
               <h1 className="text-4xl md:text-5xl text-gray-900 font-medium mb-6 leading-tight tracking-tight">

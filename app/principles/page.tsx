@@ -50,16 +50,16 @@ export default function PrinciplesPage() {
             {/* Principle 3 */}
             <div className="space-y-4">
               <h2 className="text-2xl text-gray-900 font-medium">
-                Never Leave Users Guessing
+                Never Leave Users Guessing. Always Give Next Steps.
               </h2>
               <div className="border-l-2 border-gray-300 pl-4 py-2">
                 <p className="text-base text-gray-900 leading-relaxed">
-                  Acknowledge what just happened, show what comes next, and set time expectations. If something's processing, loading, or waiting, say so, and say how long.
+                  Acknowledge what just happened, show what comes next, and set time expectations. Every interaction should offer a clear path forward—no dead ends, no waiting without knowing why or how long.
                 </p>
               </div>
               <div className="bg-gray-50 border-l-2 border-cyan-500 pl-4 py-3">
                 <p className="text-base text-gray-900 leading-relaxed">
-                  <span className="font-bold">Presence lens:</span> When money is in motion, users are emotionally invested in their act of presence reaching its destination. Ambiguity creates anxiety, clarity creates confidence.
+                  <span className="font-bold">Presence lens:</span> When money is in motion, users are emotionally invested in their act of presence reaching its destination. Ambiguity creates anxiety, clarity and forward movement create confidence.
                 </p>
               </div>
             </div>
@@ -67,7 +67,7 @@ export default function PrinciplesPage() {
             {/* Principle 4 */}
             <div className="space-y-4">
               <h2 className="text-2xl text-gray-900 font-medium">
-                Protect Without Blocking
+                Protection Without Friction
               </h2>
               <div className="border-l-2 border-gray-300 pl-4 py-2">
                 <p className="text-base text-gray-900 leading-relaxed">

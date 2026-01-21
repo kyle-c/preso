@@ -14,7 +14,7 @@ function PasswordForm() {
     e.preventDefault()
     setError('')
 
-    if (password === 'FelixPresence') {
+    if (password === 'FelixDesign2024') {
       // Set authentication cookie
       document.cookie = 'felix-auth=authenticated; path=/; max-age=86400' // 24 hours
       router.push(redirect)

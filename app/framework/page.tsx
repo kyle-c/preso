@@ -142,7 +142,7 @@ export default function FrameworkPage() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`block w-full text-left px-3 py-2 rounded-sm text-sm leading-relaxed transition-colors ${
+                  className={`block w-full text-left px-3 py-2 rounded-sm text-sm leading-relaxed transition-colors cursor-pointer ${
                     isActive
                       ? 'bg-cyan-50 text-cyan-600 font-medium'
                       : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'

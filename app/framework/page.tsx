@@ -13,10 +13,10 @@ const navigation = [
   { id: 'principle-4', title: 'Protection Without Friction', href: '#principle-4', parent: 'principles' },
   { id: 'principle-5', title: 'Grow With Your Journey', href: '#principle-5', parent: 'principles' },
   { id: 'resources', title: 'Resources', href: '#resources' },
-  { id: 'conflicts', title: 'When Principles Overlap', href: '#conflicts', parent: 'resources' },
-  { id: 'components', title: 'Component Specs', href: '#components', parent: 'resources' },
   { id: 'copy-library', title: 'Copy Library', href: '#copy-library', parent: 'resources' },
   { id: 'checklists', title: 'For Your Role', href: '#checklists', parent: 'resources' },
+  { id: 'components', title: 'Component Specs', href: '#components', parent: 'resources' },
+  { id: 'conflicts', title: 'When Principles Overlap', href: '#conflicts', parent: 'resources' },
 ]
 
 const principles = [

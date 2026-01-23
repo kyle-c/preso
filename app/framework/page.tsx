@@ -543,23 +543,23 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-4">Use principles as pattern filters:</p>
                       <ul className="space-y-3 text-sm text-gray-700">
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P1</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P1</span>
                           <span className="leading-relaxed">Read every string out loud—does it sound human?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P2</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P2</span>
                           <span className="leading-relaxed">Check user state—is this their first time or a repeat action?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P3</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P3</span>
                           <span className="leading-relaxed">Review every screen transition—is it clear what just happened?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P4</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P4</span>
                           <span className="leading-relaxed">Look for potential errors—can we prevent instead of handle?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P5</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P5</span>
                           <span className="leading-relaxed">Map the user journey—when does this feature become relevant?</span>
                         </li>
                       </ul>
@@ -569,27 +569,27 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-4">In design reviews, ask:</p>
                       <ul className="space-y-3 text-sm text-gray-700">
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Which principle is this screen serving?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Does this pass the P1 read-aloud test?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Have we considered both first-time and repeat users? (P2)</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Will users know what's happening here? (P3)</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Are we blocking or protecting? (P4)</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Is this the right time to introduce this? (P5)</span>
                         </li>
                       </ul>
@@ -608,23 +608,23 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-4">Feature readiness:</p>
                       <ul className="space-y-3 text-sm text-gray-700">
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Does the copy pass P1?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Have we designed for both P2 states (beginner + expert)?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Is P3 satisfied (every state communicated)?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Does P4 prevent errors proactively?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">When does P5 say to introduce this?</span>
                         </li>
                       </ul>
@@ -634,23 +634,23 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-4">Success metrics:</p>
                       <ul className="space-y-3 text-sm text-gray-700">
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P1</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P1</span>
                           <span className="leading-relaxed">Qualitative testing—does copy feel human?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P2</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P2</span>
                           <span className="leading-relaxed">Time-to-proficiency, education engagement</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P3</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P3</span>
                           <span className="leading-relaxed">"What's happening?" support tickets (should decrease)</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P4</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P4</span>
                           <span className="leading-relaxed">Error prevention rate vs. error handling rate</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">P5</span>
+                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P5</span>
                           <span className="leading-relaxed">Feature discovery rate, multi-product adoption</span>
                         </li>
                       </ul>
@@ -669,19 +669,19 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-4">Every state change should:</p>
                       <ul className="space-y-3 text-sm text-gray-700">
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Have a human-readable message (P1)</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Adapt to user familiarity (P2)</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Communicate clearly (P3)</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Prevent errors (P4)</span>
                         </li>
                       </ul>
@@ -733,15 +733,15 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-3">P1: Conversational language</p>
                       <ul className="space-y-2 text-sm text-gray-700 ml-4">
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Does every user-facing string pass the read-aloud test?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">No system jargon ("transaction", "execute", "beneficiary")?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Active voice, not passive?</span>
                         </li>
                       </ul>
@@ -751,15 +751,15 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-3">P2: Adaptive experience</p>
                       <ul className="space-y-2 text-sm text-gray-700 ml-4">
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Do first-time users see explanation?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Do repeat users see shortcuts?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Is educational content progressive?</span>
                         </li>
                       </ul>
@@ -769,15 +769,15 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-3">P3: State transparency</p>
                       <ul className="space-y-2 text-sm text-gray-700 ml-4">
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Is every loading/processing state labeled?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Are time expectations set?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Does every transition acknowledge what happened?</span>
                         </li>
                       </ul>
@@ -787,15 +787,15 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-3">P4: Error prevention</p>
                       <ul className="space-y-2 text-sm text-gray-700 ml-4">
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Are errors caught before submission?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Do error messages suggest solutions?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Does safety feel caring, not blocking?</span>
                         </li>
                       </ul>
@@ -805,15 +805,15 @@ export default function FrameworkPage() {
                       <p className="text-sm font-semibold text-gray-900 mb-3">P5: Feature introduction</p>
                       <ul className="space-y-2 text-sm text-gray-700 ml-4">
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Are new features introduced contextually?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">Is timing based on user readiness?</span>
                         </li>
                         <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
+                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
                           <span className="leading-relaxed">One new thing at a time?</span>
                         </li>
                       </ul>

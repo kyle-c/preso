@@ -20,7 +20,7 @@ export default function PrinciplesPage() {
               </h2>
               <div className="border-l-2 border-gray-300 pl-4 py-2">
                 <p className="text-base text-gray-900 leading-relaxed">
-                  If it sounds like software talking to a user, rewrite it. If it sounds like one person simply helping another send money, ship it.
+                  Our voice should be warm, concise and always provide clarity. If it sounds like software talking to a user, rewrite it. If it sounds like one person simply helping another send money, ship it.
                 </p>
               </div>
               <div className="bg-gray-50 border-l-2 border-cyan-500 pl-4 py-3">

@@ -6,7 +6,7 @@ const principles = [
   {
     number: 1,
     title: 'Conversational Transactions, Not Transactional\u00A0Experiences',
-    oneLiner: 'If it sounds like software talking to a user, rewrite it. If it sounds like one person simply helping another send money, ship it.',
+    oneLiner: 'Our voice should be warm, concise and always provide clarity. If it sounds like software talking to a user, rewrite it. If it sounds like one person simply helping another send money, ship it.',
     presenceLens: 'Use language that acknowledges the relational act "showing up," "being there," "helping" not just the mechanical transfer.',
   },
   {

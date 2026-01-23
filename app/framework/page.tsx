@@ -24,7 +24,7 @@ const principles = [
     id: 'principle-1',
     number: 1,
     title: 'Conversational Transactions, Not Transactional Experiences',
-    oneLiner: 'If it sounds like software talking to a user, rewrite it. If it sounds like one person simply helping another send money, ship it.',
+    oneLiner: 'Our voice should be warm, concise and always provide clarity. If it sounds like software talking to a user, rewrite it. If it sounds like one person simply helping another send money, ship it.',
     presenceLens: 'Use language that acknowledges the relational act "showing up," "being there," "helping" not just the mechanical transfer.',
     industryFoundations: ['Conversational UX', 'Calm technology', 'Trust-centered fintech design'],
   },
@@ -199,24 +199,24 @@ export default function FrameworkPage() {
                   </p>
                   <ul className="space-y-3 text-base text-gray-700">
                     <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">•</span>
-                      <span>Language that reflects <span className="font-semibold text-gray-900">relationships</span>, not just transactions</span>
+                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
+                      <span className="leading-relaxed">Language that reflects <span className="font-semibold text-gray-900">relationships</span>, not just transactions</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">•</span>
-                      <span>Interfaces that <span className="font-semibold text-gray-900">teach</span> financial concepts without condescension</span>
+                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
+                      <span className="leading-relaxed">Interfaces that <span className="font-semibold text-gray-900">teach</span> financial concepts without condescension</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">•</span>
-                      <span>Features that <span className="font-semibold text-gray-900">increase capability</span>, not just provide convenience</span>
+                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
+                      <span className="leading-relaxed">Features that <span className="font-semibold text-gray-900">increase capability</span>, not just provide convenience</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">•</span>
-                      <span><span className="font-semibold text-gray-900">Progressive revelation</span> of tools as users are ready for them</span>
+                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
+                      <span className="leading-relaxed"><span className="font-semibold text-gray-900">Progressive revelation</span> of tools as users are ready for them</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 mt-1.5 flex-shrink-0">•</span>
-                      <span>Celebrations that <span className="font-semibold text-gray-900">acknowledge growth</span>, not just completion</span>
+                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
+                      <span className="leading-relaxed">Celebrations that <span className="font-semibold text-gray-900">acknowledge growth</span>, not just completion</span>
                     </li>
                   </ul>
                 </div>
@@ -275,8 +275,8 @@ export default function FrameworkPage() {
                                 <ul className="space-y-2.5 text-base text-gray-700">
                                   {principle.industryFoundations.map((foundation, idx) => (
                                     <li key={idx} className="flex items-start">
-                                      <span className="text-gray-400 mr-3 mt-1.5 flex-shrink-0">•</span>
-                                      <span>{foundation}</span>
+                                      <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
+                                      <span className="leading-relaxed">{foundation}</span>
                                     </li>
                                   ))}
                                 </ul>

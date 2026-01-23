@@ -164,7 +164,7 @@ export default function FrameworkPage() {
                 Designing for Félix
               </h1>
               <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl">
-                A comprehensive guide to building products that enable presence across distance.
+                A comprehensive guide to building products that enable presence across distance and connection.
               </p>
             </div>
 

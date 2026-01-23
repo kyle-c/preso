@@ -8,7 +8,7 @@ const navigation = [
   { id: 'foundation', title: 'Our Foundation', href: '#foundation' },
   { id: 'principles', title: 'The Principles', href: '#principles' },
   { id: 'principle-1', title: 'Conversational Transactions, Not Transactional Experiences', href: '#principle-1', parent: 'principles' },
-  { id: 'principle-2', title: 'Guide Beginners. Accelerate Regulars.', href: '#principle-2', parent: 'principles' },
+  { id: 'principle-2', title: 'Guide Beginners. Accelerate\u00A0Regulars.', href: '#principle-2', parent: 'principles' },
   { id: 'principle-3', title: 'Never Leave Users Guessing. Always Give Next Steps.', href: '#principle-3', parent: 'principles' },
   { id: 'principle-4', title: 'Protection Without Friction', href: '#principle-4', parent: 'principles' },
   { id: 'principle-5', title: 'Grow With Your Journey', href: '#principle-5', parent: 'principles' },

@@ -333,7 +333,7 @@ export default function FrameworkPage() {
                                   <div>
                                     <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">First-time exchange rate</p>
                                     <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                      <p className="text-sm text-gray-900 leading-relaxed">"Exchange rate: 16.8 pesos per dollar. (This is how many pesos Juan gets for each dollar you send. This rate changes daily based on the market, and we'll always show it to you before you confirm.)"</p>
+                                      <p className="text-sm text-gray-900 leading-relaxed">"Exchange rate: 16.8 pesos per dollar. That's how many pesos Juan gets for each dollar—this rate changes daily, and we'll always show it before you confirm."</p>
                                     </div>
                                   </div>
                                   <div>
@@ -350,13 +350,13 @@ export default function FrameworkPage() {
                                   <div>
                                     <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Multi-step send</p>
                                     <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                      <p className="text-sm text-gray-900 leading-relaxed">"Got it. Next, how much do you want to send?"</p>
+                                      <p className="text-sm text-gray-900 leading-relaxed">"Got it! How much do you want to send?"</p>
                                     </div>
                                   </div>
                                   <div>
                                     <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Waiting (3-10 seconds)</p>
                                     <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                      <p className="text-sm text-gray-900 leading-relaxed">"Sending now—this usually takes about 30 seconds."</p>
+                                      <p className="text-sm text-gray-900 leading-relaxed">"Sending now—usually takes about 30 seconds."</p>
                                     </div>
                                   </div>
                                 </div>

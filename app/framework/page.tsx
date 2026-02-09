@@ -1,23 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-
-const navigation = [
-  { id: 'foundation', title: 'Our Foundation', href: '#foundation' },
-  { id: 'principles', title: 'The Principles', href: '#principles' },
-  { id: 'principle-1', title: 'Conversational Transactions, Not Transactional Experiences', href: '#principle-1', parent: 'principles' },
-  { id: 'principle-2', title: 'Guide Beginners. Accelerate\u00A0Regulars.', href: '#principle-2', parent: 'principles' },
-  { id: 'principle-3', title: 'Never Leave Users Guessing. Always Give Next Steps.', href: '#principle-3', parent: 'principles' },
-  { id: 'principle-4', title: 'Protection Without Friction', href: '#principle-4', parent: 'principles' },
-  { id: 'principle-5', title: 'Grow With Your Journey', href: '#principle-5', parent: 'principles' },
-  { id: 'resources', title: 'Resources', href: '#resources' },
-  { id: 'copy-library', title: 'Copy Library', href: '#copy-library', parent: 'resources' },
-  { id: 'checklists', title: 'For Your Role', href: '#checklists', parent: 'resources' },
-  { id: 'components', title: 'Component Specs', href: '#components', parent: 'resources' },
-  { id: 'conflicts', title: 'When Principles Overlap', href: '#conflicts', parent: 'resources' },
-]
+import { DesignSystemLayout } from '@/components/design-system/design-system-layout'
+import { Section } from '@/components/design-system/section'
 
 const principles = [
   {
@@ -62,847 +47,546 @@ const principles = [
   },
 ]
 
-export default function FrameworkPage() {
-  const [activeSection, setActiveSection] = useState('foundation')
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    const handleScroll = () => {
-      const sections = navigation.map(nav => {
-        const element = document.getElementById(nav.id)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          return { id: nav.id, top: rect.top, bottom: rect.bottom }
-        }
-        return null
-      }).filter(Boolean) as Array<{ id: string; top: number; bottom: number }>
-
-      const current = sections.find(section => 
-        section.top <= 100 && section.bottom >= 100
-      ) || sections.find(section => section.top > 0 && section.top < 200)
-
-      if (current) {
-        setActiveSection(current.id)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    handleScroll()
-
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const scrollToSection = (id: string) => {
-    if (typeof window === 'undefined') return
-    const element = document.getElementById(id)
-    if (element) {
-      const offset = 80
-      const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - offset
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      })
-    }
-  }
-
+function DontDoExample({ context, dont, do: doText }: { context: string; dont: string; do: string }) {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="sticky top-0 z-40 border-b bg-white">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="border-l-4 border-cyan-500 pl-4">
-              <p className="text-xs font-bold text-cyan-600 uppercase mb-1">Designing for Presence</p>
-              <h1 className="text-2xl text-gray-900 font-medium">
-                Félix UX Guidelines
-              </h1>
-            </div>
-            <Link
-              href="/guidelines"
-              className="text-sm text-gray-600 hover:text-cyan-600 transition-colors"
-            >
-              ← Back to Guidelines
-            </Link>
+    <div>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{context}</p>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-border bg-papaya/5 p-4">
+          <span className="inline-block rounded-full bg-papaya/20 px-2.5 py-0.5 text-xs font-semibold text-papaya mb-2">Don&apos;t</span>
+          <p className="text-base text-muted-foreground leading-relaxed">{dont}</p>
+        </div>
+        <div className="rounded-xl border border-border bg-cactus/5 p-4">
+          <span className="inline-block rounded-full bg-cactus/20 px-2.5 py-0.5 text-xs font-semibold text-evergreen mb-2">Do</span>
+          <p className="text-base text-foreground leading-relaxed">{doText}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DoExample({ context, text }: { context: string; text: string }) {
+  return (
+    <div>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{context}</p>
+      <div className="rounded-xl border border-border bg-cactus/5 p-4">
+        <p className="text-base text-foreground leading-relaxed">{text}</p>
+      </div>
+    </div>
+  )
+}
+
+export default function FrameworkPage() {
+  return (
+    <DesignSystemLayout
+      title="Design Principles"
+      description="A comprehensive guide to building products that enable presence across distance and connection."
+    >
+      <div className="max-w-3xl">
+      <Section
+        id="foundation"
+        title="Our Foundation: Design for Presence"
+        description="Five principles that guide every interaction, from first send to full financial companion."
+      >
+        <div className="rounded-xl bg-linen p-8 md:p-10">
+          <div className="max-w-2xl space-y-6">
+            <p className="text-lg text-muted-foreground leading-[1.75]">
+              Remittances aren't transactions, they're <span className="font-semibold text-foreground">acts of presence</span>. When someone sends money through Felix, they're <span className="font-semibold text-foreground">showing up for family</span> back home. When they build credit here, they're ensuring <span className="font-semibold text-foreground">future presence</span>, the ability to <span className="font-semibold text-foreground">stay available</span> for the people they love.
+            </p>
+
+            <p className="text-lg text-muted-foreground leading-[1.75]">
+              But presence isn't just about today, it's about building the <span className="font-semibold text-foreground">capability to show up tomorrow</span>.
+            </p>
+
+            <p className="text-lg text-muted-foreground leading-[1.75]">
+              The product should make users <span className="font-semibold text-foreground">stronger over time</span>: more knowledgeable about their finances, more confident in their decisions, more capable of building the future they want.
+            </p>
+
+            <p className="text-lg text-muted-foreground leading-[1.75]">
+              Felix <span className="font-semibold text-foreground">grows with users</span>, from their first send home to comprehensive financial management across borders. We <span className="font-semibold text-foreground">meet people where they are</span>, then <span className="font-semibold text-foreground">gradually reveal new possibilities</span> as they're ready. <span className="font-semibold text-foreground">Future presence</span> requires <span className="font-semibold text-foreground">capability across your entire financial life</span>, and we're here for that <span className="font-semibold text-foreground">full journey</span>.
+            </p>
+          </div>
+
+          <div className="mt-8 rounded-xl border border-border bg-card p-6">
+            <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">
+              This means
+            </p>
+            <ul className="space-y-3 text-base text-muted-foreground">
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
+                <span className="leading-relaxed">Language that reflects <span className="font-semibold text-foreground">relationships</span>, not just transactions</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
+                <span className="leading-relaxed">Interfaces that <span className="font-semibold text-foreground">teach</span> financial concepts without condescension</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
+                <span className="leading-relaxed">Features that <span className="font-semibold text-foreground">increase capability</span>, not just provide convenience</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
+                <span className="leading-relaxed"><span className="font-semibold text-foreground">Progressive revelation</span> of tools as users are ready for them</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
+                <span className="leading-relaxed">Celebrations that <span className="font-semibold text-foreground">acknowledge growth</span>, not just completion</span>
+              </li>
+            </ul>
           </div>
         </div>
-      </header>
+      </Section>
 
-      <div className="flex">
-        {/* Sidebar Navigation */}
-        <aside className="hidden lg:block w-64 flex-shrink-0 border-r bg-gray-50 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto">
-          <nav className="p-6 space-y-1">
-            {navigation.map((item) => {
-              const isActive = activeSection === item.id
-              const isChild = item.parent !== undefined
-              
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`block w-full text-left px-3 py-2 rounded-sm text-sm leading-relaxed transition-colors cursor-pointer ${
-                    isActive
-                      ? 'bg-cyan-50 text-cyan-600 font-medium'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                  } ${isChild ? 'ml-4 text-xs' : ''}`}
-                >
-                  {item.title}
-                </button>
-              )
-            })}
-          </nav>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 min-w-0">
-          <div className="max-w-3xl mx-auto px-6 py-16 lg:px-12">
-            {/* Introduction */}
-            <div className="mb-20">
-              <h1 className="text-4xl md:text-5xl text-gray-900 font-medium mb-6 leading-tight tracking-tight">
-                Designing for Félix
-              </h1>
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl">
-                A comprehensive guide to building products that enable presence across distance and connection.
-              </p>
-            </div>
-
-            {/* Foundation Section */}
-            <section id="foundation" className="scroll-mt-20 mb-24">
-              <div className="border-l-4 border-cyan-500 pl-6 mb-10">
-                <h2 className="text-2xl md:text-3xl text-gray-900 font-medium leading-tight tracking-tight">
-                  Our Foundation: Design for Presence
-                </h2>
+      <Section
+        id="principles"
+        title="The Five Principles"
+        description="Five principles that guide every interaction, from first send to full financial companion."
+      >
+        <div className="space-y-6">
+          {principles.map((principle) => (
+            <div
+              key={principle.id}
+              id={principle.id}
+              className="scroll-mt-8 rounded-xl border border-border bg-card overflow-hidden"
+            >
+              <div className="border-b border-border px-6 py-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate text-sm font-semibold text-turquoise">
+                      {principle.number}
+                    </span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-display text-lg font-bold text-foreground leading-snug">
+                      {principle.title}
+                    </h3>
+                    <p className="mt-2 text-base text-muted-foreground leading-relaxed">
+                      {principle.oneLiner}
+                    </p>
+                  </div>
+                </div>
               </div>
+              <div className="px-6 py-6">
+                <Tabs defaultValue="overview">
+                  <TabsList className="mb-6">
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="whatsapp">WhatsApp Examples</TabsTrigger>
+                    <TabsTrigger value="webapp">Web App Examples</TabsTrigger>
+                  </TabsList>
 
-              <div className="space-y-6 prose prose-lg max-w-none">
-                <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                  Remittances aren't transactions, they're <span className="font-semibold text-gray-900">acts of presence</span>. When someone sends money through Félix, they're <span className="font-semibold text-gray-900">showing up for family</span> back home. When they build credit here, they're ensuring <span className="font-semibold text-gray-900">future presence</span>, the ability to <span className="font-semibold text-gray-900">stay available</span> for the people they love.
-                </p>
+                  <TabsContent value="overview" className="space-y-6">
+                    <div className="rounded-xl bg-turquoise-50 p-5">
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-evergreen">Presence lens</p>
+                      <p className="text-base text-foreground leading-relaxed">
+                        {principle.presenceLens}
+                      </p>
+                    </div>
 
-                <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                  But presence isn't just about today, it's about building the <span className="font-semibold text-gray-900">capability to show up tomorrow</span>.
-                </p>
+                    <div>
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Related UX Concepts</p>
+                      <div className="flex flex-wrap gap-2">
+                        {principle.industryFoundations.map((foundation, idx) => (
+                          <span key={idx} className="rounded-full bg-stone px-3 py-1 text-xs font-medium text-slate">
+                            {foundation}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </TabsContent>
 
-                <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                  The product should make users <span className="font-semibold text-gray-900">stronger over time</span>: more knowledgeable about their finances, more confident in their decisions, more capable of building the future they want.
-                </p>
+                  <TabsContent value="whatsapp" className="space-y-6">
+                    {principle.id === 'principle-1' && (
+                      <div className="space-y-6">
+                        <DontDoExample context="User starts a send" dont={`"Enter recipient details."`} do={`"Who are you sending to?"`} />
+                        <DontDoExample context="Amount confirmation" dont={`"Please confirm transaction amount."`} do={`"Send $100 to Juan?"`} />
+                        <DontDoExample context="Processing status" dont={`"Processing transaction..."`} do={`"Sending to Juan now—usually takes about 30 seconds."`} />
+                      </div>
+                    )}
 
-                <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                  Félix <span className="font-semibold text-gray-900">grows with users</span>, from their first send home to comprehensive financial management across borders. We <span className="font-semibold text-gray-900">meet people where they are</span>, then <span className="font-semibold text-gray-900">gradually reveal new possibilities</span> as they're ready. <span className="font-semibold text-gray-900">Future presence</span> requires <span className="font-semibold text-gray-900">capability across your entire financial life</span>, and we're here for that <span className="font-semibold text-gray-900">full journey</span>.
-                </p>
+                    {principle.id === 'principle-2' && (
+                      <div className="space-y-6">
+                        <DoExample context="First-time exchange rate" text={`"Exchange rate: 16.8 pesos per dollar. That's how many pesos Juan gets for each dollar—this rate changes daily, and we'll always show it before you confirm."`} />
+                        <DoExample context="Repeat user exchange rate" text={`"Exchange rate: 16.8 pesos per dollar—higher than last time, so Juan gets a bit more."`} />
+                      </div>
+                    )}
 
-                <div className="bg-gray-50 border-l-2 border-cyan-500 pl-5 py-4 mt-8 rounded-r-sm">
-                  <p className="text-sm font-semibold text-gray-900 mb-4 tracking-wide uppercase">
-                    This means:
-                  </p>
-                  <ul className="space-y-3 text-base text-gray-700">
-                    <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                      <span className="leading-relaxed">Language that reflects <span className="font-semibold text-gray-900">relationships</span>, not just transactions</span>
+                    {principle.id === 'principle-3' && (
+                      <div className="space-y-6">
+                        <DoExample context="Multi-step send" text={`"Got it! How much do you want to send?"`} />
+                        <DoExample context="Waiting (3-10 seconds)" text={`"Sending now—usually takes about 30 seconds."`} />
+                      </div>
+                    )}
+
+                    {principle.id === 'principle-4' && (
+                      <div className="space-y-6">
+                        <DontDoExample context="Real-time validation" dont={`After submit: "Invalid card number"`} do={`As typing: "Card number should be 16 digits—looks like you're missing a few"`} />
+                        <DoExample context="Unusual amount check" text={`"This is higher than you usually send—does everything look right?"`} />
+                      </div>
+                    )}
+
+                    {principle.id === 'principle-5' && (
+                      <div className="space-y-6">
+                        <DoExample context="Feature introduction" text={`After 3rd send: "You've sent to Maria 3 times now. Want me to remind you each month?"`} />
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  <TabsContent value="webapp" className="space-y-6">
+                    {principle.id === 'principle-1' && (
+                      <div className="space-y-6">
+                        <DontDoExample context="Payment review" dont={`"Transaction Summary"`} do={`"Here's what you're sending"`} />
+                        <DontDoExample context="Error state" dont={`"Payment method invalid."`} do={`"This card didn't go through—want to try a different one?"`} />
+                      </div>
+                    )}
+
+                    {(principle.id === 'principle-2' || principle.id === 'principle-3' || principle.id === 'principle-4' || principle.id === 'principle-5') && (
+                      <div className="rounded-xl border border-border bg-stone p-6 text-center">
+                        <p className="text-sm text-muted-foreground">Web app examples coming soon.</p>
+                      </div>
+                    )}
+                  </TabsContent>
+                </Tabs>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        id="resources"
+        title="Resources"
+        description="Quick reference guides, checklists, and specifications for teams."
+      >
+        {/* Copy Library */}
+        <div className="mb-12">
+          <h3 className="mb-2 font-display text-lg font-bold text-foreground">Copy Library</h3>
+          <p className="mb-6 text-base text-muted-foreground">
+            Reference guide for common user actions, organized by context and experience level.
+          </p>
+
+
+          <div className="relative">
+            <div className="overflow-x-auto rounded-xl border border-border">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b border-border bg-stone">
+                    <th className="p-4 text-left text-xs font-semibold uppercase tracking-wider text-foreground">Context</th>
+                    <th className="p-4 text-left text-xs font-semibold uppercase tracking-wider text-foreground">Experience</th>
+                    <th className="p-4 text-left text-xs font-semibold uppercase tracking-wider text-papaya">Don&apos;t</th>
+                    <th className="p-4 text-left text-xs font-semibold uppercase tracking-wider text-evergreen">Do</th>
+                    <th className="p-4 text-left text-xs font-semibold uppercase tracking-wider text-foreground">Principle</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  <tr className="transition-colors hover:bg-stone/50">
+                    <td className="p-4 text-sm font-medium text-foreground">Send money</td>
+                    <td className="p-4 text-sm text-muted-foreground">First-time</td>
+                    <td className="p-4 text-sm text-papaya leading-relaxed">&quot;Enter recipient details&quot;</td>
+                    <td className="p-4 text-sm text-evergreen leading-relaxed">&quot;Who are you sending to?&quot;</td>
+                    <td className="p-4"><span className="rounded-full bg-slate px-2.5 py-0.5 text-xs font-medium text-turquoise">P1</span></td>
+                  </tr>
+                  <tr className="transition-colors hover:bg-stone/50">
+                    <td className="p-4 text-sm font-medium text-foreground">Send money</td>
+                    <td className="p-4 text-sm text-muted-foreground">Repeat (5+)</td>
+                    <td className="p-4 text-sm text-papaya leading-relaxed">&quot;Enter recipient details&quot;</td>
+                    <td className="p-4 text-sm text-evergreen leading-relaxed">&quot;Sending to Juan again?&quot;</td>
+                    <td className="p-4"><span className="rounded-full bg-slate px-2.5 py-0.5 text-xs font-medium text-turquoise">P2</span></td>
+                  </tr>
+                  <tr className="transition-colors hover:bg-stone/50">
+                    <td className="p-4 text-sm font-medium text-foreground">Processing</td>
+                    <td className="p-4 text-sm text-muted-foreground">All</td>
+                    <td className="p-4 text-sm text-papaya leading-relaxed">&quot;Processing transaction...&quot;</td>
+                    <td className="p-4 text-sm text-evergreen leading-relaxed">&quot;Sending to Juan now—usually takes about 30 seconds.&quot;</td>
+                    <td className="p-4"><span className="rounded-full bg-slate px-2.5 py-0.5 text-xs font-medium text-turquoise">P3</span></td>
+                  </tr>
+                  <tr className="transition-colors hover:bg-stone/50">
+                    <td className="p-4 text-sm font-medium text-foreground">Error</td>
+                    <td className="p-4 text-sm text-muted-foreground">All</td>
+                    <td className="p-4 text-sm text-papaya leading-relaxed">&quot;Payment method invalid.&quot;</td>
+                    <td className="p-4 text-sm text-evergreen leading-relaxed">&quot;This card didn't go through—want to try a different one?&quot;</td>
+                    <td className="p-4"><span className="rounded-full bg-slate px-2.5 py-0.5 text-xs font-medium text-turquoise">P1, P3</span></td>
+                  </tr>
+                  <tr className="transition-colors hover:bg-stone/50">
+                    <td className="p-4 text-sm font-medium text-foreground">Success</td>
+                    <td className="p-4 text-sm text-muted-foreground">All</td>
+                    <td className="p-4 text-sm text-papaya leading-relaxed">&quot;Transaction completed. ID: TX-123&quot;</td>
+                    <td className="p-4 text-sm text-evergreen leading-relaxed">&quot;Done! Juan received $1,680 pesos.&quot;</td>
+                    <td className="p-4"><span className="rounded-full bg-slate px-2.5 py-0.5 text-xs font-medium text-turquoise">P1</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl bg-background/50 backdrop-blur-sm">
+              <div className="text-center">
+                <p className="font-display text-base font-bold text-foreground">Work in progress</p>
+                <p className="mt-1 text-sm text-muted-foreground">This content is being refined</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* For Your Role */}
+        <div>
+          <h3 className="mb-2 font-display text-lg font-bold text-foreground">For Your Role</h3>
+          <p className="mb-6 text-base text-muted-foreground">
+            Role-specific guides to help you apply these principles in your work.
+          </p>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* Designers */}
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="rounded-full bg-blueberry/20 px-3 py-1 text-xs font-semibold text-blueberry">Designers</span>
+              </div>
+              <div className="space-y-6">
+                <div>
+                  <p className="mb-3 text-sm font-semibold text-foreground">Principles as pattern filters</p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">1</span>
+                      <span className="leading-relaxed">Read every string out loud—does it sound human?</span>
                     </li>
-                    <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                      <span className="leading-relaxed">Interfaces that <span className="font-semibold text-gray-900">teach</span> financial concepts without condescension</span>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">2</span>
+                      <span className="leading-relaxed">Check user state—is this their first time or a repeat action?</span>
                     </li>
-                    <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                      <span className="leading-relaxed">Features that <span className="font-semibold text-gray-900">increase capability</span>, not just provide convenience</span>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">3</span>
+                      <span className="leading-relaxed">Review every screen transition—is it clear what just happened?</span>
                     </li>
-                    <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                      <span className="leading-relaxed"><span className="font-semibold text-gray-900">Progressive revelation</span> of tools as users are ready for them</span>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">4</span>
+                      <span className="leading-relaxed">Look for potential errors—can we prevent instead of handle?</span>
                     </li>
-                    <li className="flex items-start">
-                      <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                      <span className="leading-relaxed">Celebrations that <span className="font-semibold text-gray-900">acknowledge growth</span>, not just completion</span>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">5</span>
+                      <span className="leading-relaxed">Map the user journey—when does this feature become relevant?</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="mb-3 text-sm font-semibold text-foreground">In design reviews, ask</p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="leading-relaxed">Which principle is this screen serving?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="leading-relaxed">Does this pass the P1 read-aloud test?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="leading-relaxed">Have we considered both first-time and repeat users? (P2)</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="leading-relaxed">Will users know what's happening here? (P3)</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="leading-relaxed">Are we blocking or protecting? (P4)</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="leading-relaxed">Is this the right time to introduce this? (P5)</span>
                     </li>
                   </ul>
                 </div>
               </div>
-            </section>
+            </div>
 
-            {/* Principles Overview */}
-            <section id="principles" className="scroll-mt-20 mb-24">
-              <h2 className="text-2xl md:text-3xl text-gray-900 font-medium mb-4 leading-tight tracking-tight">
-                The Five Principles
-              </h2>
-              <p className="text-base md:text-lg text-gray-600 mb-12 leading-relaxed max-w-2xl">
-                Five principles that guide every interaction, from first send to full financial companion.
-              </p>
+            {/* Product Managers */}
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="rounded-full bg-mango/20 px-3 py-1 text-xs font-semibold text-mango">Product Managers</span>
+              </div>
+              <div className="space-y-6">
+                <div>
+                  <p className="mb-3 text-sm font-semibold text-foreground">Feature readiness</p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="leading-relaxed">Does the copy pass P1?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="leading-relaxed">Have we designed for both P2 states (beginner + expert)?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="leading-relaxed">Is P3 satisfied (every state communicated)?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="leading-relaxed">Does P4 prevent errors proactively?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="leading-relaxed">When does P5 say to introduce this?</span>
+                    </li>
+                  </ul>
+                </div>
 
-              <div className="space-y-8">
-                {principles.map((principle) => (
-                  <div
-                    key={principle.id}
-                    id={principle.id}
-                    className="scroll-mt-20 border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm"
-                  >
-                    <div className="px-6 py-6 border-b border-gray-200">
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center mt-0.5">
-                          <span className="text-sm font-semibold text-cyan-600">{principle.number}</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2.5 leading-snug">
-                            {principle.title}
-                          </h3>
-                          <p className="text-sm md:text-base text-gray-600 leading-relaxed">
-                            {principle.oneLiner}
-                          </p>
-                        </div>
-                      </div>
+                <div>
+                  <p className="mb-3 text-sm font-semibold text-foreground">Success metrics</p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">1</span>
+                      <span className="leading-relaxed">Qualitative testing—does copy feel human?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">2</span>
+                      <span className="leading-relaxed">Time-to-proficiency, education engagement</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">3</span>
+                      <span className="leading-relaxed">&quot;What's happening?&quot; support tickets (should decrease)</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">4</span>
+                      <span className="leading-relaxed">Error prevention rate vs. error handling rate</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-slate text-[10px] font-semibold text-turquoise">5</span>
+                      <span className="leading-relaxed">Feature discovery rate, multi-product adoption</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Engineers */}
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="rounded-full bg-evergreen/20 px-3 py-1 text-xs font-semibold text-evergreen">Engineers</span>
+              </div>
+              <div className="space-y-6">
+                <div>
+                  <p className="mb-3 text-sm font-semibold text-foreground">Every state change should</p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                      <span className="leading-relaxed">Have a human-readable message (P1)</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                      <span className="leading-relaxed">Adapt to user familiarity (P2)</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                      <span className="leading-relaxed">Communicate clearly (P3)</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                      <span className="leading-relaxed">Prevent errors (P4)</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="rounded-xl border border-border bg-stone p-5">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Example patterns</p>
+                  <div className="space-y-4 font-mono text-sm text-muted-foreground">
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground">P1: Conversational language</p>
+                      <p className="text-foreground">message = &quot;This card didn't work—want to try another?&quot;</p>
                     </div>
-                    <div className="px-6 py-6">
-                      <Tabs defaultValue="overview">
-                            <TabsList className="mb-8">
-                              <TabsTrigger value="overview">Overview</TabsTrigger>
-                              <TabsTrigger value="whatsapp">WhatsApp Examples</TabsTrigger>
-                              <TabsTrigger value="webapp">Web App Examples</TabsTrigger>
-                            </TabsList>
-
-                            <TabsContent value="overview" className="space-y-8">
-                              <div className="bg-gray-50 border-l-2 border-cyan-500 pl-5 py-4 rounded-r-sm">
-                                <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Presence lens</p>
-                                <p className="text-base text-gray-900 leading-relaxed">
-                                  {principle.presenceLens}
-                                </p>
-                              </div>
-
-                              <div className="border-l-2 border-gray-300 pl-5 py-3">
-                                <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Related UX Concepts</p>
-                                <ul className="space-y-2.5 text-base text-gray-700">
-                                  {principle.industryFoundations.map((foundation, idx) => (
-                                    <li key={idx} className="flex items-start">
-                                      <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                                      <span className="leading-relaxed">{foundation}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </TabsContent>
-
-                            <TabsContent value="whatsapp" className="space-y-8">
-                              {principle.id === 'principle-1' && (
-                                <div className="space-y-4">
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">User starts a send</p>
-                                    <div className="space-y-3">
-                                      <div className="bg-red-50 border-l-2 border-red-200 rounded-md p-4">
-                                        <p className="text-xs font-medium text-red-700 mb-1.5">Don't</p>
-                                        <p className="text-sm text-gray-700 leading-relaxed">"Enter recipient details."</p>
-                                      </div>
-                                      <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                        <p className="text-xs font-medium text-cyan-700 mb-1.5">Do</p>
-                                        <p className="text-sm text-gray-900 leading-relaxed">"Who are you sending to?"</p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Amount confirmation</p>
-                                    <div className="space-y-3">
-                                      <div className="bg-red-50 border-l-2 border-red-200 rounded-md p-4">
-                                        <p className="text-xs font-medium text-red-700 mb-1.5">Don't</p>
-                                        <p className="text-sm text-gray-700 leading-relaxed">"Please confirm transaction amount."</p>
-                                      </div>
-                                      <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                        <p className="text-xs font-medium text-cyan-700 mb-1.5">Do</p>
-                                        <p className="text-sm text-gray-900 leading-relaxed">"Send $100 to Juan?"</p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Processing status</p>
-                                    <div className="space-y-3">
-                                      <div className="bg-red-50 border-l-2 border-red-200 rounded-md p-4">
-                                        <p className="text-xs font-medium text-red-700 mb-1.5">Don't</p>
-                                        <p className="text-sm text-gray-700 leading-relaxed">"Processing transaction..."</p>
-                                      </div>
-                                      <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                        <p className="text-xs font-medium text-cyan-700 mb-1.5">Do</p>
-                                        <p className="text-sm text-gray-900 leading-relaxed">"Sending to Juan now—usually takes about 30 seconds."</p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                              {principle.id === 'principle-2' && (
-                                <div className="space-y-4">
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">First-time exchange rate</p>
-                                    <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                      <p className="text-sm text-gray-900 leading-relaxed">"Exchange rate: 16.8 pesos per dollar. That's how many pesos Juan gets for each dollar—this rate changes daily, and we'll always show it before you confirm."</p>
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Repeat user exchange rate</p>
-                                    <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                      <p className="text-sm text-gray-900 leading-relaxed">"Exchange rate: 16.8 pesos per dollar—higher than last time, so Juan gets a bit more."</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                              {principle.id === 'principle-3' && (
-                                <div className="space-y-4">
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Multi-step send</p>
-                                    <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                      <p className="text-sm text-gray-900 leading-relaxed">"Got it! How much do you want to send?"</p>
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Waiting (3-10 seconds)</p>
-                                    <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                      <p className="text-sm text-gray-900 leading-relaxed">"Sending now—usually takes about 30 seconds."</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                              {principle.id === 'principle-4' && (
-                                <div className="space-y-4">
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Real-time validation</p>
-                                    <div className="space-y-3">
-                                      <div className="bg-red-50 border-l-2 border-red-200 rounded-md p-4">
-                                        <p className="text-xs font-medium text-red-700 mb-1.5">Don't</p>
-                                        <p className="text-sm text-gray-700 leading-relaxed">After submit: "Invalid card number"</p>
-                                      </div>
-                                      <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                        <p className="text-xs font-medium text-cyan-700 mb-1.5">Do</p>
-                                        <p className="text-sm text-gray-900 leading-relaxed">As typing: "Card number should be 16 digits—looks like you're missing a few"</p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Unusual amount check</p>
-                                    <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                      <p className="text-sm text-gray-900 leading-relaxed">"This is higher than you usually send—does everything look right?"</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                              {principle.id === 'principle-5' && (
-                                <div className="space-y-4">
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Feature introduction</p>
-                                    <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                      <p className="text-sm text-gray-900 leading-relaxed">After 3rd send: "You've sent to Maria 3 times now. Want me to remind you each month?"</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                            </TabsContent>
-
-                            <TabsContent value="webapp" className="space-y-8">
-                              {principle.id === 'principle-1' && (
-                                <div className="space-y-4">
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Payment review</p>
-                                    <div className="space-y-3">
-                                      <div className="bg-red-50 border-l-2 border-red-200 rounded-md p-4">
-                                        <p className="text-xs font-medium text-red-700 mb-1.5">Don't</p>
-                                        <p className="text-sm text-gray-700 leading-relaxed">"Transaction Summary"</p>
-                                      </div>
-                                      <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                        <p className="text-xs font-medium text-cyan-700 mb-1.5">Do</p>
-                                        <p className="text-sm text-gray-900 leading-relaxed">"Here's what you're sending"</p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Error state</p>
-                                    <div className="space-y-3">
-                                      <div className="bg-red-50 border-l-2 border-red-200 rounded-md p-4">
-                                        <p className="text-xs font-medium text-red-700 mb-1.5">Don't</p>
-                                        <p className="text-sm text-gray-700 leading-relaxed">"Payment method invalid."</p>
-                                      </div>
-                                      <div className="bg-cyan-50 border-l-2 border-cyan-300 rounded-md p-4">
-                                        <p className="text-xs font-medium text-cyan-700 mb-1.5">Do</p>
-                                        <p className="text-sm text-gray-900 leading-relaxed">"This card didn't go through—want to try a different one?"</p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                              {(principle.id === 'principle-2' || principle.id === 'principle-3' || principle.id === 'principle-4' || principle.id === 'principle-5') && (
-                                <div className="text-sm text-gray-600">
-                                  Web app examples coming soon.
-                                </div>
-                              )}
-                            </TabsContent>
-                      </Tabs>
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground">P2: Adaptive complexity</p>
+                      <p className="text-foreground">if user.send_count {'<'} 3:</p>
+                      <p className="ml-4 text-foreground">show_explanation()</p>
+                      <p className="text-foreground">else:</p>
+                      <p className="ml-4 text-foreground">show_shortcut()</p>
                     </div>
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground">P4: Error prevention</p>
+                      <p className="text-foreground">if amount {'>'} user.avg * 2:</p>
+                      <p className="ml-4 text-foreground">confirm(&quot;Higher than usual—look right?&quot;)</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* QA/Testing */}
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="rounded-full bg-turquoise/20 px-3 py-1 text-xs font-semibold text-slate">QA / Testing</span>
+              </div>
+              <div className="space-y-6">
+                {[
+                  { label: 'P1: Conversational language', items: ['Does every user-facing string pass the read-aloud test?', 'No system jargon ("transaction", "execute", "beneficiary")?', 'Active voice, not passive?'] },
+                  { label: 'P2: Adaptive experience', items: ['Do first-time users see explanation?', 'Do repeat users see shortcuts?', 'Is educational content progressive?'] },
+                  { label: 'P3: State transparency', items: ['Is every loading/processing state labeled?', 'Are time expectations set?', 'Does every transition acknowledge what happened?'] },
+                  { label: 'P4: Error prevention', items: ['Are errors caught before submission?', 'Do error messages suggest solutions?', 'Does safety feel caring, not blocking?'] },
+                  { label: 'P5: Feature introduction', items: ['Are new features introduced contextually?', 'Is timing based on user readiness?', 'One new thing at a time?'] },
+                ].map((section) => (
+                  <div key={section.label}>
+                    <p className="mb-2 text-sm font-semibold text-foreground">{section.label}</p>
+                    <ul className="space-y-1.5 text-sm text-muted-foreground">
+                      {section.items.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
+                          <span className="leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>
-            </section>
-
-            {/* Resources Section */}
-            <section id="resources" className="scroll-mt-20 mb-24">
-              <h2 className="text-2xl md:text-3xl text-gray-900 font-medium mb-4 leading-tight tracking-tight">
-                Resources
-              </h2>
-              <p className="text-base md:text-lg text-gray-600 mb-12 leading-relaxed max-w-2xl">
-                Quick reference guides, checklists, and specifications for teams.
-              </p>
-            </section>
-
-            {/* Copy Library */}
-            <section id="copy-library" className="scroll-mt-20 mb-24">
-              <h3 className="text-xl md:text-2xl text-gray-900 font-semibold mb-3 leading-tight tracking-tight">
-                Copy Library
-              </h3>
-              <p className="text-base text-gray-600 mb-8 leading-relaxed">
-                Reference guide for common user actions, organized by context and experience level.
-              </p>
-
-              <div className="relative">
-                <div className="overflow-x-auto rounded-lg border border-gray-200">
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="border-b border-gray-200 bg-gray-50">
-                        <th className="text-left p-4 text-xs font-semibold text-gray-700 uppercase tracking-wider">Context</th>
-                        <th className="text-left p-4 text-xs font-semibold text-gray-700 uppercase tracking-wider">Experience</th>
-                        <th className="text-left p-4 text-xs font-semibold text-gray-700 uppercase tracking-wider">❌ Don't</th>
-                        <th className="text-left p-4 text-xs font-semibold text-gray-700 uppercase tracking-wider">✅ Do</th>
-                        <th className="text-left p-4 text-xs font-semibold text-gray-700 uppercase tracking-wider">Principle</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="p-4 text-sm text-gray-700 font-medium">Send money</td>
-                        <td className="p-4 text-sm text-gray-600">First-time</td>
-                        <td className="p-4 text-sm text-red-600 leading-relaxed">"Enter recipient details"</td>
-                        <td className="p-4 text-sm text-green-600 leading-relaxed">"Who are you sending to?"</td>
-                        <td className="p-4 text-sm text-gray-500 font-mono">P1</td>
-                      </tr>
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="p-4 text-sm text-gray-700 font-medium">Send money</td>
-                        <td className="p-4 text-sm text-gray-600">Repeat (5+)</td>
-                        <td className="p-4 text-sm text-red-600 leading-relaxed">"Enter recipient details"</td>
-                        <td className="p-4 text-sm text-green-600 leading-relaxed">"Sending to Juan again?"</td>
-                        <td className="p-4 text-sm text-gray-500 font-mono">P2</td>
-                      </tr>
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="p-4 text-sm text-gray-700 font-medium">Processing</td>
-                        <td className="p-4 text-sm text-gray-600">All</td>
-                        <td className="p-4 text-sm text-red-600 leading-relaxed">"Processing transaction..."</td>
-                        <td className="p-4 text-sm text-green-600 leading-relaxed">"Sending to Juan now—usually takes about 30 seconds."</td>
-                        <td className="p-4 text-sm text-gray-500 font-mono">P3</td>
-                      </tr>
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="p-4 text-sm text-gray-700 font-medium">Error</td>
-                        <td className="p-4 text-sm text-gray-600">All</td>
-                        <td className="p-4 text-sm text-red-600 leading-relaxed">"Payment method invalid."</td>
-                        <td className="p-4 text-sm text-green-600 leading-relaxed">"This card didn't go through—want to try a different one?"</td>
-                        <td className="p-4 text-sm text-gray-500 font-mono">P1, P3</td>
-                      </tr>
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="p-4 text-sm text-gray-700 font-medium">Success</td>
-                        <td className="p-4 text-sm text-gray-600">All</td>
-                        <td className="p-4 text-sm text-red-600 leading-relaxed">"Transaction completed. ID: TX-123"</td>
-                        <td className="p-4 text-sm text-green-600 leading-relaxed">"Done! Juan received $1,680 pesos."</td>
-                        <td className="p-4 text-sm text-gray-500 font-mono">P1</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className="absolute inset-0 bg-white/50 backdrop-blur-sm rounded-lg flex items-center justify-center pointer-events-none">
-                  <div className="text-center">
-                    <p className="text-base font-semibold text-gray-900 mb-1">Work in progress</p>
-                    <p className="text-sm text-gray-600">This content is being refined</p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Checklists */}
-            <section id="checklists" className="scroll-mt-20 mb-24">
-              <h3 className="text-xl md:text-2xl text-gray-900 font-semibold mb-8 leading-tight tracking-tight">
-                For Your Role
-              </h3>
-              <p className="text-base md:text-lg text-gray-600 mb-12 leading-relaxed max-w-2xl">
-                Role-specific guides to help you apply these principles in your work.
-              </p>
-
-              <div className="space-y-12">
-                {/* Designers */}
-                <div className="border border-gray-200 rounded-lg p-8 bg-white shadow-sm">
-                  <h4 className="text-lg md:text-xl text-gray-900 font-semibold mb-6 leading-snug">
-                    Designers
-                  </h4>
-                  
-                  <div className="space-y-8">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-4">Use principles as pattern filters:</p>
-                      <ul className="space-y-3 text-sm text-gray-700">
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P1</span>
-                          <span className="leading-relaxed">Read every string out loud—does it sound human?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P2</span>
-                          <span className="leading-relaxed">Check user state—is this their first time or a repeat action?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P3</span>
-                          <span className="leading-relaxed">Review every screen transition—is it clear what just happened?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P4</span>
-                          <span className="leading-relaxed">Look for potential errors—can we prevent instead of handle?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P5</span>
-                          <span className="leading-relaxed">Map the user journey—when does this feature become relevant?</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-4">In design reviews, ask:</p>
-                      <ul className="space-y-3 text-sm text-gray-700">
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Which principle is this screen serving?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Does this pass the P1 read-aloud test?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Have we considered both first-time and repeat users? (P2)</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Will users know what's happening here? (P3)</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Are we blocking or protecting? (P4)</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Is this the right time to introduce this? (P5)</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Product Managers */}
-                <div className="border border-gray-200 rounded-lg p-8 bg-white shadow-sm">
-                  <h4 className="text-lg md:text-xl text-gray-900 font-semibold mb-6 leading-snug">
-                    Product Managers
-                  </h4>
-                  
-                  <div className="space-y-8">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-4">Feature readiness:</p>
-                      <ul className="space-y-3 text-sm text-gray-700">
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Does the copy pass P1?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Have we designed for both P2 states (beginner + expert)?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Is P3 satisfied (every state communicated)?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Does P4 prevent errors proactively?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">When does P5 say to introduce this?</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-4">Success metrics:</p>
-                      <ul className="space-y-3 text-sm text-gray-700">
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P1</span>
-                          <span className="leading-relaxed">Qualitative testing—does copy feel human?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P2</span>
-                          <span className="leading-relaxed">Time-to-proficiency, education engagement</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P3</span>
-                          <span className="leading-relaxed">"What's happening?" support tickets (should decrease)</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P4</span>
-                          <span className="leading-relaxed">Error prevention rate vs. error handling rate</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-cyan-600 mr-3 flex-shrink-0 leading-[1.5]">P5</span>
-                          <span className="leading-relaxed">Feature discovery rate, multi-product adoption</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Engineers */}
-                <div className="border border-gray-200 rounded-lg p-8 bg-white shadow-sm">
-                  <h4 className="text-lg md:text-xl text-gray-900 font-semibold mb-6 leading-snug">
-                    Engineers
-                  </h4>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-4">Every state change should:</p>
-                      <ul className="space-y-3 text-sm text-gray-700">
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Have a human-readable message (P1)</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Adapt to user familiarity (P2)</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Communicate clearly (P3)</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Prevent errors (P4)</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-gray-50 border-l-2 border-cyan-500 pl-5 py-4 rounded-r-sm">
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-3 tracking-wider">Example patterns</p>
-                      <div className="space-y-4 text-sm font-mono text-gray-700">
-                        <div>
-                          <p className="text-xs font-semibold text-gray-600 mb-1">P1: Conversational language</p>
-                          <p className="text-gray-900">message = "This card didn't work—want to try another?"</p>
-                          <p className="text-gray-500 text-xs mt-1"># Not: "Payment method invalid"</p>
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold text-gray-600 mb-1">P2: Adaptive complexity</p>
-                          <p className="text-gray-900">if user.send_count {'<'} 3:</p>
-                          <p className="text-gray-900 ml-4">show_explanation()</p>
-                          <p className="text-gray-900">else:</p>
-                          <p className="text-gray-900 ml-4">show_shortcut()</p>
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold text-gray-600 mb-1">P3: State transparency</p>
-                          <p className="text-gray-900">status = "Sending now—usually takes 30 seconds"</p>
-                          <p className="text-gray-500 text-xs mt-1"># Not just: {'<'}spinner{'>'}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold text-gray-600 mb-1">P4: Error prevention</p>
-                          <p className="text-gray-900">if amount {'>'} user.avg_amount * 2:</p>
-                          <p className="text-gray-900 ml-4">confirm("This is higher than usual—does everything look right?")</p>
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold text-gray-600 mb-1">P5: Feature introduction timing</p>
-                          <p className="text-gray-900">if user.send_count == 10 and user.consistency_high:</p>
-                          <p className="text-gray-900 ml-4">suggest_credit_building()</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* QA/Testing */}
-                <div className="border border-gray-200 rounded-lg p-8 bg-white shadow-sm">
-                  <h4 className="text-lg md:text-xl text-gray-900 font-semibold mb-6 leading-snug">
-                    QA/Testing
-                  </h4>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-3">P1: Conversational language</p>
-                      <ul className="space-y-2 text-sm text-gray-700 ml-4">
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Does every user-facing string pass the read-aloud test?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">No system jargon ("transaction", "execute", "beneficiary")?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Active voice, not passive?</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-3">P2: Adaptive experience</p>
-                      <ul className="space-y-2 text-sm text-gray-700 ml-4">
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Do first-time users see explanation?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Do repeat users see shortcuts?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Is educational content progressive?</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-3">P3: State transparency</p>
-                      <ul className="space-y-2 text-sm text-gray-700 ml-4">
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Is every loading/processing state labeled?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Are time expectations set?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Does every transition acknowledge what happened?</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-3">P4: Error prevention</p>
-                      <ul className="space-y-2 text-sm text-gray-700 ml-4">
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Are errors caught before submission?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Do error messages suggest solutions?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Does safety feel caring, not blocking?</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 mb-3">P5: Feature introduction</p>
-                      <ul className="space-y-2 text-sm text-gray-700 ml-4">
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Are new features introduced contextually?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">Is timing based on user readiness?</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-gray-400 mr-3 flex-shrink-0 leading-[1.5]">•</span>
-                          <span className="leading-relaxed">One new thing at a time?</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Principle Conflicts */}
-            <section id="conflicts" className="scroll-mt-20 mb-24">
-              <h3 className="text-xl md:text-2xl text-gray-900 font-semibold mb-10 leading-tight tracking-tight">
-                When Principles Overlap
-              </h3>
-
-              <div className="space-y-8">
-                <div className="border border-gray-200 rounded-lg p-8 bg-white shadow-sm">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-6 leading-snug">P1 (Conversational) vs P3 (Clarity)</h4>
-                  <div className="space-y-5">
-                    <div>
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-2 tracking-wider">When</p>
-                      <p className="text-base text-gray-700 leading-relaxed">Brevity for conversation hurts understanding</p>
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-2 tracking-wider">Resolution</p>
-                      <p className="text-base text-gray-900 leading-relaxed">Be conversational but complete. Add context when needed: "We need to verify your identity—it's required by U.S. law to keep everyone safe. Takes about 2 minutes."</p>
-                    </div>
-                    <div className="bg-gray-50 border-l-2 border-cyan-500 pl-4 py-3 rounded-r-sm">
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-2 tracking-wider">Test</p>
-                      <p className="text-sm text-gray-700 leading-relaxed">Can you understand what's happening and why? If no, add context while keeping tone conversational.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border border-gray-200 rounded-lg p-8 bg-white shadow-sm">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-6 leading-snug">P2 (Guide Beginners) vs P4 (Protect)</h4>
-                  <div className="space-y-5">
-                    <div>
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-2 tracking-wider">When</p>
-                      <p className="text-base text-gray-700 leading-relaxed">Safety checks frustrate new users</p>
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-2 tracking-wider">Resolution</p>
-                      <p className="text-base text-gray-900 leading-relaxed">Frame protection as collaboration: "Just to make sure this goes to the right person—can you confirm Juan's phone number ends in 1234?"</p>
-                    </div>
-                    <div className="bg-gray-50 border-l-2 border-cyan-500 pl-4 py-3 rounded-r-sm">
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-2 tracking-wider">Test</p>
-                      <p className="text-sm text-gray-700 leading-relaxed">Does this feel like someone double-checking with you, or doubting you? If doubting, reframe.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border border-gray-200 rounded-lg p-8 bg-white shadow-sm">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-6 leading-snug">P4 (Protect) vs P5 (Grow)</h4>
-                  <div className="space-y-5">
-                    <div>
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-2 tracking-wider">When</p>
-                      <p className="text-base text-gray-700 leading-relaxed">To gate features vs. trust users</p>
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-2 tracking-wider">Resolution</p>
-                      <p className="text-base text-gray-900 leading-relaxed">Protect when it's about safety/legal. Trust when it's about capability. If user has demonstrated readiness (P5 signals), reduce gates while maintaining safety checks.</p>
-                    </div>
-                    <div className="bg-gray-50 border-l-2 border-cyan-500 pl-4 py-3 rounded-r-sm">
-                      <p className="text-xs font-semibold text-gray-600 uppercase mb-2 tracking-wider">Test</p>
-                      <p className="text-sm text-gray-700 leading-relaxed">Is this gate preventing harm or preventing growth? If growth, find way to trust while protecting.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Component Specifications */}
-            <section id="components" className="scroll-mt-20 mb-24">
-              <h3 className="text-xl md:text-2xl text-gray-900 font-semibold mb-8 leading-tight tracking-tight">
-                Component Specifications
-              </h3>
-
-              <div className="border border-gray-200 rounded-lg p-12 bg-gray-50">
-                <div className="text-center">
-                  <p className="text-base text-gray-600 mb-2">This section is in progress</p>
-                  <p className="text-sm text-gray-500">Component specifications will be added here soon.</p>
-                </div>
-              </div>
-            </section>
-
+            </div>
           </div>
-        </main>
+        </div>
+      </Section>
+
+      <Section
+        id="conflicts"
+        title="When Principles Overlap"
+        description="How to navigate tensions between principles."
+      >
+        <div className="space-y-6">
+          {[
+            {
+              title: 'P1 (Conversational) vs P3 (Clarity)',
+              when: 'Brevity for conversation hurts understanding',
+              resolution: 'Be conversational but complete. Add context when needed: "We need to verify your identity—it\'s required by U.S. law to keep everyone safe. Takes about 2 minutes."',
+              test: 'Can you understand what\'s happening and why? If no, add context while keeping tone conversational.',
+            },
+            {
+              title: 'P2 (Guide Beginners) vs P4 (Protect)',
+              when: 'Safety checks frustrate new users',
+              resolution: 'Frame protection as collaboration: "Just to make sure this goes to the right person—can you confirm Juan\'s phone number ends in 1234?"',
+              test: 'Does this feel like someone double-checking with you, or doubting you? If doubting, reframe.',
+            },
+            {
+              title: 'P4 (Protect) vs P5 (Grow)',
+              when: 'To gate features vs. trust users',
+              resolution: 'Protect when it\'s about safety/legal. Trust when it\'s about capability. If user has demonstrated readiness (P5 signals), reduce gates while maintaining safety checks.',
+              test: 'Is this gate preventing harm or preventing growth? If growth, find way to trust while protecting.',
+            },
+          ].map((conflict) => (
+            <div key={conflict.title} className="rounded-xl border border-border bg-card p-6">
+              <h4 className="font-display text-base font-bold text-foreground">{conflict.title}</h4>
+              <div className="mt-4 grid gap-4 md:grid-cols-3">
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">When</p>
+                  <p className="text-base text-muted-foreground leading-relaxed">{conflict.when}</p>
+                </div>
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Resolution</p>
+                  <p className="text-base text-foreground leading-relaxed">{conflict.resolution}</p>
+                </div>
+                <div className="rounded-xl bg-turquoise-50 p-4">
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-evergreen">Test</p>
+                  <p className="text-base text-foreground leading-relaxed">{conflict.test}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
       </div>
-    </div>
+    </DesignSystemLayout>
   )
 }

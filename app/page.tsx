@@ -41,6 +41,57 @@ export default function HomePage() {
       description="A comprehensive design system built with shadcn/ui, featuring brand colors, typography, and components for consistent product development."
     >
       <Section
+        id="foundation"
+        title="Our Foundation: Design for Presence"
+      >
+        <div className="max-w-4xl space-y-8">
+          <p className="text-xl font-light text-foreground leading-[1.5]">
+            Remittances aren&apos;t transactions, they&apos;re <span className="font-semibold">acts of presence</span>. When someone sends money through Felix, they&apos;re <span className="font-semibold">showing up for family</span> back home.
+          </p>
+
+          <p className="text-lg font-light text-muted-foreground leading-[1.6]">
+            When they build credit here, they&apos;re ensuring <span className="font-medium text-foreground">future presence</span>, the ability to <span className="font-medium text-foreground">stay available</span> for the people they love. But presence isn&apos;t just about today, it&apos;s about building the <span className="font-medium text-foreground">capability to show up tomorrow</span>.
+          </p>
+
+          <p className="border-l-2 border-turquoise pl-6 text-lg font-light text-muted-foreground leading-[1.6]">
+            The product should make users <span className="font-medium text-foreground">stronger over time</span>: more knowledgeable about their finances, more confident in their decisions, more capable of building the future they want.
+          </p>
+
+          <p className="text-lg font-light text-muted-foreground leading-[1.6]">
+            Felix <span className="font-medium text-foreground">grows with users</span>, from their first send home to comprehensive financial management across borders. We <span className="font-medium text-foreground">meet people where they are</span>, then <span className="font-medium text-foreground">gradually reveal new possibilities</span> as they&apos;re ready. <span className="font-medium text-foreground">Future presence</span> requires <span className="font-medium text-foreground">capability across your entire financial life</span>, and we&apos;re here for that <span className="font-medium text-foreground">full journey</span>.
+          </p>
+
+          <div className="mt-2 w-fit rounded-lg border border-border bg-card px-5 py-4">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.01em] leading-[1.4] text-foreground">
+              This means
+            </p>
+            <ul className="space-y-2 text-base text-muted-foreground">
+              <li className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                <span className="leading-[1.6]">Language that reflects <span className="font-semibold text-foreground">relationships</span>, not just transactions</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                <span className="leading-[1.6]">Interfaces that <span className="font-semibold text-foreground">teach</span> financial concepts without condescension</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                <span className="leading-[1.6]">Features that <span className="font-semibold text-foreground">increase capability</span>, not just provide convenience</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                <span className="leading-[1.6]"><span className="font-semibold text-foreground">Progressive revelation</span> of tools as users are ready for them</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                <span className="leading-[1.6]">Celebrations that <span className="font-semibold text-foreground">acknowledge growth</span>, not just completion</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </Section>
+
+      <Section
         id="getting-started"
         title="Getting Started"
         description="Explore the design system documentation to build consistent and beautiful interfaces."

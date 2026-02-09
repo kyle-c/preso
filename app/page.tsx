@@ -65,26 +65,26 @@ export default function HomePage() {
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.01em] leading-[1.4] text-turquoise">
               Felix uses
             </p>
-            <ul className="space-y-2 text-base text-linen/80">
+            <ul className="space-y-2 text-base text-concrete">
               <li className="flex items-start gap-3">
                 <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]">Language that reflects <span className="font-medium text-linen">relationships</span>, not just transactions</span>
+                <span className="leading-[1.6]">Language that reflects <span className="font-medium text-stone">relationships</span>, not just transactions</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]">Interfaces that <span className="font-medium text-linen">teach</span> financial concepts without condescension</span>
+                <span className="leading-[1.6]">Interfaces that <span className="font-medium text-stone">teach</span> financial concepts without condescension</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]">Features that <span className="font-medium text-linen">increase capability</span>, not just provide convenience</span>
+                <span className="leading-[1.6]">Features that <span className="font-medium text-stone">increase capability</span>, not just provide convenience</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]"><span className="font-medium text-linen">Progressive revelation</span> of tools as users are ready for them</span>
+                <span className="leading-[1.6]"><span className="font-medium text-stone">Progressive revelation</span> of tools as users are ready for them</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]">Celebrations that <span className="font-medium text-linen">acknowledge growth</span>, not just completion</span>
+                <span className="leading-[1.6]">Celebrations that <span className="font-medium text-stone">acknowledge growth</span>, not just completion</span>
               </li>
             </ul>
           </div>
@@ -126,7 +126,7 @@ export default function HomePage() {
         <div className="grid gap-8 md:grid-cols-3">
           <div className="rounded-xl bg-slate p-6">
             <h4 className="mb-3 font-display text-lg font-bold text-turquoise">Primary Colors</h4>
-            <p className="text-sm text-linen/80">
+            <p className="text-sm text-concrete">
               Turquoise and Slate form the core of our visual identity, creating a bold and trustworthy appearance.
             </p>
           </div>

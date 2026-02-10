@@ -103,7 +103,7 @@ export default function HomePage() {
               <Link
                 key={feature.href}
                 href={feature.href}
-                className="group rounded-xl border border-border bg-card p-6 transition-all hover:shadow-md hover:-translate-y-0.5"
+                className="group rounded-xl border border-border bg-white p-6 transition-all hover:shadow-md hover:-translate-y-0.5"
               >
                 <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg ${feature.color}`}>
                   <Icon className="h-6 w-6 text-slate" />

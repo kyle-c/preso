@@ -12,9 +12,6 @@ const principles = [
     oneLiner: 'Our voice should be warm, concise and always provide clarity. If it sounds like software talking to a user, rewrite it. If it sounds like one person simply helping another send money, ship it.',
     presenceLens: 'Use language that acknowledges the relational act "showing up," "being there," "helping" not just the mechanical transfer.',
     industryFoundations: ['Conversational UX', 'Calm technology', 'Trust-centered fintech design'],
-    badgeText: 'text-turquoise',
-    accentBorder: 'border-t-turquoise',
-    lensBg: 'bg-turquoise-50',
   },
   {
     id: 'principle-2',
@@ -23,9 +20,6 @@ const principles = [
     oneLiner: 'Guide new users with simple explanation to build trust. As they grow familiar, get them there faster, never removing control or understanding.',
     presenceLens: 'First sends are significant acts, guide users through them with care and context. Repeat sends are routine presence, make them effortless while building financial knowledge that enables future presence.',
     industryFoundations: ['Progressive disclosure', 'Adaptive UX', 'First-time vs repeat-user optimization', 'Contextual education'],
-    badgeText: 'text-cactus',
-    accentBorder: 'border-t-cactus',
-    lensBg: 'bg-cactus/10',
   },
   {
     id: 'principle-3',
@@ -34,9 +28,6 @@ const principles = [
     oneLiner: 'Acknowledge what just happened, show what comes next, and set time expectations. Every interaction should offer a clear path forward—no dead ends, no waiting without knowing why or how long.',
     presenceLens: 'When money is in motion, users are emotionally invested in their act of presence reaching its destination. Ambiguity creates anxiety, clarity and forward movement create confidence.',
     industryFoundations: ['Wayfinding', 'Reduced cognitive load', 'State transparency'],
-    badgeText: 'text-blueberry',
-    accentBorder: 'border-t-blueberry',
-    lensBg: 'bg-blueberry/10',
   },
   {
     id: 'principle-4',
@@ -45,9 +36,6 @@ const principles = [
     oneLiner: 'Catch mistakes early through smart defaults, clarifying questions, and real-time validation. Make safety feel like double-checking together, not being doubted or restricted.',
     presenceLens: 'Users are trying to show up for loved ones, our job is to ensure that act of care lands successfully, not to create obstacles that make them feel less capable.',
     industryFoundations: ['Error prevention > error handling', 'Guardrails over gates', 'Fintech risk UX'],
-    badgeText: 'text-mango',
-    accentBorder: 'border-t-mango',
-    lensBg: 'bg-mango/10',
   },
   {
     id: 'principle-5',
@@ -56,9 +44,6 @@ const principles = [
     oneLiner: 'Meet users where they are, then gradually reveal new possibilities as they\'re ready. Introduce financial tools at moments when they\'re relevant and helpful—not all at once.',
     presenceLens: 'Future presence isn\'t just about today\'s remittance, it\'s about building a complete financial foundation. Guide users from sending money home to managing their entire financial life in the U.S., one empowering step at a time.',
     industryFoundations: ['Progressive disclosure', 'Contextual feature introduction', 'Journey-based product expansion', 'Life-stage awareness'],
-    badgeText: 'text-lime',
-    accentBorder: 'border-t-lime',
-    lensBg: 'bg-lime/10',
   },
 ]
 
@@ -107,12 +92,12 @@ export default function FrameworkPage() {
             <div
               key={principle.id}
               id={principle.id}
-              className={`scroll-mt-8 rounded-xl border border-border border-t-2 ${principle.accentBorder} bg-card overflow-hidden`}
+              className="scroll-mt-8 rounded-xl border border-border bg-white overflow-hidden"
             >
               <div className="border-b border-border px-6 py-6">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
-                    <span className={`inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate text-sm font-semibold ${principle.badgeText}`}>
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate text-sm font-semibold text-turquoise">
                       {principle.number}
                     </span>
                   </div>
@@ -135,7 +120,7 @@ export default function FrameworkPage() {
                   </TabsList>
 
                   <TabsContent value="overview" className="space-y-6">
-                    <div className={`rounded-xl ${principle.lensBg} p-5`}>
+                    <div className="rounded-xl bg-turquoise-50 p-5">
                       <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-evergreen">Presence lens</p>
                       <p className="text-base text-foreground leading-relaxed">
                         {principle.presenceLens}
@@ -329,27 +314,27 @@ export default function FrameworkPage() {
                   <p className="mb-3 text-sm font-semibold text-foreground">In design reviews, ask</p>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Which principle is this screen serving?</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Does this pass the P1 read-aloud test?</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Have we considered both first-time and repeat users? (P2)</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Will users know what's happening here? (P3)</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Are we blocking or protecting? (P4)</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blueberry" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Is this the right time to introduce this? (P5)</span>
                     </li>
                   </ul>
@@ -367,23 +352,23 @@ export default function FrameworkPage() {
                   <p className="mb-3 text-sm font-semibold text-foreground">Feature readiness</p>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Does the copy pass P1?</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Have we designed for both P2 states (beginner + expert)?</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Is P3 satisfied (every state communicated)?</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Does P4 prevent errors proactively?</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-mango" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">When does P5 say to introduce this?</span>
                     </li>
                   </ul>
@@ -427,19 +412,19 @@ export default function FrameworkPage() {
                   <p className="mb-3 text-sm font-semibold text-foreground">Every state change should</p>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Have a human-readable message (P1)</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Adapt to user familiarity (P2)</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Communicate clearly (P3)</span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-evergreen" />
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                       <span className="leading-relaxed">Prevent errors (P4)</span>
                     </li>
                   </ul>
@@ -487,7 +472,7 @@ export default function FrameworkPage() {
                     <ul className="space-y-1.5 text-sm text-muted-foreground">
                       {section.items.map((item, idx) => (
                         <li key={idx} className="flex items-start gap-3">
-                          <span className="mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
+                          <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
                           <span className="leading-relaxed">{item}</span>
                         </li>
                       ))}

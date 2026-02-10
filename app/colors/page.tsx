@@ -163,7 +163,7 @@ export default function ColorsPage() {
         </div>
 
         <h3 className="mb-4 font-display text-lg font-bold text-foreground">Usage Examples</h3>
-        <div className="rounded-lg border border-border bg-stone p-6">
+        <div className="rounded-lg border border-border bg-white p-6">
           <pre className="overflow-x-auto text-sm text-slate">
             <code>{`// Backgrounds
 <div className="bg-turquoise">Primary turquoise</div>

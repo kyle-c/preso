@@ -41,7 +41,7 @@ export function ColorSwatch({
         <button
           onClick={copyToClipboard}
           className={cn(
-            "relative h-32 w-full rounded-lg transition-transform hover:scale-[1.02]",
+            "relative h-32 w-full rounded-lg border border-border transition-transform hover:scale-[1.02]",
             className
           )}
           style={{ backgroundColor: hex }}

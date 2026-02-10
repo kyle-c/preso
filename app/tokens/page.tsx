@@ -133,7 +133,7 @@ export default function TokensPage() {
             </thead>
             <tbody className="divide-y divide-border">
               {semanticTokens.map((token) => (
-                <tr key={token.token} className="bg-card">
+                <tr key={token.token} className="bg-white">
                   <td className="px-4 py-3">
                     <code className="rounded bg-muted px-2 py-1 text-sm text-foreground">{token.token}</code>
                   </td>
@@ -164,7 +164,7 @@ export default function TokensPage() {
       >
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {brandTokens.map((token) => (
-            <div key={token.token} className="flex items-start gap-3 rounded-lg border border-border bg-card p-4">
+            <div key={token.token} className="flex items-start gap-3 rounded-lg border border-border bg-white p-4">
               <div 
                 className="h-10 w-10 shrink-0 rounded-lg border border-border" 
                 style={{ backgroundColor: token.value }} 
@@ -191,7 +191,7 @@ export default function TokensPage() {
                 className="h-20" 
                 style={{ backgroundColor: token.value.split(' ')[0] }} 
               />
-              <div className="bg-card p-3">
+              <div className="bg-white p-3">
                 <code className="text-xs font-medium text-foreground">{token.token}</code>
                 <p className="mt-1 text-xs text-muted-foreground">{token.description}</p>
               </div>
@@ -218,7 +218,7 @@ export default function TokensPage() {
             </thead>
             <tbody className="divide-y divide-border">
               {spacingTokens.map((token) => (
-                <tr key={token.token} className="bg-card">
+                <tr key={token.token} className="bg-white">
                   <td className="px-4 py-3">
                     <code className="rounded bg-muted px-2 py-1 text-sm text-foreground">{token.token}</code>
                   </td>
@@ -264,7 +264,7 @@ export default function TokensPage() {
             </thead>
             <tbody className="divide-y divide-border">
               {typographyTokens.map((token) => (
-                <tr key={token.token} className="bg-card">
+                <tr key={token.token} className="bg-white">
                   <td className="px-4 py-3">
                     <code className="rounded bg-muted px-2 py-1 text-sm text-foreground">{token.token}</code>
                   </td>
@@ -295,7 +295,7 @@ export default function TokensPage() {
             </thead>
             <tbody className="divide-y divide-border">
               {lineHeightTokens.map((token) => (
-                <tr key={token.token} className="bg-card">
+                <tr key={token.token} className="bg-white">
                   <td className="px-4 py-3">
                     <code className="rounded bg-muted px-2 py-1 text-sm text-foreground">{token.token}</code>
                   </td>
@@ -324,7 +324,7 @@ export default function TokensPage() {
             </thead>
             <tbody className="divide-y divide-border">
               {letterSpacingTokens.map((token) => (
-                <tr key={token.token} className="bg-card">
+                <tr key={token.token} className="bg-white">
                   <td className="px-4 py-3">
                     <code className="rounded bg-muted px-2 py-1 text-sm text-foreground">{token.token}</code>
                   </td>
@@ -345,7 +345,7 @@ export default function TokensPage() {
         <h3 className="mb-4 font-display text-lg font-bold text-foreground">Font Weights</h3>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {fontWeightTokens.map((token) => (
-            <div key={token.token} className="rounded-lg border border-border bg-card p-4">
+            <div key={token.token} className="rounded-lg border border-border bg-white p-4">
               <code className="text-sm font-medium text-foreground">{token.token}</code>
               <p className="text-xs text-muted-foreground">{token.value}</p>
               <p className="mt-2 text-xl text-foreground" style={{ fontWeight: parseInt(token.value) }}>Felix Pago</p>
@@ -372,7 +372,7 @@ export default function TokensPage() {
             </thead>
             <tbody className="divide-y divide-border">
               {sidebarTokens.map((token) => (
-                <tr key={token.token} className="bg-card">
+                <tr key={token.token} className="bg-white">
                   <td className="px-4 py-3">
                     <code className="rounded bg-muted px-2 py-1 text-sm text-foreground">{token.token}</code>
                   </td>
@@ -396,7 +396,7 @@ export default function TokensPage() {
         description="How to use design tokens in your components."
       >
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="rounded-xl border border-border bg-white p-6">
             <h4 className="mb-4 font-display text-lg font-bold text-foreground">Tailwind Classes</h4>
             <pre className="overflow-x-auto rounded-lg bg-slate p-4 text-sm text-linen">
               <code>{`<!-- Using semantic tokens -->
@@ -415,7 +415,7 @@ export default function TokensPage() {
             </pre>
           </div>
 
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="rounded-xl border border-border bg-white p-6">
             <h4 className="mb-4 font-display text-lg font-bold text-foreground">CSS Custom Properties</h4>
             <pre className="overflow-x-auto rounded-lg bg-slate p-4 text-sm text-linen">
               <code>{`/* Using CSS variables directly */

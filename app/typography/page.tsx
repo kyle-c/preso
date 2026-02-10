@@ -36,7 +36,7 @@ export default function TypographyPage() {
         description="Our typography uses a mixture of fonts to create visual hierarchy."
       >
         <div className="grid gap-8 md:grid-cols-2">
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="rounded-xl border border-border bg-white p-6">
             <p className="mb-2 text-sm font-medium text-muted-foreground">Display Font</p>
             <p className="font-display text-4xl font-extrabold text-foreground">Plain</p>
             <p className="mt-4 text-sm text-muted-foreground">
@@ -48,7 +48,7 @@ export default function TypographyPage() {
             </div>
           </div>
           
-          <div className="rounded-xl border border-border bg-card p-6">
+          <div className="rounded-xl border border-border bg-white p-6">
             <p className="mb-2 text-sm font-medium text-muted-foreground">Body Font</p>
             <p className="font-sans text-4xl font-medium text-foreground">Saans</p>
             <p className="mt-4 text-sm text-muted-foreground">
@@ -91,7 +91,7 @@ export default function TypographyPage() {
       >
         <div className="space-y-8">
           {typeScale.map((item) => (
-            <div key={item.name} className="rounded-xl border border-border bg-card p-6">
+            <div key={item.name} className="rounded-xl border border-border bg-white p-6">
               <div className="mb-4 flex flex-wrap items-baseline gap-4">
                 <span className="rounded-full bg-slate px-3 py-1 text-xs font-medium text-turquoise">
                   {item.name}

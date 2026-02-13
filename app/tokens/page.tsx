@@ -70,6 +70,75 @@ const spacingTokens = [
   { token: "--spacing-3xl", value: "4rem (64px)", description: "Page-level spacing", tailwind: "gap-16, py-16" },
 ]
 
+const borderRadiusTokens = [
+  { token: "--radius-none", value: "0px", description: "Sharp corners, no rounding", tailwind: "rounded-none", preview: "0px" },
+  { token: "--radius-sm", value: "0.25rem (4px)", description: "Subtle rounding for small elements", tailwind: "rounded-sm", preview: "4px" },
+  { token: "--radius-md", value: "0.5rem (8px)", description: "Standard components (inputs, buttons)", tailwind: "rounded-md", preview: "8px" },
+  { token: "--radius-lg", value: "1rem (16px)", description: "Cards, dialogs, larger components", tailwind: "rounded-lg", preview: "16px" },
+  { token: "--radius-xl", value: "1.5rem (24px)", description: "Feature cards, sheets", tailwind: "rounded-xl", preview: "24px" },
+  { token: "--radius-2xl", value: "2rem (32px)", description: "Large promotional cards", tailwind: "rounded-2xl", preview: "32px" },
+  { token: "--radius-full", value: "9999px", description: "Pills, avatars, fully rounded", tailwind: "rounded-full", preview: "9999px" },
+]
+
+const shadowTokens = [
+  {
+    token: "--shadow-xs",
+    value: "0 1px 2px rgba(8, 36, 34, 0.03)",
+    description: "Subtle depth for inputs, small interactive elements",
+    tailwind: "shadow-xs",
+    css: "0 1px 2px rgba(8, 36, 34, 0.03)"
+  },
+  {
+    token: "--shadow-sm",
+    value: "0 1px 3px rgba(8, 36, 34, 0.06), 0 1px 2px rgba(8, 36, 34, 0.04)",
+    description: "Buttons, form controls, subtle cards",
+    tailwind: "shadow-sm",
+    css: "0 1px 3px rgba(8, 36, 34, 0.06), 0 1px 2px rgba(8, 36, 34, 0.04)"
+  },
+  {
+    token: "--shadow-md",
+    value: "0 4px 6px rgba(8, 36, 34, 0.06), 0 2px 4px rgba(8, 36, 34, 0.04)",
+    description: "Cards, dropdowns, hover states",
+    tailwind: "shadow-md",
+    css: "0 4px 6px rgba(8, 36, 34, 0.06), 0 2px 4px rgba(8, 36, 34, 0.04)"
+  },
+  {
+    token: "--shadow-lg",
+    value: "0 10px 15px rgba(8, 36, 34, 0.06), 0 4px 6px rgba(8, 36, 34, 0.03)",
+    description: "Popovers, tooltips, floating elements",
+    tailwind: "shadow-lg",
+    css: "0 10px 15px rgba(8, 36, 34, 0.06), 0 4px 6px rgba(8, 36, 34, 0.03)"
+  },
+  {
+    token: "--shadow-xl",
+    value: "0 20px 25px rgba(8, 36, 34, 0.06), 0 8px 10px rgba(8, 36, 34, 0.03)",
+    description: "Modals, dialogs, important overlays",
+    tailwind: "shadow-xl",
+    css: "0 20px 25px rgba(8, 36, 34, 0.06), 0 8px 10px rgba(8, 36, 34, 0.03)"
+  },
+  {
+    token: "--shadow-2xl",
+    value: "0 25px 50px rgba(8, 36, 34, 0.12)",
+    description: "High-emphasis elements, dramatic depth",
+    tailwind: "shadow-2xl",
+    css: "0 25px 50px rgba(8, 36, 34, 0.12)"
+  },
+  {
+    token: "--shadow-inner",
+    value: "inset 0 2px 4px rgba(8, 36, 34, 0.04)",
+    description: "Pressed states, inset inputs",
+    tailwind: "shadow-inner",
+    css: "inset 0 2px 4px rgba(8, 36, 34, 0.04)"
+  },
+  {
+    token: "--shadow-turquoise",
+    value: "0 4px 14px rgba(43, 242, 241, 0.25)",
+    description: "Brand accent glow for primary actions",
+    tailwind: "shadow-turquoise",
+    css: "0 4px 14px rgba(43, 242, 241, 0.25)"
+  },
+]
+
 const typographyTokens = [
   { token: "--text-caption", value: "0.75rem (12px)", description: "Caption - Labels, metadata", tailwind: "text-xs", typeScale: "Caption" },
   { token: "--text-body-sm", value: "0.875rem (14px)", description: "Body Small - Fine print, notes", tailwind: "text-sm", typeScale: "Body Small" },
@@ -235,6 +304,97 @@ export default function TokensPage() {
                     />
                   </td>
                   <td className="px-4 py-3 text-sm text-muted-foreground">{token.description}</td>
+                  <td className="px-4 py-3">
+                    <code className="rounded bg-muted px-2 py-1 text-xs text-muted-foreground">{token.tailwind}</code>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+
+      <Section
+        id="border-radius"
+        title="Border Radius Tokens"
+        description="Consistent corner rounding for UI elements. Use smaller radii for compact elements and larger radii for cards and containers."
+      >
+        <div className="overflow-hidden rounded-xl border border-border">
+          <table className="w-full">
+            <thead className="bg-muted">
+              <tr>
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Token</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Value</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Preview</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Usage</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Tailwind</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {borderRadiusTokens.map((token) => (
+                <tr key={token.token} className="bg-white">
+                  <td className="px-4 py-3">
+                    <code className="rounded bg-muted px-2 py-1 text-sm text-foreground">{token.token}</code>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-muted-foreground">{token.value}</td>
+                  <td className="px-4 py-3">
+                    <div
+                      className="h-12 w-12 border-2 border-turquoise bg-turquoise/20"
+                      style={{ borderRadius: token.preview }}
+                    />
+                  </td>
+                  <td className="px-4 py-3 text-sm text-muted-foreground">{token.description}</td>
+                  <td className="px-4 py-3">
+                    <code className="rounded bg-muted px-2 py-1 text-xs text-muted-foreground">{token.tailwind}</code>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+
+      <Section
+        id="shadows"
+        title="Shadow & Elevation Tokens"
+        description="Shadows use slate-tinted colors for cohesion with the brand. Use elevation to create visual hierarchy and indicate interactivity."
+      >
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {shadowTokens.map((token) => (
+            <div key={token.token} className="space-y-3">
+              <div
+                className="flex h-24 items-center justify-center rounded-xl bg-white"
+                style={{ boxShadow: token.css }}
+              >
+                <span className="text-xs font-medium text-muted-foreground">{token.tailwind}</span>
+              </div>
+              <div>
+                <code className="text-sm font-medium text-foreground">{token.token}</code>
+                <p className="mt-1 text-xs text-muted-foreground">{token.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <h3 className="mb-4 mt-10 font-display text-lg font-bold text-foreground">CSS Values</h3>
+        <div className="overflow-hidden rounded-xl border border-border">
+          <table className="w-full">
+            <thead className="bg-muted">
+              <tr>
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Token</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Value</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Tailwind</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {shadowTokens.map((token) => (
+                <tr key={token.token} className="bg-white">
+                  <td className="px-4 py-3">
+                    <code className="rounded bg-muted px-2 py-1 text-sm text-foreground">{token.token}</code>
+                  </td>
+                  <td className="px-4 py-3">
+                    <code className="text-xs text-muted-foreground">{token.css}</code>
+                  </td>
                   <td className="px-4 py-3">
                     <code className="rounded bg-muted px-2 py-1 text-xs text-muted-foreground">{token.tailwind}</code>
                   </td>

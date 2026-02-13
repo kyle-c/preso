@@ -69,6 +69,8 @@ const navItems = [
       { title: "Brand Tokens", href: "/tokens#brand" },
       { title: "Chart Tokens", href: "/tokens#chart" },
       { title: "Spacing", href: "/tokens#spacing" },
+      { title: "Border Radius", href: "/tokens#border-radius" },
+      { title: "Shadows", href: "/tokens#shadows" },
       { title: "Typography", href: "/tokens#typography" },
       { title: "Sidebar Tokens", href: "/tokens#sidebar" },
     ],
@@ -86,7 +88,7 @@ export function SidebarNav() {
           <Link href="/" className="flex items-center">
             <FelixLogo className="h-6 w-auto text-turquoise" />
           </Link>
-          <span className="text-xs font-medium uppercase tracking-[0.01em] leading-[1.4] text-sidebar-foreground/60">
+          <span className="text-xs font-medium uppercase tracking-[0.01em] leading-[1.4] text-turquoise-600">
             Design System
           </span>
         </div>

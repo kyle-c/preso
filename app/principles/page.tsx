@@ -8,7 +8,7 @@ const principles = [
   {
     id: 'principle-1',
     number: 1,
-    title: 'Conversational Transactions, Not Transactional Experiences',
+    title: 'Conversational Transactions,\nNot Transactional Experiences',
     oneLiner: 'Our voice should be warm, concise and always provide clarity. If it sounds like software talking to a user, rewrite it. If it sounds like one person simply helping another send money, ship it.',
     presenceLens: 'Use language that acknowledges the relational act "showing up," "being there," "helping" not just the mechanical transfer.',
     industryFoundations: ['Conversational UX', 'Calm technology', 'Trust-centered fintech design'],
@@ -16,7 +16,7 @@ const principles = [
   {
     id: 'principle-2',
     number: 2,
-    title: 'Guide Beginners. Accelerate Regulars.',
+    title: 'Guide Beginners.\nAccelerate Regulars.',
     oneLiner: 'Guide new users with simple explanation to build trust. As they grow familiar, get them there faster, never removing control or understanding.',
     presenceLens: 'First sends are significant acts, guide users through them with care and context. Repeat sends are routine presence, make them effortless while building financial knowledge that enables future presence.',
     industryFoundations: ['Progressive disclosure', 'Adaptive UX', 'First-time vs repeat-user optimization', 'Contextual education'],
@@ -24,7 +24,7 @@ const principles = [
   {
     id: 'principle-3',
     number: 3,
-    title: 'Never Leave Users Guessing. Always Give Next Steps.',
+    title: 'Never Leave Users Guessing.\nAlways Give Next Steps.',
     oneLiner: 'Acknowledge what just happened, show what comes next, and set time expectations. Every interaction should offer a clear path forward—no dead ends, no waiting without knowing why or how long.',
     presenceLens: 'When money is in motion, users are emotionally invested in their act of presence reaching its destination. Ambiguity creates anxiety, clarity and forward movement create confidence.',
     industryFoundations: ['Wayfinding', 'Reduced cognitive load', 'State transparency'],
@@ -94,18 +94,16 @@ export default function FrameworkPage() {
               id={principle.id}
               className="scroll-mt-8 rounded-xl border border-border bg-white overflow-hidden"
             >
-              <div className="border-b border-border px-6 py-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate text-sm font-semibold text-turquoise">
-                      {principle.number}
-                    </span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-display text-lg font-bold text-foreground leading-snug">
+              <div className="relative border-b border-border px-6 py-6">
+                <span className="absolute right-6 top-4 select-none font-display text-[120px] font-black leading-none text-concrete/30">
+                  {principle.number}
+                </span>
+                <div className="relative">
+                  <div className="min-w-0 max-w-[75%]">
+                    <h3 className="font-display text-2xl font-extrabold text-foreground leading-snug whitespace-pre-line">
                       {principle.title}
                     </h3>
-                    <p className="mt-2 text-base text-muted-foreground leading-relaxed">
+                    <p className="mt-3 text-base text-muted-foreground leading-relaxed">
                       {principle.oneLiner}
                     </p>
                   </div>
@@ -120,7 +118,7 @@ export default function FrameworkPage() {
                   </TabsList>
 
                   <TabsContent value="overview" className="space-y-6">
-                    <div className="rounded-xl bg-turquoise-50 p-5">
+                    <div className="rounded-xl bg-turquoise-100 p-5">
                       <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-evergreen">Presence lens</p>
                       <p className="text-base text-foreground leading-relaxed">
                         {principle.presenceLens}
@@ -279,7 +277,7 @@ export default function FrameworkPage() {
 
           <div className="grid gap-6 md:grid-cols-2">
             {/* Designers */}
-            <div className="rounded-xl border border-border bg-card p-6">
+            <div className="rounded-xl border border-border bg-white p-6">
               <div className="mb-4 flex items-center gap-3">
                 <span className="rounded-full bg-blueberry/20 px-3 py-1 text-xs font-semibold text-blueberry">Designers</span>
               </div>
@@ -343,37 +341,11 @@ export default function FrameworkPage() {
             </div>
 
             {/* Product Managers */}
-            <div className="rounded-xl border border-border bg-card p-6">
+            <div className="rounded-xl border border-border bg-white p-6">
               <div className="mb-4 flex items-center gap-3">
                 <span className="rounded-full bg-mango/20 px-3 py-1 text-xs font-semibold text-mango">Product Managers</span>
               </div>
               <div className="space-y-6">
-                <div>
-                  <p className="mb-3 text-sm font-semibold text-foreground">Feature readiness</p>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
-                      <span className="leading-relaxed">Does the copy pass P1?</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
-                      <span className="leading-relaxed">Have we designed for both P2 states (beginner + expert)?</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
-                      <span className="leading-relaxed">Is P3 satisfied (every state communicated)?</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
-                      <span className="leading-relaxed">Does P4 prevent errors proactively?</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
-                      <span className="leading-relaxed">When does P5 say to introduce this?</span>
-                    </li>
-                  </ul>
-                </div>
-
                 <div>
                   <p className="mb-3 text-sm font-semibold text-foreground">Success metrics</p>
                   <ul className="space-y-2 text-sm text-muted-foreground">
@@ -399,11 +371,37 @@ export default function FrameworkPage() {
                     </li>
                   </ul>
                 </div>
+
+                <div>
+                  <p className="mb-3 text-sm font-semibold text-foreground">Feature readiness</p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-3">
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
+                      <span className="leading-relaxed">Does the copy pass P1?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
+                      <span className="leading-relaxed">Have we designed for both P2 states (beginner + expert)?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
+                      <span className="leading-relaxed">Is P3 satisfied (every state communicated)?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
+                      <span className="leading-relaxed">Does P4 prevent errors proactively?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate" />
+                      <span className="leading-relaxed">When does P5 say to introduce this?</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
             {/* Engineers */}
-            <div className="rounded-xl border border-border bg-card p-6">
+            <div className="rounded-xl border border-border bg-white p-6">
               <div className="mb-4 flex items-center gap-3">
                 <span className="rounded-full bg-evergreen/20 px-3 py-1 text-xs font-semibold text-evergreen">Engineers</span>
               </div>
@@ -455,7 +453,7 @@ export default function FrameworkPage() {
             </div>
 
             {/* QA/Testing */}
-            <div className="rounded-xl border border-border bg-card p-6">
+            <div className="rounded-xl border border-border bg-white p-6">
               <div className="mb-4 flex items-center gap-3">
                 <span className="rounded-full bg-turquoise/20 px-3 py-1 text-xs font-semibold text-slate">QA / Testing</span>
               </div>
@@ -511,7 +509,7 @@ export default function FrameworkPage() {
               test: 'Is this gate preventing harm or preventing growth? If growth, find way to trust while protecting.',
             },
           ].map((conflict) => (
-            <div key={conflict.title} className="rounded-xl border border-border bg-card p-6">
+            <div key={conflict.title} className="rounded-xl border border-border bg-white p-6">
               <h4 className="font-display text-base font-bold text-foreground">{conflict.title}</h4>
               <div className="mt-4 grid gap-4 md:grid-cols-3">
                 <div>
@@ -522,7 +520,7 @@ export default function FrameworkPage() {
                   <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Resolution</p>
                   <p className="text-base text-foreground leading-relaxed">{conflict.resolution}</p>
                 </div>
-                <div className="rounded-xl bg-turquoise-50 p-4">
+                <div className="rounded-xl bg-turquoise-100 p-4">
                   <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-evergreen">Test</p>
                   <p className="text-base text-foreground leading-relaxed">{conflict.test}</p>
                 </div>

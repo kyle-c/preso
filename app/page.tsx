@@ -1,9 +1,16 @@
 import { DesignSystemLayout } from "@/components/design-system/design-system-layout"
 import { Section } from "@/components/design-system/section"
 import Link from "next/link"
-import { Palette, Type, Component, Blend } from "lucide-react"
+import { Palette, Type, Component, Blend, Compass } from "lucide-react"
 
 const features = [
+  {
+    title: "Principles",
+    description: "Core design principles that guide how we build experiences at Felix Pago.",
+    href: "/principles",
+    icon: Compass,
+    color: "bg-sky",
+  },
   {
     title: "Colors",
     description: "Primary and secondary color palettes with WCAG-compliant colorways.",
@@ -37,14 +44,17 @@ const features = [
 export default function HomePage() {
   return (
     <DesignSystemLayout
-      title="Felix Pago Design System"
-      description="A comprehensive design system built with shadcn/ui, featuring brand colors, typography, and components for consistent product development."
+      title=""
     >
       <Section
         id="foundation"
-        title="Our Foundation: Design for Presence"
+        title=""
       >
         <div className="max-w-4xl space-y-8">
+          <div className="-mt-2 mb-2">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.01em] leading-[1.4] text-turquoise-700">Overview</p>
+            <h2 className="font-display text-4xl font-extrabold text-foreground leading-tight tracking-tight">Designing for Presence</h2>
+          </div>
           <p className="text-xl font-light text-foreground leading-[1.5]">
             Remittances aren&apos;t transactions, they&apos;re <span className="font-semibold">acts of presence</span>. When someone sends money through Felix, they&apos;re <span className="font-semibold">showing up for family</span> back home.
           </p>
@@ -145,35 +155,6 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <Section
-        id="color-proportions"
-        title="Color Proportions"
-        description="Use this guide to maintain the correct balance of colors in your designs."
-      >
-        <div className="overflow-hidden rounded-xl border border-border">
-          <div className="flex h-32">
-            <div className="flex-[3] bg-turquoise" />
-            <div className="flex-[3] bg-slate" />
-            <div className="flex-1 bg-concrete" />
-            <div className="flex-1 bg-stone" />
-            <div className="flex-[0.3] bg-blueberry" />
-            <div className="flex-[0.3] bg-evergreen" />
-            <div className="flex-[0.3] bg-mocha" />
-            <div className="flex-[0.3] bg-papaya" />
-            <div className="flex-[0.3] bg-sky" />
-            <div className="flex-[0.3] bg-cactus" />
-            <div className="flex-[0.3] bg-yam" />
-            <div className="flex-[0.3] bg-lime" />
-            <div className="flex-[0.3] bg-mango" />
-            <div className="flex-[0.3] bg-fortuna" />
-          </div>
-          <div className="bg-card p-4">
-            <p className="text-sm text-muted-foreground">
-              Primary colors (Turquoise and Slate) should dominate your designs, with neutrals providing balance and secondary colors used sparingly for accents.
-            </p>
-          </div>
-        </div>
-      </Section>
     </DesignSystemLayout>
   )
 }

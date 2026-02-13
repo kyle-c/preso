@@ -1,0 +1,279 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Felix Pago Design System */
+:root {
+  /* Primary Palette - Base Colors */
+  --turquoise: #2BF2F1;
+  --slate: #082422;
+  
+  /* Turquoise Scale (50-950) */
+  --turquoise-50: #EEFEFE;
+  --turquoise-100: #D4FFFE;
+  --turquoise-200: #AEFFFE;
+  --turquoise-300: #8DFDFA;
+  --turquoise-400: #5DF7F5;
+  --turquoise-500: #2BF2F1;
+  --turquoise-600: #14D4D3;
+  --turquoise-700: #10A8A7;
+  --turquoise-800: #128585;
+  --turquoise-900: #156D6C;
+  --turquoise-950: #064949;
+  
+  /* Slate Scale (50-950) */
+  --slate-50: #F0F5F5;
+  --slate-100: #DAE5E4;
+  --slate-200: #B9CCCB;
+  --slate-300: #90ADAB;
+  --slate-400: #698988;
+  --slate-500: #4F6F6E;
+  --slate-600: #3F5958;
+  --slate-700: #354949;
+  --slate-800: #2D3D3C;
+  --slate-900: #1A2928;
+  --slate-950: #082422;
+  --concrete: #CFCABF;
+  --stone: #EFEBE7;
+  --linen: #FEFCF9;
+  
+  /* Secondary Palette */
+  --blueberry: #6060BF;
+  --evergreen: #35605F;
+  --mocha: #877867;
+  --papaya: #F26629;
+  --sky: #8DFDFA;
+  --cactus: #60D06F;
+  --yam: #C1A98A;
+  --mango: #F19D38;
+  --light-sky: #D4FFFE;
+  --lime: #DCFF00;
+  --lychee: #FFCD9C;
+  --fortuna: #FFB05A;
+  
+  /* Shadcn Token Mapping */
+  --background: #FEFCF9;
+  --foreground: #082422;
+  --card: #EFEBE7;
+  --card-foreground: #082422;
+  --popover: #FEFCF9;
+  --popover-foreground: #082422;
+  --primary: #2BF2F1;
+  --primary-foreground: #082422;
+  --secondary: #CFCABF;
+  --secondary-foreground: #082422;
+  --muted: #EFEBE7;
+  --muted-foreground: #35605F;
+  --accent: #2BF2F1;
+  --accent-foreground: #082422;
+  --destructive: #F26629;
+  --destructive-foreground: #082422;
+  --border: #CFCABF;
+  --input: #877867;
+  --ring: #2BF2F1;
+  --link: #10A8A7;
+  
+  /* Chart colors using secondary palette */
+  --chart-1: #2BF2F1;
+  --chart-2: #6060BF;
+  --chart-3: #60D06F;
+  --chart-4: #F19D38;
+  --chart-5: #F26629;
+  
+  --radius: 1rem;
+  
+  /* Spacing Scale */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
+  --spacing-3xl: 4rem;     /* 64px */
+  
+  /* Typography Scale - aligned with type scale */
+  --text-caption: 0.75rem;       /* 12px - Caption */
+  --text-body-sm: 0.875rem;      /* 14px - Body Small */
+  --text-body: 1rem;             /* 16px - Body */
+  --text-body-lg: 1.125rem;      /* 18px - Body Large */
+  --text-heading-4: 1.25rem;     /* 20px - Heading 4 */
+  --text-heading-3: 1.5rem;      /* 24px - Heading 3 */
+  --text-heading-2: 1.875rem;    /* 30px - Heading 2 */
+  --text-heading-1: 2.25rem;     /* 36px - Heading 1 */
+  --text-display-md: 3rem;       /* 48px - Display MD */
+  --text-display-lg: 3.75rem;    /* 60px - Display LG */
+  --text-display-xl: 4.5rem;     /* 72px - Display XL */
+  
+  /* Line Heights - aligned with type scale */
+  --leading-none: 1;             /* Display XL, Display LG */
+  --leading-display: 1.1;        /* Display MD */
+  --leading-heading-1: 1.2;      /* Heading 1 */
+  --leading-heading-2: 1.3;      /* Heading 2 */
+  --leading-heading-3: 1.4;      /* Heading 3, Caption */
+  --leading-heading-4: 1.5;      /* Heading 4, Body Small */
+  --leading-body: 1.6;           /* Body, Body Large */
+  
+  /* Letter Spacing - aligned with type scale */
+  --tracking-display: -0.02em;   /* Display XL, Display LG */
+  --tracking-heading: -0.01em;   /* Display MD, Heading 1 */
+  --tracking-normal: 0em;        /* Heading 2-4, Body */
+  --tracking-caption: 0.01em;    /* Caption, uppercase text */
+  
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+  
+  /* Sidebar */
+  --sidebar: #082422;
+  --sidebar-foreground: #FEFCF9;
+  --sidebar-primary: #2BF2F1;
+  --sidebar-primary-foreground: #082422;
+  --sidebar-accent: #35605F;
+  --sidebar-accent-foreground: #FEFCF9;
+  --sidebar-border: #35605F;
+  --sidebar-ring: #2BF2F1;
+}
+
+.dark {
+  --background: #082422;
+  --foreground: #FEFCF9;
+  --card: #082422;
+  --card-foreground: #FEFCF9;
+  --popover: #082422;
+  --popover-foreground: #FEFCF9;
+  --primary: #2BF2F1;
+  --primary-foreground: #082422;
+  --secondary: #35605F;
+  --secondary-foreground: #FEFCF9;
+  --muted: #35605F;
+  --muted-foreground: #CFCABF;
+  --accent: #2BF2F1;
+  --accent-foreground: #082422;
+  --destructive: #F26629;
+  --destructive-foreground: #082422;
+  --border: #35605F;
+  --input: #35605F;
+  --ring: #2BF2F1;
+  --chart-1: #2BF2F1;
+  --chart-2: #8DFDFA;
+  --chart-3: #60D06F;
+  --chart-4: #F19D38;
+  --chart-5: #F26629;
+  --sidebar: #082422;
+  --sidebar-foreground: #FEFCF9;
+  --sidebar-primary: #2BF2F1;
+  --sidebar-primary-foreground: #082422;
+  --sidebar-accent: #35605F;
+  --sidebar-accent-foreground: #FEFCF9;
+  --sidebar-border: #35605F;
+  --sidebar-ring: #2BF2F1;
+  --link: #2BF2F1;
+}
+
+@theme inline {
+  --font-sans: 'DM Sans', 'DM Sans Fallback', system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Plus Jakarta Sans Fallback', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  
+  /* Felix Pago Brand Colors */
+  --color-turquoise: var(--turquoise);
+  --color-turquoise-50: var(--turquoise-50);
+  --color-turquoise-100: var(--turquoise-100);
+  --color-turquoise-200: var(--turquoise-200);
+  --color-turquoise-300: var(--turquoise-300);
+  --color-turquoise-400: var(--turquoise-400);
+  --color-turquoise-500: var(--turquoise-500);
+  --color-turquoise-600: var(--turquoise-600);
+  --color-turquoise-700: var(--turquoise-700);
+  --color-turquoise-800: var(--turquoise-800);
+  --color-turquoise-900: var(--turquoise-900);
+  --color-turquoise-950: var(--turquoise-950);
+  --color-slate: var(--slate);
+  --color-slate-50: var(--slate-50);
+  --color-slate-100: var(--slate-100);
+  --color-slate-200: var(--slate-200);
+  --color-slate-300: var(--slate-300);
+  --color-slate-400: var(--slate-400);
+  --color-slate-500: var(--slate-500);
+  --color-slate-600: var(--slate-600);
+  --color-slate-700: var(--slate-700);
+  --color-slate-800: var(--slate-800);
+  --color-slate-900: var(--slate-900);
+  --color-slate-950: var(--slate-950);
+  --color-concrete: var(--concrete);
+  --color-stone: var(--stone);
+  --color-linen: var(--linen);
+  --color-blueberry: var(--blueberry);
+  --color-evergreen: var(--evergreen);
+  --color-mocha: var(--mocha);
+  --color-papaya: var(--papaya);
+  --color-sky: var(--sky);
+  --color-cactus: var(--cactus);
+  --color-yam: var(--yam);
+  --color-mango: var(--mango);
+  --color-light-sky: var(--light-sky);
+  --color-lime: var(--lime);
+  --color-lychee: var(--lychee);
+  --color-fortuna: var(--fortuna);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button,
+  [role="button"],
+  a {
+    cursor: pointer;
+  }
+  button:disabled,
+  [role="button"]:disabled {
+    cursor: not-allowed;
+  }
+}

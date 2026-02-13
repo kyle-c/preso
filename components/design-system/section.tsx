@@ -14,7 +14,7 @@ interface SectionProps {
 export function Section({ id, title, description, accessibility, children }: SectionProps) {
   return (
     <section id={id} className="mb-16 scroll-mt-8">
-      <div className="mb-6">
+      {title && <div className="mb-6">
         <div className="flex items-center gap-3">
           <h2 className="font-display text-2xl font-bold text-foreground">{title}</h2>
           {accessibility && (
@@ -41,7 +41,7 @@ export function Section({ id, title, description, accessibility, children }: Sec
             ))}
           </ul>
         )}
-      </div>
+      </div>}
       {children}
     </section>
   )

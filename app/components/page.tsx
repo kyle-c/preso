@@ -1,10 +1,10 @@
 import { DesignSystemLayout } from "@/components/design-system/design-system-layout"
 import { Section } from "@/components/design-system/section"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
+import { FloatingInput } from "@/components/ui/floating-input"
 import { ArrowRight, Send, Download, Plus, Check, X, Loader2 } from "lucide-react"
 
 export default function ComponentsPage() {
@@ -192,33 +192,20 @@ export default function ComponentsPage() {
         }}
       >
         <div className="max-w-md space-y-6">
-          {/* Basic Inputs */}
-          <div className="space-y-2">
-            <Label htmlFor="default">Default Input</Label>
-            <Input id="default" placeholder="Enter your email..." />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="disabled">Disabled Input</Label>
-            <Input id="disabled" placeholder="Disabled input" disabled />
-          </div>
-
-          {/* With Button */}
-          <div className="space-y-2">
-            <Label>Input with Button</Label>
-            <div className="flex gap-2">
-              <Input placeholder="Enter phone number..." />
-              <Button>Send</Button>
-            </div>
+          {/* Floating Label Inputs */}
+          <div className="space-y-4">
+            <FloatingInput label="Email address" type="email" />
+            <FloatingInput label="Phone number" type="tel" />
+            <FloatingInput label="Disabled input" disabled />
           </div>
 
           {/* Brand Styled */}
-          <div className="space-y-2">
-            <Label>Brand Styled Input</Label>
+          <div>
+            <h4 className="mb-4 text-sm font-medium text-muted-foreground">Brand Styled</h4>
             <div className="flex overflow-hidden rounded-full border-2 border-concrete bg-linen">
-              <input 
-                type="email" 
-                placeholder="Enter your email..." 
+              <input
+                type="email"
+                placeholder="Enter your email..."
                 className="flex-1 bg-transparent px-4 py-3 text-slate placeholder:text-slate/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
               />
               <button type="button" className="rounded-full bg-turquoise px-6 py-3 font-medium text-slate transition-colors hover:bg-turquoise/90">

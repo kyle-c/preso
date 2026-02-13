@@ -98,7 +98,7 @@ export default function ColorsPage() {
             <div className="flex-[3] bg-slate" />
             <div className="flex-1 bg-concrete" />
             <div className="flex-1 bg-stone" />
-            <div className="flex-[2] bg-linen" />
+            <div className="flex-1 bg-linen" />
             <div className="flex-[0.3] bg-blueberry" />
             <div className="flex-[0.3] bg-evergreen" />
             <div className="flex-[0.3] bg-mocha" />

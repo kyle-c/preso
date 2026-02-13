@@ -88,6 +88,37 @@ export default function ColorsPage() {
       description="Primary colors should be used in important brand moments to build recognition and association with our brand. These should be followed at all times for consistency."
     >
       <Section
+        id="color-proportions"
+        title="Color Proportions"
+        description="Use this guide to maintain the correct balance of colors in your designs."
+      >
+        <div className="overflow-hidden rounded-xl border border-border">
+          <div className="flex h-32">
+            <div className="flex-[3] bg-turquoise" />
+            <div className="flex-[3] bg-slate" />
+            <div className="flex-1 bg-concrete" />
+            <div className="flex-1 bg-stone" />
+            <div className="flex-[2] bg-linen" />
+            <div className="flex-[0.3] bg-blueberry" />
+            <div className="flex-[0.3] bg-evergreen" />
+            <div className="flex-[0.3] bg-mocha" />
+            <div className="flex-[0.3] bg-papaya" />
+            <div className="flex-[0.3] bg-sky" />
+            <div className="flex-[0.3] bg-cactus" />
+            <div className="flex-[0.3] bg-yam" />
+            <div className="flex-[0.3] bg-lime" />
+            <div className="flex-[0.3] bg-mango" />
+            <div className="flex-[0.3] bg-fortuna" />
+          </div>
+          <div className="bg-white p-4">
+            <p className="text-sm text-muted-foreground">
+              Primary colors (Turquoise and Slate) should dominate your designs, with neutrals providing balance and secondary colors used sparingly for accents.
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      <Section
         id="primary"
         title="Primary Palette"
         description="The core colors that define the Felix Pago brand identity."
@@ -243,48 +274,6 @@ export default function ColorsPage() {
         </div>
       </Section>
 
-      <Section
-        id="proportions"
-        title="Color Proportions"
-        description="An approximate overview of the proportions colors should be used in relation to others. Use this to help create visuals with the correct color ratio."
-      >
-        <div className="overflow-hidden rounded-xl border border-border">
-          <div className="flex h-48">
-            <div className="flex-[30] bg-turquoise" title="Turquoise" />
-            <div className="flex-[30] bg-slate" title="Slate" />
-            <div className="flex-[15] bg-concrete" title="Concrete" />
-            <div className="flex-[15] bg-stone" title="Stone" />
-            <div className="flex-1 bg-blueberry" title="Blueberry" />
-            <div className="flex-1 bg-evergreen" title="Evergreen" />
-            <div className="flex-1 bg-mocha" title="Mocha" />
-            <div className="flex-1 bg-papaya" title="Papaya" />
-            <div className="flex-1 bg-sky" title="Sky" />
-            <div className="flex-1 bg-cactus" title="Cactus" />
-            <div className="flex-1 bg-yam" title="Yam" />
-            <div className="flex-1 bg-lime" title="Lime" />
-            <div className="flex-1 bg-mango" title="Mango" />
-            <div className="flex-1 bg-fortuna" title="Fortuna" />
-          </div>
-        </div>
-        <div className="mt-4 flex flex-wrap gap-4">
-          <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded bg-turquoise" />
-            <span className="text-sm text-muted-foreground">Turquoise (Primary)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded bg-slate" />
-            <span className="text-sm text-muted-foreground">Slate (Primary)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded bg-concrete" />
-            <span className="text-sm text-muted-foreground">Neutrals</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded bg-mango" />
-            <span className="text-sm text-muted-foreground">Secondary (Accents)</span>
-          </div>
-        </div>
-      </Section>
     </DesignSystemLayout>
   )
 }

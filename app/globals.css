@@ -155,7 +155,7 @@
   --destructive-foreground: #082422;
   --border: #CFCABF;
   --input: #877867;
-  --ring: #2BF2F1;
+  --ring: #877867;
   --link: #10A8A7;
   
   /* Chart colors using secondary palette */
@@ -242,7 +242,7 @@
   --destructive-foreground: #082422;
   --border: #35605F;
   --input: #35605F;
-  --ring: #2BF2F1;
+  --ring: #CFCABF;
   --chart-1: #2BF2F1;
   --chart-2: #8DFDFA;
   --chart-3: #60D06F;
@@ -360,4 +360,11 @@
   [role="button"]:disabled {
     cursor: not-allowed;
   }
+}
+
+/* Focus visible override — unlayered so it takes precedence over @layer utilities.
+   Replaces the crisp 3px ring with a diffuse shadow tonal to the border color. */
+:focus-visible {
+  --tw-ring-shadow: 0 0 10px 3px color-mix(in srgb, var(--color-ring) 8%, transparent);
+  border-color: var(--color-input);
 }

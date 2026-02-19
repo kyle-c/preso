@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-turquoise text-slate hover:bg-turquoise/90',
+        default: 'bg-turquoise text-slate hover:bg-turquoise/80',
         secondary: 'bg-concrete text-slate hover:bg-concrete/80',
         outline: 'border-2 border-slate bg-transparent text-slate hover:bg-slate hover:text-linen',
         destructive:

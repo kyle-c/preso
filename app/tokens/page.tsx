@@ -16,9 +16,9 @@ const semanticTokens = [
   { token: "--accent-foreground", value: "#082422 (Slate)", description: "Text on accent backgrounds", light: "#082422", dark: "#082422" },
   { token: "--destructive", value: "#F26629 (Papaya)", description: "Error and destructive actions", light: "#F26629", dark: "#F26629" },
   { token: "--destructive-foreground", value: "#082422 (Slate)", description: "Text on destructive backgrounds", light: "#082422", dark: "#082422" },
-  { token: "--border", value: "#CFCABF (Concrete)", description: "Borders and dividers", light: "#CFCABF", dark: "#35605F" },
-  { token: "--input", value: "#877867 (Mocha)", description: "Input borders", light: "#877867", dark: "#35605F" },
-  { token: "--ring", value: "#2BF2F1 (Turquoise)", description: "Focus rings", light: "#2BF2F1", dark: "#2BF2F1" },
+  { token: "--border", value: "#CFCABF (Concrete)", description: "Borders, dividers, and default (unfocused) input borders", light: "#CFCABF", dark: "#35605F" },
+  { token: "--input", value: "#877867 (Mocha)", description: "Focused/active input border state — darker than default", light: "#877867", dark: "#35605F" },
+  { token: "--ring", value: "#877867 (Mocha)", description: "Focus shadow glow — tonal with the input border", light: "#877867", dark: "#CFCABF" },
 ]
 
 const brandTokens = [

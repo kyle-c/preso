@@ -25,7 +25,7 @@ function FloatingInput({
         id={inputId}
         data-slot="floating-input"
         className={cn(
-          'peer h-14 w-full rounded-xl border border-input bg-transparent px-4 pt-4 pb-2 text-base text-foreground transition-colors outline-none',
+          'peer h-14 w-full rounded-xl border border-border bg-transparent px-4 pt-4 pb-2 text-base text-foreground transition-colors outline-none',
           'focus:border-ring focus:ring-ring/50 focus:ring-[3px]',
           'placeholder:text-transparent',
           'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',

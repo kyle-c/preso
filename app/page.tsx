@@ -72,7 +72,7 @@ export default function HomePage() {
           </p>
 
           <div className="mt-2 w-fit rounded-xl border border-border bg-white px-6 py-5">
-            <p className="mb-3 font-display text-base font-bold text-foreground">
+            <p className="mb-3 font-display text-xl font-light text-foreground">
               Felix uses
             </p>
             <ul className="space-y-2 text-base text-muted-foreground">

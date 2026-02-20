@@ -71,30 +71,30 @@ export default function HomePage() {
             Felix <span className="font-medium text-foreground">grows with users</span>, from their first send home to comprehensive financial management across borders. We <span className="font-medium text-foreground">meet people where they are</span>, then <span className="font-medium text-foreground">gradually reveal new possibilities</span> as they&apos;re ready. <span className="font-medium text-foreground">Future presence</span> requires <span className="font-medium text-foreground">capability across your entire financial life</span>, and we&apos;re here for that <span className="font-medium text-foreground">full journey</span>.
           </p>
 
-          <div className="mt-2 w-fit rounded-xl bg-slate px-6 py-5">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.01em] leading-[1.4] text-turquoise">
+          <div className="mt-2 w-fit rounded-xl border border-border bg-white px-6 py-5">
+            <p className="mb-3 font-display text-base font-bold text-foreground">
               Felix uses
             </p>
-            <ul className="space-y-2 text-base text-concrete">
+            <ul className="space-y-2 text-base text-muted-foreground">
               <li className="flex items-start gap-3">
-                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]">Language that reflects <span className="font-medium text-stone">relationships</span>, not just transactions</span>
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise-600" />
+                <span className="leading-[1.6]">Language that reflects <span className="font-medium text-foreground">relationships</span>, not just transactions</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]">Interfaces that <span className="font-medium text-stone">teach</span> financial concepts without condescension</span>
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise-600" />
+                <span className="leading-[1.6]">Interfaces that <span className="font-medium text-foreground">teach</span> financial concepts without condescension</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]">Features that <span className="font-medium text-stone">increase capability</span>, not just provide convenience</span>
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise-600" />
+                <span className="leading-[1.6]">Features that <span className="font-medium text-foreground">increase capability</span>, not just provide convenience</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]"><span className="font-medium text-stone">Progressive revelation</span> of tools as users are ready for them</span>
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise-600" />
+                <span className="leading-[1.6]"><span className="font-medium text-foreground">Progressive revelation</span> of tools as users are ready for them</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise" />
-                <span className="leading-[1.6]">Celebrations that <span className="font-medium text-stone">acknowledge growth</span>, not just completion</span>
+                <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise-600" />
+                <span className="leading-[1.6]">Celebrations that <span className="font-medium text-foreground">acknowledge growth</span>, not just completion</span>
               </li>
             </ul>
           </div>

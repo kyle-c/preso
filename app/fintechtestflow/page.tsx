@@ -34,7 +34,7 @@ function PhoneFrame({ children }: { children: React.ReactNode }) {
 }
 
 const badge = (label: string) => (
-  <span className="inline-block border border-slate/30 text-slate text-[12px] font-semibold px-3 py-1 rounded-full">
+  <span className="inline-block border border-mocha text-mocha text-[12px] font-semibold px-3 py-1 rounded-full">
     {label}
   </span>
 )

@@ -116,7 +116,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
     <div className="flex flex-col px-5 pb-8">
       <ScreenHeader />
 
-      <div className="flex items-center gap-3 px-1 py-3">
+      <div className="flex items-center gap-3 px-1 py-1.5">
         <div className="h-9 w-9 flex-shrink-0" />
         <div className="flex flex-1 gap-1.5">
           <div className="h-1.5 flex-1 rounded-full bg-slate" />

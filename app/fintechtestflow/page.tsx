@@ -130,7 +130,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
       <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-slate mb-2">
         {t.paymentMethod.titleLine1}<br />{t.paymentMethod.titleLine2}
       </h1>
-      <div className="flex items-center gap-3 mb-5">
+      <div className="flex items-center gap-3 mb-3">
         <div className="flex-1 h-px bg-slate/15" />
         <span className="text-[12px] font-semibold text-mocha uppercase tracking-wider">{t.paymentMethod.subtitle}</span>
         <div className="flex-1 h-px bg-slate/15" />

@@ -101,7 +101,7 @@ export const content: Record<Language, ContentTokens> = {
     paymentMethod: {
       titleLine1: 'Almost done.',
       titleLine2: 'How do you want to pay?',
-      subtitle: "Pick whatever's easiest for you.",
+      subtitle: 'Express Pay',
       creditDebitName: 'Credit/debit card',
       creditDebitDesc: 'Credit cards may carry extra fees.',
       applePayName: 'Apple Pay',
@@ -184,7 +184,7 @@ export const content: Record<Language, ContentTokens> = {
     paymentMethod: {
       titleLine1: 'Ya casi.',
       titleLine2: '¿Cómo quieres pagar?',
-      subtitle: 'Elige lo que más te convenga.',
+      subtitle: 'Express Pay',
       creditDebitName: 'Tarjeta de crédito/débito',
       creditDebitDesc: 'Las tarjetas de crédito pueden tener cargos adicionales.',
       applePayName: 'Apple Pay',
@@ -267,7 +267,7 @@ export const content: Record<Language, ContentTokens> = {
     paymentMethod: {
       titleLine1: 'Quase lá.',
       titleLine2: 'Como você quer pagar?',
-      subtitle: 'Escolha o que for mais fácil para você.',
+      subtitle: 'Express Pay',
       creditDebitName: 'Cartão de crédito/débito',
       creditDebitDesc: 'Cartões de crédito podem ter taxas adicionais.',
       applePayName: 'Apple Pay',

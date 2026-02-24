@@ -130,7 +130,11 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
       <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-slate mb-2">
         {t.paymentMethod.titleLine1}<br />{t.paymentMethod.titleLine2}
       </h1>
-      <p className="text-[15px] text-slate/60 mb-5">{t.paymentMethod.subtitle}</p>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="flex-1 h-px bg-slate/15" />
+        <span className="text-[12px] font-semibold text-mocha uppercase tracking-wider">{t.paymentMethod.subtitle}</span>
+        <div className="flex-1 h-px bg-slate/15" />
+      </div>
 
       {/* Apple Pay button */}
       <button

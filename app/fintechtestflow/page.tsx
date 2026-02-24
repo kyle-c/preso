@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { FelixLogo } from '@/components/design-system/felix-logo'
 import { Button } from '@/components/ui/button'
 import { FloatingInput } from '@/components/ui/floating-input'
@@ -12,6 +12,14 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ChevronLeft, Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin } from 'lucide-react'
+import { type Language, type ContentTokens, languages, content } from './content'
+
+// ─── Language context ────────────────────────────────────────────────────────
+
+const LangContext = createContext<ContentTokens>(content['en'])
+const useT = () => useContext(LangContext)
+
+// ─── Phone frame ─────────────────────────────────────────────────────────────
 
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
@@ -33,6 +41,31 @@ function PhoneFrame({ children }: { children: React.ReactNode }) {
   )
 }
 
+// ─── Shared sub-components ───────────────────────────────────────────────────
+
+function ScreenHeader() {
+  const t = useT()
+  return (
+    <div className="flex flex-col items-center pt-4 pb-1">
+      <FelixLogo className="h-8 text-slate" />
+      <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
+        <span className="text-[10px] font-semibold text-slate">{t.common.badge}</span>
+      </div>
+    </div>
+  )
+}
+
+function BackButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-slate/15 text-slate hover:bg-white"
+    >
+      <ChevronLeft className="h-4 w-4" />
+    </button>
+  )
+}
+
 function AppleIcon({ className }: { className?: string }) {
   return (
     <svg className={className ?? 'h-5 w-5 fill-slate'} viewBox="0 0 814 1000" xmlns="http://www.w3.org/2000/svg">
@@ -41,13 +74,27 @@ function AppleIcon({ className }: { className?: string }) {
   )
 }
 
-const badge = (label: string) => (
+const BadgePill = ({ label }: { label: string }) => (
   <span className="inline-block border border-mocha text-mocha text-[12px] font-semibold px-3 py-1 rounded-full">
     {label}
   </span>
 )
 
+// ─── Stores data ─────────────────────────────────────────────────────────────
+
+const stores = [
+  { id: 'walgreens',   name: 'Walgreens',             fee: '$3.95', bg: 'bg-[#E31837]', text: 'W'   },
+  { id: 'cvs',         name: 'CVS Pharmacy',           fee: '$3.95', bg: 'bg-[#CC0000]', text: 'CVS' },
+  { id: '7eleven',     name: '7-Eleven',               fee: '$3.95', bg: 'bg-[#008751]', text: '7'   },
+  { id: 'walmart',     name: 'Walmart',                fee: '$3.74', bg: 'bg-[#0071CE]', text: '★'   },
+  { id: 'caseys',      name: "Casey's",                fee: '$3.95', bg: 'bg-[#C8102E]', text: 'C'   },
+  { id: 'officedepot', name: 'Office Depot OfficeMax', fee: '$3.95', bg: 'bg-[#CC0000]', text: 'OD'  },
+]
+
+// ─── Screens ─────────────────────────────────────────────────────────────────
+
 function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
+  const t = useT()
   const [selected, setSelected] = useState<string | null>('card')
 
   const cardClass = (id: string) =>
@@ -57,18 +104,16 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
         : 'bg-white border-slate/20 shadow-sm'
     }`
 
+  const SelectedBadge = () => (
+    <span className="absolute top-4 right-4 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full">
+      {t.common.selected}
+    </span>
+  )
+
   return (
     <div className="flex flex-col px-5 pb-8">
-      <div className="flex flex-col items-center pt-4 pb-1">
-        <FelixLogo className="h-8 text-slate" />
-        <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
-          <span className="text-[10px] font-semibold text-slate">
-            Authorized UniTeller Agent
-          </span>
-        </div>
-      </div>
+      <ScreenHeader />
 
-      {/* Progress */}
       <div className="flex items-center gap-3 px-1 py-3">
         <div className="h-9 w-9 flex-shrink-0" />
         <div className="flex flex-1 gap-1.5">
@@ -81,83 +126,67 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
       </div>
 
       <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-slate mb-2">
-        Almost done.<br />How do you want to pay?
+        {t.paymentMethod.titleLine1}<br />{t.paymentMethod.titleLine2}
       </h1>
-      <p className="text-[15px] text-slate/60 mb-5">
-        Pick whatever's easiest for you.
-      </p>
+      <p className="text-[15px] text-slate/60 mb-5">{t.paymentMethod.subtitle}</p>
 
       <div className="space-y-3">
-        {/* Credit/debit card */}
         <button className={cardClass('card')} onClick={() => setSelected('card')}>
-          {selected === 'card' && <span className="absolute top-4 right-4 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full">Selected</span>}
-          <p className="font-bold text-[17px] text-slate">Credit/debit card</p>
-          <p className="text-[13px] text-mocha mt-1.5 leading-snug">
-            Credit cards may carry extra fees.
-          </p>
+          {selected === 'card' && <SelectedBadge />}
+          <p className="font-bold text-[17px] text-slate">{t.paymentMethod.creditDebitName}</p>
+          <p className="text-[13px] text-mocha mt-1.5 leading-snug">{t.paymentMethod.creditDebitDesc}</p>
           <div className="mt-3 flex gap-2">
-            {badge('No fee for debit')}
-            {badge('Instant')}
+            <BadgePill label={t.paymentMethod.badgeNoFeeDebit} />
+            <BadgePill label={t.paymentMethod.badgeInstant} />
           </div>
         </button>
 
-        {/* Apple Pay */}
         <button className={cardClass('apple')} onClick={() => setSelected('apple')}>
-          {selected === 'apple' && <span className="absolute top-4 right-4 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full">Selected</span>}
+          {selected === 'apple' && <SelectedBadge />}
           <div className="flex items-center gap-2.5">
             <AppleIcon className="h-[18px] w-[18px] fill-slate" />
-            <p className="font-bold text-[17px] text-slate">Apple Pay</p>
+            <p className="font-bold text-[17px] text-slate">{t.paymentMethod.applePayName}</p>
           </div>
-          <p className="text-[13px] text-mocha mt-1.5 leading-snug">
-            Pay with Face ID or Touch ID.
-          </p>
+          <p className="text-[13px] text-mocha mt-1.5 leading-snug">{t.paymentMethod.applePayDesc}</p>
           <div className="mt-3 flex gap-2">
-            {badge('No fee for debit')}
-            {badge('Instant')}
+            <BadgePill label={t.paymentMethod.badgeNoFeeDebit} />
+            <BadgePill label={t.paymentMethod.badgeInstant} />
           </div>
         </button>
 
-        {/* Bank account */}
         <button className={cardClass('bank')} onClick={() => setSelected('bank')}>
-          {selected === 'bank' && <span className="absolute top-4 right-4 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full">Selected</span>}
-          <p className="font-bold text-[17px] text-slate">Bank account</p>
-          <p className="text-[13px] text-mocha mt-1.5 leading-snug">
-            From your checking or savings account.
-          </p>
+          {selected === 'bank' && <SelectedBadge />}
+          <p className="font-bold text-[17px] text-slate">{t.paymentMethod.bankName}</p>
+          <p className="text-[13px] text-mocha mt-1.5 leading-snug">{t.paymentMethod.bankDesc}</p>
           <div className="mt-3 flex gap-2">
-            {badge('No fee')}
-            {badge('1–3 business days')}
+            <BadgePill label={t.paymentMethod.badgeNoFee} />
+            <BadgePill label={t.paymentMethod.badgeBusinessDays} />
           </div>
         </button>
 
-        {/* Cash at a store */}
         <button className={cardClass('cash')} onClick={() => setSelected('cash')}>
-          {selected === 'cash' && <span className="absolute top-4 right-4 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full">Selected</span>}
-          <p className="font-bold text-[17px] text-slate">Cash at a store</p>
-          <p className="text-[13px] text-mocha mt-1.5 leading-snug">
-            Pay cash at a store near you.
-          </p>
+          {selected === 'cash' && <SelectedBadge />}
+          <p className="font-bold text-[17px] text-slate">{t.paymentMethod.cashName}</p>
+          <p className="text-[13px] text-mocha mt-1.5 leading-snug">{t.paymentMethod.cashDesc}</p>
           <div className="mt-3 flex gap-2">
-            {badge('$3.95')}
-            {badge('Same day')}
+            <BadgePill label={t.paymentMethod.badgeCashFee} />
+            <BadgePill label={t.paymentMethod.badgeSameDay} />
           </div>
         </button>
       </div>
 
       <div className="mt-5 space-y-2.5">
         <Button size="lg" className="w-full text-[15px]" onClick={() => onNext(selected!)} disabled={!selected}>
-          Continue
+          {t.common.continue}
         </Button>
-        <Button variant="outline" size="lg" className="w-full text-[15px]">
-          Cancel
-        </Button>
+        <Button variant="outline" size="lg" className="w-full text-[15px]">{t.common.cancel}</Button>
       </div>
-
     </div>
   )
 }
 
 function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; onBack: () => void; paymentMethod: string }) {
+  const t = useT()
   const [address, setAddress] = useState('')
   const [zip, setZip] = useState('')
   const [city, setCity] = useState('')
@@ -167,22 +196,10 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex flex-col items-center pt-4 pb-1">
-        <FelixLogo className="h-8 text-slate" />
-        <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
-          <span className="text-[10px] font-semibold text-slate">
-            Authorized UniTeller Agent
-          </span>
-        </div>
-      </div>
+      <ScreenHeader />
 
       <div className="flex items-center gap-3 px-6 py-3">
-        <button
-          onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-slate/15 text-slate hover:bg-white"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
+        <BackButton onClick={onBack} />
         <div className="flex flex-1 gap-1.5">
           <div className="h-1.5 flex-1 rounded-full bg-slate" />
           <div className="h-1.5 flex-1 rounded-full bg-slate" />
@@ -194,23 +211,21 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
 
       <div className="flex-1 px-6 pb-6 overflow-y-auto">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-2">
-          {isCash ? "What's your address?" : "What's the billing address on your card?"}
+          {isCash ? t.address.titleCash : t.address.titleBilling}
         </h1>
         {isCash && (
-          <p className="text-[14px] text-mocha mb-5 leading-snug">
-            We'll use this to find the closest store locations where you can pay.
-          </p>
+          <p className="text-[14px] text-mocha mb-5 leading-snug">{t.address.helperCash}</p>
         )}
         {!isCash && <div className="mb-6" />}
 
         <div className="space-y-4">
-          <FloatingInput label="Address *" className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={address} onChange={e => setAddress(e.target.value)} />
-          <FloatingInput label="Apt, suite, or floor" className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" />
-          <FloatingInput label="ZIP Code *" className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={zip} onChange={e => setZip(e.target.value)} />
-          <FloatingInput label="City *" className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={city} onChange={e => setCity(e.target.value)} />
+          <FloatingInput label={t.address.fieldAddress} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={address} onChange={e => setAddress(e.target.value)} />
+          <FloatingInput label={t.address.fieldApt} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" />
+          <FloatingInput label={t.address.fieldZip} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={zip} onChange={e => setZip(e.target.value)} />
+          <FloatingInput label={t.address.fieldCity} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={city} onChange={e => setCity(e.target.value)} />
           <Select onValueChange={setState}>
             <SelectTrigger className="!h-14 w-full rounded-2xl bg-white px-4 text-base data-[placeholder]:text-muted-foreground">
-              <SelectValue placeholder="State *" />
+              <SelectValue placeholder={t.address.fieldState} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="AL">Alabama</SelectItem>
@@ -269,11 +284,9 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
 
         <div className="pt-8 space-y-2.5">
           <Button size="lg" className="w-full text-[15px]" onClick={onNext} disabled={!canContinue}>
-            Continue
+            {t.common.continue}
           </Button>
-          <Button variant="outline" size="lg" className="w-full text-[15px]">
-            Cancel
-          </Button>
+          <Button variant="outline" size="lg" className="w-full text-[15px]">{t.common.cancel}</Button>
         </div>
       </div>
     </div>
@@ -281,6 +294,7 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
 }
 
 function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+  const t = useT()
   const [name, setName] = useState('')
   const [cardNumber, setCardNumber] = useState('')
   const [expiry, setExpiry] = useState('')
@@ -289,22 +303,10 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex flex-col items-center pt-4 pb-1">
-        <FelixLogo className="h-8 text-slate" />
-        <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
-          <span className="text-[10px] font-semibold text-slate">
-            Authorized UniTeller Agent
-          </span>
-        </div>
-      </div>
+      <ScreenHeader />
 
       <div className="flex items-center gap-3 px-6 py-3">
-        <button
-          onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-slate/15 text-slate hover:bg-white"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
+        <BackButton onClick={onBack} />
         <div className="flex flex-1 gap-1.5">
           <div className="h-1.5 flex-1 rounded-full bg-slate" />
           <div className="h-1.5 flex-1 rounded-full bg-slate" />
@@ -316,38 +318,34 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
 
       <div className="flex-1 px-6 pb-6 overflow-y-auto">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-6">
-          Enter your card details
+          {t.cardDetails.title}
         </h1>
 
         <div className="space-y-4">
           <div>
-            <FloatingInput label="Full name on card *" className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={name} onChange={e => setName(e.target.value)} />
-            <p className="text-[12px] text-mocha mt-1.5 px-1 leading-snug">
-              If your card shows a bank name, enter the account holder's name.
-            </p>
+            <FloatingInput label={t.cardDetails.fieldFullName} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={name} onChange={e => setName(e.target.value)} />
+            <p className="text-[12px] text-mocha mt-1.5 px-1 leading-snug">{t.cardDetails.helperName}</p>
           </div>
-          <FloatingInput label="Card number *" className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={cardNumber} onChange={e => setCardNumber(e.target.value)} />
-          <FloatingInput label="Expiry date * (MM / YY)" className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={expiry} onChange={e => setExpiry(e.target.value)} />
-          <FloatingInput label="CVV *" className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={cvv} onChange={e => setCvv(e.target.value)} />
+          <FloatingInput label={t.cardDetails.fieldCardNumber} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={cardNumber} onChange={e => setCardNumber(e.target.value)} />
+          <FloatingInput label={t.cardDetails.fieldExpiry} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={expiry} onChange={e => setExpiry(e.target.value)} />
+          <FloatingInput label={t.cardDetails.fieldCvv} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={cvv} onChange={e => setCvv(e.target.value)} />
         </div>
 
         <div className="pt-8 space-y-3">
           <Button size="lg" className="w-full text-[15px]" onClick={onNext} disabled={!canContinue}>
-            Continue
+            {t.common.continue}
           </Button>
           <p className="text-[11px] text-mocha text-center leading-relaxed px-2">
-            By tapping Continue, you agree to our{' '}
-            <span className="text-mocha underline underline-offset-2">terms and conditions</span>
-            {' '}and{' '}
-            <span className="text-mocha underline underline-offset-2">privacy policy</span>.
+            {t.cardDetails.termsPre}{' '}
+            <span className="underline underline-offset-2">{t.cardDetails.termsLink}</span>
+            {' '}{t.cardDetails.termsAnd}{' '}
+            <span className="underline underline-offset-2">{t.cardDetails.privacyLink}</span>.
           </p>
           <div className="mt-4 rounded-2xl bg-blueberry/10 px-4 py-3.5 flex gap-3 items-start">
             <Lock className="h-4 w-4 text-blueberry mt-0.5 flex-shrink-0" />
             <div>
-              <p className="text-[13px] font-semibold text-blueberry">Your payment is safe with us</p>
-              <p className="text-[13px] text-blueberry/70 mt-0.5">
-                Encrypted with 256-bit SSL — your info stays private.
-              </p>
+              <p className="text-[13px] font-semibold text-blueberry">{t.cardDetails.securityTitle}</p>
+              <p className="text-[13px] text-blueberry/70 mt-0.5">{t.cardDetails.securityBody}</p>
             </div>
           </div>
         </div>
@@ -355,174 +353,17 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
     </div>
   )
 }
-
-function ReviewScreen({ onNext, onBack, onChangePayment, paymentMethod, selectedStore }: { onNext: () => void; onBack: () => void; onChangePayment: () => void; paymentMethod: string; selectedStore: string }) {
-  const [feesExpanded, setFeesExpanded] = useState(false)
-
-  const store = stores.find(s => s.id === selectedStore)
-  const storeFee = paymentMethod === 'cash' ? parseFloat(store?.fee.replace('$', '') ?? '0') : 0
-  const felixFee = 0
-  const otherFees = 0
-  const taxes = 0
-  const total = 10 + storeFee + felixFee + otherFees + taxes
-
-  const feeLabel: Record<string, string> = {
-    card: 'Felix fee',
-    apple: 'Felix fee',
-    bank: 'Felix fee',
-    cash: 'Felix fee',
-  }
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex flex-col items-center pt-4 pb-1">
-        <FelixLogo className="h-8 text-slate" />
-        <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
-          <span className="text-[10px] font-semibold text-slate">
-            Authorized UniTeller Agent
-          </span>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3 px-6 py-3">
-        <button
-          onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-slate/15 text-slate hover:bg-white"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-        <div className="flex flex-1 gap-1.5">
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-        </div>
-        <div className="w-9 flex-shrink-0" />
-      </div>
-
-      <div className="flex-1 px-5 pb-4 overflow-y-auto">
-        <h1 className="font-display text-[24px] font-extrabold leading-tight tracking-tight text-slate mt-4 mb-6">
-          Review your transfer to Patricia Caballero
-        </h1>
-
-        {/* Receipt card */}
-        <div className="bg-white rounded-2xl border border-slate/15 overflow-hidden divide-y divide-slate/10 mb-5">
-          <div className="px-4 py-3.5 flex items-center justify-between">
-            <span className="text-[13px] text-mocha">You send</span>
-            <span className="font-bold text-[16px] text-slate">🇺🇸 USD $10.00</span>
-          </div>
-          <div className="px-4 py-3.5 flex items-center justify-between">
-            <span className="text-[13px] text-mocha">Recipient gets</span>
-            <span className="font-bold text-[16px] text-slate">🇲🇽 MXN $174.20</span>
-          </div>
-          <div className="px-4 py-3.5 flex items-center justify-between">
-            <span className="text-[13px] text-mocha">Payment method</span>
-            <div className="flex items-center gap-2">
-              {paymentMethod === 'cash' ? (
-                <MapPin className="h-4 w-4 text-slate/40" />
-              ) : (
-                <CreditCard className="h-4 w-4 text-slate/40" />
-              )}
-              <span className="font-semibold text-[14px] text-slate">
-                {paymentMethod === 'cash'
-                  ? stores.find(s => s.id === selectedStore)?.name ?? 'Cash at a store'
-                  : '**** 5164'}
-              </span>
-              <button onClick={onChangePayment} className="text-[13px] font-semibold text-mocha underline decoration-mocha underline-offset-4 hover:text-slate hover:decoration-slate ml-1">Change</button>
-            </div>
-          </div>
-          <button
-            onClick={() => setFeesExpanded(v => !v)}
-            className="w-full px-4 py-3.5 flex items-center justify-between text-left"
-          >
-            <span className="text-[13px] text-mocha">Amount + fees</span>
-            <div className="flex items-center gap-1">
-              <span className="font-semibold text-[14px] text-slate">USD ${total.toFixed(2)}</span>
-              <ChevronDown className={`h-4 w-4 text-slate/40 transition-transform duration-200 ${feesExpanded ? 'rotate-180' : ''}`} />
-            </div>
-          </button>
-
-          <div className={`grid transition-all duration-300 ease-in-out ${feesExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
-            <div className="overflow-hidden">
-              <div className="bg-stone/40 divide-y divide-slate/10">
-                <div className="px-4 py-2.5 flex items-center justify-between">
-                  <span className="text-[12px] text-mocha">Exchange rate</span>
-                  <span className="text-[12px] text-slate font-medium">1 USD = 17.42 MXN</span>
-                </div>
-                <div className="px-4 py-2.5 flex items-center justify-between">
-                  <span className="text-[12px] text-mocha">Amount to send</span>
-                  <span className="text-[12px] text-slate font-medium">USD 10.00</span>
-                </div>
-                <div className="px-4 py-2.5 flex items-center justify-between">
-                  <span className="text-[12px] text-mocha">{feeLabel[paymentMethod]}</span>
-                  <span className="text-[12px] text-slate font-medium">+ USD {felixFee.toFixed(2)}</span>
-                </div>
-                {paymentMethod === 'cash' && (
-                  <div className="px-4 py-2.5 flex items-center justify-between">
-                    <span className="text-[12px] text-mocha">{store?.name} fee</span>
-                    <span className="text-[12px] text-slate font-medium">+ USD {storeFee.toFixed(2)}</span>
-                  </div>
-                )}
-                <div className="px-4 py-2.5 flex items-center justify-between">
-                  <span className="text-[12px] text-mocha">Other fees</span>
-                  <span className="text-[12px] text-slate font-medium">+ USD {otherFees.toFixed(2)}</span>
-                </div>
-                <div className="px-4 py-2.5 flex items-center justify-between">
-                  <span className="text-[12px] text-mocha">Taxes</span>
-                  <span className="text-[12px] text-slate font-medium">+ USD {taxes.toFixed(2)}</span>
-                </div>
-                <div className="px-4 py-3 flex items-center justify-between border-t border-slate/15">
-                  <span className="text-[13px] font-bold text-slate">Total</span>
-                  <span className="text-[13px] font-bold text-slate">USD {total.toFixed(2)}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <Button size="lg" className="w-full text-[15px] mb-4" onClick={onNext}>
-          Send now
-        </Button>
-
-        <p className="text-[11px] text-mocha leading-relaxed text-center">
-          For questions or complaints about Zero Hash LLC, contact your state's regulatory agency.{' '}
-          <span className="text-mocha underline decoration-mocha underline-offset-2 hover:text-slate hover:decoration-slate">Learn more.</span>
-        </p>
-      </div>
-    </div>
-  )
-}
-
-const stores = [
-  { id: 'walgreens', name: 'Walgreens', fee: '$3.95', bg: 'bg-[#E31837]', text: 'W' },
-  { id: 'cvs', name: 'CVS Pharmacy', fee: '$3.95', bg: 'bg-[#CC0000]', text: 'CVS' },
-  { id: '7eleven', name: '7-Eleven', fee: '$3.95', bg: 'bg-[#008751]', text: '7' },
-  { id: 'walmart', name: 'Walmart', fee: '$3.74', bg: 'bg-[#0071CE]', text: '★' },
-  { id: 'caseys', name: "Casey's", fee: '$3.95', bg: 'bg-[#C8102E]', text: 'C' },
-  { id: 'officedepot', name: 'Office Depot OfficeMax', fee: '$3.95', bg: 'bg-[#CC0000]', text: 'OD' },
-]
 
 function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: (storeId: string) => void }) {
+  const t = useT()
   const [selected, setSelected] = useState<string | null>(null)
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex flex-col items-center pt-4 pb-1">
-        <FelixLogo className="h-8 text-slate" />
-        <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
-          <span className="text-[10px] font-semibold text-slate">
-            Authorized UniTeller Agent
-          </span>
-        </div>
-      </div>
+      <ScreenHeader />
 
       <div className="flex items-center gap-3 px-6 py-3">
-        <button
-          onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-slate/15 text-slate hover:bg-white"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
+        <BackButton onClick={onBack} />
         <div className="flex flex-1 gap-1.5">
           <div className="h-1.5 flex-1 rounded-full bg-slate" />
           <div className="h-1.5 flex-1 rounded-full bg-slate" />
@@ -534,7 +375,7 @@ function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: 
 
       <div className="flex-1 px-5 pb-4 overflow-y-auto">
         <h1 className="font-display text-[24px] font-extrabold leading-tight tracking-tight text-slate mt-2 mb-5">
-          Where do you want to pay?
+          {t.storeSelection.title}
         </h1>
 
         <div className="space-y-2.5">
@@ -553,7 +394,7 @@ function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: 
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-[15px] text-slate leading-tight">{store.name}</p>
-                <p className="text-[12px] text-mocha mt-0.5">Min: $20 · Max: $500</p>
+                <p className="text-[12px] text-mocha mt-0.5">{t.storeSelection.minMax}</p>
               </div>
               <span className="flex-shrink-0 inline-block border border-mocha text-mocha text-[12px] font-semibold px-3 py-1 rounded-full">
                 {store.fee}
@@ -564,15 +405,133 @@ function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: 
 
         <div className="mt-5 space-y-2.5">
           <Button size="lg" className="w-full text-[15px]" onClick={() => onNext(selected!)} disabled={!selected}>
-            Continue
+            {t.common.continue}
           </Button>
-          <Button variant="outline" size="lg" className="w-full text-[15px]">
-            Cancel
-          </Button>
+          <Button variant="outline" size="lg" className="w-full text-[15px]">{t.common.cancel}</Button>
         </div>
 
         <p className="mt-5 text-[10px] text-mocha leading-relaxed text-center">
-          Service provided by Green Dot®. ©2024 Green Dot Corporation. All rights reserved. Green Dot Corporation NMLS #914924; Green Dot Bank NMLS #908739.
+          {t.storeSelection.greenDot}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function ReviewScreen({ onNext, onBack, onChangePayment, paymentMethod, selectedStore }: {
+  onNext: () => void
+  onBack: () => void
+  onChangePayment: () => void
+  paymentMethod: string
+  selectedStore: string
+}) {
+  const t = useT()
+  const [feesExpanded, setFeesExpanded] = useState(false)
+
+  const store = stores.find(s => s.id === selectedStore)
+  const storeFee = paymentMethod === 'cash' ? parseFloat(store?.fee.replace('$', '') ?? '0') : 0
+  const felixFee = 0
+  const otherFees = 0
+  const taxes = 0
+  const total = 10 + storeFee + felixFee + otherFees + taxes
+  const storeFeeLabel = t.review.storeFee.replace('{store}', store?.name ?? '')
+
+  return (
+    <div className="flex flex-col h-full">
+      <ScreenHeader />
+
+      <div className="flex items-center gap-3 px-6 py-3">
+        <BackButton onClick={onBack} />
+        <div className="flex flex-1 gap-1.5">
+          <div className="h-1.5 flex-1 rounded-full bg-slate" />
+          <div className="h-1.5 flex-1 rounded-full bg-slate" />
+          <div className="h-1.5 flex-1 rounded-full bg-slate" />
+          <div className="h-1.5 flex-1 rounded-full bg-slate" />
+        </div>
+        <div className="w-9 flex-shrink-0" />
+      </div>
+
+      <div className="flex-1 px-5 pb-4 overflow-y-auto">
+        <h1 className="font-display text-[24px] font-extrabold leading-tight tracking-tight text-slate mt-4 mb-6">
+          {t.review.title}
+        </h1>
+
+        <div className="bg-white rounded-2xl border border-slate/15 overflow-hidden divide-y divide-slate/10 mb-5">
+          <div className="px-4 py-3.5 flex items-center justify-between">
+            <span className="text-[13px] text-mocha">{t.review.youSend}</span>
+            <span className="font-bold text-[16px] text-slate">🇺🇸 USD $10.00</span>
+          </div>
+          <div className="px-4 py-3.5 flex items-center justify-between">
+            <span className="text-[13px] text-mocha">{t.review.recipientGets}</span>
+            <span className="font-bold text-[16px] text-slate">🇲🇽 MXN $174.20</span>
+          </div>
+          <div className="px-4 py-3.5 flex items-center justify-between">
+            <span className="text-[13px] text-mocha">{t.review.paymentMethodLabel}</span>
+            <div className="flex items-center gap-2">
+              {paymentMethod === 'cash' ? <MapPin className="h-4 w-4 text-slate/40" /> : <CreditCard className="h-4 w-4 text-slate/40" />}
+              <span className="font-semibold text-[14px] text-slate">
+                {paymentMethod === 'cash' ? (store?.name ?? t.paymentMethod.cashName) : '**** 5164'}
+              </span>
+              <button onClick={onChangePayment} className="text-[13px] font-semibold text-mocha underline decoration-mocha underline-offset-4 hover:text-slate hover:decoration-slate ml-1">
+                {t.common.change}
+              </button>
+            </div>
+          </div>
+          <button onClick={() => setFeesExpanded(v => !v)} className="w-full px-4 py-3.5 flex items-center justify-between text-left">
+            <span className="text-[13px] text-mocha">{t.review.amountFees}</span>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-[14px] text-slate">USD ${total.toFixed(2)}</span>
+              <ChevronDown className={`h-4 w-4 text-slate/40 transition-transform duration-200 ${feesExpanded ? 'rotate-180' : ''}`} />
+            </div>
+          </button>
+
+          <div className={`grid transition-all duration-300 ease-in-out ${feesExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+            <div className="overflow-hidden">
+              <div className="bg-stone/40 divide-y divide-slate/10">
+                <div className="px-4 py-2.5 flex items-center justify-between">
+                  <span className="text-[12px] text-mocha">{t.review.exchangeRate}</span>
+                  <span className="text-[12px] text-slate font-medium">1 USD = 17.42 MXN</span>
+                </div>
+                <div className="px-4 py-2.5 flex items-center justify-between">
+                  <span className="text-[12px] text-mocha">{t.review.amountToSend}</span>
+                  <span className="text-[12px] text-slate font-medium">USD 10.00</span>
+                </div>
+                <div className="px-4 py-2.5 flex items-center justify-between">
+                  <span className="text-[12px] text-mocha">{t.review.felixFee}</span>
+                  <span className="text-[12px] text-slate font-medium">+ USD {felixFee.toFixed(2)}</span>
+                </div>
+                {paymentMethod === 'cash' && (
+                  <div className="px-4 py-2.5 flex items-center justify-between">
+                    <span className="text-[12px] text-mocha">{storeFeeLabel}</span>
+                    <span className="text-[12px] text-slate font-medium">+ USD {storeFee.toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="px-4 py-2.5 flex items-center justify-between">
+                  <span className="text-[12px] text-mocha">{t.review.otherFees}</span>
+                  <span className="text-[12px] text-slate font-medium">+ USD {otherFees.toFixed(2)}</span>
+                </div>
+                <div className="px-4 py-2.5 flex items-center justify-between">
+                  <span className="text-[12px] text-mocha">{t.review.taxes}</span>
+                  <span className="text-[12px] text-slate font-medium">+ USD {taxes.toFixed(2)}</span>
+                </div>
+                <div className="px-4 py-3 flex items-center justify-between border-t border-slate/15">
+                  <span className="text-[13px] font-bold text-slate">{t.review.total}</span>
+                  <span className="text-[13px] font-bold text-slate">USD {total.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Button size="lg" className="w-full text-[15px] mb-4" onClick={onNext}>
+          {t.review.sendNow}
+        </Button>
+
+        <p className="text-[11px] text-mocha leading-relaxed text-center">
+          {t.review.legal}{' '}
+          <span className="underline decoration-mocha underline-offset-2 hover:text-slate hover:decoration-slate cursor-pointer">
+            {t.review.learnMore}
+          </span>
         </p>
       </div>
     </div>
@@ -593,16 +552,10 @@ function PaperPlane() {
 }
 
 function SuccessScreen() {
+  const t = useT()
   return (
     <div className="flex flex-col h-full px-5 pb-8">
-      <div className="flex flex-col items-center pt-4 pb-1">
-        <FelixLogo className="h-8 text-slate" />
-        <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
-          <span className="text-[10px] font-semibold text-slate">
-            Authorized UniTeller Agent
-          </span>
-        </div>
-      </div>
+      <ScreenHeader />
 
       <div className="flex justify-center py-5">
         <PaperPlane />
@@ -610,63 +563,80 @@ function SuccessScreen() {
 
       <div className="text-center mb-6">
         <h1 className="font-display text-[28px] font-extrabold leading-tight tracking-tight text-slate mb-3">
-          Your payment went through!
+          {t.success.title}
         </h1>
-        <p className="text-[14px] text-slate/60 leading-relaxed">
-          💸 Patricia Caballero will receive 52.26 MXN for your $3 USD transfer.
-        </p>
+        <p className="text-[14px] text-slate/60 leading-relaxed">{t.success.body}</p>
       </div>
 
-      {/* Referral */}
       <div className="bg-slate rounded-2xl p-5 mb-3 text-center">
-        <p className="font-display text-[20px] font-extrabold text-white mb-1">
-          Earn up to $1,000 USD
-        </p>
-        <p className="text-[13px] text-white/60 mb-4 leading-snug">
-          Earn $20 USD for each friend who makes their first transfer
-        </p>
-        <Button
-          size="lg"
-          className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-white font-semibold text-[15px] border-0"
-        >
-          📱 Share on WhatsApp
+        <p className="font-display text-[20px] font-extrabold text-white mb-1">{t.success.referralTitle}</p>
+        <p className="text-[13px] text-white/60 mb-4 leading-snug">{t.success.referralBody}</p>
+        <Button size="lg" className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-white font-semibold text-[15px] border-0">
+          📱 {t.success.shareWhatsApp}
         </Button>
       </div>
 
-      <Button variant="outline" size="lg" className="w-full text-[15px]">
-        Back to WhatsApp
-      </Button>
+      <Button variant="outline" size="lg" className="w-full text-[15px]">{t.success.backToWhatsApp}</Button>
     </div>
   )
 }
+
+// ─── Language switcher ────────────────────────────────────────────────────────
+
+function LanguageSwitcher({ current, onChange }: { current: Language; onChange: (l: Language) => void }) {
+  return (
+    <div className="flex items-center gap-2 mb-6">
+      {languages.map(lang => (
+        <button
+          key={lang.code}
+          onClick={() => onChange(lang.code)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-semibold transition-all ${
+            current === lang.code
+              ? 'bg-slate text-linen'
+              : 'bg-white border border-slate/20 text-slate hover:bg-stone'
+          }`}
+        >
+          <span>{lang.flag}</span>
+          <span>{lang.label}</span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function FintechTestFlowPage() {
   const [screen, setScreen] = useState<'payment' | 'address' | 'store' | 'card' | 'review' | 'success'>('payment')
   const [paymentMethod, setPaymentMethod] = useState<string>('card')
   const [selectedStore, setSelectedStore] = useState<string>('')
+  const [language, setLanguage] = useState<Language>('en')
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-stone p-8">
-      <PhoneFrame>
-        {screen === 'payment' && (
-          <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
-        )}
-        {screen === 'address' && (
-          <AddressScreen onBack={() => setScreen('payment')} onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} paymentMethod={paymentMethod} />
-        )}
-        {screen === 'store' && (
-          <StoreSelectionScreen onBack={() => setScreen('address')} onNext={(storeId) => { setSelectedStore(storeId); setScreen('review') }} />
-        )}
-        {screen === 'card' && (
-          <CardDetailsScreen onBack={() => setScreen('address')} onNext={() => setScreen('review')} />
-        )}
-        {screen === 'review' && (
-          <ReviewScreen onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} onNext={() => setScreen('success')} onChangePayment={() => setScreen('payment')} paymentMethod={paymentMethod} selectedStore={selectedStore} />
-        )}
-        {screen === 'success' && (
-          <SuccessScreen />
-        )}
-      </PhoneFrame>
-    </div>
+    <LangContext.Provider value={content[language]}>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-stone p-8">
+        <LanguageSwitcher current={language} onChange={setLanguage} />
+        <PhoneFrame>
+          {screen === 'payment' && (
+            <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
+          )}
+          {screen === 'address' && (
+            <AddressScreen onBack={() => setScreen('payment')} onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} paymentMethod={paymentMethod} />
+          )}
+          {screen === 'store' && (
+            <StoreSelectionScreen onBack={() => setScreen('address')} onNext={(storeId) => { setSelectedStore(storeId); setScreen('review') }} />
+          )}
+          {screen === 'card' && (
+            <CardDetailsScreen onBack={() => setScreen('address')} onNext={() => setScreen('review')} />
+          )}
+          {screen === 'review' && (
+            <ReviewScreen onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} onNext={() => setScreen('success')} onChangePayment={() => setScreen('payment')} paymentMethod={paymentMethod} selectedStore={selectedStore} />
+          )}
+          {screen === 'success' && (
+            <SuccessScreen />
+          )}
+        </PhoneFrame>
+      </div>
+    </LangContext.Provider>
   )
 }

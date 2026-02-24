@@ -600,6 +600,12 @@ function LanguageSwitcher({ current, onChange }: { current: Language; onChange: 
           <span>{lang.label}</span>
         </button>
       ))}
+      <a
+        href="/fintech/tokens"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate/20 text-[13px] font-semibold text-slate hover:bg-stone transition-all"
+      >
+        Content tokens →
+      </a>
     </div>
   )
 }

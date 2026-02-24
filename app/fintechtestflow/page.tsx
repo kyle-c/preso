@@ -130,24 +130,26 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
       </h1>
       <p className="text-[15px] text-slate/60 mb-5">{t.paymentMethod.subtitle}</p>
 
+      {/* Apple Pay button */}
+      <button
+        onClick={() => onNext('apple')}
+        className="w-full flex items-center justify-center gap-2 bg-slate text-linen rounded-2xl py-4 font-semibold text-[17px] hover:bg-slate/90 active:scale-[0.98] transition-all"
+      >
+        <AppleIcon className="h-[18px] w-[18px] fill-linen" />
+        <span>Pay</span>
+      </button>
+
+      <div className="flex items-center gap-3 my-4">
+        <div className="flex-1 h-px bg-slate/15" />
+        <span className="text-[12px] font-semibold text-mocha uppercase tracking-wider">or pay another way</span>
+        <div className="flex-1 h-px bg-slate/15" />
+      </div>
+
       <div className="space-y-3">
         <button className={cardClass('card')} onClick={() => setSelected('card')}>
           {selected === 'card' && <SelectedBadge />}
           <p className="font-bold text-[17px] text-slate">{t.paymentMethod.creditDebitName}</p>
           <p className="text-[13px] text-mocha mt-1.5 leading-snug">{t.paymentMethod.creditDebitDesc}</p>
-          <div className="mt-3 flex gap-2">
-            <BadgePill label={t.paymentMethod.badgeNoFeeDebit} />
-            <BadgePill label={t.paymentMethod.badgeInstant} />
-          </div>
-        </button>
-
-        <button className={cardClass('apple')} onClick={() => setSelected('apple')}>
-          {selected === 'apple' && <SelectedBadge />}
-          <div className="flex items-center gap-2.5">
-            <AppleIcon className="h-[18px] w-[18px] fill-slate" />
-            <p className="font-bold text-[17px] text-slate">{t.paymentMethod.applePayName}</p>
-          </div>
-          <p className="text-[13px] text-mocha mt-1.5 leading-snug">{t.paymentMethod.applePayDesc}</p>
           <div className="mt-3 flex gap-2">
             <BadgePill label={t.paymentMethod.badgeNoFeeDebit} />
             <BadgePill label={t.paymentMethod.badgeInstant} />

@@ -18,6 +18,7 @@ export interface ContentTokens {
     titleLine1: string
     titleLine2: string
     subtitle: string
+    orPayAnotherWay: string
     creditDebitName: string
     creditDebitDesc: string
     applePayName: string
@@ -102,6 +103,7 @@ export const content: Record<Language, ContentTokens> = {
       titleLine1: 'Almost done.',
       titleLine2: 'How do you want to pay?',
       subtitle: 'Express Pay',
+      orPayAnotherWay: 'or pay another way',
       creditDebitName: 'Credit/debit card',
       creditDebitDesc: 'Credit cards may carry extra fees.',
       applePayName: 'Apple Pay',
@@ -184,7 +186,8 @@ export const content: Record<Language, ContentTokens> = {
     paymentMethod: {
       titleLine1: 'Ya casi.',
       titleLine2: '¿Cómo quieres pagar?',
-      subtitle: 'Express Pay',
+      subtitle: 'Pago Express',
+      orPayAnotherWay: 'o paga de otra forma',
       creditDebitName: 'Tarjeta de crédito/débito',
       creditDebitDesc: 'Las tarjetas de crédito pueden tener cargos adicionales.',
       applePayName: 'Apple Pay',
@@ -267,7 +270,8 @@ export const content: Record<Language, ContentTokens> = {
     paymentMethod: {
       titleLine1: 'Quase lá.',
       titleLine2: 'Como você quer pagar?',
-      subtitle: 'Express Pay',
+      subtitle: 'Pagamento Express',
+      orPayAnotherWay: 'ou pague de outra forma',
       creditDebitName: 'Cartão de crédito/débito',
       creditDebitDesc: 'Cartões de crédito podem ter taxas adicionais.',
       applePayName: 'Apple Pay',

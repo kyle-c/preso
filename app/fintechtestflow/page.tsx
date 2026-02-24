@@ -139,14 +139,14 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
       {/* Apple Pay button */}
       <button
         onClick={() => onNext('apple')}
-        className="w-full flex items-center justify-center bg-slate rounded-2xl py-4 hover:bg-slate/90 active:scale-[0.98] transition-all"
+        className="w-full flex items-center justify-center bg-slate rounded-2xl py-3 hover:bg-slate/90 active:scale-[0.98] transition-all"
       >
         <ApplePayIcon className="h-7 w-auto fill-linen" />
       </button>
 
       <div className="flex items-center gap-3 my-4">
         <div className="flex-1 h-px bg-slate/15" />
-        <span className="text-[12px] font-semibold text-mocha uppercase tracking-wider">or pay another way</span>
+        <span className="text-[12px] font-semibold text-mocha uppercase tracking-wider">{t.paymentMethod.orPayAnotherWay}</span>
         <div className="flex-1 h-px bg-slate/15" />
       </div>
 

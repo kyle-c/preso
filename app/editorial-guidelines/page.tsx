@@ -137,8 +137,8 @@ export default function EditorialGuidelinesPage() {
               </p>
               <div className="space-y-4">
                 <DontDo dont='"Payment Method Selection"' doText='"How do you want to pay?"' label="Screen titles" />
-                <DontDo dont='"Transaction Summary"' doText='"Here\'s what you\'re sending"' label="Review screens" />
-                <DontDo dont='"Billing Address"' doText='"What\'s the billing address on your card?"' label="Form screens" />
+                <DontDo dont='"Transaction Summary"' doText={`"Here's what you're sending"`} label="Review screens" />
+                <DontDo dont='"Billing Address"' doText={`"What's the billing address on your card?"`} label="Form screens" />
               </div>
             </div>
 
@@ -153,7 +153,7 @@ export default function EditorialGuidelinesPage() {
               </p>
               <div className="space-y-4">
                 <DontDo dont='"Invalid card number"' doText='"Card number should be 16 digits"' label="Inline validation" />
-                <DontDo dont='"Payment method invalid."' doText='"This card didn\'t go through — want to try a different one?"' label="Payment failure" />
+                <DontDo dont='"Payment method invalid."' doText={`"This card didn't go through — want to try a different one?"`} label="Payment failure" />
                 <DontDo dont='"Error: Required field"' doText='"Address is required"' label="Required fields" />
               </div>
               <div className="mt-5 rounded-xl bg-turquoise-100 p-5">

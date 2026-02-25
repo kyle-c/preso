@@ -21,7 +21,7 @@ export default function FintechTokensPage() {
           <h1 className="font-display text-[40px] font-extrabold leading-tight tracking-tight text-slate mb-3">
             Content Tokens
           </h1>
-          <p className="text-[16px] text-slate/60 max-w-xl">
+          <p className="text-[16px] text-mocha max-w-xl">
             All user-facing strings for the payment flow, organized by screen. Supports English, Mexican Spanish, and Brazilian Portuguese.
           </p>
           <div className="mt-4 flex items-center gap-3">

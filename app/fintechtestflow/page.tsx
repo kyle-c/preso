@@ -652,8 +652,8 @@ function TokenInspector({
 
   return (
     <div className="w-[260px] h-[844px] shrink-0 flex flex-col overflow-hidden opacity-40 hover:opacity-100 transition-opacity duration-200">
-      {/* Header */}
-      <p className="text-[10px] font-semibold text-mocha uppercase tracking-widest pt-[18px] pb-3 px-1 shrink-0">
+      {/* Header — vertically matches PhoneControls row */}
+      <p className="text-[10px] font-semibold text-mocha uppercase tracking-widest py-[11px] px-1 shrink-0">
         Tokens in view
       </p>
 
@@ -714,9 +714,9 @@ function TokenInspector({
 
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
-function TopBar({ current, onChange }: { current: Language; onChange: (l: Language) => void }) {
+function PhoneControls({ current, onChange }: { current: Language; onChange: (l: Language) => void }) {
   return (
-    <div className="flex items-center justify-between px-8 py-4 shrink-0">
+    <div className="flex items-center justify-between w-full mb-4">
       <div className="flex items-center gap-1">
         {languages.map(lang => {
           const label = lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'
@@ -776,13 +776,12 @@ export default function FintechTestFlowPage() {
 
   return (
     <LangContext.Provider value={editableContent[language]}>
-      <div className="flex flex-col h-screen bg-stone overflow-hidden">
-        {/* Top bar */}
-        <TopBar current={language} onChange={setLanguage} />
+      <div className="min-h-screen bg-stone overflow-y-auto">
+        <div className="flex justify-center gap-10 pt-8 px-8">
 
-        {/* Centered phone + inspector pair */}
-        <div className="flex-1 flex items-center justify-center overflow-y-auto py-6">
-          <div className="flex items-start gap-10">
+          {/* Phone column: controls above, device below */}
+          <div className="flex flex-col items-stretch w-[390px] shrink-0">
+            <PhoneControls current={language} onChange={setLanguage} />
             <PhoneFrame>
               {screen === 'payment' && (
                 <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
@@ -803,14 +802,15 @@ export default function FintechTestFlowPage() {
                 <SuccessScreen />
               )}
             </PhoneFrame>
-
-            <TokenInspector
-              tokens={editableContent}
-              language={language}
-              screen={screen}
-              onChange={updateToken}
-            />
           </div>
+
+          {/* Inspector: top-aligned next to device */}
+          <TokenInspector
+            tokens={editableContent}
+            language={language}
+            screen={screen}
+            onChange={updateToken}
+          />
         </div>
       </div>
     </LangContext.Provider>

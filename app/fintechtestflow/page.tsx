@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { FelixLogo } from '@/components/design-system/felix-logo'
 import { Button } from '@/components/ui/button'
 import { FloatingInput } from '@/components/ui/floating-input'
@@ -588,6 +588,132 @@ function SuccessScreen() {
   )
 }
 
+// ─── Token inspector ──────────────────────────────────────────────────────────
+
+const INSPECTOR_STORAGE_KEY = 'felix-content-tokens'
+
+const tokenSections: { label: string; key: keyof ContentTokens }[] = [
+  { label: 'Common',          key: 'common' },
+  { label: 'Payment Method',  key: 'paymentMethod' },
+  { label: 'Address',         key: 'address' },
+  { label: 'Card Details',    key: 'cardDetails' },
+  { label: 'Store Selection', key: 'storeSelection' },
+  { label: 'Review',          key: 'review' },
+  { label: 'Success',         key: 'success' },
+]
+
+const flatTokens = tokenSections.flatMap(({ label, key }) =>
+  Object.keys(content['en'][key] as Record<string, string>).map(tokenKey => ({
+    sectionKey: key,
+    sectionLabel: label,
+    tokenKey,
+    id: `${key}.${tokenKey}`,
+  }))
+)
+
+function TokenInspector({
+  tokens,
+  language,
+  onChange,
+}: {
+  tokens: Record<Language, ContentTokens>
+  language: Language
+  onChange: (section: keyof ContentTokens, key: string, lang: Language, value: string) => void
+}) {
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [drafts, setDrafts] = useState<Record<string, string>>({})
+  const expandedRef = useRef<HTMLDivElement>(null)
+
+  function open(id: string, sectionKey: keyof ContentTokens, tokenKey: string) {
+    if (expandedId === id) { setExpandedId(null); return }
+    const initial: Record<string, string> = {}
+    languages.forEach(l => {
+      initial[l.code] = (tokens[l.code][sectionKey] as Record<string, string>)[tokenKey]
+    })
+    setDrafts(initial)
+    setExpandedId(id)
+  }
+
+  function save(sectionKey: keyof ContentTokens, tokenKey: string) {
+    languages.forEach(l => onChange(sectionKey, tokenKey, l.code, drafts[l.code] ?? ''))
+    setExpandedId(null)
+  }
+
+  // Scroll expanded row into view
+  useEffect(() => {
+    if (expandedRef.current) {
+      expandedRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [expandedId])
+
+  // Group by section for rendering separators
+  let lastSection = ''
+
+  return (
+    <div className="w-[300px] shrink-0 h-screen sticky top-0 flex flex-col bg-white border-l border-slate/10 overflow-hidden">
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-slate/10 shrink-0">
+        <p className="text-[10px] font-semibold text-mocha uppercase tracking-widest">Token Inspector</p>
+      </div>
+
+      {/* Token list */}
+      <div className="flex-1 overflow-y-auto divide-y divide-slate/5">
+        {flatTokens.map(({ sectionKey, sectionLabel, tokenKey, id }) => {
+          const currentVal = (tokens[language][sectionKey] as Record<string, string>)[tokenKey]
+          const isExpanded = expandedId === id
+          const showSection = sectionLabel !== lastSection
+          lastSection = sectionLabel
+
+          return (
+            <div key={id} ref={isExpanded ? expandedRef : undefined}>
+              {showSection && (
+                <div className="px-4 pt-3 pb-1">
+                  <span className="text-[10px] font-semibold text-mocha uppercase tracking-widest">{sectionLabel}</span>
+                </div>
+              )}
+
+              {/* Row */}
+              <button
+                onClick={() => open(id, sectionKey, tokenKey)}
+                className={`w-full flex items-baseline gap-2 px-4 py-2.5 text-left transition-colors ${isExpanded ? 'bg-linen' : 'hover:bg-linen/60'}`}
+              >
+                <code className="text-[11px] font-mono text-blueberry underline underline-offset-2 decoration-dotted shrink-0">{tokenKey}</code>
+                <span className="text-[12px] text-mocha truncate">{currentVal}</span>
+              </button>
+
+              {/* Expanded editor */}
+              {isExpanded && (
+                <div className="px-4 pb-4 pt-1 bg-linen space-y-2.5">
+                  {languages.map(lang => (
+                    <div key={lang.code}>
+                      <label className="text-[10px] font-semibold text-mocha uppercase tracking-wider mb-1 flex items-center gap-1">
+                        <span>{lang.flag}</span>
+                        <span>{lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES' : 'PT'}</span>
+                      </label>
+                      <textarea
+                        value={drafts[lang.code] ?? ''}
+                        onChange={e => setDrafts(d => ({ ...d, [lang.code]: e.target.value }))}
+                        rows={2}
+                        className="w-full text-[13px] text-slate bg-white border border-slate/20 rounded-xl px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-turquoise/40"
+                      />
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => save(sectionKey, tokenKey)}
+                    className="w-full py-2.5 bg-turquoise text-slate text-[13px] font-semibold rounded-xl hover:bg-turquoise/90 transition-colors"
+                  >
+                    Save
+                  </button>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ─── Language switcher ────────────────────────────────────────────────────────
 
 function LanguageSwitcher({ current, onChange }: { current: Language; onChange: (l: Language) => void }) {
@@ -625,30 +751,62 @@ export default function FintechTestFlowPage() {
   const [selectedStore, setSelectedStore] = useState<string>('')
   const [language, setLanguage] = useState<Language>('en')
 
+  // Mutable token state — shared between the flow and the inspector
+  const [editableContent, setEditableContent] = useState<Record<Language, ContentTokens>>(() =>
+    JSON.parse(JSON.stringify(content))
+  )
+
+  // Load persisted edits on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(INSPECTOR_STORAGE_KEY)
+      if (saved) setEditableContent(JSON.parse(saved))
+    } catch {}
+  }, [])
+
+  function updateToken(section: keyof ContentTokens, key: string, lang: Language, value: string) {
+    setEditableContent(prev => {
+      const next = JSON.parse(JSON.stringify(prev))
+      ;(next[lang][section] as Record<string, string>)[key] = value
+      localStorage.setItem(INSPECTOR_STORAGE_KEY, JSON.stringify(next))
+      return next
+    })
+  }
+
   return (
-    <LangContext.Provider value={content[language]}>
-      <div className="flex min-h-screen flex-col items-center justify-center bg-stone p-8">
-        <LanguageSwitcher current={language} onChange={setLanguage} />
-        <PhoneFrame>
-          {screen === 'payment' && (
-            <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
-          )}
-          {screen === 'address' && (
-            <AddressScreen onBack={() => setScreen('payment')} onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} paymentMethod={paymentMethod} />
-          )}
-          {screen === 'store' && (
-            <StoreSelectionScreen onBack={() => setScreen('address')} onNext={(storeId) => { setSelectedStore(storeId); setScreen('review') }} />
-          )}
-          {screen === 'card' && (
-            <CardDetailsScreen onBack={() => setScreen('address')} onNext={() => setScreen('review')} />
-          )}
-          {screen === 'review' && (
-            <ReviewScreen onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} onNext={() => setScreen('success')} onChangePayment={() => setScreen('payment')} paymentMethod={paymentMethod} selectedStore={selectedStore} />
-          )}
-          {screen === 'success' && (
-            <SuccessScreen />
-          )}
-        </PhoneFrame>
+    <LangContext.Provider value={editableContent[language]}>
+      <div className="flex h-screen bg-stone overflow-hidden">
+        {/* Flow */}
+        <div className="flex-1 flex flex-col items-center justify-center p-8 overflow-y-auto">
+          <LanguageSwitcher current={language} onChange={setLanguage} />
+          <PhoneFrame>
+            {screen === 'payment' && (
+              <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
+            )}
+            {screen === 'address' && (
+              <AddressScreen onBack={() => setScreen('payment')} onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} paymentMethod={paymentMethod} />
+            )}
+            {screen === 'store' && (
+              <StoreSelectionScreen onBack={() => setScreen('address')} onNext={(storeId) => { setSelectedStore(storeId); setScreen('review') }} />
+            )}
+            {screen === 'card' && (
+              <CardDetailsScreen onBack={() => setScreen('address')} onNext={() => setScreen('review')} />
+            )}
+            {screen === 'review' && (
+              <ReviewScreen onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} onNext={() => setScreen('success')} onChangePayment={() => setScreen('payment')} paymentMethod={paymentMethod} selectedStore={selectedStore} />
+            )}
+            {screen === 'success' && (
+              <SuccessScreen />
+            )}
+          </PhoneFrame>
+        </div>
+
+        {/* Inspector */}
+        <TokenInspector
+          tokens={editableContent}
+          language={language}
+          onChange={updateToken}
+        />
       </div>
     </LangContext.Provider>
   )

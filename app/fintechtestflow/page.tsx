@@ -592,37 +592,45 @@ function SuccessScreen() {
 
 const INSPECTOR_STORAGE_KEY = 'felix-content-tokens'
 
-const tokenSections: { label: string; key: keyof ContentTokens }[] = [
-  { label: 'Common',          key: 'common' },
-  { label: 'Payment Method',  key: 'paymentMethod' },
-  { label: 'Address',         key: 'address' },
-  { label: 'Card Details',    key: 'cardDetails' },
-  { label: 'Store Selection', key: 'storeSelection' },
-  { label: 'Review',          key: 'review' },
-  { label: 'Success',         key: 'success' },
-]
+// Which sections are relevant for each screen
+const screenSections: Record<string, Array<keyof ContentTokens>> = {
+  payment: ['common', 'paymentMethod'],
+  address: ['common', 'address'],
+  store:   ['common', 'storeSelection'],
+  card:    ['common', 'cardDetails'],
+  review:  ['common', 'review'],
+  success: ['success'],
+}
 
-const flatTokens = tokenSections.flatMap(({ label, key }) =>
-  Object.keys(content['en'][key] as Record<string, string>).map(tokenKey => ({
-    sectionKey: key,
-    sectionLabel: label,
-    tokenKey,
-    id: `${key}.${tokenKey}`,
-  }))
-)
+function getScreenTokens(screen: string) {
+  const sections = screenSections[screen] ?? []
+  return sections.flatMap(sectionKey =>
+    Object.keys(content['en'][sectionKey] as Record<string, string>).map(tokenKey => ({
+      sectionKey,
+      tokenKey,
+      id: `${sectionKey}.${tokenKey}`,
+    }))
+  )
+}
 
 function TokenInspector({
   tokens,
   language,
+  screen,
   onChange,
 }: {
   tokens: Record<Language, ContentTokens>
   language: Language
+  screen: string
   onChange: (section: keyof ContentTokens, key: string, lang: Language, value: string) => void
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [drafts, setDrafts] = useState<Record<string, string>>({})
   const expandedRef = useRef<HTMLDivElement>(null)
+  const visibleTokens = getScreenTokens(screen)
+
+  // Close editor when screen changes
+  useEffect(() => { setExpandedId(null) }, [screen])
 
   function open(id: string, sectionKey: keyof ContentTokens, tokenKey: string) {
     if (expandedId === id) { setExpandedId(null); return }
@@ -639,68 +647,56 @@ function TokenInspector({
     setExpandedId(null)
   }
 
-  // Scroll expanded row into view
   useEffect(() => {
-    if (expandedRef.current) {
-      expandedRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-    }
+    expandedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [expandedId])
 
-  // Group by section for rendering separators
-  let lastSection = ''
-
   return (
-    <div className="w-[300px] shrink-0 h-screen sticky top-0 flex flex-col bg-white border-l border-slate/10 overflow-hidden">
+    <div className="w-[280px] shrink-0 flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-slate/10 shrink-0">
-        <p className="text-[10px] font-semibold text-mocha uppercase tracking-widest">Token Inspector</p>
-      </div>
+      <p className="text-[10px] font-semibold text-mocha/60 uppercase tracking-widest pt-[18px] pb-3 px-6 shrink-0">
+        Tokens in view
+      </p>
 
-      {/* Token list */}
-      <div className="flex-1 overflow-y-auto divide-y divide-slate/5">
-        {flatTokens.map(({ sectionKey, sectionLabel, tokenKey, id }) => {
+      {/* Token list — no background, just text on stone */}
+      <div className="flex-1 overflow-y-auto px-6">
+        {visibleTokens.map(({ sectionKey, tokenKey, id }) => {
           const currentVal = (tokens[language][sectionKey] as Record<string, string>)[tokenKey]
           const isExpanded = expandedId === id
-          const showSection = sectionLabel !== lastSection
-          lastSection = sectionLabel
 
           return (
             <div key={id} ref={isExpanded ? expandedRef : undefined}>
-              {showSection && (
-                <div className="px-4 pt-3 pb-1">
-                  <span className="text-[10px] font-semibold text-mocha uppercase tracking-widest">{sectionLabel}</span>
-                </div>
-              )}
-
-              {/* Row */}
+              {/* Collapsed row */}
               <button
-                onClick={() => open(id, sectionKey, tokenKey)}
-                className={`w-full flex items-baseline gap-2 px-4 py-2.5 text-left transition-colors ${isExpanded ? 'bg-linen' : 'hover:bg-linen/60'}`}
+                onClick={() => open(id, sectionKey as keyof ContentTokens, tokenKey)}
+                className="w-full flex items-baseline gap-2 py-1.5 text-left group"
               >
-                <code className="text-[11px] font-mono text-blueberry underline underline-offset-2 decoration-dotted shrink-0">{tokenKey}</code>
-                <span className="text-[12px] text-mocha truncate">{currentVal}</span>
+                <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isExpanded ? 'text-blueberry' : 'text-blueberry/70 group-hover:text-blueberry'}`}>
+                  {tokenKey}
+                </code>
+                <span className="text-[12px] text-mocha/60 truncate leading-snug">{currentVal}</span>
               </button>
 
               {/* Expanded editor */}
               {isExpanded && (
-                <div className="px-4 pb-4 pt-1 bg-linen space-y-2.5">
+                <div className="mt-1 mb-3 bg-white rounded-2xl border border-slate/10 p-3 space-y-2.5 shadow-sm">
+                  <p className="text-[11px] font-mono text-blueberry mb-1">{sectionKey}.{tokenKey}</p>
                   {languages.map(lang => (
                     <div key={lang.code}>
-                      <label className="text-[10px] font-semibold text-mocha uppercase tracking-wider mb-1 flex items-center gap-1">
-                        <span>{lang.flag}</span>
-                        <span>{lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES' : 'PT'}</span>
+                      <label className="text-[10px] font-semibold text-mocha uppercase tracking-wider mb-1 block">
+                        {lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'}
                       </label>
                       <textarea
                         value={drafts[lang.code] ?? ''}
                         onChange={e => setDrafts(d => ({ ...d, [lang.code]: e.target.value }))}
                         rows={2}
-                        className="w-full text-[13px] text-slate bg-white border border-slate/20 rounded-xl px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-turquoise/40"
+                        className="w-full text-[13px] text-slate bg-stone border border-slate/15 rounded-xl px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-turquoise/40"
                       />
                     </div>
                   ))}
                   <button
-                    onClick={() => save(sectionKey, tokenKey)}
-                    className="w-full py-2.5 bg-turquoise text-slate text-[13px] font-semibold rounded-xl hover:bg-turquoise/90 transition-colors"
+                    onClick={() => save(sectionKey as keyof ContentTokens, tokenKey)}
+                    className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-xl hover:bg-turquoise/90 transition-colors"
                   >
                     Save
                   </button>
@@ -714,30 +710,33 @@ function TokenInspector({
   )
 }
 
-// ─── Language switcher ────────────────────────────────────────────────────────
+// ─── Top bar ──────────────────────────────────────────────────────────────────
 
-function LanguageSwitcher({ current, onChange }: { current: Language; onChange: (l: Language) => void }) {
+function TopBar({ current, onChange }: { current: Language; onChange: (l: Language) => void }) {
   return (
-    <div className="flex items-center gap-2 mb-6">
-      {languages.map(lang => (
-        <button
-          key={lang.code}
-          onClick={() => onChange(lang.code)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-semibold transition-all ${
-            current === lang.code
-              ? 'bg-slate text-linen'
-              : 'bg-white border border-slate/20 text-slate hover:bg-stone'
-          }`}
-        >
-          <span>{lang.flag}</span>
-          <span>{lang.label}</span>
-        </button>
-      ))}
+    <div className="flex items-center justify-between px-8 py-4 shrink-0">
+      <div className="flex items-center gap-1">
+        {languages.map(lang => {
+          const label = lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'
+          const active = current === lang.code
+          return (
+            <button
+              key={lang.code}
+              onClick={() => onChange(lang.code)}
+              className={`px-3 py-1.5 rounded-full text-[13px] font-semibold transition-all ${
+                active ? 'bg-slate text-linen' : 'text-slate/50 hover:text-slate'
+              }`}
+            >
+              {label}
+            </button>
+          )
+        })}
+      </div>
       <a
         href="/fintech/tokens"
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate/20 text-[13px] font-semibold text-slate hover:bg-stone transition-all"
+        className="text-[13px] font-semibold text-slate/50 hover:text-slate transition-colors"
       >
-        Content tokens →
+        Tokens →
       </a>
     </div>
   )
@@ -775,38 +774,44 @@ export default function FintechTestFlowPage() {
 
   return (
     <LangContext.Provider value={editableContent[language]}>
-      <div className="flex h-screen bg-stone overflow-hidden">
-        {/* Flow */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8 overflow-y-auto">
-          <LanguageSwitcher current={language} onChange={setLanguage} />
-          <PhoneFrame>
-            {screen === 'payment' && (
-              <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
-            )}
-            {screen === 'address' && (
-              <AddressScreen onBack={() => setScreen('payment')} onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} paymentMethod={paymentMethod} />
-            )}
-            {screen === 'store' && (
-              <StoreSelectionScreen onBack={() => setScreen('address')} onNext={(storeId) => { setSelectedStore(storeId); setScreen('review') }} />
-            )}
-            {screen === 'card' && (
-              <CardDetailsScreen onBack={() => setScreen('address')} onNext={() => setScreen('review')} />
-            )}
-            {screen === 'review' && (
-              <ReviewScreen onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} onNext={() => setScreen('success')} onChangePayment={() => setScreen('payment')} paymentMethod={paymentMethod} selectedStore={selectedStore} />
-            )}
-            {screen === 'success' && (
-              <SuccessScreen />
-            )}
-          </PhoneFrame>
-        </div>
+      <div className="flex flex-col h-screen bg-stone overflow-hidden">
+        {/* Top bar */}
+        <TopBar current={language} onChange={setLanguage} />
 
-        {/* Inspector */}
-        <TokenInspector
-          tokens={editableContent}
-          language={language}
-          onChange={updateToken}
-        />
+        {/* Main: phone + inspector */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Phone */}
+          <div className="flex-1 flex items-center justify-center pb-6 overflow-y-auto">
+            <PhoneFrame>
+              {screen === 'payment' && (
+                <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
+              )}
+              {screen === 'address' && (
+                <AddressScreen onBack={() => setScreen('payment')} onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} paymentMethod={paymentMethod} />
+              )}
+              {screen === 'store' && (
+                <StoreSelectionScreen onBack={() => setScreen('address')} onNext={(storeId) => { setSelectedStore(storeId); setScreen('review') }} />
+              )}
+              {screen === 'card' && (
+                <CardDetailsScreen onBack={() => setScreen('address')} onNext={() => setScreen('review')} />
+              )}
+              {screen === 'review' && (
+                <ReviewScreen onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} onNext={() => setScreen('success')} onChangePayment={() => setScreen('payment')} paymentMethod={paymentMethod} selectedStore={selectedStore} />
+              )}
+              {screen === 'success' && (
+                <SuccessScreen />
+              )}
+            </PhoneFrame>
+          </div>
+
+          {/* Inspector */}
+          <TokenInspector
+            tokens={editableContent}
+            language={language}
+            screen={screen}
+            onChange={updateToken}
+          />
+        </div>
       </div>
     </LangContext.Provider>
   )

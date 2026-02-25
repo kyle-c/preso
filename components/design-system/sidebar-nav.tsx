@@ -9,7 +9,8 @@ import {
   Component,
   Home,
   Blend,
-  BookOpen
+  BookOpen,
+  PenLine,
 } from "lucide-react"
 import { FelixLogo } from "./felix-logo"
 
@@ -27,6 +28,19 @@ const navItems = [
       { title: "The Principles", href: "/principles#principles" },
       { title: "Resources", href: "/principles#resources" },
       { title: "When Principles Overlap", href: "/principles#conflicts" },
+    ],
+  },
+  {
+    title: "Editorial Guidelines",
+    href: "/editorial-guidelines",
+    icon: PenLine,
+    children: [
+      { title: "Voice & Tone", href: "/editorial-guidelines#voice" },
+      { title: "Writing Patterns", href: "/editorial-guidelines#patterns" },
+      { title: "Multilingual", href: "/editorial-guidelines#multilingual" },
+      { title: "Content Tokens", href: "/editorial-guidelines#tokens" },
+      { title: "Common Pitfalls", href: "/editorial-guidelines#pitfalls" },
+      { title: "Quick Reference", href: "/editorial-guidelines#reference" },
     ],
   },
   {

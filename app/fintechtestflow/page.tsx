@@ -652,14 +652,14 @@ function TokenInspector({
   }, [expandedId])
 
   return (
-    <div className="w-[280px] shrink-0 flex flex-col overflow-hidden">
+    <div className="w-[260px] shrink-0 flex flex-col overflow-hidden opacity-20 hover:opacity-100 transition-opacity duration-200">
       {/* Header */}
-      <p className="text-[10px] font-semibold text-mocha/60 uppercase tracking-widest pt-[18px] pb-3 px-6 shrink-0">
+      <p className="text-[10px] font-semibold text-mocha uppercase tracking-widest pt-[18px] pb-3 px-1 shrink-0">
         Tokens in view
       </p>
 
       {/* Token list — no background, just text on stone */}
-      <div className="flex-1 overflow-y-auto px-6">
+      <div className="flex-1 overflow-y-auto px-1">
         {visibleTokens.map(({ sectionKey, tokenKey, id }) => {
           const currentVal = (tokens[language][sectionKey] as Record<string, string>)[tokenKey]
           const isExpanded = expandedId === id
@@ -778,10 +778,9 @@ export default function FintechTestFlowPage() {
         {/* Top bar */}
         <TopBar current={language} onChange={setLanguage} />
 
-        {/* Main: phone + inspector */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Phone */}
-          <div className="flex-1 flex items-center justify-center pb-6 overflow-y-auto">
+        {/* Centered phone + inspector pair */}
+        <div className="flex-1 flex items-center justify-center overflow-y-auto py-6">
+          <div className="flex items-start gap-10">
             <PhoneFrame>
               {screen === 'payment' && (
                 <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
@@ -802,15 +801,14 @@ export default function FintechTestFlowPage() {
                 <SuccessScreen />
               )}
             </PhoneFrame>
-          </div>
 
-          {/* Inspector */}
-          <TokenInspector
-            tokens={editableContent}
-            language={language}
-            screen={screen}
-            onChange={updateToken}
-          />
+            <TokenInspector
+              tokens={editableContent}
+              language={language}
+              screen={screen}
+              onChange={updateToken}
+            />
+          </div>
         </div>
       </div>
     </LangContext.Provider>

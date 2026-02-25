@@ -651,7 +651,7 @@ function TokenInspector({
   }
 
   return (
-    <div className="w-[260px] shrink-0 flex flex-col overflow-hidden opacity-40 hover:opacity-100 transition-opacity duration-200">
+    <div className="w-[260px] h-[844px] shrink-0 flex flex-col overflow-hidden opacity-40 hover:opacity-100 transition-opacity duration-200">
       {/* Header */}
       <p className="text-[10px] font-semibold text-mocha uppercase tracking-widest pt-[18px] pb-3 px-1 shrink-0">
         Tokens in view

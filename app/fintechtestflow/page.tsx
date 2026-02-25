@@ -198,8 +198,24 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
   const [zip, setZip] = useState('')
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
-  const canContinue = address && zip && city && state
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
   const isCash = paymentMethod === 'cash'
+
+  function validate(field: string, value: string): string | undefined {
+    if (field === 'address') return !value ? 'Address is required' : undefined
+    if (field === 'zip') return !value ? 'ZIP code is required' : !/^\d{5}$/.test(value) ? 'Enter a valid 5-digit ZIP' : undefined
+    if (field === 'city') return !value ? 'City is required' : undefined
+    if (field === 'state') return !value ? 'State is required' : undefined
+  }
+
+  const err = (f: string, v: string) => touched[f] ? validate(f, v) : undefined
+  const valid = (f: string, v: string) => !!(touched[f] && !validate(f, v) && v)
+  const touch = (f: string) => setTouched(p => ({ ...p, [f]: true }))
+
+  const canContinue = !validate('address', address) && !validate('zip', zip) && !validate('city', city) && !validate('state', state)
+
+  const fieldClass = '!rounded-2xl bg-white'
+  const labelClass = 'bg-white text-mocha'
 
   return (
     <div className="flex flex-col h-full">
@@ -226,12 +242,25 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
         {!isCash && <div className="mb-6" />}
 
         <div className="space-y-4">
-          <FloatingInput label={t.address.fieldAddress} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={address} onChange={e => setAddress(e.target.value)} />
-          <FloatingInput label={t.address.fieldApt} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" />
-          <FloatingInput label={t.address.fieldZip} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={zip} onChange={e => setZip(e.target.value)} />
-          <FloatingInput label={t.address.fieldCity} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={city} onChange={e => setCity(e.target.value)} />
-          <Select onValueChange={setState}>
-            <SelectTrigger className="!h-14 w-full rounded-2xl bg-white px-4 text-base data-[placeholder]:text-muted-foreground">
+          <FloatingInput
+            label={t.address.fieldAddress} className={fieldClass} labelClassName={labelClass}
+            value={address} onChange={e => setAddress(e.target.value)} onBlur={() => touch('address')}
+            error={err('address', address)} isValid={valid('address', address)}
+          />
+          <FloatingInput label={t.address.fieldApt} className={fieldClass} labelClassName={labelClass} />
+          <FloatingInput
+            label={t.address.fieldZip} className={fieldClass} labelClassName={labelClass}
+            value={zip} onChange={e => setZip(e.target.value.replace(/\D/g, '').slice(0, 5))} onBlur={() => touch('zip')}
+            error={err('zip', zip)} isValid={valid('zip', zip)}
+            inputMode="numeric"
+          />
+          <FloatingInput
+            label={t.address.fieldCity} className={fieldClass} labelClassName={labelClass}
+            value={city} onChange={e => setCity(e.target.value)} onBlur={() => touch('city')}
+            error={err('city', city)} isValid={valid('city', city)}
+          />
+          <Select onValueChange={v => { setState(v); touch('state') }}>
+            <SelectTrigger className={`!h-14 w-full rounded-2xl bg-white px-4 text-base data-[placeholder]:text-muted-foreground transition-colors ${touched.state && !state ? 'border-red-400 ring-[3px] ring-red-400/20' : state ? 'border-turquoise/60' : ''}`}>
               <SelectValue placeholder={t.address.fieldState} />
             </SelectTrigger>
             <SelectContent>
@@ -306,7 +335,37 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
   const [cardNumber, setCardNumber] = useState('')
   const [expiry, setExpiry] = useState('')
   const [cvv, setCvv] = useState('')
-  const canContinue = name && cardNumber && expiry && cvv
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+  function validate(field: string, value: string): string | undefined {
+    if (field === 'name') return !value ? 'Name is required' : undefined
+    if (field === 'cardNumber') return !value ? 'Card number is required' : value.replace(/\s/g, '').length < 16 ? 'Enter a 16-digit card number' : undefined
+    if (field === 'expiry') {
+      if (!value) return 'Expiry date is required'
+      if (!/^\d{2}\/\d{2}$/.test(value)) return 'Use MM/YY format'
+      const month = parseInt(value.slice(0, 2))
+      if (month < 1 || month > 12) return 'Invalid month'
+      return undefined
+    }
+    if (field === 'cvv') return !value ? 'CVV is required' : !/^\d{3,4}$/.test(value) ? 'Enter 3 or 4 digits' : undefined
+  }
+
+  const err = (f: string, v: string) => touched[f] ? validate(f, v) : undefined
+  const valid = (f: string, v: string) => !!(touched[f] && !validate(f, v) && v)
+  const touch = (f: string) => setTouched(p => ({ ...p, [f]: true }))
+
+  const canContinue = !validate('name', name) && !validate('cardNumber', cardNumber) && !validate('expiry', expiry) && !validate('cvv', cvv)
+
+  function formatCard(v: string) {
+    return v.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim()
+  }
+  function formatExpiry(v: string) {
+    const d = v.replace(/\D/g, '').slice(0, 4)
+    return d.length >= 3 ? d.slice(0, 2) + '/' + d.slice(2) : d
+  }
+
+  const fieldClass = '!rounded-2xl bg-white'
+  const labelClass = 'bg-white text-mocha'
 
   return (
     <div className="flex flex-col h-full">
@@ -330,12 +389,38 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
 
         <div className="space-y-4">
           <div>
-            <FloatingInput label={t.cardDetails.fieldFullName} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={name} onChange={e => setName(e.target.value)} />
-            <p className="text-[12px] text-mocha mt-1.5 px-1 leading-snug">{t.cardDetails.helperName}</p>
+            <FloatingInput
+              label={t.cardDetails.fieldFullName} className={fieldClass} labelClassName={labelClass}
+              value={name} onChange={e => setName(e.target.value)} onBlur={() => touch('name')}
+              error={err('name', name)} isValid={valid('name', name)}
+              autoComplete="cc-name"
+            />
+            {!err('name', name) && <p className="text-[12px] text-mocha mt-1.5 px-1 leading-snug">{t.cardDetails.helperName}</p>}
           </div>
-          <FloatingInput label={t.cardDetails.fieldCardNumber} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={cardNumber} onChange={e => setCardNumber(e.target.value)} />
-          <FloatingInput label={t.cardDetails.fieldExpiry} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={expiry} onChange={e => setExpiry(e.target.value)} />
-          <FloatingInput label={t.cardDetails.fieldCvv} className="!rounded-2xl bg-white [&+label]:bg-white [&+label]:text-mocha" value={cvv} onChange={e => setCvv(e.target.value)} />
+          <FloatingInput
+            label={t.cardDetails.fieldCardNumber} className={fieldClass} labelClassName={labelClass}
+            value={cardNumber}
+            onChange={e => setCardNumber(formatCard(e.target.value))}
+            onBlur={() => touch('cardNumber')}
+            error={err('cardNumber', cardNumber)} isValid={valid('cardNumber', cardNumber)}
+            inputMode="numeric" autoComplete="cc-number"
+          />
+          <FloatingInput
+            label={t.cardDetails.fieldExpiry} className={fieldClass} labelClassName={labelClass}
+            value={expiry}
+            onChange={e => setExpiry(formatExpiry(e.target.value))}
+            onBlur={() => touch('expiry')}
+            error={err('expiry', expiry)} isValid={valid('expiry', expiry)}
+            inputMode="numeric" autoComplete="cc-exp" maxLength={5}
+          />
+          <FloatingInput
+            label={t.cardDetails.fieldCvv} className={fieldClass} labelClassName={labelClass}
+            value={cvv}
+            onChange={e => setCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
+            onBlur={() => touch('cvv')}
+            error={err('cvv', cvv)} isValid={valid('cvv', cvv)}
+            inputMode="numeric" autoComplete="cc-csc" maxLength={4}
+          />
         </div>
 
         <div className="pt-8 space-y-3">

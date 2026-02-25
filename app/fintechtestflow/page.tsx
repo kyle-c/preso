@@ -624,78 +624,80 @@ function TokenInspector({
   screen: string
   onChange: (section: keyof ContentTokens, key: string, lang: Language, value: string) => void
 }) {
-  const [expandedId, setExpandedId] = useState<string | null>(null)
-  const [drafts, setDrafts] = useState<Record<string, string>>({})
-  const expandedRef = useRef<HTMLDivElement>(null)
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [pinnedId, setPinnedId] = useState<string | null>(null) // stays open while a textarea is focused
+  const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>({})
   const visibleTokens = getScreenTokens(screen)
 
-  // Close editor when screen changes
-  useEffect(() => { setExpandedId(null) }, [screen])
+  // Reset on screen change
+  useEffect(() => { setHoveredId(null); setPinnedId(null) }, [screen])
 
-  function open(id: string, sectionKey: keyof ContentTokens, tokenKey: string) {
-    if (expandedId === id) { setExpandedId(null); return }
-    const initial: Record<string, string> = {}
-    languages.forEach(l => {
-      initial[l.code] = (tokens[l.code][sectionKey] as Record<string, string>)[tokenKey]
+  function initDrafts(id: string, sectionKey: keyof ContentTokens, tokenKey: string) {
+    setDrafts(prev => {
+      if (prev[id]) return prev
+      const initial: Record<string, string> = {}
+      languages.forEach(l => {
+        initial[l.code] = (tokens[l.code][sectionKey] as Record<string, string>)[tokenKey]
+      })
+      return { ...prev, [id]: initial }
     })
-    setDrafts(initial)
-    setExpandedId(id)
   }
 
-  function save(sectionKey: keyof ContentTokens, tokenKey: string) {
-    languages.forEach(l => onChange(sectionKey, tokenKey, l.code, drafts[l.code] ?? ''))
-    setExpandedId(null)
+  function save(id: string, sectionKey: keyof ContentTokens, tokenKey: string) {
+    const d = drafts[id] ?? {}
+    languages.forEach(l => onChange(sectionKey, tokenKey, l.code, d[l.code] ?? ''))
+    setPinnedId(null)
+    setHoveredId(null)
   }
-
-  useEffect(() => {
-    expandedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  }, [expandedId])
 
   return (
-    <div className="w-[260px] shrink-0 flex flex-col overflow-hidden opacity-20 hover:opacity-100 transition-opacity duration-200">
+    <div className="w-[260px] shrink-0 flex flex-col overflow-hidden opacity-40 hover:opacity-100 transition-opacity duration-200">
       {/* Header */}
       <p className="text-[10px] font-semibold text-mocha uppercase tracking-widest pt-[18px] pb-3 px-1 shrink-0">
         Tokens in view
       </p>
 
-      {/* Token list — no background, just text on stone */}
+      {/* Token list */}
       <div className="flex-1 overflow-y-auto px-1">
         {visibleTokens.map(({ sectionKey, tokenKey, id }) => {
           const currentVal = (tokens[language][sectionKey] as Record<string, string>)[tokenKey]
-          const isExpanded = expandedId === id
+          const isOpen = hoveredId === id || pinnedId === id
 
           return (
-            <div key={id} ref={isExpanded ? expandedRef : undefined}>
-              {/* Collapsed row */}
-              <button
-                onClick={() => open(id, sectionKey as keyof ContentTokens, tokenKey)}
-                className="w-full flex items-baseline gap-2 py-1.5 text-left group"
-              >
-                <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isExpanded ? 'text-blueberry' : 'text-blueberry/70 group-hover:text-blueberry'}`}>
+            <div
+              key={id}
+              onMouseEnter={() => { setHoveredId(id); initDrafts(id, sectionKey as keyof ContentTokens, tokenKey) }}
+              onMouseLeave={() => { if (pinnedId !== id) setHoveredId(null) }}
+            >
+              {/* Row label */}
+              <div className="flex items-baseline gap-2 py-1.5">
+                <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isOpen ? 'text-blueberry' : 'text-blueberry/70'}`}>
                   {tokenKey}
                 </code>
                 <span className="text-[12px] text-mocha/60 truncate leading-snug">{currentVal}</span>
-              </button>
+              </div>
 
-              {/* Expanded editor */}
-              {isExpanded && (
-                <div className="mt-1 mb-3 bg-white rounded-2xl border border-slate/10 p-3 space-y-2.5 shadow-sm">
-                  <p className="text-[11px] font-mono text-blueberry mb-1">{sectionKey}.{tokenKey}</p>
+              {/* Hover editor */}
+              {isOpen && (
+                <div className="mb-3 bg-white rounded-2xl border border-slate/10 p-3 space-y-2.5 shadow-sm">
+                  <p className="text-[11px] font-mono text-blueberry">{sectionKey}.{tokenKey}</p>
                   {languages.map(lang => (
                     <div key={lang.code}>
                       <label className="text-[10px] font-semibold text-mocha uppercase tracking-wider mb-1 block">
                         {lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'}
                       </label>
                       <textarea
-                        value={drafts[lang.code] ?? ''}
-                        onChange={e => setDrafts(d => ({ ...d, [lang.code]: e.target.value }))}
+                        value={drafts[id]?.[lang.code] ?? ''}
+                        onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [lang.code]: e.target.value } }))}
+                        onFocus={() => setPinnedId(id)}
+                        onBlur={() => setPinnedId(null)}
                         rows={2}
                         className="w-full text-[13px] text-slate bg-stone border border-slate/15 rounded-xl px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-turquoise/40"
                       />
                     </div>
                   ))}
                   <button
-                    onClick={() => save(sectionKey as keyof ContentTokens, tokenKey)}
+                    onClick={() => save(id, sectionKey as keyof ContentTokens, tokenKey)}
                     className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-xl hover:bg-turquoise/90 transition-colors"
                   >
                     Save

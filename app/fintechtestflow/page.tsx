@@ -87,12 +87,12 @@ const BadgePill = ({ label }: { label: string }) => (
 // ─── Stores data ─────────────────────────────────────────────────────────────
 
 const stores = [
-  { id: 'walgreens',   name: 'Walgreens',             fee: '$3.95', logo: '/stores/walgreens.png' },
-  { id: 'cvs',         name: 'CVS Pharmacy',           fee: '$3.95', logo: '/stores/cvs.png'       },
-  { id: '7eleven',     name: '7-Eleven',               fee: '$3.95', logo: '/stores/seven.png'     },
-  { id: 'walmart',     name: 'Walmart',                fee: '$3.74', logo: '/stores/walmart.png'   },
-  { id: 'caseys',      name: "Casey's",                fee: '$3.95', logo: '/stores/caseys.png'    },
-  { id: 'officedepot', name: 'Office Depot OfficeMax', fee: '$3.95', logo: '/stores/odepot.png'    },
+  { id: 'walgreens',   name: 'Walgreens',             fee: '$3.95', logo: '/stores/walgreens.png', logoPad: 'p-1.5' },
+  { id: 'cvs',         name: 'CVS Pharmacy',           fee: '$3.95', logo: '/stores/cvs.png',       logoPad: 'p-1.5' },
+  { id: '7eleven',     name: '7-Eleven',               fee: '$3.95', logo: '/stores/seven.png',     logoPad: 'p-0.5' },
+  { id: 'walmart',     name: 'Walmart',                fee: '$3.74', logo: '/stores/walmart.png',   logoPad: 'p-1.5' },
+  { id: 'caseys',      name: "Casey's",                fee: '$3.95', logo: '/stores/caseys.png',    logoPad: 'p-1.5' },
+  { id: 'officedepot', name: 'Office Depot OfficeMax', fee: '$3.95', logo: '/stores/odepot.png',    logoPad: 'p-0.5' },
 ]
 
 // ─── Screens ─────────────────────────────────────────────────────────────────
@@ -510,7 +510,7 @@ function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: 
                   : 'bg-white border-slate/20 shadow-sm'
               }`}
             >
-              <div className="h-11 w-11 rounded-xl border border-slate/10 bg-white flex items-center justify-center flex-shrink-0 overflow-hidden p-1.5">
+              <div className={`h-11 w-11 rounded-xl border border-slate/10 bg-white flex items-center justify-center flex-shrink-0 overflow-hidden ${store.logoPad}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={store.logo} alt={store.name} className="w-full h-full object-contain" />
               </div>

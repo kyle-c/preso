@@ -125,14 +125,13 @@ function PayMethodCard({
           : 'bg-white border-slate/20 shadow-sm'
       }`}
     >
-      {/* Text stays left, badge in top-left so it never conflicts with illustration */}
       {selected && (
-        <span className="inline-block bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2">
+        <span className="absolute top-4 right-4 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full z-10">
           {selectedLabel}
         </span>
       )}
-      <p className="font-bold text-[17px] text-slate max-w-[65%]">{title}</p>
-      <p className="text-[13px] text-mocha mt-1.5 leading-snug max-w-[65%]">{desc}</p>
+      <p className="font-bold text-[17px] text-slate max-w-[72%]">{title}</p>
+      <p className="text-[13px] text-mocha mt-1.5 leading-snug max-w-[72%]">{desc}</p>
       <div className="mt-3 flex gap-2 flex-wrap">
         {badges.map(b => (
           <BadgePill key={b} label={b} />
@@ -200,7 +199,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           desc={t.paymentMethod.creditDebitDesc}
           badges={[t.paymentMethod.badgeNoFeeDebit, t.paymentMethod.badgeInstant]}
           illustration="/illustrations/card.svg"
-          imgClassName="h-[68px]"
+          imgClassName="h-[54px]"
           selectedLabel={t.common.selected}
         />
         <PayMethodCard
@@ -211,7 +210,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           desc={t.paymentMethod.bankDesc}
           badges={[t.paymentMethod.badgeNoFee, t.paymentMethod.badgeBusinessDays]}
           illustration="/illustrations/bank.svg"
-          imgClassName="h-[72px]"
+          imgClassName="h-[58px]"
           selectedLabel={t.common.selected}
         />
         <PayMethodCard
@@ -222,7 +221,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           desc={t.paymentMethod.cashDesc}
           badges={[t.paymentMethod.badgeCashFee, t.paymentMethod.badgeSameDay]}
           illustration="/illustrations/cash.svg"
-          imgClassName="h-[56px]"
+          imgClassName="h-[50px]"
           selectedLabel={t.common.selected}
         />
       </div>

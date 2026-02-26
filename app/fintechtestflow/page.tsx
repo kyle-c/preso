@@ -960,111 +960,327 @@ function CanvasMiniPhone({
   children,
   editableContent,
   language,
+  screenKey,
+  uid,
+  selectedUid,
+  onSelect,
 }: {
   label: string
   progress?: number
   children: React.ReactNode
   editableContent: Record<Language, ContentTokens>
   language: Language
+  screenKey: string
+  uid: string
+  selectedUid: string | null
+  onSelect: (uid: string) => void
 }) {
+  const isSelected = selectedUid === uid
+  const groups = screenGroups[screenKey] ?? []
+  const t = editableContent[language]
+
   return (
-    <div className="flex flex-col items-center gap-3 flex-shrink-0">
+    <div className="relative flex-shrink-0">
+      {/* Phone + label */}
       <div
-        className="relative overflow-hidden shadow-2xl"
-        style={{ width: CANVAS_W, height: CANVAS_H, borderRadius: Math.round(52 * CANVAS_SCALE) }}
+        className="flex flex-col items-center gap-3 cursor-pointer"
+        onClick={() => onSelect(isSelected ? '' : uid)}
       >
         <div
-          className="absolute top-0 left-0 pointer-events-none"
-          style={{ transform: `scale(${CANVAS_SCALE})`, transformOrigin: 'top left', width: 390, height: 844 }}
+          className="relative overflow-hidden shadow-2xl transition-all duration-150"
+          style={{
+            width: CANVAS_W,
+            height: CANVAS_H,
+            borderRadius: Math.round(52 * CANVAS_SCALE),
+            boxShadow: isSelected
+              ? '0 0 0 2px #60a5fa, 0 8px 40px rgba(0,0,0,0.6)'
+              : '0 8px 32px rgba(0,0,0,0.5)',
+          }}
         >
-          <LangContext.Provider value={editableContent[language]}>
-            <PhoneFrame progress={progress}>{children}</PhoneFrame>
-          </LangContext.Provider>
+          <div
+            className="absolute top-0 left-0 pointer-events-none"
+            style={{ transform: `scale(${CANVAS_SCALE})`, transformOrigin: 'top left', width: 390, height: 844 }}
+          >
+            <LangContext.Provider value={editableContent[language]}>
+              <PhoneFrame progress={progress}>{children}</PhoneFrame>
+            </LangContext.Provider>
+          </div>
         </div>
+        <p className={`text-[10px] font-medium tracking-wide transition-colors ${isSelected ? 'text-white/70' : 'text-white/35'}`}>
+          {label}
+        </p>
       </div>
-      <p className="text-[10px] font-medium text-white/35 tracking-wide">{label}</p>
+
+      {/* Token annotation panel */}
+      {isSelected && groups.length > 0 && (
+        <div
+          className="absolute top-0 z-20 w-[172px] bg-[#252525] border border-white/[0.09] rounded-2xl overflow-hidden shadow-2xl"
+          style={{ left: CANVAS_W + 10 }}
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="px-3 pt-3 pb-1 border-b border-white/[0.07]">
+            <p className="text-[9px] font-semibold text-white/30 uppercase tracking-widest">{label}</p>
+          </div>
+          <div className="px-3 py-2.5 space-y-3 max-h-[260px] overflow-y-auto">
+            {groups.map((group, gi) => (
+              <div key={gi}>
+                {group.label && (
+                  <p className="text-[8px] font-semibold text-white/20 uppercase tracking-widest mb-1.5">{group.label}</p>
+                )}
+                {group.items.map(({ s, k }) => {
+                  const val = (t[s] as Record<string, string>)[k]
+                  return (
+                    <div key={`${s}.${k}`} className="mb-1.5">
+                      <p className="text-[9px] font-mono text-[#60a5fa]/70 leading-none mb-0.5">{k}</p>
+                      <p className="text-[10px] text-white/45 leading-snug line-clamp-2">{val}</p>
+                    </div>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
 function CanvasArrow() {
   return (
-    <div className="flex-shrink-0 self-start flex items-center" style={{ marginTop: CANVAS_H / 2 - 6, marginLeft: 6, marginRight: 6 }}>
+    <div
+      className="flex-shrink-0 flex items-center"
+      style={{ marginTop: CANVAS_H / 2 - 6 + 3, marginLeft: 6, marginRight: 6, alignSelf: 'flex-start' }}
+    >
       <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
-        <path d="M0 6H21" stroke="rgba(255,255,255,0.18)" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M17 2L23 6L17 10" stroke="rgba(255,255,255,0.18)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M0 6H21" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M17 2L23 6L17 10" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </div>
   )
 }
 
-function FlowCanvas({
+function FlowCanvasOverlay({
   editableContent,
   language,
+  onClose,
 }: {
   editableContent: Record<Language, ContentTokens>
   language: Language
+  onClose: () => void
 }) {
-  const mp = (label: string, progress: number, node: React.ReactNode) => ({ label, progress, node })
+  const [selectedUid, setSelectedUid] = useState<string | null>(null)
+  const viewRef = useRef<HTMLDivElement>(null)
+  const canvas = useRef({ zoom: 1, ox: 0, oy: 0 })
+  const [, repaint] = useState(0)
+  const re = () => repaint(n => n + 1)
+  const dragging = useRef(false)
+  const lastMouse = useRef({ x: 0, y: 0 })
 
+  // Fit to viewport on mount
+  useEffect(() => {
+    const el = viewRef.current
+    if (!el) return
+    const vw = el.clientWidth
+    const vh = el.clientHeight
+    const cw = 5 * CANVAS_W + 4 * 40 + 160
+    const ch = 2 * (CANVAS_H + 36 + 56) + 120
+    const zoom = Math.min((vw - 120) / cw, (vh - 100) / ch, 1.2)
+    canvas.current = { zoom, ox: (vw - cw * zoom) / 2, oy: 60 }
+    re()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Non-passive wheel for pan + pinch zoom
+  useEffect(() => {
+    const el = viewRef.current!
+    function onWheel(e: WheelEvent) {
+      e.preventDefault()
+      const c = canvas.current
+      if (e.ctrlKey || e.metaKey) {
+        const rect = el.getBoundingClientRect()
+        const mx = e.clientX - rect.left
+        const my = e.clientY - rect.top
+        const factor = 1 - e.deltaY * 0.004
+        const newZoom = Math.min(Math.max(c.zoom * factor, 0.08), 4)
+        const scale = newZoom / c.zoom
+        c.ox = mx - (mx - c.ox) * scale
+        c.oy = my - (my - c.oy) * scale
+        c.zoom = newZoom
+      } else {
+        c.ox -= e.deltaX
+        c.oy -= e.deltaY
+      }
+      repaint(n => n + 1)
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [])
+
+  function onMouseDown(e: React.MouseEvent) {
+    if (e.button !== 0) return
+    dragging.current = true
+    lastMouse.current = { x: e.clientX, y: e.clientY }
+  }
+  function onMouseMove(e: React.MouseEvent) {
+    if (!dragging.current) return
+    canvas.current.ox += e.clientX - lastMouse.current.x
+    canvas.current.oy += e.clientY - lastMouse.current.y
+    lastMouse.current = { x: e.clientX, y: e.clientY }
+    repaint(n => n + 1)
+  }
+  function stopDrag() { dragging.current = false }
+
+  function zoomBy(factor: number) {
+    const el = viewRef.current
+    if (!el) return
+    const c = canvas.current
+    const mx = el.clientWidth / 2
+    const my = el.clientHeight / 2
+    const newZoom = Math.min(Math.max(c.zoom * factor, 0.08), 4)
+    const scale = newZoom / c.zoom
+    c.ox = mx - (mx - c.ox) * scale
+    c.oy = my - (my - c.oy) * scale
+    c.zoom = newZoom
+    repaint(n => n + 1)
+  }
+
+  function fit() {
+    const el = viewRef.current
+    if (!el) return
+    const vw = el.clientWidth
+    const vh = el.clientHeight
+    const cw = 5 * CANVAS_W + 4 * 40 + 160
+    const ch = 2 * (CANVAS_H + 36 + 56) + 120
+    const zoom = Math.min((vw - 120) / cw, (vh - 100) / ch, 1.2)
+    canvas.current = { zoom, ox: (vw - cw * zoom) / 2, oy: 60 }
+    repaint(n => n + 1)
+  }
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+      if ((e.key === '+' || e.key === '=') && !e.ctrlKey && !e.metaKey) zoomBy(1.15)
+      if (e.key === '-' && !e.ctrlKey && !e.metaKey) zoomBy(1 / 1.15)
+      if (e.key === '0') fit()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onClose])
+
+  const mp = (label: string, sk: string, progress: number, node: React.ReactNode) => ({ label, sk, progress, node })
   const flows = [
     {
-      id: 'card',
-      label: 'Card / Bank Flow',
-      dot: '#60a5fa',
+      id: 'card', label: 'Card / Bank Flow', dot: '#60a5fa',
       screens: [
-        mp('Payment Method', 25, <PaymentMethodScreen onNext={() => {}} />),
-        mp('Billing Address', 50, <AddressScreen onNext={() => {}} onBack={() => {}} paymentMethod="card" />),
-        mp('Card Details', 75, <CardDetailsScreen onNext={() => {}} onBack={() => {}} />),
-        mp('Review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangePayment={() => {}} paymentMethod="card" selectedStore="" />),
-        mp('Success', 100, <SuccessScreen />),
+        mp('Payment Method', 'payment', 25, <PaymentMethodScreen onNext={() => {}} />),
+        mp('Billing Address', 'address', 50, <AddressScreen onNext={() => {}} onBack={() => {}} paymentMethod="card" />),
+        mp('Card Details', 'card', 75, <CardDetailsScreen onNext={() => {}} onBack={() => {}} />),
+        mp('Review', 'review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangePayment={() => {}} paymentMethod="card" selectedStore="" />),
+        mp('Success', 'success', 100, <SuccessScreen />),
       ],
     },
     {
-      id: 'cash',
-      label: 'Cash Flow',
-      dot: '#4ade80',
+      id: 'cash', label: 'Cash Flow', dot: '#4ade80',
       screens: [
-        mp('Payment Method', 25, <PaymentMethodScreen onNext={() => {}} />),
-        mp('Cash Address', 50, <AddressScreen onNext={() => {}} onBack={() => {}} paymentMethod="cash" />),
-        mp('Store Selection', 75, <StoreSelectionScreen onBack={() => {}} onNext={() => {}} />),
-        mp('Review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangePayment={() => {}} paymentMethod="cash" selectedStore="walgreens" />),
-        mp('Success', 100, <SuccessScreen />),
+        mp('Payment Method', 'payment', 25, <PaymentMethodScreen onNext={() => {}} />),
+        mp('Cash Address', 'address', 50, <AddressScreen onNext={() => {}} onBack={() => {}} paymentMethod="cash" />),
+        mp('Store Selection', 'store', 75, <StoreSelectionScreen onBack={() => {}} onNext={() => {}} />),
+        mp('Review', 'review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangePayment={() => {}} paymentMethod="cash" selectedStore="walgreens" />),
+        mp('Success', 'success', 100, <SuccessScreen />),
       ],
     },
   ]
 
+  const { zoom, ox, oy } = canvas.current
+  const btnCls = 'h-7 px-2.5 rounded-md text-[12px] font-semibold text-white/45 hover:text-white hover:bg-white/10 transition-colors'
+
   return (
-    <div className="bg-[#1c1c1c] rounded-2xl p-10 overflow-auto">
-      <div className="space-y-14" style={{ minWidth: 'max-content' }}>
-        {flows.map(flow => (
-          <div key={flow.id}>
-            {/* Section label */}
-            <div className="flex items-center gap-2 mb-7">
-              <div className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: flow.dot }} />
-              <p className="text-[11px] font-semibold text-white/25 uppercase tracking-widest">{flow.label}</p>
-              <div className="h-px flex-1 bg-white/[0.06]" style={{ minWidth: 40 }} />
-            </div>
-            {/* Screen row */}
-            <div className="flex items-start">
-              {flow.screens.flatMap((screen, i) => {
-                const nodes = [
-                  <CanvasMiniPhone
-                    key={`screen-${i}`}
-                    label={screen.label}
-                    progress={screen.progress}
-                    editableContent={editableContent}
-                    language={language}
-                  >
-                    {screen.node}
-                  </CanvasMiniPhone>,
-                ]
-                if (i < flow.screens.length - 1) nodes.push(<CanvasArrow key={`arrow-${i}`} />)
-                return nodes
-              })}
-            </div>
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#1c1c1c] select-none">
+      {/* Toolbar */}
+      <div className="shrink-0 flex items-center justify-between px-5 h-11 border-b border-white/[0.07]">
+        <span className="text-[13px] font-semibold text-white/30">Flow Canvas</span>
+        <div className="flex items-center gap-0.5">
+          <button className={btnCls} onClick={() => zoomBy(1 / 1.2)}>−</button>
+          <span className="text-[12px] tabular-nums text-white/35 w-12 text-center">{Math.round(zoom * 100)}%</span>
+          <button className={btnCls} onClick={() => zoomBy(1.2)}>+</button>
+          <div className="w-px h-4 bg-white/10 mx-2" />
+          <button className={btnCls} onClick={fit}>Fit</button>
+        </div>
+        <button
+          onClick={onClose}
+          className="h-7 w-7 flex items-center justify-center rounded-md text-white/35 hover:text-white hover:bg-white/10 transition-colors text-[15px] leading-none"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Canvas viewport */}
+      <div
+        ref={viewRef}
+        className="flex-1 overflow-hidden"
+        style={{ cursor: dragging.current ? 'grabbing' : 'grab' }}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={stopDrag}
+        onMouseLeave={stopDrag}
+      >
+        {/* Dot-grid background */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
+          }}
+        />
+
+        {/* Transformable canvas */}
+        <div
+          style={{
+            position: 'absolute',
+            transform: `translate(${ox}px, ${oy}px) scale(${zoom})`,
+            transformOrigin: '0 0',
+          }}
+        >
+          <div className="space-y-16">
+            {flows.map(flow => (
+              <div key={flow.id}>
+                <div className="flex items-center gap-2 mb-8">
+                  <div className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: flow.dot }} />
+                  <p className="text-[11px] font-semibold text-white/22 uppercase tracking-widest">{flow.label}</p>
+                  <div className="h-px w-32 bg-white/[0.05]" />
+                </div>
+                <div className="flex items-start">
+                  {flow.screens.flatMap((screen, i) => {
+                    const uid = `${flow.id}-${screen.sk}`
+                    const nodes: React.ReactNode[] = [
+                      <CanvasMiniPhone
+                        key={uid}
+                        label={screen.label}
+                        screenKey={screen.sk}
+                        uid={uid}
+                        selectedUid={selectedUid}
+                        onSelect={setSelectedUid}
+                        progress={screen.progress}
+                        editableContent={editableContent}
+                        language={language}
+                      >
+                        {screen.node}
+                      </CanvasMiniPhone>,
+                    ]
+                    if (i < flow.screens.length - 1) nodes.push(<CanvasArrow key={`arrow-${i}`} />)
+                    return nodes
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+      </div>
+
+      {/* Hint */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[11px] text-white/18 pointer-events-none">
+        Scroll to pan · ⌘ scroll to zoom · Click a screen to inspect tokens
       </div>
     </div>
   )
@@ -1163,11 +1379,11 @@ export default function FintechTestFlowPage() {
             </PhoneFrame>
             {/* Canvas toggle */}
             <button
-              onClick={() => setShowCanvas(v => !v)}
+              onClick={() => setShowCanvas(true)}
               className="mt-3 mx-auto flex items-center gap-1.5 text-[12px] font-semibold text-mocha/50 hover:text-mocha transition-colors py-1.5 px-3 rounded-full hover:bg-slate/5"
             >
               <Layers className="h-3.5 w-3.5" />
-              {showCanvas ? 'Close canvas' : 'View all screens'}
+              View all screens
             </button>
           </div>
 
@@ -1180,13 +1396,16 @@ export default function FintechTestFlowPage() {
           />
         </div>
 
-        {/* Flow canvas */}
-        {showCanvas && (
-          <div className="mt-4 pb-10 px-8">
-            <FlowCanvas editableContent={editableContent} language={language} />
-          </div>
-        )}
       </div>
+
+      {/* Full-screen canvas overlay */}
+      {showCanvas && (
+        <FlowCanvasOverlay
+          editableContent={editableContent}
+          language={language}
+          onClose={() => setShowCanvas(false)}
+        />
+      )}
     </LangContext.Provider>
   )
 }

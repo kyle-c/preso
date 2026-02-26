@@ -125,12 +125,14 @@ function PayMethodCard({
           : 'bg-white border-slate/20 shadow-sm'
       }`}
     >
-      {selected && (
-        <span className="absolute top-4 right-4 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full z-10">
-          {selectedLabel}
-        </span>
-      )}
-      <p className="font-bold text-[17px] text-slate max-w-[72%]">{title}</p>
+      <div className="flex items-center justify-between gap-2">
+        <p className="font-bold text-[17px] text-slate">{title}</p>
+        {selected && (
+          <span className="flex-shrink-0 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full">
+            {selectedLabel}
+          </span>
+        )}
+      </div>
       <p className="text-[13px] text-mocha mt-1.5 leading-snug max-w-[72%]">{desc}</p>
       <div className="mt-3 flex gap-2 flex-wrap">
         {badges.map(b => (

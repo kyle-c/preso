@@ -144,17 +144,24 @@ export function SidebarNav() {
                   <Icon className="h-4 w-4" />
                   {item.title}
                 </Link>
-                {item.children && isActive && (
-                  <div className="ml-7 mt-1 space-y-1 border-l border-sidebar-border pl-3">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className="block py-1.5 text-sm leading-[1.5] text-sidebar-foreground/70 hover:text-sidebar-foreground"
-                      >
-                        {child.title}
-                      </Link>
-                    ))}
+                {item.children && (
+                  <div
+                    className="grid transition-[grid-template-rows] duration-200 ease-in-out"
+                    style={{ gridTemplateRows: isActive ? '1fr' : '0fr' }}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="ml-7 mt-1 mb-1 space-y-1 border-l border-sidebar-border pl-3">
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            className="block py-1.5 text-sm leading-[1.5] text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
+                          >
+                            {child.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

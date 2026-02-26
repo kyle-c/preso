@@ -1,7 +1,7 @@
 import { DesignSystemLayout } from "@/components/design-system/design-system-layout"
 import { Section } from "@/components/design-system/section"
 import Link from "next/link"
-import { Palette, Type, Component, Blend, Compass } from "lucide-react"
+import { Palette, Type, Component, Blend, Compass, Images } from "lucide-react"
 
 const features = [
   {
@@ -38,6 +38,13 @@ const features = [
     href: "/tokens",
     icon: Blend,
     color: "bg-blueberry",
+  },
+  {
+    title: "Illustrations",
+    description: "The full illustration library with SVG and PNG downloads for every asset.",
+    href: "/illustrations",
+    icon: Images,
+    color: "bg-lime",
   },
 ]
 

@@ -695,7 +695,7 @@ function SuccessScreen() {
 
 // ─── Token inspector ──────────────────────────────────────────────────────────
 
-const INSPECTOR_STORAGE_KEY = 'felix-content-tokens'
+const INSPECTOR_STORAGE_KEY = 'felix-content-tokens-v2'
 
 // Which sections are relevant for each screen
 const screenSections: Record<string, Array<keyof ContentTokens>> = {

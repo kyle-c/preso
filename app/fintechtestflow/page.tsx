@@ -130,7 +130,7 @@ function PayMethodCard({
       onClick={onClick}
       className={`relative w-full text-left rounded-2xl p-5 border transition-all overflow-hidden ${
         selected
-          ? 'bg-white border-slate/60'
+          ? 'bg-white border-slate/60 shadow-lg'
           : 'bg-white border-slate/20 shadow-sm'
       }`}
     >

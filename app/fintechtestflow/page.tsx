@@ -137,7 +137,7 @@ function PayMethodCard({
       <div className="flex items-center justify-between gap-2">
         <p className="font-bold text-[17px] text-slate">{title}</p>
         {selected && (
-          <span className="flex-shrink-0 bg-slate text-linen text-[11px] font-semibold px-2.5 py-1 rounded-full">
+          <span className="flex-shrink-0 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full">
             {selectedLabel}
           </span>
         )}

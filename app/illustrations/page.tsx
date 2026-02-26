@@ -66,7 +66,6 @@ const categories: Category[] = [
       { name: "Hand - Card 1", hasPng: true },
       { name: "Hand - Card 2", hasPng: true },
       { name: "Hand - Cell Phone OK", hasPng: true },
-      { name: "Hand - Cell Phone - Félix WA", hasPng: true },
       { name: "Hand - Star - Perks", hasPng: true },
       { name: "Hand - Stars", hasPng: true },
       { name: "Hand - Tool", hasPng: true },

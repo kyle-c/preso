@@ -21,7 +21,7 @@ const useT = () => useContext(LangContext)
 
 // ─── Phone frame ─────────────────────────────────────────────────────────────
 
-function PhoneFrame({ children }: { children: React.ReactNode }) {
+function PhoneFrame({ children, progress }: { children: React.ReactNode; progress?: number }) {
   return (
     <div className="relative mx-auto w-[390px] h-[844px] rounded-[52px] border-[12px] border-slate bg-slate shadow-2xl overflow-hidden">
       <div className="absolute top-3 left-1/2 -translate-x-1/2 z-50 w-[126px] h-[34px] bg-slate rounded-full" />
@@ -33,6 +33,15 @@ function PhoneFrame({ children }: { children: React.ReactNode }) {
           <Battery className="h-3.5 w-3.5 text-slate" />
         </div>
       </div>
+      {/* Thin progress stripe pinned just below the status bar */}
+      {progress !== undefined && (
+        <div className="absolute top-[54px] left-0 right-0 z-30 h-[3px] bg-slate/10">
+          <div
+            className="h-full bg-turquoise transition-[width] duration-300 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
       <div className="h-full w-full overflow-y-auto bg-linen pt-[54px] pb-[34px]">
         {children}
       </div>
@@ -158,17 +167,6 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
     <div className="flex flex-col px-5 pb-8">
       <ScreenHeader />
 
-      <div className="flex items-center gap-3 px-1 py-1.5">
-        <div className="h-9 w-9 flex-shrink-0" />
-        <div className="flex flex-1 gap-1.5">
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate/20" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate/20" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate/20" />
-        </div>
-        <div className="w-9 flex-shrink-0" />
-      </div>
-
       <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-slate mb-2">
         {t.paymentMethod.titleLine1}<br />{t.paymentMethod.titleLine2}
       </h1>
@@ -267,14 +265,8 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
     <div className="flex flex-col h-full">
       <ScreenHeader />
 
-      <div className="flex items-center gap-3 px-6 py-3">
+      <div className="px-6 pt-3 pb-1">
         <BackButton onClick={onBack} />
-        <div className="flex flex-1 gap-1.5">
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate/20" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate/20" />
-        </div>
         <div className="w-9 flex-shrink-0" />
       </div>
 
@@ -417,14 +409,8 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
     <div className="flex flex-col h-full">
       <ScreenHeader />
 
-      <div className="flex items-center gap-3 px-6 py-3">
+      <div className="px-6 pt-3 pb-1">
         <BackButton onClick={onBack} />
-        <div className="flex flex-1 gap-1.5">
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate/20" />
-        </div>
         <div className="w-9 flex-shrink-0" />
       </div>
 
@@ -500,14 +486,8 @@ function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: 
     <div className="flex flex-col h-full">
       <ScreenHeader />
 
-      <div className="flex items-center gap-3 px-6 py-3">
+      <div className="px-6 pt-3 pb-1">
         <BackButton onClick={onBack} />
-        <div className="flex flex-1 gap-1.5">
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate/20" />
-        </div>
         <div className="w-9 flex-shrink-0" />
       </div>
 
@@ -578,14 +558,8 @@ function ReviewScreen({ onNext, onBack, onChangePayment, paymentMethod, selected
     <div className="flex flex-col h-full">
       <ScreenHeader />
 
-      <div className="flex items-center gap-3 px-6 py-3">
+      <div className="px-6 pt-3 pb-1">
         <BackButton onClick={onBack} />
-        <div className="flex flex-1 gap-1.5">
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-          <div className="h-1.5 flex-1 rounded-full bg-slate" />
-        </div>
         <div className="w-9 flex-shrink-0" />
       </div>
 
@@ -913,7 +887,7 @@ export default function FintechTestFlowPage() {
           {/* Phone column: controls above, device below */}
           <div className="flex flex-col items-stretch w-[390px] shrink-0">
             <PhoneControls current={language} onChange={setLanguage} />
-            <PhoneFrame>
+            <PhoneFrame progress={{ payment: 25, address: 50, store: 75, card: 75, review: 100, success: 100 }[screen]}>
               {screen === 'payment' && (
                 <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
               )}

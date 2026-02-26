@@ -95,22 +95,67 @@ const stores = [
 
 // ─── Screens ─────────────────────────────────────────────────────────────────
 
+function PayMethodCard({
+  id,
+  selected,
+  onClick,
+  title,
+  desc,
+  badge,
+  illustration,
+  isNew,
+}: {
+  id: string
+  selected: boolean
+  onClick: () => void
+  title: string
+  desc: string
+  badge: string
+  illustration: string
+  isNew?: boolean
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`relative w-full text-left rounded-2xl overflow-hidden bg-turquoise active:scale-[0.98] transition-all min-h-[140px] p-5 ${
+        selected ? 'ring-[3px] ring-slate' : 'ring-0'
+      }`}
+    >
+      {/* "New" corner sticker */}
+      {isNew && (
+        <div className="absolute top-0 right-0 overflow-hidden w-[80px] h-[80px] pointer-events-none">
+          <div className="absolute top-[14px] right-[-20px] w-[90px] bg-[#D8F400] text-slate text-[11px] font-black text-center py-1 rotate-45 shadow-sm">
+            New
+          </div>
+        </div>
+      )}
+
+      {/* Text content */}
+      <p className="font-display text-[18px] font-extrabold text-slate leading-snug max-w-[62%]">
+        {title} →
+      </p>
+      <p className="text-[12px] text-slate/75 mt-1.5 leading-snug max-w-[60%]">{desc}</p>
+      <div className="mt-4">
+        <span className="inline-block bg-slate text-linen text-[12px] font-semibold px-3 py-1.5 rounded-full">
+          {badge}
+        </span>
+      </div>
+
+      {/* Illustration */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={illustration}
+        alt=""
+        aria-hidden
+        className="absolute bottom-0 right-0 h-[100px] w-auto pointer-events-none"
+      />
+    </button>
+  )
+}
+
 function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
   const t = useT()
   const [selected, setSelected] = useState<string | null>('card')
-
-  const cardClass = (id: string) =>
-    `relative w-full text-left rounded-2xl p-5 border transition-all ${
-      selected === id
-        ? 'bg-white border-turquoise/50 ring-[3px] ring-turquoise/30'
-        : 'bg-white border-slate/20 shadow-sm'
-    }`
-
-  const SelectedBadge = () => (
-    <span className="absolute top-4 right-4 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full">
-      {t.common.selected}
-    </span>
-  )
 
   return (
     <div className="flex flex-col px-5 pb-8">
@@ -151,35 +196,34 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
       </div>
 
       <div className="space-y-3">
-        <button className={cardClass('card')} onClick={() => setSelected('card')}>
-          {selected === 'card' && <SelectedBadge />}
-          <p className="font-bold text-[17px] text-slate">{t.paymentMethod.creditDebitName}</p>
-          <p className="text-[13px] text-mocha mt-1.5 leading-snug">{t.paymentMethod.creditDebitDesc}</p>
-          <div className="mt-3 flex gap-2">
-            <BadgePill label={t.paymentMethod.badgeNoFeeDebit} />
-            <BadgePill label={t.paymentMethod.badgeInstant} />
-          </div>
-        </button>
-
-        <button className={cardClass('bank')} onClick={() => setSelected('bank')}>
-          {selected === 'bank' && <SelectedBadge />}
-          <p className="font-bold text-[17px] text-slate">{t.paymentMethod.bankName}</p>
-          <p className="text-[13px] text-mocha mt-1.5 leading-snug">{t.paymentMethod.bankDesc}</p>
-          <div className="mt-3 flex gap-2">
-            <BadgePill label={t.paymentMethod.badgeNoFee} />
-            <BadgePill label={t.paymentMethod.badgeBusinessDays} />
-          </div>
-        </button>
-
-        <button className={cardClass('cash')} onClick={() => setSelected('cash')}>
-          {selected === 'cash' && <SelectedBadge />}
-          <p className="font-bold text-[17px] text-slate">{t.paymentMethod.cashName}</p>
-          <p className="text-[13px] text-mocha mt-1.5 leading-snug">{t.paymentMethod.cashDesc}</p>
-          <div className="mt-3 flex gap-2">
-            <BadgePill label={t.paymentMethod.badgeCashFee} />
-            <BadgePill label={t.paymentMethod.badgeSameDay} />
-          </div>
-        </button>
+        <PayMethodCard
+          id="card"
+          selected={selected === 'card'}
+          onClick={() => setSelected('card')}
+          title={t.paymentMethod.creditDebitName}
+          desc={t.paymentMethod.creditDebitDesc}
+          badge={t.paymentMethod.badgeNoFeeDebit}
+          illustration="/illustrations/card.svg"
+        />
+        <PayMethodCard
+          id="bank"
+          selected={selected === 'bank'}
+          onClick={() => setSelected('bank')}
+          title={t.paymentMethod.bankName}
+          desc={t.paymentMethod.bankDesc}
+          badge={t.paymentMethod.badgeNoFee}
+          illustration="/illustrations/bank.svg"
+        />
+        <PayMethodCard
+          id="cash"
+          selected={selected === 'cash'}
+          onClick={() => setSelected('cash')}
+          title={t.paymentMethod.cashName}
+          desc={t.paymentMethod.cashDesc}
+          badge={t.paymentMethod.badgeCashFee}
+          illustration="/illustrations/cash.svg"
+          isNew
+        />
       </div>
 
       <div className="mt-5 space-y-2.5">

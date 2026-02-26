@@ -506,7 +506,7 @@ function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: 
               onClick={() => setSelected(store.id)}
               className={`relative w-full text-left rounded-2xl px-4 py-3.5 border transition-all flex items-center gap-3 ${
                 selected === store.id
-                  ? 'bg-white border-turquoise/50 ring-[3px] ring-turquoise/30'
+                  ? 'bg-white border-slate/60 shadow-lg'
                   : 'bg-white border-slate/20 shadow-sm'
               }`}
             >

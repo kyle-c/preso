@@ -178,11 +178,12 @@ function IllustrationCard({ item }: { item: Illustration }) {
       {/* Preview */}
       <div className="relative flex h-36 items-center justify-center bg-stone/40 p-4"
            style={{ backgroundImage: 'radial-gradient(circle, #d1cdc7 1px, transparent 1px)', backgroundSize: '16px 16px' }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={svgPath}
-          alt={item.name}
-          className="h-full w-full object-contain drop-shadow-sm"
+        <object
+          type="image/svg+xml"
+          data={svgPath}
+          className="h-full w-full"
+          style={{ pointerEvents: 'none' }}
+          aria-label={item.name}
         />
       </div>
 

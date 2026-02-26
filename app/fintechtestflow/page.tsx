@@ -55,7 +55,7 @@ function PhoneFrame({ children, progress }: { children: React.ReactNode; progres
 function ScreenHeader() {
   const t = useT()
   return (
-    <div className="flex flex-col items-center pt-4 pb-1">
+    <div className="flex flex-col items-center pt-4 pb-3">
       <FelixLogo className="h-8 text-slate" />
       <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
         <span className="text-[10px] font-semibold text-slate">{t.common.badge}</span>

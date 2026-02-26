@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { FelixLogo } from '@/components/design-system/felix-logo'
 import { Button } from '@/components/ui/button'
 import { FloatingInput } from '@/components/ui/floating-input'
-import { ChevronLeft, Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin } from 'lucide-react'
+import { ChevronLeft, Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin, Layers } from 'lucide-react'
 import { type Language, type ContentTokens, languages, content } from './content'
 
 // ─── Language context ────────────────────────────────────────────────────────
@@ -948,6 +948,128 @@ function TokenInspector({
   )
 }
 
+// ─── Flow canvas ─────────────────────────────────────────────────────────────
+
+const CANVAS_SCALE = 0.32
+const CANVAS_W = Math.round(390 * CANVAS_SCALE) // 125px
+const CANVAS_H = Math.round(844 * CANVAS_SCALE) // 270px
+
+function CanvasMiniPhone({
+  label,
+  progress,
+  children,
+  editableContent,
+  language,
+}: {
+  label: string
+  progress?: number
+  children: React.ReactNode
+  editableContent: Record<Language, ContentTokens>
+  language: Language
+}) {
+  return (
+    <div className="flex flex-col items-center gap-3 flex-shrink-0">
+      <div
+        className="relative overflow-hidden shadow-2xl"
+        style={{ width: CANVAS_W, height: CANVAS_H, borderRadius: Math.round(52 * CANVAS_SCALE) }}
+      >
+        <div
+          className="absolute top-0 left-0 pointer-events-none"
+          style={{ transform: `scale(${CANVAS_SCALE})`, transformOrigin: 'top left', width: 390, height: 844 }}
+        >
+          <LangContext.Provider value={editableContent[language]}>
+            <PhoneFrame progress={progress}>{children}</PhoneFrame>
+          </LangContext.Provider>
+        </div>
+      </div>
+      <p className="text-[10px] font-medium text-white/35 tracking-wide">{label}</p>
+    </div>
+  )
+}
+
+function CanvasArrow() {
+  return (
+    <div className="flex-shrink-0 self-start flex items-center" style={{ marginTop: CANVAS_H / 2 - 6, marginLeft: 6, marginRight: 6 }}>
+      <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
+        <path d="M0 6H21" stroke="rgba(255,255,255,0.18)" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M17 2L23 6L17 10" stroke="rgba(255,255,255,0.18)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
+  )
+}
+
+function FlowCanvas({
+  editableContent,
+  language,
+}: {
+  editableContent: Record<Language, ContentTokens>
+  language: Language
+}) {
+  const mp = (label: string, progress: number, node: React.ReactNode) => ({ label, progress, node })
+
+  const flows = [
+    {
+      id: 'card',
+      label: 'Card / Bank Flow',
+      dot: '#60a5fa',
+      screens: [
+        mp('Payment Method', 25, <PaymentMethodScreen onNext={() => {}} />),
+        mp('Billing Address', 50, <AddressScreen onNext={() => {}} onBack={() => {}} paymentMethod="card" />),
+        mp('Card Details', 75, <CardDetailsScreen onNext={() => {}} onBack={() => {}} />),
+        mp('Review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangePayment={() => {}} paymentMethod="card" selectedStore="" />),
+        mp('Success', 100, <SuccessScreen />),
+      ],
+    },
+    {
+      id: 'cash',
+      label: 'Cash Flow',
+      dot: '#4ade80',
+      screens: [
+        mp('Payment Method', 25, <PaymentMethodScreen onNext={() => {}} />),
+        mp('Cash Address', 50, <AddressScreen onNext={() => {}} onBack={() => {}} paymentMethod="cash" />),
+        mp('Store Selection', 75, <StoreSelectionScreen onBack={() => {}} onNext={() => {}} />),
+        mp('Review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangePayment={() => {}} paymentMethod="cash" selectedStore="walgreens" />),
+        mp('Success', 100, <SuccessScreen />),
+      ],
+    },
+  ]
+
+  return (
+    <div className="bg-[#1c1c1c] rounded-2xl p-10 overflow-auto">
+      <div className="space-y-14" style={{ minWidth: 'max-content' }}>
+        {flows.map(flow => (
+          <div key={flow.id}>
+            {/* Section label */}
+            <div className="flex items-center gap-2 mb-7">
+              <div className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: flow.dot }} />
+              <p className="text-[11px] font-semibold text-white/25 uppercase tracking-widest">{flow.label}</p>
+              <div className="h-px flex-1 bg-white/[0.06]" style={{ minWidth: 40 }} />
+            </div>
+            {/* Screen row */}
+            <div className="flex items-start">
+              {flow.screens.flatMap((screen, i) => {
+                const nodes = [
+                  <CanvasMiniPhone
+                    key={`screen-${i}`}
+                    label={screen.label}
+                    progress={screen.progress}
+                    editableContent={editableContent}
+                    language={language}
+                  >
+                    {screen.node}
+                  </CanvasMiniPhone>,
+                ]
+                if (i < flow.screens.length - 1) nodes.push(<CanvasArrow key={`arrow-${i}`} />)
+                return nodes
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
 function PhoneControls({ current, onChange }: { current: Language; onChange: (l: Language) => void }) {
@@ -987,6 +1109,7 @@ export default function FintechTestFlowPage() {
   const [paymentMethod, setPaymentMethod] = useState<string>('card')
   const [selectedStore, setSelectedStore] = useState<string>('')
   const [language, setLanguage] = useState<Language>('en')
+  const [showCanvas, setShowCanvas] = useState(false)
 
   // Mutable token state — shared between the flow and the inspector
   const [editableContent, setEditableContent] = useState<Record<Language, ContentTokens>>(() =>
@@ -1038,6 +1161,14 @@ export default function FintechTestFlowPage() {
                 <SuccessScreen />
               )}
             </PhoneFrame>
+            {/* Canvas toggle */}
+            <button
+              onClick={() => setShowCanvas(v => !v)}
+              className="mt-3 mx-auto flex items-center gap-1.5 text-[12px] font-semibold text-mocha/50 hover:text-mocha transition-colors py-1.5 px-3 rounded-full hover:bg-slate/5"
+            >
+              <Layers className="h-3.5 w-3.5" />
+              {showCanvas ? 'Close canvas' : 'View all screens'}
+            </button>
           </div>
 
           {/* Inspector: top-aligned next to device */}
@@ -1048,6 +1179,13 @@ export default function FintechTestFlowPage() {
             onChange={updateToken}
           />
         </div>
+
+        {/* Flow canvas */}
+        {showCanvas && (
+          <div className="mt-4 pb-10 px-8">
+            <FlowCanvas editableContent={editableContent} language={language} />
+          </div>
+        )}
       </div>
     </LangContext.Provider>
   )

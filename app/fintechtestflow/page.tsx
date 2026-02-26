@@ -101,53 +101,46 @@ function PayMethodCard({
   onClick,
   title,
   desc,
-  badge,
+  badges,
   illustration,
-  isNew,
+  selectedLabel,
 }: {
   id: string
   selected: boolean
   onClick: () => void
   title: string
   desc: string
-  badge: string
+  badges: string[]
   illustration: string
-  isNew?: boolean
+  selectedLabel: string
 }) {
   return (
     <button
       onClick={onClick}
-      className={`relative w-full text-left rounded-2xl overflow-hidden bg-turquoise active:scale-[0.98] transition-all min-h-[140px] p-5 ${
-        selected ? 'ring-[3px] ring-slate' : 'ring-0'
+      className={`relative w-full text-left rounded-2xl p-5 border transition-all overflow-hidden ${
+        selected
+          ? 'bg-white border-turquoise/50 ring-[3px] ring-turquoise/30'
+          : 'bg-white border-slate/20 shadow-sm'
       }`}
     >
-      {/* "New" corner sticker */}
-      {isNew && (
-        <div className="absolute top-0 right-0 overflow-hidden w-[80px] h-[80px] pointer-events-none">
-          <div className="absolute top-[14px] right-[-20px] w-[90px] bg-[#D8F400] text-slate text-[11px] font-black text-center py-1 rotate-45 shadow-sm">
-            New
-          </div>
-        </div>
-      )}
-
-      {/* Text content */}
-      <p className="font-display text-[18px] font-extrabold text-slate leading-snug max-w-[62%]">
-        {title} →
-      </p>
-      <p className="text-[12px] text-slate/75 mt-1.5 leading-snug max-w-[60%]">{desc}</p>
-      <div className="mt-4">
-        <span className="inline-block bg-slate text-linen text-[12px] font-semibold px-3 py-1.5 rounded-full">
-          {badge}
+      {selected && (
+        <span className="absolute top-4 right-4 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full z-10">
+          {selectedLabel}
         </span>
+      )}
+      <p className="font-bold text-[17px] text-slate max-w-[65%]">{title}</p>
+      <p className="text-[13px] text-mocha mt-1.5 leading-snug max-w-[65%]">{desc}</p>
+      <div className="mt-3 flex gap-2 flex-wrap">
+        {badges.map(b => (
+          <BadgePill key={b} label={b} />
+        ))}
       </div>
-
-      {/* Illustration */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={illustration}
         alt=""
         aria-hidden
-        className="absolute bottom-0 right-0 h-[100px] w-auto pointer-events-none"
+        className="absolute bottom-0 right-3 h-[90px] w-auto pointer-events-none"
       />
     </button>
   )
@@ -202,8 +195,9 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           onClick={() => setSelected('card')}
           title={t.paymentMethod.creditDebitName}
           desc={t.paymentMethod.creditDebitDesc}
-          badge={t.paymentMethod.badgeNoFeeDebit}
+          badges={[t.paymentMethod.badgeNoFeeDebit, t.paymentMethod.badgeInstant]}
           illustration="/illustrations/card.svg"
+          selectedLabel={t.common.selected}
         />
         <PayMethodCard
           id="bank"
@@ -211,8 +205,9 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           onClick={() => setSelected('bank')}
           title={t.paymentMethod.bankName}
           desc={t.paymentMethod.bankDesc}
-          badge={t.paymentMethod.badgeNoFee}
+          badges={[t.paymentMethod.badgeNoFee, t.paymentMethod.badgeBusinessDays]}
           illustration="/illustrations/bank.svg"
+          selectedLabel={t.common.selected}
         />
         <PayMethodCard
           id="cash"
@@ -220,9 +215,9 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           onClick={() => setSelected('cash')}
           title={t.paymentMethod.cashName}
           desc={t.paymentMethod.cashDesc}
-          badge={t.paymentMethod.badgeCashFee}
+          badges={[t.paymentMethod.badgeCashFee, t.paymentMethod.badgeSameDay]}
           illustration="/illustrations/cash.svg"
-          isNew
+          selectedLabel={t.common.selected}
         />
       </div>
 

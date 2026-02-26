@@ -697,25 +697,139 @@ function SuccessScreen() {
 
 const INSPECTOR_STORAGE_KEY = 'felix-content-tokens-v2'
 
-// Which sections are relevant for each screen
-const screenSections: Record<string, Array<keyof ContentTokens>> = {
-  payment: ['common', 'paymentMethod'],
-  address: ['common', 'address'],
-  store:   ['common', 'storeSelection'],
-  card:    ['common', 'cardDetails'],
-  review:  ['common', 'review'],
-  success: ['success'],
-}
+// Grouped token structure for the inspector
+type TRef   = { s: keyof ContentTokens; k: string }
+type TGroup = { label: string | null; items: TRef[] }
 
-function getScreenTokens(screen: string) {
-  const sections = screenSections[screen] ?? []
-  return sections.flatMap(sectionKey =>
-    Object.keys(content['en'][sectionKey] as Record<string, string>).map(tokenKey => ({
-      sectionKey,
-      tokenKey,
-      id: `${sectionKey}.${tokenKey}`,
-    }))
-  )
+const screenGroups: Record<string, TGroup[]> = {
+  payment: [
+    { label: null, items: [
+      { s: 'common', k: 'badge' },
+    ]},
+    { label: 'SCREEN', items: [
+      { s: 'paymentMethod', k: 'titleLine1' },
+      { s: 'paymentMethod', k: 'titleLine2' },
+      { s: 'paymentMethod', k: 'subtitle' },
+      { s: 'paymentMethod', k: 'orPayAnotherWay' },
+    ]},
+    { label: 'CREDIT / DEBIT CARD', items: [
+      { s: 'paymentMethod', k: 'creditDebitName' },
+      { s: 'paymentMethod', k: 'creditDebitDesc' },
+      { s: 'paymentMethod', k: 'badgeNoFeeDebit' },
+      { s: 'paymentMethod', k: 'badgeInstant' },
+    ]},
+    { label: 'BANK ACCOUNT', items: [
+      { s: 'paymentMethod', k: 'bankName' },
+      { s: 'paymentMethod', k: 'bankDesc' },
+      { s: 'paymentMethod', k: 'badgeNoFee' },
+      { s: 'paymentMethod', k: 'badgeBusinessDays' },
+    ]},
+    { label: 'CASH AT A STORE', items: [
+      { s: 'paymentMethod', k: 'cashName' },
+      { s: 'paymentMethod', k: 'cashDesc' },
+      { s: 'paymentMethod', k: 'badgeCashFee' },
+      { s: 'paymentMethod', k: 'badgeSameDay' },
+    ]},
+    { label: null, items: [
+      { s: 'common', k: 'continue' },
+      { s: 'common', k: 'cancel' },
+    ]},
+  ],
+  address: [
+    { label: null, items: [{ s: 'common', k: 'badge' }]},
+    { label: 'ADDRESS FORM', items: [
+      { s: 'address', k: 'titleBilling' },
+      { s: 'address', k: 'titleCash' },
+      { s: 'address', k: 'helperCash' },
+      { s: 'address', k: 'fieldAddress' },
+      { s: 'address', k: 'fieldApt' },
+      { s: 'address', k: 'fieldZip' },
+      { s: 'address', k: 'fieldCity' },
+      { s: 'address', k: 'fieldState' },
+    ]},
+    { label: null, items: [
+      { s: 'common', k: 'continue' },
+      { s: 'common', k: 'cancel' },
+    ]},
+  ],
+  card: [
+    { label: null, items: [{ s: 'common', k: 'badge' }]},
+    { label: 'CARD DETAILS', items: [
+      { s: 'cardDetails', k: 'title' },
+      { s: 'cardDetails', k: 'fieldFullName' },
+      { s: 'cardDetails', k: 'fieldCardNumber' },
+      { s: 'cardDetails', k: 'fieldExpiry' },
+      { s: 'cardDetails', k: 'fieldCvv' },
+      { s: 'cardDetails', k: 'helperName' },
+    ]},
+    { label: 'LEGAL', items: [
+      { s: 'cardDetails', k: 'termsPre' },
+      { s: 'cardDetails', k: 'termsLink' },
+      { s: 'cardDetails', k: 'termsAnd' },
+      { s: 'cardDetails', k: 'privacyLink' },
+    ]},
+    { label: 'SECURITY NOTICE', items: [
+      { s: 'cardDetails', k: 'securityTitle' },
+      { s: 'cardDetails', k: 'securityBody' },
+    ]},
+    { label: null, items: [
+      { s: 'common', k: 'continue' },
+      { s: 'common', k: 'cancel' },
+    ]},
+  ],
+  store: [
+    { label: null, items: [{ s: 'common', k: 'badge' }]},
+    { label: 'STORE SELECTION', items: [
+      { s: 'storeSelection', k: 'title' },
+      { s: 'storeSelection', k: 'minMax' },
+      { s: 'storeSelection', k: 'greenDot' },
+    ]},
+    { label: null, items: [
+      { s: 'common', k: 'continue' },
+      { s: 'common', k: 'cancel' },
+    ]},
+  ],
+  review: [
+    { label: null, items: [{ s: 'common', k: 'badge' }]},
+    { label: 'TRANSFER SUMMARY', items: [
+      { s: 'review', k: 'title' },
+      { s: 'review', k: 'youSend' },
+      { s: 'review', k: 'recipientGets' },
+      { s: 'review', k: 'paymentMethodLabel' },
+    ]},
+    { label: 'FEE BREAKDOWN', items: [
+      { s: 'review', k: 'amountFees' },
+      { s: 'review', k: 'exchangeRate' },
+      { s: 'review', k: 'amountToSend' },
+      { s: 'review', k: 'felixFee' },
+      { s: 'review', k: 'storeFee' },
+      { s: 'review', k: 'otherFees' },
+      { s: 'review', k: 'taxes' },
+      { s: 'review', k: 'total' },
+    ]},
+    { label: 'LEGAL', items: [
+      { s: 'review', k: 'legal' },
+      { s: 'review', k: 'learnMore' },
+    ]},
+    { label: null, items: [
+      { s: 'review', k: 'sendNow' },
+      { s: 'common', k: 'change' },
+    ]},
+  ],
+  success: [
+    { label: 'CONFIRMATION', items: [
+      { s: 'success', k: 'title' },
+      { s: 'success', k: 'body' },
+    ]},
+    { label: 'REFERRAL', items: [
+      { s: 'success', k: 'referralTitle' },
+      { s: 'success', k: 'referralBody' },
+    ]},
+    { label: 'ACTIONS', items: [
+      { s: 'success', k: 'shareWhatsApp' },
+      { s: 'success', k: 'backToWhatsApp' },
+    ]},
+  ],
 }
 
 function TokenInspector({
@@ -730,29 +844,76 @@ function TokenInspector({
   onChange: (section: keyof ContentTokens, key: string, lang: Language, value: string) => void
 }) {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
-  const [pinnedId, setPinnedId] = useState<string | null>(null) // stays open while a textarea is focused
+  const [pinnedId, setPinnedId] = useState<string | null>(null)
   const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>({})
-  const visibleTokens = getScreenTokens(screen)
+  const visibleGroups = screenGroups[screen] ?? []
 
   // Reset on screen change
   useEffect(() => { setHoveredId(null); setPinnedId(null) }, [screen])
 
-  function initDrafts(id: string, sectionKey: keyof ContentTokens, tokenKey: string) {
+  function initDrafts(id: string, s: keyof ContentTokens, k: string) {
     setDrafts(prev => {
       if (prev[id]) return prev
       const initial: Record<string, string> = {}
       languages.forEach(l => {
-        initial[l.code] = (tokens[l.code][sectionKey] as Record<string, string>)[tokenKey]
+        initial[l.code] = (tokens[l.code][s] as Record<string, string>)[k]
       })
       return { ...prev, [id]: initial }
     })
   }
 
-  function save(id: string, sectionKey: keyof ContentTokens, tokenKey: string) {
+  function save(id: string, s: keyof ContentTokens, k: string) {
     const d = drafts[id] ?? {}
-    languages.forEach(l => onChange(sectionKey, tokenKey, l.code, d[l.code] ?? ''))
+    languages.forEach(l => onChange(s, k, l.code, d[l.code] ?? ''))
     setPinnedId(null)
     setHoveredId(null)
+  }
+
+  function TokenRow({ s, k }: TRef) {
+    const id = `${s}.${k}`
+    const currentVal = (tokens[language][s] as Record<string, string>)[k]
+    const isOpen = hoveredId === id || pinnedId === id
+
+    return (
+      <div
+        key={id}
+        onMouseEnter={() => { setHoveredId(id); initDrafts(id, s, k) }}
+        onMouseLeave={() => { if (pinnedId !== id) setHoveredId(null) }}
+      >
+        <div className="flex items-baseline gap-2 py-1.5">
+          <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isOpen ? 'text-blueberry' : 'text-blueberry/70'}`}>
+            {k}
+          </code>
+          <span className="text-[12px] text-mocha/60 truncate leading-snug">{currentVal}</span>
+        </div>
+        {isOpen && (
+          <div className="mb-3 bg-white rounded-2xl border border-slate/10 p-3 space-y-2.5 shadow-sm">
+            <p className="text-[11px] font-mono text-blueberry">{s}.{k}</p>
+            {languages.map(lang => (
+              <div key={lang.code}>
+                <label className="text-[10px] font-semibold text-mocha uppercase tracking-wider mb-1 block">
+                  {lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'}
+                </label>
+                <textarea
+                  value={drafts[id]?.[lang.code] ?? ''}
+                  onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [lang.code]: e.target.value } }))}
+                  onFocus={() => setPinnedId(id)}
+                  onBlur={() => setPinnedId(null)}
+                  rows={2}
+                  className="w-full text-[13px] text-slate bg-stone border border-slate/15 rounded-xl px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-turquoise/40"
+                />
+              </div>
+            ))}
+            <button
+              onClick={() => save(id, s, k)}
+              className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-xl hover:bg-turquoise/90 transition-colors"
+            >
+              Save
+            </button>
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -763,55 +924,21 @@ function TokenInspector({
       </p>
 
       {/* Token list */}
-      <div className="flex-1 overflow-y-auto px-1">
-        {visibleTokens.map(({ sectionKey, tokenKey, id }) => {
-          const currentVal = (tokens[language][sectionKey] as Record<string, string>)[tokenKey]
-          const isOpen = hoveredId === id || pinnedId === id
-
-          return (
-            <div
-              key={id}
-              onMouseEnter={() => { setHoveredId(id); initDrafts(id, sectionKey as keyof ContentTokens, tokenKey) }}
-              onMouseLeave={() => { if (pinnedId !== id) setHoveredId(null) }}
-            >
-              {/* Row label */}
-              <div className="flex items-baseline gap-2 py-1.5">
-                <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isOpen ? 'text-blueberry' : 'text-blueberry/70'}`}>
-                  {tokenKey}
-                </code>
-                <span className="text-[12px] text-mocha/60 truncate leading-snug">{currentVal}</span>
-              </div>
-
-              {/* Hover editor */}
-              {isOpen && (
-                <div className="mb-3 bg-white rounded-2xl border border-slate/10 p-3 space-y-2.5 shadow-sm">
-                  <p className="text-[11px] font-mono text-blueberry">{sectionKey}.{tokenKey}</p>
-                  {languages.map(lang => (
-                    <div key={lang.code}>
-                      <label className="text-[10px] font-semibold text-mocha uppercase tracking-wider mb-1 block">
-                        {lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'}
-                      </label>
-                      <textarea
-                        value={drafts[id]?.[lang.code] ?? ''}
-                        onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [lang.code]: e.target.value } }))}
-                        onFocus={() => setPinnedId(id)}
-                        onBlur={() => setPinnedId(null)}
-                        rows={2}
-                        className="w-full text-[13px] text-slate bg-stone border border-slate/15 rounded-xl px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-turquoise/40"
-                      />
-                    </div>
-                  ))}
-                  <button
-                    onClick={() => save(id, sectionKey as keyof ContentTokens, tokenKey)}
-                    className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-xl hover:bg-turquoise/90 transition-colors"
-                  >
-                    Save
-                  </button>
-                </div>
-              )}
+      <div className="flex-1 overflow-y-auto px-1 space-y-1">
+        {visibleGroups.map((group, gi) =>
+          group.label === null ? (
+            // Plain rows — no container
+            group.items.map(ref => <TokenRow key={`${ref.s}.${ref.k}`} {...ref} />)
+          ) : (
+            // Labeled group — rounded stone container
+            <div key={gi} className="bg-stone/70 rounded-2xl px-3 pt-2.5 pb-1">
+              <p className="text-[9px] font-semibold text-mocha/50 uppercase tracking-widest mb-1">
+                {group.label}
+              </p>
+              {group.items.map(ref => <TokenRow key={`${ref.s}.${ref.k}`} {...ref} />)}
             </div>
           )
-        })}
+        )}
       </div>
     </div>
   )

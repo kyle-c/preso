@@ -132,7 +132,6 @@ function PayMethodCard({
         </span>
       )}
       <p className="font-bold text-[17px] text-slate max-w-[65%]">{title}</p>
-      <p className="text-[13px] text-mocha mt-1.5 leading-snug max-w-[65%]">{desc}</p>
       <div className="mt-3 flex gap-2 flex-wrap">
         {badges.map(b => (
           <BadgePill key={b} label={b} />

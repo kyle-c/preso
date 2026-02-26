@@ -130,14 +130,14 @@ function PayMethodCard({
       onClick={onClick}
       className={`relative w-full text-left rounded-2xl p-5 border transition-all overflow-hidden ${
         selected
-          ? 'bg-white border-turquoise/50 ring-[3px] ring-turquoise/30'
+          ? 'bg-white border-slate/60'
           : 'bg-white border-slate/20 shadow-sm'
       }`}
     >
       <div className="flex items-center justify-between gap-2">
         <p className="font-bold text-[17px] text-slate">{title}</p>
         {selected && (
-          <span className="flex-shrink-0 bg-turquoise text-slate text-[11px] font-semibold px-2.5 py-1 rounded-full">
+          <span className="flex-shrink-0 bg-slate text-linen text-[11px] font-semibold px-2.5 py-1 rounded-full">
             {selectedLabel}
           </span>
         )}

@@ -11,6 +11,7 @@ import {
   Blend,
   BookOpen,
   PenLine,
+  Images,
 } from "lucide-react"
 import { FelixLogo } from "./felix-logo"
 
@@ -51,6 +52,22 @@ const navItems = [
       { title: "Primary Palette", href: "/colors#primary" },
       { title: "Secondary Palette", href: "/colors#secondary" },
       { title: "Colorways", href: "/colors#colorways" },
+    ],
+  },
+  {
+    title: "Illustrations",
+    href: "/illustrations",
+    icon: Images,
+    children: [
+      { title: "Brand & Characters", href: "/illustrations#brand" },
+      { title: "Flags — 3D", href: "/illustrations#flags-3d" },
+      { title: "Flags — Original", href: "/illustrations#flags-og" },
+      { title: "Hands", href: "/illustrations#hands" },
+      { title: "Money & Payments", href: "/illustrations#money" },
+      { title: "Communication", href: "/illustrations#communication" },
+      { title: "Status & Alerts", href: "/illustrations#status" },
+      { title: "Navigation & Maps", href: "/illustrations#navigation" },
+      { title: "Other", href: "/illustrations#other" },
     ],
   },
   {

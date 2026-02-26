@@ -4,13 +4,6 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { FelixLogo } from '@/components/design-system/felix-logo'
 import { Button } from '@/components/ui/button'
 import { FloatingInput } from '@/components/ui/floating-input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { ChevronLeft, Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin } from 'lucide-react'
 import { type Language, type ContentTokens, languages, content } from './content'
 
@@ -94,12 +87,12 @@ const BadgePill = ({ label }: { label: string }) => (
 // ─── Stores data ─────────────────────────────────────────────────────────────
 
 const stores = [
-  { id: 'walgreens',   name: 'Walgreens',             fee: '$3.95', bg: 'bg-[#E31837]', text: 'W'   },
-  { id: 'cvs',         name: 'CVS Pharmacy',           fee: '$3.95', bg: 'bg-[#CC0000]', text: 'CVS' },
-  { id: '7eleven',     name: '7-Eleven',               fee: '$3.95', bg: 'bg-[#008751]', text: '7'   },
-  { id: 'walmart',     name: 'Walmart',                fee: '$3.74', bg: 'bg-[#0071CE]', text: '★'   },
-  { id: 'caseys',      name: "Casey's",                fee: '$3.95', bg: 'bg-[#C8102E]', text: 'C'   },
-  { id: 'officedepot', name: 'Office Depot OfficeMax', fee: '$3.95', bg: 'bg-[#CC0000]', text: 'OD'  },
+  { id: 'walgreens',   name: 'Walgreens',             fee: '$3.95', logo: '/stores/walgreens.png' },
+  { id: 'cvs',         name: 'CVS Pharmacy',           fee: '$3.95', logo: '/stores/cvs.png'       },
+  { id: '7eleven',     name: '7-Eleven',               fee: '$3.95', logo: '/stores/seven.png'     },
+  { id: 'walmart',     name: 'Walmart',                fee: '$3.74', logo: '/stores/walmart.png'   },
+  { id: 'caseys',      name: "Casey's",                fee: '$3.95', logo: '/stores/caseys.png'    },
+  { id: 'officedepot', name: 'Office Depot OfficeMax', fee: '$3.95', logo: '/stores/odepot.png'    },
 ]
 
 // ─── Screens ─────────────────────────────────────────────────────────────────
@@ -297,63 +290,73 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
             value={city} onChange={e => setCity(e.target.value)} onBlur={() => touch('city')}
             error={err('city', city)} isValid={valid('city', city)}
           />
-          <Select onValueChange={v => { setState(v); touch('state') }}>
-            <SelectTrigger className={`!h-14 w-full rounded-2xl bg-white px-4 text-base data-[placeholder]:text-muted-foreground transition-colors ${touched.state && !state ? 'border-red-400 ring-[3px] ring-red-400/20' : state ? 'border-turquoise/60' : ''}`}>
-              <SelectValue placeholder={t.address.fieldState} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="AL">Alabama</SelectItem>
-              <SelectItem value="AK">Alaska</SelectItem>
-              <SelectItem value="AZ">Arizona</SelectItem>
-              <SelectItem value="AR">Arkansas</SelectItem>
-              <SelectItem value="CA">California</SelectItem>
-              <SelectItem value="CO">Colorado</SelectItem>
-              <SelectItem value="CT">Connecticut</SelectItem>
-              <SelectItem value="DE">Delaware</SelectItem>
-              <SelectItem value="FL">Florida</SelectItem>
-              <SelectItem value="GA">Georgia</SelectItem>
-              <SelectItem value="HI">Hawaii</SelectItem>
-              <SelectItem value="ID">Idaho</SelectItem>
-              <SelectItem value="IL">Illinois</SelectItem>
-              <SelectItem value="IN">Indiana</SelectItem>
-              <SelectItem value="IA">Iowa</SelectItem>
-              <SelectItem value="KS">Kansas</SelectItem>
-              <SelectItem value="KY">Kentucky</SelectItem>
-              <SelectItem value="LA">Louisiana</SelectItem>
-              <SelectItem value="ME">Maine</SelectItem>
-              <SelectItem value="MD">Maryland</SelectItem>
-              <SelectItem value="MA">Massachusetts</SelectItem>
-              <SelectItem value="MI">Michigan</SelectItem>
-              <SelectItem value="MN">Minnesota</SelectItem>
-              <SelectItem value="MS">Mississippi</SelectItem>
-              <SelectItem value="MO">Missouri</SelectItem>
-              <SelectItem value="MT">Montana</SelectItem>
-              <SelectItem value="NE">Nebraska</SelectItem>
-              <SelectItem value="NV">Nevada</SelectItem>
-              <SelectItem value="NH">New Hampshire</SelectItem>
-              <SelectItem value="NJ">New Jersey</SelectItem>
-              <SelectItem value="NM">New Mexico</SelectItem>
-              <SelectItem value="NY">New York</SelectItem>
-              <SelectItem value="NC">North Carolina</SelectItem>
-              <SelectItem value="ND">North Dakota</SelectItem>
-              <SelectItem value="OH">Ohio</SelectItem>
-              <SelectItem value="OK">Oklahoma</SelectItem>
-              <SelectItem value="OR">Oregon</SelectItem>
-              <SelectItem value="PA">Pennsylvania</SelectItem>
-              <SelectItem value="RI">Rhode Island</SelectItem>
-              <SelectItem value="SC">South Carolina</SelectItem>
-              <SelectItem value="SD">South Dakota</SelectItem>
-              <SelectItem value="TN">Tennessee</SelectItem>
-              <SelectItem value="TX">Texas</SelectItem>
-              <SelectItem value="UT">Utah</SelectItem>
-              <SelectItem value="VT">Vermont</SelectItem>
-              <SelectItem value="VA">Virginia</SelectItem>
-              <SelectItem value="WA">Washington</SelectItem>
-              <SelectItem value="WV">West Virginia</SelectItem>
-              <SelectItem value="WI">Wisconsin</SelectItem>
-              <SelectItem value="WY">Wyoming</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="relative">
+            <select
+              value={state}
+              onChange={e => { setState(e.target.value); touch('state') }}
+              onBlur={() => touch('state')}
+              className={`h-14 w-full rounded-2xl bg-white border px-4 pr-10 text-base appearance-none transition-colors outline-none cursor-pointer focus:ring-[3px] ${
+                touched.state && !state
+                  ? 'border-red-400 ring-[3px] ring-red-400/20 text-slate'
+                  : state
+                    ? 'border-turquoise/60 focus:border-turquoise focus:ring-turquoise/25 text-slate'
+                    : 'border-border focus:border-turquoise focus:ring-turquoise/25 text-muted-foreground'
+              }`}
+            >
+              <option value="" disabled>{t.address.fieldState}</option>
+              <option value="AL">Alabama</option>
+              <option value="AK">Alaska</option>
+              <option value="AZ">Arizona</option>
+              <option value="AR">Arkansas</option>
+              <option value="CA">California</option>
+              <option value="CO">Colorado</option>
+              <option value="CT">Connecticut</option>
+              <option value="DE">Delaware</option>
+              <option value="FL">Florida</option>
+              <option value="GA">Georgia</option>
+              <option value="HI">Hawaii</option>
+              <option value="ID">Idaho</option>
+              <option value="IL">Illinois</option>
+              <option value="IN">Indiana</option>
+              <option value="IA">Iowa</option>
+              <option value="KS">Kansas</option>
+              <option value="KY">Kentucky</option>
+              <option value="LA">Louisiana</option>
+              <option value="ME">Maine</option>
+              <option value="MD">Maryland</option>
+              <option value="MA">Massachusetts</option>
+              <option value="MI">Michigan</option>
+              <option value="MN">Minnesota</option>
+              <option value="MS">Mississippi</option>
+              <option value="MO">Missouri</option>
+              <option value="MT">Montana</option>
+              <option value="NE">Nebraska</option>
+              <option value="NV">Nevada</option>
+              <option value="NH">New Hampshire</option>
+              <option value="NJ">New Jersey</option>
+              <option value="NM">New Mexico</option>
+              <option value="NY">New York</option>
+              <option value="NC">North Carolina</option>
+              <option value="ND">North Dakota</option>
+              <option value="OH">Ohio</option>
+              <option value="OK">Oklahoma</option>
+              <option value="OR">Oregon</option>
+              <option value="PA">Pennsylvania</option>
+              <option value="RI">Rhode Island</option>
+              <option value="SC">South Carolina</option>
+              <option value="SD">South Dakota</option>
+              <option value="TN">Tennessee</option>
+              <option value="TX">Texas</option>
+              <option value="UT">Utah</option>
+              <option value="VT">Vermont</option>
+              <option value="VA">Virginia</option>
+              <option value="WA">Washington</option>
+              <option value="WV">West Virginia</option>
+              <option value="WI">Wisconsin</option>
+              <option value="WY">Wyoming</option>
+            </select>
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          </div>
         </div>
 
         <div className="pt-8 space-y-2.5">
@@ -507,8 +510,9 @@ function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: 
                   : 'bg-white border-slate/20 shadow-sm'
               }`}
             >
-              <div className={`h-10 w-10 rounded-full ${store.bg} flex items-center justify-center flex-shrink-0`}>
-                <span className="text-white text-[11px] font-extrabold">{store.text}</span>
+              <div className="h-11 w-11 rounded-xl border border-slate/10 bg-white flex items-center justify-center flex-shrink-0 overflow-hidden p-1.5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={store.logo} alt={store.name} className="w-full h-full object-contain" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-[15px] text-slate leading-tight">{store.name}</p>

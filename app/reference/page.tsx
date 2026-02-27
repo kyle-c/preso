@@ -3,51 +3,26 @@
 import { DesignSystemLayout } from '@/components/design-system/design-system-layout'
 import { referenceMarkdown } from '@/lib/reference-markdown'
 
-/**
- * Splits the reference markdown into sections by ## headings,
- * then renders each as a styled prose block.
- */
-function MarkdownSection({ id, title, body }: { id: string; title: string; body: string }) {
-  return (
-    <section id={id} className="mb-12 scroll-mt-24">
-      <h2 className="font-display text-2xl font-extrabold tracking-tight text-foreground mb-4">
-        {title}
-      </h2>
-      <div
-        className="prose prose-slate max-w-none
-          prose-headings:font-display prose-headings:font-extrabold prose-headings:tracking-tight
-          prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3
-          prose-h4:text-base prose-h4:mt-6 prose-h4:mb-2
-          prose-p:text-[15px] prose-p:leading-relaxed prose-p:text-muted-foreground
-          prose-li:text-[15px] prose-li:text-muted-foreground
-          prose-strong:text-foreground prose-strong:font-semibold
-          prose-code:text-[13px] prose-code:bg-stone prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-foreground prose-code:before:content-none prose-code:after:content-none
-          prose-pre:bg-slate prose-pre:text-linen prose-pre:rounded-xl prose-pre:text-[13px] prose-pre:leading-relaxed
-          prose-table:text-[14px]
-          prose-th:text-left prose-th:font-semibold prose-th:text-foreground prose-th:border-b prose-th:border-border prose-th:pb-2
-          prose-td:border-b prose-td:border-border/50 prose-td:py-2 prose-td:text-muted-foreground
-          prose-a:text-turquoise-700 prose-a:underline prose-a:underline-offset-2
-          prose-blockquote:border-turquoise prose-blockquote:text-muted-foreground prose-blockquote:not-italic
-          prose-hr:border-border
-        "
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(body) }}
-      />
-    </section>
-  )
+/* ── Slugify ────────────────────────────────────────────────────────────────── */
+
+function slugify(title: string): string {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
-/** Minimal markdown → HTML renderer (no external deps). */
+/* ── Markdown → HTML with explicit design-system classes ────────────────────── */
+
 function renderMarkdown(md: string): string {
   let html = md
 
-  // Fenced code blocks (```lang ... ```)
-  html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_m, lang, code) => {
-    const escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;').trimEnd()
-    return `<pre><code class="language-${lang || 'text'}">${escaped}</code></pre>`
+  // Fenced code blocks
+  html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_m, _lang, code) => {
+    const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').trimEnd()
+    return `<pre class="my-4 overflow-x-auto rounded-xl border border-border bg-slate p-5 text-[13px] leading-relaxed text-linen font-mono"><code>${escaped}</code></pre>`
   })
 
-  // Inline code
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>')
+  // Inline code — must be after fenced blocks
+  html = html.replace(/`([^`]+)`/g,
+    '<code class="rounded-md border border-slate/10 bg-stone px-1.5 py-0.5 text-[13px] font-mono text-foreground">$1</code>')
 
   // Tables
   html = html.replace(
@@ -60,74 +35,98 @@ function renderMarkdown(md: string): string {
         r.split('|').slice(1, -1).map(c => c.trim())
 
       const headers = parseRow(rows[0])
-      // Skip separator row (row[1])
-      const bodyRows = rows.slice(2)
+      const bodyRows = rows.slice(2) // skip separator row
 
-      let t = '<table><thead><tr>'
-      headers.forEach(h => { t += `<th>${h}</th>` })
-      t += '</tr></thead><tbody>'
+      let t = '<div class="my-4 overflow-hidden rounded-xl border border-border">'
+      t += '<table class="w-full border-collapse text-sm">'
+      t += '<thead><tr class="bg-stone">'
+      headers.forEach(h => {
+        t += `<th class="px-4 py-3 text-left text-sm font-semibold text-foreground">${h}</th>`
+      })
+      t += '</tr></thead><tbody class="divide-y divide-border">'
       bodyRows.forEach(r => {
         const cells = parseRow(r)
-        t += '<tr>'
-        cells.forEach(c => { t += `<td>${c}</td>` })
+        t += '<tr class="transition-colors hover:bg-stone/40">'
+        cells.forEach(c => {
+          t += `<td class="px-4 py-2.5 text-sm text-muted-foreground">${c}</td>`
+        })
         t += '</tr>'
       })
-      t += '</tbody></table>'
+      t += '</tbody></table></div>'
       return '\n' + t + '\n'
     },
   )
 
-  // Headings (#### → h4, ### → h3)
-  html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>')
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>')
+  // H4
+  html = html.replace(/^#### (.+)$/gm,
+    '<h4 class="mt-8 mb-3 font-display text-base font-bold text-foreground">$1</h4>')
+
+  // H3
+  html = html.replace(/^### (.+)$/gm,
+    '<h3 class="mt-10 mb-4 font-display text-lg font-bold text-foreground">$1</h3>')
 
   // Horizontal rules
-  html = html.replace(/^---$/gm, '<hr />')
+  html = html.replace(/^---$/gm, '<hr class="my-8 border-border" />')
 
   // Bold
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-foreground">$1</strong>')
 
   // Italic
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
 
   // Blockquotes
-  html = html.replace(/^> (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
+  html = html.replace(/^> (.+)$/gm,
+    '<blockquote class="my-4 border-l-4 border-turquoise pl-4 text-sm text-muted-foreground leading-relaxed">$1</blockquote>')
   // Merge consecutive blockquotes
-  html = html.replace(/<\/blockquote>\n<blockquote>/g, '\n')
+  html = html.replace(/<\/blockquote>\n<blockquote class="[^"]*">/g, '<br />')
+
+  // Ordered lists (1. 2. 3.)
+  html = html.replace(/(?:^|\n)((?:\d+\. [^\n]+\n?)+)/g, (_m, block: string) => {
+    const items = block.trim().split('\n').map(l => l.replace(/^\d+\.\s/, ''))
+    return '\n<ol class="my-3 ml-4 list-decimal space-y-2 text-sm text-muted-foreground leading-relaxed marker:text-foreground marker:font-semibold">' +
+      items.map(i => `<li class="pl-1">${i}</li>`).join('') + '</ol>\n'
+  })
 
   // Unordered lists
   html = html.replace(/(?:^|\n)((?:- [^\n]+\n?)+)/g, (_m, block: string) => {
     const items = block.trim().split('\n').map(l => l.replace(/^- /, ''))
-    return '\n<ul>' + items.map(i => `<li>${i}</li>`).join('') + '</ul>\n'
+    return '\n<ul class="my-3 ml-4 list-disc space-y-1.5 text-sm text-muted-foreground leading-relaxed marker:text-concrete">' +
+      items.map(i => `<li class="pl-1">${i}</li>`).join('') + '</ul>\n'
   })
 
-  // Paragraphs — wrap remaining text lines
+  // Paragraphs — wrap remaining loose text
   html = html
     .split('\n\n')
     .map(block => {
       const trimmed = block.trim()
       if (!trimmed) return ''
-      if (
-        trimmed.startsWith('<') ||
-        trimmed.startsWith('#')
-      ) return trimmed
-      return `<p>${trimmed.replace(/\n/g, '<br />')}</p>`
+      if (trimmed.startsWith('<') || trimmed.startsWith('#')) return trimmed
+      return `<p class="my-3 text-sm leading-relaxed text-muted-foreground">${trimmed.replace(/\n/g, '<br />')}</p>`
     })
     .join('\n\n')
 
   return html
 }
 
-/** Derive a URL-friendly id from a section title. */
-function slugify(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
+/* ── Section renderer ───────────────────────────────────────────────────────── */
+
+function MarkdownSection({ id, title, body }: { id: string; title: string; body: string }) {
+  return (
+    <section id={id} className="mb-16 scroll-mt-8">
+      <div className="mb-6">
+        <h2 className="font-display text-2xl font-bold text-foreground">{title}</h2>
+      </div>
+      <div
+        className="max-w-4xl"
+        dangerouslySetInnerHTML={{ __html: renderMarkdown(body) }}
+      />
+    </section>
+  )
 }
 
+/* ── Page ────────────────────────────────────────────────────────────────────── */
+
 export default function ReferencePage() {
-  // Split by ## headings into sections
   const lines = referenceMarkdown.split('\n')
   const sections: { title: string; body: string }[] = []
   let preamble = ''
@@ -157,26 +156,29 @@ export default function ReferencePage() {
       title="Reference"
       description="Comprehensive design system reference — everything needed to replicate every screen, component, and pattern."
     >
-      {/* Preamble / intro */}
+      {/* Preamble */}
       {preamble && (
         <div
-          className="mb-10 prose prose-slate max-w-none prose-blockquote:border-turquoise prose-blockquote:text-muted-foreground prose-blockquote:not-italic prose-p:text-muted-foreground prose-hr:border-border"
+          className="mb-10 max-w-4xl"
           dangerouslySetInnerHTML={{ __html: renderMarkdown(preamble) }}
         />
       )}
 
       {/* Table of contents */}
-      <nav className="mb-12 rounded-xl border border-border bg-stone/50 p-6">
-        <h3 className="font-display text-sm font-extrabold uppercase tracking-wider text-foreground mb-3">
-          Contents
-        </h3>
-        <div className="columns-2 gap-6">
+      <nav className="mb-14 overflow-hidden rounded-xl border border-border bg-stone/50">
+        <div className="border-b border-border bg-stone px-6 py-3">
+          <h3 className="font-display text-xs font-bold uppercase tracking-wider text-foreground">
+            Contents
+          </h3>
+        </div>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-0 px-6 py-4">
           {sections.map((s) => (
             <a
               key={s.title}
               href={`#${slugify(s.title)}`}
-              className="block py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-2 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
+              <span className="h-1 w-1 rounded-full bg-turquoise flex-shrink-0" />
               {s.title}
             </a>
           ))}
@@ -192,6 +194,13 @@ export default function ReferencePage() {
           body={s.body}
         />
       ))}
+
+      {/* Footer */}
+      <div className="mt-8 border-t border-border pt-8 pb-4">
+        <p className="text-xs text-muted-foreground">
+          Felix Pago Design System — Comprehensive Reference
+        </p>
+      </div>
     </DesignSystemLayout>
   )
 }

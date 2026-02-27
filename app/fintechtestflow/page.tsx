@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { FelixLogo } from '@/components/design-system/felix-logo'
 import { Button } from '@/components/ui/button'
 import { FloatingInput } from '@/components/ui/floating-input'
-import { ChevronLeft, Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin, Layers, X, Search, Shield, Zap, Check, Building2 } from 'lucide-react'
+import { Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin, Layers, X, Search, Shield, Zap, Check, Building2, SlidersHorizontal, Info, DollarSign, Crosshair, Plus } from 'lucide-react'
 import { type Language, type ContentTokens, languages, content } from './content'
 
 // ─── Language context ────────────────────────────────────────────────────────
@@ -48,23 +48,12 @@ function PhoneFrame({ children, progress }: { children: React.ReactNode; progres
 function ScreenHeader() {
   const t = useT()
   return (
-    <div className="flex flex-col items-center pt-4 pb-3">
+    <div className="flex flex-col items-center pt-5 pb-4">
       <FelixLogo className="h-8 text-slate" />
-      <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
+      <div className="mt-3.5 rounded-full bg-turquoise px-2.5 py-0.5">
         <span className="text-[10px] font-semibold text-slate">{t.common.badge}</span>
       </div>
     </div>
-  )
-}
-
-function BackButton({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-slate/15 text-slate hover:bg-white"
-    >
-      <ChevronLeft className="h-4 w-4" />
-    </button>
   )
 }
 
@@ -87,12 +76,12 @@ const BadgePill = ({ label }: { label: string }) => (
 // ─── Stores data ─────────────────────────────────────────────────────────────
 
 const stores = [
-  { id: 'walgreens',   name: 'Walgreens',             fee: '$3.95', logo: '/stores/walgreens.png', logoPad: 'p-1.5' },
-  { id: 'cvs',         name: 'CVS Pharmacy',           fee: '$3.95', logo: '/stores/cvs.png',       logoPad: 'p-1.5' },
-  { id: '7eleven',     name: '7-Eleven',               fee: '$3.95', logo: '/stores/seven.png',     logoPad: 'p-0.5' },
-  { id: 'walmart',     name: 'Walmart',                fee: '$3.74', logo: '/stores/walmart.png',   logoPad: 'p-1.5' },
-  { id: 'caseys',      name: "Casey's",                fee: '$3.95', logo: '/stores/caseys.png',    logoPad: 'p-1.5' },
-  { id: 'officedepot', name: 'Office Depot OfficeMax', fee: '$3.95', logo: '/stores/odepot.png',    logoPad: 'p-0.5' },
+  { id: 'walgreens',   name: 'Walgreens',             fee: '$3.95', logo: '/stores/walgreens.png', logoPad: 'p-1.5', address: '4012 University Blvd, Jacksonville, FL 32216',  mapX: 32, mapY: 38 },
+  { id: 'cvs',         name: 'CVS Pharmacy',           fee: '$3.95', logo: '/stores/cvs.png',       logoPad: 'p-1.5', address: '3634 Rogero Rd, Jacksonville, FL 32277',        mapX: 68, mapY: 34 },
+  { id: '7eleven',     name: '7-Eleven',               fee: '$3.95', logo: '/stores/seven.png',     logoPad: 'p-0.5', address: '5120 Fort Caroline Rd, Jacksonville, FL 32277', mapX: 80, mapY: 22 },
+  { id: 'walmart',     name: 'Walmart',                fee: '$3.74', logo: '/stores/walmart.png',   logoPad: 'p-1.5', address: '8221 Southside Blvd, Jacksonville, FL 32256',   mapX: 48, mapY: 62 },
+  { id: 'caseys',      name: "Casey's",                fee: '$3.95', logo: '/stores/caseys.png',    logoPad: 'p-1.5', address: '7100 Arlington Expy, Jacksonville, FL 32211',   mapX: 22, mapY: 70 },
+  { id: 'officedepot', name: 'Office Depot OfficeMax', fee: '$3.95', logo: '/stores/odepot.png',    logoPad: 'p-0.5', address: '6000 Merrill Rd, Jacksonville, FL 32277',       mapX: 55, mapY: 45 },
 ]
 
 // ─── Screens ─────────────────────────────────────────────────────────────────
@@ -135,7 +124,7 @@ function PayMethodCard({
           </span>
         )}
       </div>
-      <p className="text-[13px] text-mocha mt-1.5 leading-snug max-w-[72%]">{desc}</p>
+      <p className="text-[13px] text-mocha mt-1.5 leading-snug max-w-[80%]">{desc}</p>
       <div className="mt-3 flex gap-2 flex-wrap">
         {badges.map(b => (
           <BadgePill key={b} label={b} />
@@ -179,7 +168,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
 
       <div className="flex items-center gap-3 my-4">
         <div className="flex-1 h-px bg-slate/15" />
-        <span className="text-[12px] font-semibold text-mocha uppercase tracking-wider">{t.paymentMethod.orPayAnotherWay}</span>
+        <span className="text-[11px] font-medium text-mocha uppercase tracking-wider">{t.paymentMethod.orPayAnotherWay}</span>
         <div className="flex-1 h-px bg-slate/15" />
       </div>
 
@@ -258,11 +247,6 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
   return (
     <div className="flex flex-col h-full">
       <ScreenHeader />
-
-      <div className="px-6 pt-3 pb-1">
-        <BackButton onClick={onBack} />
-        <div className="w-9 flex-shrink-0" />
-      </div>
 
       <div className="flex-1 px-6 pb-6 overflow-y-auto">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-2">
@@ -364,7 +348,7 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
           <Button size="lg" className="w-full text-[15px]" onClick={onNext} disabled={!canContinue}>
             {t.common.continue}
           </Button>
-          <Button variant="outline" size="lg" className="w-full text-[15px]">{t.common.cancel}</Button>
+          <Button variant="outline" size="lg" className="w-full text-[15px]" onClick={onBack}>{t.common.previous}</Button>
         </div>
       </div>
     </div>
@@ -413,11 +397,6 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
     <div className="flex flex-col h-full">
       <ScreenHeader />
 
-      <div className="px-6 pt-3 pb-1">
-        <BackButton onClick={onBack} />
-        <div className="w-9 flex-shrink-0" />
-      </div>
-
       <div className="flex-1 px-6 pb-6 overflow-y-auto">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-6">
           {t.cardDetails.title}
@@ -463,6 +442,7 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
           <Button size="lg" className="w-full text-[15px]" onClick={onNext} disabled={!canContinue}>
             {t.common.continue}
           </Button>
+          <Button variant="outline" size="lg" className="w-full text-[15px]" onClick={onBack}>{t.common.previous}</Button>
           <p className="text-[11px] text-mocha text-center leading-relaxed px-2">
             {t.cardDetails.termsPre}{' '}
             <span className="underline underline-offset-2">{t.cardDetails.termsLink}</span>
@@ -485,63 +465,165 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
 function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: (storeId: string) => void }) {
   const t = useT()
   const [selected, setSelected] = useState<string | null>(null)
+  const selectedStore = stores.find(s => s.id === selected)
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="relative flex flex-col h-full">
       <ScreenHeader />
 
-      <div className="px-6 pt-3 pb-1">
-        <BackButton onClick={onBack} />
-        <div className="w-9 flex-shrink-0" />
-      </div>
-
       <div className="flex-1 px-5 pb-4 overflow-y-auto">
-        <h1 className="font-display text-[24px] font-extrabold leading-tight tracking-tight text-slate mt-2 mb-5">
+        <h1 className="font-display text-[24px] font-extrabold leading-tight tracking-tight text-slate mt-2 mb-4">
           {t.storeSelection.title}
         </h1>
 
-        <div className="space-y-2.5">
-          {stores.map((store) => (
+        {/* Address input + filter */}
+        <p className="text-[13px] text-mocha mb-1.5">{t.storeSelection.addressLabel}</p>
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="flex-1 h-11 rounded-2xl border border-slate/15 bg-white px-3.5 flex items-center">
+            <span className="text-[13px] text-slate truncate">{t.storeSelection.addressPlaceholder}</span>
+          </div>
+          <button className="h-11 w-11 rounded-2xl bg-turquoise flex items-center justify-center flex-shrink-0">
+            <SlidersHorizontal className="h-4.5 w-4.5 text-slate" />
+          </button>
+        </div>
+
+        {/* Simulated map */}
+        <div className="relative w-full rounded-2xl overflow-hidden border border-slate/10 bg-[#e8e4da]" style={{ height: 320 }}>
+          {/* Faux street grid */}
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            {/* Horizontal roads */}
+            <line x1="0" y1="20" x2="100" y2="20" stroke="#d5d0c5" strokeWidth="1.2" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#d5d0c5" strokeWidth="1.2" />
+            <line x1="0" y1="75" x2="100" y2="75" stroke="#d5d0c5" strokeWidth="1.2" />
+            <line x1="10" y1="35" x2="90" y2="35" stroke="#d5d0c5" strokeWidth="0.8" />
+            <line x1="5" y1="60" x2="70" y2="60" stroke="#d5d0c5" strokeWidth="0.8" />
+            <line x1="30" y1="85" x2="100" y2="85" stroke="#d5d0c5" strokeWidth="0.8" />
+            {/* Vertical roads */}
+            <line x1="25" y1="0" x2="25" y2="100" stroke="#d5d0c5" strokeWidth="1.2" />
+            <line x1="55" y1="0" x2="55" y2="100" stroke="#d5d0c5" strokeWidth="1.2" />
+            <line x1="80" y1="0" x2="80" y2="100" stroke="#d5d0c5" strokeWidth="1.2" />
+            <line x1="40" y1="10" x2="40" y2="70" stroke="#d5d0c5" strokeWidth="0.8" />
+            <line x1="65" y1="30" x2="65" y2="90" stroke="#d5d0c5" strokeWidth="0.8" />
+            {/* Parks */}
+            <rect x="42" y="8" width="10" height="10" rx="2" fill="#c8dab0" opacity="0.6" />
+            <rect x="70" y="55" width="14" height="8" rx="2" fill="#c8dab0" opacity="0.6" />
+          </svg>
+
+          {/* Faux labels */}
+          <span className="absolute text-[7px] font-medium text-slate/25 uppercase tracking-wider" style={{ left: '8%', top: '14%' }}>University Park</span>
+          <span className="absolute text-[7px] font-medium text-slate/25 uppercase tracking-wider" style={{ left: '55%', top: '8%' }}>Woodmere</span>
+          <span className="absolute text-[7px] font-medium text-slate/25 uppercase tracking-wider" style={{ left: '12%', top: '55%' }}>Arlington Manor</span>
+          <span className="absolute text-[7px] font-medium text-slate/25 uppercase tracking-wider" style={{ left: '50%', top: '80%' }}>Lake Lucina</span>
+
+          {/* Store pins */}
+          {stores.map(store => (
             <button
               key={store.id}
               onClick={() => setSelected(store.id)}
-              className={`relative w-full text-left rounded-2xl px-4 py-3.5 border transition-all flex items-center gap-3 ${
-                selected === store.id
-                  ? 'bg-white border-slate/60 shadow-lg'
-                  : 'bg-white border-slate/20 shadow-sm'
-              }`}
+              className={`absolute -translate-x-1/2 -translate-y-full transition-transform ${selected === store.id ? 'scale-125 z-20' : 'z-10 hover:scale-110'}`}
+              style={{ left: `${store.mapX}%`, top: `${store.mapY}%` }}
             >
-              <div className={`h-11 w-11 rounded-xl border border-slate/10 bg-white flex items-center justify-center flex-shrink-0 overflow-hidden ${store.logoPad}`}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={store.logo} alt={store.name} className="w-full h-full object-contain" />
+              <div className="flex flex-col items-center">
+                <div className={`h-8 w-8 rounded-full border-2 bg-white shadow-lg flex items-center justify-center overflow-hidden ${store.logoPad} ${selected === store.id ? 'border-turquoise' : 'border-white'}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={store.logo} alt={store.name} className="w-full h-full object-contain" />
+                </div>
+                <div className="w-0 h-0 border-l-[5px] border-r-[5px] border-t-[6px] border-l-transparent border-r-transparent border-t-white -mt-[1px]" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-bold text-[15px] text-slate leading-tight">{store.name}</p>
-                <p className="text-[12px] text-mocha mt-0.5">{t.storeSelection.minMax}</p>
-              </div>
-              <span className="flex-shrink-0 inline-block border border-mocha text-mocha text-[12px] font-semibold px-3 py-1 rounded-full">
-                {store.fee}
-              </span>
             </button>
           ))}
+
+          {/* Recenter button */}
+          <button className="absolute bottom-3 right-3 h-8 w-8 rounded-full bg-white shadow-md flex items-center justify-center border border-slate/10">
+            <Crosshair className="h-4 w-4 text-slate/50" />
+          </button>
         </div>
 
-        <div className="mt-5 space-y-2.5">
-          <Button size="lg" className="w-full text-[15px]" onClick={() => onNext(selected!)} disabled={!selected}>
-            {t.common.continue}
-          </Button>
-          <Button variant="outline" size="lg" className="w-full text-[15px]">{t.common.cancel}</Button>
-        </div>
-
-        <p className="mt-5 text-[10px] text-mocha leading-relaxed text-center">
+        <p className="mt-4 text-[10px] text-mocha leading-relaxed text-center">
           {t.storeSelection.greenDot}
         </p>
+
+        <div className="pt-4">
+          <Button variant="outline" size="lg" className="w-full text-[15px]" onClick={onBack}>{t.common.previous}</Button>
+        </div>
       </div>
+
+      {/* Store detail bottom sheet */}
+      {selectedStore && (
+        <div className="absolute inset-0 z-50 flex flex-col justify-end">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setSelected(null)} />
+          <div className="relative bg-white rounded-t-2xl shadow-2xl">
+            {/* Drag handle */}
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="w-9 h-1 rounded-full bg-slate/20" />
+            </div>
+            {/* Store header */}
+            <div className="flex items-center justify-between px-5 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className={`h-9 w-9 rounded-xl border border-slate/10 bg-white flex items-center justify-center flex-shrink-0 overflow-hidden ${selectedStore.logoPad}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={selectedStore.logo} alt={selectedStore.name} className="w-full h-full object-contain" />
+                </div>
+                <p className="font-bold text-[17px] text-slate">{selectedStore.name}</p>
+              </div>
+              <button onClick={() => setSelected(null)} className="h-8 w-8 flex items-center justify-center rounded-full border border-slate/15 text-slate hover:bg-stone">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Mini map */}
+            <div className="mx-5 rounded-xl overflow-hidden border border-slate/10 bg-[#e8e4da] relative" style={{ height: 140 }}>
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line x1="0" y1="40" x2="100" y2="40" stroke="#d5d0c5" strokeWidth="1.5" />
+                <line x1="0" y1="70" x2="100" y2="70" stroke="#d5d0c5" strokeWidth="1" />
+                <line x1="45" y1="0" x2="45" y2="100" stroke="#d5d0c5" strokeWidth="1.5" />
+                <line x1="75" y1="0" x2="75" y2="100" stroke="#d5d0c5" strokeWidth="1" />
+                <line x1="20" y1="20" x2="80" y2="20" stroke="#d5d0c5" strokeWidth="0.7" />
+                <rect x="50" y="15" width="12" height="8" rx="2" fill="#c8dab0" opacity="0.5" />
+              </svg>
+              {/* Pin */}
+              <div className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-full flex flex-col items-center z-10">
+                <div className="h-7 w-7 rounded-full bg-red-500 border-2 border-white shadow-lg flex items-center justify-center">
+                  <MapPin className="h-3.5 w-3.5 text-white fill-white" />
+                </div>
+                <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[5px] border-l-transparent border-r-transparent border-t-red-500 -mt-[1px]" />
+              </div>
+              <span className="absolute text-[8px] font-medium text-slate/30" style={{ left: '55%', top: '36%' }}>{selectedStore.name}</span>
+            </div>
+
+            <div className="px-5 pt-3.5 pb-5 space-y-3">
+              {/* Address */}
+              <div className="flex items-start gap-2.5">
+                <MapPin className="h-4 w-4 text-slate/40 mt-0.5 flex-shrink-0" />
+                <p className="text-[14px] text-slate leading-snug">{selectedStore.address}</p>
+              </div>
+              {/* Fee */}
+              <div className="flex items-center gap-2.5">
+                <DollarSign className="h-4 w-4 text-slate/40 flex-shrink-0" />
+                <p className="text-[14px] font-semibold text-slate">{t.storeSelection.storeFeeLabel.replace('{fee}', selectedStore.fee)}</p>
+              </div>
+              {/* Limit badge */}
+              <span className="inline-block border border-mocha/30 text-mocha text-[12px] font-semibold px-3 py-1 rounded-full">
+                {t.storeSelection.limitBadge}
+              </span>
+              {/* Info callout */}
+              <div className="rounded-xl border border-blueberry/20 bg-blueberry/5 px-3.5 py-3 flex gap-2.5 items-start">
+                <Info className="h-4 w-4 text-blueberry/50 mt-0.5 flex-shrink-0" />
+                <p className="text-[13px] text-blueberry/70 leading-snug">{t.storeSelection.infoText.replace('{store}', selectedStore.name)}</p>
+              </div>
+              {/* CTA */}
+              <Button size="lg" className="w-full text-[15px]" onClick={() => onNext(selectedStore.id)}>
+                {t.storeSelection.selectStore}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
-function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMethod, paymentMethod, selectedStore, defaultShowSheet = false }: {
+function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMethod, paymentMethod, selectedStore, defaultShowSheet = false, onChangeClick, hidePrevious = false }: {
   onNext: () => void
   onBack: () => void
   onChangeContextual: () => void
@@ -549,6 +631,8 @@ function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMetho
   paymentMethod: string
   selectedStore: string
   defaultShowSheet?: boolean
+  onChangeClick?: () => void
+  hidePrevious?: boolean
 }) {
   const t = useT()
   const [feesExpanded, setFeesExpanded] = useState(false)
@@ -565,11 +649,6 @@ function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMetho
   return (
     <div className="relative flex flex-col h-full">
       <ScreenHeader />
-
-      <div className="px-6 pt-3 pb-1">
-        <BackButton onClick={onBack} />
-        <div className="w-9 flex-shrink-0" />
-      </div>
 
       <div className="flex-1 px-5 pb-4 overflow-y-auto">
         <h1 className="font-display text-[24px] font-extrabold leading-tight tracking-tight text-slate mt-4 mb-6">
@@ -588,11 +667,11 @@ function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMetho
           <div className="px-4 py-3.5 flex items-center justify-between">
             <span className="text-[13px] text-mocha">{t.review.paymentMethodLabel}</span>
             <div className="flex items-center gap-2">
-              {paymentMethod === 'cash' ? <MapPin className="h-4 w-4 text-slate/40" /> : paymentMethod === 'bank' ? <Building2 className="h-4 w-4 text-slate/40" /> : <CreditCard className="h-4 w-4 text-slate/40" />}
+              {paymentMethod === 'apple' ? <ApplePayIcon className="h-4 w-auto fill-slate/40" /> : paymentMethod === 'cash' ? <MapPin className="h-4 w-4 text-slate/40" /> : paymentMethod === 'bank' ? <Building2 className="h-4 w-4 text-slate/40" /> : <CreditCard className="h-4 w-4 text-slate/40" />}
               <span className="font-semibold text-[14px] text-slate">
-                {paymentMethod === 'cash' ? (store?.name ?? t.paymentMethod.cashName) : paymentMethod === 'bank' ? 'Premier ····0010' : '**** 5164'}
+                {paymentMethod === 'apple' ? 'Apple Pay' : paymentMethod === 'cash' ? (store?.name ?? t.paymentMethod.cashName) : paymentMethod === 'bank' ? 'Premier ····0010' : '**** 5164'}
               </span>
-              <button onClick={() => setShowSheet(true)} className="text-[13px] font-semibold text-mocha underline decoration-mocha underline-offset-4 hover:text-slate hover:decoration-slate ml-1">
+              <button onClick={() => onChangeClick ? onChangeClick() : setShowSheet(true)} className="text-[13px] font-semibold text-mocha underline decoration-mocha underline-offset-4 hover:text-slate hover:decoration-slate ml-1">
                 {t.common.change}
               </button>
             </div>
@@ -643,9 +722,14 @@ function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMetho
           </div>
         </div>
 
-        <Button size="lg" className="w-full text-[15px] mb-4" onClick={onNext}>
-          {t.review.sendNow}
-        </Button>
+        <div className="space-y-2.5 mb-4">
+          <Button size="lg" className="w-full text-[15px]" onClick={onNext}>
+            {t.review.sendNow}
+          </Button>
+          {!hidePrevious && (
+            <Button variant="outline" size="lg" className="w-full text-[15px]" onClick={onBack}>{t.common.previous}</Button>
+          )}
+        </div>
 
         <p className="text-[11px] text-mocha leading-relaxed text-center">
           {t.review.legal}{' '}
@@ -674,8 +758,8 @@ function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMetho
                 onClick={() => { setShowSheet(false); onChangeContextual() }}
                 className="w-full flex items-center gap-3 py-3.5 text-left"
               >
-                {paymentMethod === 'cash' ? <MapPin className="h-5 w-5 text-slate/50" /> : paymentMethod === 'bank' ? <Building2 className="h-5 w-5 text-slate/50" /> : <CreditCard className="h-5 w-5 text-slate/50" />}
-                <span className="text-[15px] text-slate">
+                {paymentMethod === 'cash' ? <MapPin className="h-5 w-5 text-mocha" /> : paymentMethod === 'bank' ? <Building2 className="h-5 w-5 text-mocha" /> : <CreditCard className="h-5 w-5 text-mocha" />}
+                <span className="text-[15px] text-mocha">
                   {paymentMethod === 'cash' ? t.review.changeStore : paymentMethod === 'bank' ? t.review.changeBank : t.review.changeCard}
                 </span>
               </button>
@@ -684,8 +768,8 @@ function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMetho
                 onClick={() => { setShowSheet(false); onChangePaymentMethod() }}
                 className="w-full flex items-center gap-3 py-3.5 text-left"
               >
-                <Layers className="h-5 w-5 text-slate/50" />
-                <span className="text-[15px] text-slate">{t.review.changeMethod}</span>
+                <Layers className="h-5 w-5 text-mocha" />
+                <span className="text-[15px] text-mocha">{t.review.changeMethod}</span>
               </button>
             </div>
             <div className="px-5 pt-2 pb-6">
@@ -699,6 +783,109 @@ function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMetho
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+// ─── Saved methods (repeat user) ─────────────────────────────────────────────
+
+const savedMethods: { type: string; icon: React.ComponentType<{ className?: string }> | null; label: string; sublabel: string; storeId?: string; appleIcon?: boolean }[] = [
+  { type: 'card',   icon: CreditCard, label: '**** 5164',        sublabel: 'Visa debit card' },
+  { type: 'apple',  icon: null,       label: 'Apple Pay',        sublabel: 'Pay with Face ID', appleIcon: true },
+  { type: 'bank',   icon: Building2,  label: 'Premier ····0010', sublabel: 'Checking account' },
+  { type: 'cash',   icon: MapPin,     label: 'Walgreens',        sublabel: '$3.95 fee · Pay in cash', storeId: 'walgreens' },
+]
+
+function SavedMethodsSheet({
+  currentMethod,
+  currentStore,
+  onSelect,
+  onClose,
+  onAddNew,
+}: {
+  currentMethod: string
+  currentStore: string
+  onSelect: (method: string, storeId: string) => void
+  onClose: () => void
+  onAddNew?: () => void
+}) {
+  const t = useT()
+
+  return (
+    <div className="absolute inset-0 z-50 flex flex-col justify-end">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-white rounded-t-2xl">
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-1">
+          <div className="w-9 h-1 rounded-full bg-slate/20" />
+        </div>
+
+        <div className="px-5 pb-3">
+          <h3 className="text-[17px] font-bold text-slate">Your saved methods</h3>
+          <p className="text-[13px] text-mocha mt-0.5">Pick how you want to pay</p>
+        </div>
+
+        <div className="px-5 space-y-2 pb-3">
+          {savedMethods.map(m => {
+            const active = m.type === currentMethod && (m.type !== 'cash' || m.storeId === currentStore)
+            const Icon = m.icon
+            return (
+              <button
+                key={m.type}
+                onClick={() => { onSelect(m.type, m.storeId ?? ''); onClose() }}
+                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-all ${
+                  active
+                    ? 'border-turquoise bg-turquoise/[0.06]'
+                    : 'border-slate/10 bg-white hover:bg-stone/50'
+                }`}
+              >
+                <div className={`h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  active ? 'bg-turquoise/15' : 'bg-stone'
+                }`}>
+                  {m.appleIcon
+                    ? <ApplePayIcon className={`h-4 w-auto ${active ? 'fill-slate' : 'fill-slate/50'}`} />
+                    : Icon && <Icon className={`h-4 w-4 ${active ? 'text-slate' : 'text-slate/50'}`} />
+                  }
+                </div>
+                <div className="flex-1 min-w-0 text-left">
+                  <p className="text-[15px] font-semibold text-slate truncate">{m.label}</p>
+                  <p className="text-[12px] text-mocha whitespace-nowrap">{m.sublabel}</p>
+                </div>
+                {active && (
+                  <div className="h-5 w-5 rounded-full bg-turquoise flex items-center justify-center flex-shrink-0">
+                    <Check className="h-3 w-3 text-slate" />
+                  </div>
+                )}
+              </button>
+            )
+          })}
+
+          {/* Add new method */}
+          {onAddNew && (
+            <button
+              onClick={() => { onAddNew(); onClose() }}
+              className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border border-dashed border-slate/15 hover:bg-stone/50 transition-all"
+            >
+              <div className="h-9 w-9 rounded-full bg-stone flex items-center justify-center flex-shrink-0">
+                <Plus className="h-4 w-4 text-slate/50" />
+              </div>
+              <div className="flex-1 text-left">
+                <p className="text-[15px] font-semibold text-slate">Add new method</p>
+                <p className="text-[12px] text-mocha">Card, bank account, or cash</p>
+              </div>
+            </button>
+          )}
+        </div>
+
+        <div className="px-5 pt-1 pb-6">
+          <button
+            onClick={onClose}
+            className="w-full py-3 rounded-xl bg-stone text-[15px] font-semibold text-mocha"
+          >
+            {t.common.cancel}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -754,13 +941,6 @@ function BankConsentScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
   return (
     <div className="flex flex-col h-full">
       <ScreenHeader />
-      <div className="px-6 pt-3 pb-1 flex items-center gap-3">
-        <BackButton onClick={onBack} />
-        <div className="flex-1" />
-        <button onClick={onBack} className="flex h-9 w-9 items-center justify-center rounded-full border border-slate/15 text-slate hover:bg-white">
-          <X className="h-4 w-4" />
-        </button>
-      </div>
       <div className="flex-1 px-6 pb-6 overflow-y-auto">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mt-2 mb-4">
           {t.bankConsent.title}
@@ -768,9 +948,12 @@ function BankConsentScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
         <p className="text-[14px] text-mocha leading-relaxed mb-8">
           {t.bankConsent.body}
         </p>
-        <Button size="lg" className="w-full text-[15px]" onClick={onNext}>
-          {t.bankConsent.agree}
-        </Button>
+        <div className="space-y-2.5">
+          <Button size="lg" className="w-full text-[15px]" onClick={onNext}>
+            {t.bankConsent.agree}
+          </Button>
+          <Button variant="outline" size="lg" className="w-full text-[15px]" onClick={onBack}>{t.common.previous}</Button>
+        </div>
       </div>
     </div>
   )
@@ -789,9 +972,6 @@ function BankConnectScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
   return (
     <div className="flex flex-col h-full">
       <ScreenHeader />
-      <div className="px-6 pt-3 pb-1">
-        <BackButton onClick={onBack} />
-      </div>
       <div className="flex-1 px-6 pb-6 overflow-y-auto">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-1">
           {t.bankConnect.title}
@@ -802,10 +982,11 @@ function BankConnectScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
           <FloatingInput label={t.bankConnect.fieldMiddleName} className={fieldClass} labelClassName={labelClass} value={middleName} onChange={e => setMiddleName(e.target.value)} />
           <FloatingInput label={t.bankConnect.fieldLastName} className={fieldClass} labelClassName={labelClass} value={lastName} onChange={e => setLastName(e.target.value)} />
         </div>
-        <div className="pt-8">
+        <div className="pt-8 space-y-2.5">
           <Button size="lg" className="w-full text-[15px]" onClick={onNext} disabled={!canContinue}>
             {t.bankConnect.linkAccount}
           </Button>
+          <Button variant="outline" size="lg" className="w-full text-[15px]" onClick={onBack}>{t.common.previous}</Button>
         </div>
       </div>
     </div>
@@ -1148,14 +1329,19 @@ const screenGroups: Record<string, TGroup[]> = {
   ],
   store: [
     { label: null, items: [{ s: 'common', k: 'badge' }]},
-    { label: 'STORE SELECTION', items: [
+    { label: 'MAP VIEW', items: [
       { s: 'storeSelection', k: 'title' },
-      { s: 'storeSelection', k: 'minMax' },
-      { s: 'storeSelection', k: 'greenDot' },
+      { s: 'storeSelection', k: 'addressLabel' },
+      { s: 'storeSelection', k: 'addressPlaceholder' },
     ]},
-    { label: null, items: [
-      { s: 'common', k: 'continue' },
-      { s: 'common', k: 'cancel' },
+    { label: 'STORE DETAIL', items: [
+      { s: 'storeSelection', k: 'storeFeeLabel' },
+      { s: 'storeSelection', k: 'limitBadge' },
+      { s: 'storeSelection', k: 'infoText' },
+      { s: 'storeSelection', k: 'selectStore' },
+    ]},
+    { label: 'LEGAL', items: [
+      { s: 'storeSelection', k: 'greenDot' },
     ]},
   ],
   review: [
@@ -1831,6 +2017,21 @@ function FlowCanvasOverlay({
         mp('Success', 'success', 100, <SuccessScreen />),
       ],
     },
+    {
+      id: 'repeat', label: 'Repeat User', dot: '#f59e0b',
+      screens: [
+        mp('Review', 'review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="card" selectedStore="" />),
+        mp('Saved Methods', 'savedMethods', 100, (
+          <div className="relative flex flex-col h-full">
+            <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="card" selectedStore="" />
+            <SavedMethodsSheet currentMethod="card" currentStore="" onSelect={() => {}} onClose={() => {}} onAddNew={() => {}} />
+          </div>
+        )),
+        mp('Review (Bank)', 'reviewBank', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="bank" selectedStore="" />),
+        mp('Review (Cash)', 'reviewCash', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="cash" selectedStore="walgreens" />),
+        mp('Success', 'success', 100, <SuccessScreen />),
+      ],
+    },
   ]
 
   // Derive selected screen info for the sidebar
@@ -2008,9 +2209,14 @@ function PhoneControls({ current, onChange }: { current: Language; onChange: (l:
 
 export default function FintechTestFlowPage() {
   const [screen, setScreen] = useState<'payment' | 'address' | 'store' | 'card' | 'review' | 'success' | 'bankConsent' | 'bankConnect' | 'stripeSelect' | 'stripeIntro' | 'stripeAccount' | 'stripeLink' | 'stripeComplete'>('payment')
+  const [repeatScreen, setRepeatScreen] = useState<'review' | 'success'>('review')
   const [paymentMethod, setPaymentMethod] = useState<string>('card')
   const [selectedStore, setSelectedStore] = useState<string>('')
+  const [repeatPaymentMethod, setRepeatPaymentMethod] = useState<string>('card')
+  const [repeatSelectedStore, setRepeatSelectedStore] = useState<string>('')
+  const [showSavedMethods, setShowSavedMethods] = useState(false)
   const [language, setLanguage] = useState<Language>('en')
+  const [userType, setUserType] = useState<'new' | 'repeat'>('new')
   const [showCanvas, setShowCanvas] = useState(false)
   const [ready, setReady] = useState(false)
 
@@ -2079,65 +2285,127 @@ export default function FintechTestFlowPage() {
           {/* Phone column: controls above, device below */}
           <div className="flex flex-col items-stretch w-[390px] shrink-0">
             <PhoneControls current={language} onChange={setLanguage} />
-            <PhoneFrame progress={{
-              payment: 10, bankConsent: 20, address: 40, bankConnect: 45,
-              stripeSelect: 50, stripeIntro: 60, stripeAccount: 70, stripeLink: 80, stripeComplete: 90,
-              store: 75, card: 75, review: 100, success: 100,
-            }[screen]}>
-              {screen === 'payment' && (
-                <PaymentMethodScreen onNext={(method) => {
-                  setPaymentMethod(method)
-                  setScreen(method === 'bank' ? 'bankConsent' : 'address')
-                }} />
-              )}
-              {screen === 'bankConsent' && (
-                <BankConsentScreen onBack={() => setScreen('payment')} onNext={() => setScreen('address')} />
-              )}
-              {screen === 'address' && (
-                <AddressScreen
-                  onBack={() => setScreen(paymentMethod === 'bank' ? 'bankConsent' : 'payment')}
-                  onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : paymentMethod === 'bank' ? 'bankConnect' : 'card')}
-                  paymentMethod={paymentMethod}
-                />
-              )}
-              {screen === 'bankConnect' && (
-                <BankConnectScreen onBack={() => setScreen('address')} onNext={() => setScreen('stripeSelect')} />
-              )}
-              {screen === 'stripeSelect' && (
-                <StripeBankSelectScreen onBack={() => setScreen('bankConnect')} onNext={() => setScreen('stripeIntro')} />
-              )}
-              {screen === 'stripeIntro' && (
-                <StripeIntroScreen onBack={() => setScreen('stripeSelect')} onNext={() => setScreen('stripeAccount')} />
-              )}
-              {screen === 'stripeAccount' && (
-                <StripeAccountScreen onBack={() => setScreen('stripeIntro')} onNext={() => setScreen('stripeLink')} />
-              )}
-              {screen === 'stripeLink' && (
-                <StripeLinkScreen onBack={() => setScreen('stripeAccount')} onNext={() => setScreen('stripeComplete')} />
-              )}
-              {screen === 'stripeComplete' && (
-                <StripeCompletedScreen onBack={() => setScreen('stripeLink')} onNext={() => setScreen('review')} />
-              )}
-              {screen === 'store' && (
-                <StoreSelectionScreen onBack={() => setScreen('address')} onNext={(storeId) => { setSelectedStore(storeId); setScreen('review') }} />
-              )}
-              {screen === 'card' && (
-                <CardDetailsScreen onBack={() => setScreen('address')} onNext={() => setScreen('review')} />
-              )}
-              {screen === 'review' && (
-                <ReviewScreen
-                  onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : paymentMethod === 'bank' ? 'stripeComplete' : 'card')}
-                  onNext={() => setScreen('success')}
-                  onChangeContextual={() => setScreen(paymentMethod === 'cash' ? 'store' : paymentMethod === 'bank' ? 'stripeSelect' : 'card')}
-                  onChangePaymentMethod={() => setScreen('payment')}
-                  paymentMethod={paymentMethod}
-                  selectedStore={selectedStore}
-                />
-              )}
-              {screen === 'success' && (
-                <SuccessScreen />
+            <PhoneFrame progress={userType === 'repeat'
+              ? { review: 100, success: 100 }[repeatScreen]
+              : {
+                payment: 10, bankConsent: 20, address: 40, bankConnect: 45,
+                stripeSelect: 50, stripeIntro: 60, stripeAccount: 70, stripeLink: 80, stripeComplete: 90,
+                store: 75, card: 75, review: 100, success: 100,
+              }[screen]}>
+              {userType === 'repeat' ? (
+                <div className="relative flex flex-col h-full">
+                  {repeatScreen === 'review' && (
+                    <ReviewScreen
+                      onBack={() => {}}
+                      onNext={() => setRepeatScreen('success')}
+                      onChangeContextual={() => {}}
+                      onChangePaymentMethod={() => {}}
+                      paymentMethod={repeatPaymentMethod}
+                      selectedStore={repeatSelectedStore}
+                      onChangeClick={() => setShowSavedMethods(true)}
+                      hidePrevious
+                    />
+                  )}
+                  {repeatScreen === 'success' && (
+                    <SuccessScreen />
+                  )}
+                  {showSavedMethods && (
+                    <SavedMethodsSheet
+                      currentMethod={repeatPaymentMethod}
+                      currentStore={repeatSelectedStore}
+                      onSelect={(method, storeId) => {
+                        setRepeatPaymentMethod(method)
+                        setRepeatSelectedStore(storeId)
+                      }}
+                      onClose={() => setShowSavedMethods(false)}
+                      onAddNew={() => {
+                        setUserType('new')
+                        setScreen('payment')
+                      }}
+                    />
+                  )}
+                </div>
+              ) : (
+                <>
+                  {screen === 'payment' && (
+                    <PaymentMethodScreen onNext={(method) => {
+                      setPaymentMethod(method)
+                      setScreen(method === 'bank' ? 'bankConsent' : 'address')
+                    }} />
+                  )}
+                  {screen === 'bankConsent' && (
+                    <BankConsentScreen onBack={() => setScreen('payment')} onNext={() => setScreen('address')} />
+                  )}
+                  {screen === 'address' && (
+                    <AddressScreen
+                      onBack={() => setScreen(paymentMethod === 'bank' ? 'bankConsent' : 'payment')}
+                      onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : paymentMethod === 'bank' ? 'bankConnect' : 'card')}
+                      paymentMethod={paymentMethod}
+                    />
+                  )}
+                  {screen === 'bankConnect' && (
+                    <BankConnectScreen onBack={() => setScreen('address')} onNext={() => setScreen('stripeSelect')} />
+                  )}
+                  {screen === 'stripeSelect' && (
+                    <StripeBankSelectScreen onBack={() => setScreen('bankConnect')} onNext={() => setScreen('stripeIntro')} />
+                  )}
+                  {screen === 'stripeIntro' && (
+                    <StripeIntroScreen onBack={() => setScreen('stripeSelect')} onNext={() => setScreen('stripeAccount')} />
+                  )}
+                  {screen === 'stripeAccount' && (
+                    <StripeAccountScreen onBack={() => setScreen('stripeIntro')} onNext={() => setScreen('stripeLink')} />
+                  )}
+                  {screen === 'stripeLink' && (
+                    <StripeLinkScreen onBack={() => setScreen('stripeAccount')} onNext={() => setScreen('stripeComplete')} />
+                  )}
+                  {screen === 'stripeComplete' && (
+                    <StripeCompletedScreen onBack={() => setScreen('stripeLink')} onNext={() => setScreen('review')} />
+                  )}
+                  {screen === 'store' && (
+                    <StoreSelectionScreen onBack={() => setScreen('address')} onNext={(storeId) => { setSelectedStore(storeId); setScreen('review') }} />
+                  )}
+                  {screen === 'card' && (
+                    <CardDetailsScreen onBack={() => setScreen('address')} onNext={() => setScreen('review')} />
+                  )}
+                  {screen === 'review' && (
+                    <ReviewScreen
+                      onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : paymentMethod === 'bank' ? 'stripeComplete' : 'card')}
+                      onNext={() => setScreen('success')}
+                      onChangeContextual={() => setScreen(paymentMethod === 'cash' ? 'store' : paymentMethod === 'bank' ? 'stripeSelect' : 'card')}
+                      onChangePaymentMethod={() => setScreen('payment')}
+                      paymentMethod={paymentMethod}
+                      selectedStore={selectedStore}
+                    />
+                  )}
+                  {screen === 'success' && (
+                    <SuccessScreen />
+                  )}
+                </>
               )}
             </PhoneFrame>
+            {/* User type toggle */}
+            <div className="mt-[30px] w-full rounded-full bg-slate/[0.08] p-1 flex">
+              <button
+                onClick={() => setUserType('new')}
+                className={`flex-1 py-2.5 rounded-full text-[14px] font-semibold transition-all ${
+                  userType === 'new'
+                    ? 'bg-white shadow-sm text-slate'
+                    : 'text-mocha/50 hover:text-mocha'
+                }`}
+              >
+                New user
+              </button>
+              <button
+                onClick={() => setUserType('repeat')}
+                className={`flex-1 py-2.5 rounded-full text-[14px] font-semibold transition-all ${
+                  userType === 'repeat'
+                    ? 'bg-white shadow-sm text-slate'
+                    : 'text-mocha/50 hover:text-mocha'
+                }`}
+              >
+                Repeat user
+              </button>
+            </div>
             {/* Canvas toggle */}
             <button
               onClick={() => setShowCanvas(true)}

@@ -13,6 +13,7 @@ import {
   PenLine,
   Images,
   Globe,
+  FileText,
 } from "lucide-react"
 import { FelixLogo } from "./felix-logo"
 import { useDSLang } from "./ds-lang-context"
@@ -113,6 +114,23 @@ export function SidebarNav() {
         { title: n.contentTokens, href: "/editorial-guidelines#tokens" },
         { title: n.commonPitfalls, href: "/editorial-guidelines#pitfalls" },
         { title: n.quickReference, href: "/editorial-guidelines#reference" },
+      ],
+    },
+    {
+      title: n.reference,
+      href: "/reference",
+      icon: FileText,
+      dividerBefore: true,
+      children: [
+        { title: n.refStack, href: "/reference#stack-setup" },
+        { title: n.refPrinciples, href: "/reference#design-principles" },
+        { title: n.refColors, href: "/reference#colors" },
+        { title: n.refTypography, href: "/reference#typography" },
+        { title: n.refComponents, href: "/reference#components" },
+        { title: n.refPatterns, href: "/reference#ui-patterns" },
+        { title: n.refContentTokens, href: "/reference#content-tokens-fintech-flow" },
+        { title: n.refFintechFlows, href: "/reference#fintech-flow-architecture" },
+        { title: n.refPresentation, href: "/reference#presentation-system" },
       ],
     },
   ]

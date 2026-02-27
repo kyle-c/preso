@@ -13,6 +13,9 @@ const sections: { label: string; key: keyof ContentTokens }[] = [
   { label: 'Store Selection', key: 'storeSelection' },
   { label: 'Review',          key: 'review' },
   { label: 'Success',         key: 'success' },
+  { label: 'Bank Consent',    key: 'bankConsent' },
+  { label: 'Bank Connect',    key: 'bankConnect' },
+  { label: 'Stripe',          key: 'stripe' },
 ]
 
 function deepClone<T>(obj: T): T {

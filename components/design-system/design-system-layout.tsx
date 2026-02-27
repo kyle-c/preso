@@ -22,6 +22,7 @@ function getPageKey(pathname: string): keyof DSStrings['pages'] | null {
   if (pathname.startsWith('/components')) return 'components'
   if (pathname.startsWith('/tokens')) return 'tokens'
   if (pathname.startsWith('/illustrations')) return 'illustrations'
+  if (pathname.startsWith('/reference')) return 'reference'
   return null
 }
 

@@ -47,6 +47,16 @@ export interface DSStrings {
     shadows: string
     typographyTokens: string
     sidebarTokens: string
+    reference: string
+    refStack: string
+    refPrinciples: string
+    refColors: string
+    refTypography: string
+    refComponents: string
+    refPatterns: string
+    refContentTokens: string
+    refFintechFlows: string
+    refPresentation: string
     version: string
   }
   pages: {
@@ -58,6 +68,7 @@ export interface DSStrings {
     components:    { title: string; description: string }
     tokens:        { title: string; description: string }
     illustrations: { title: string; description: string }
+    reference:     { title: string; description: string }
   }
   home: {
     overviewLabel: string
@@ -150,6 +161,16 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       shadows: 'Shadows',
       typographyTokens: 'Typography',
       sidebarTokens: 'Sidebar Tokens',
+      reference: 'Reference',
+      refStack: 'Stack & Setup',
+      refPrinciples: 'Principles',
+      refColors: 'Colors',
+      refTypography: 'Typography',
+      refComponents: 'Components',
+      refPatterns: 'Patterns',
+      refContentTokens: 'Content Tokens',
+      refFintechFlows: 'Fintech Flows',
+      refPresentation: 'Presentation',
       version: 'Version 1.0.0',
     },
     pages: {
@@ -161,6 +182,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       components:    { title: 'Components', description: 'A library of UI building blocks for creating consistent, accessible, and on-brand interfaces.' },
       tokens:        { title: 'Design Tokens', description: 'Design tokens mapped to shadcn/ui naming conventions.' },
       illustrations: { title: 'Illustrations', description: 'The Felix illustration library. Download SVG for web and product use, PNG for presentations and documents.' },
+      reference:     { title: 'Reference', description: 'Comprehensive design system reference — everything needed to replicate every screen, component, and pattern.' },
     },
     home: {
       overviewLabel: 'Overview',
@@ -251,6 +273,16 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       shadows: 'Sombras',
       typographyTokens: 'Tipografía',
       sidebarTokens: 'Tokens de Barra Lateral',
+      reference: 'Referencia',
+      refStack: 'Stack y Config',
+      refPrinciples: 'Principios',
+      refColors: 'Colores',
+      refTypography: 'Tipografía',
+      refComponents: 'Componentes',
+      refPatterns: 'Patrones',
+      refContentTokens: 'Tokens de Contenido',
+      refFintechFlows: 'Flujos Fintech',
+      refPresentation: 'Presentación',
       version: 'Versión 1.0.0',
     },
     pages: {
@@ -262,6 +294,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       components:    { title: 'Componentes', description: 'Una biblioteca de elementos de interfaz para crear interfaces consistentes, accesibles y acordes a la marca.' },
       tokens:        { title: 'Design Tokens', description: 'Tokens de diseño mapeados a las convenciones de nomenclatura de shadcn/ui.' },
       illustrations: { title: 'Ilustraciones', description: 'La biblioteca de ilustraciones de Felix. Descarga SVG para web y PNG para presentaciones y documentos.' },
+      reference:     { title: 'Referencia', description: 'Referencia completa del sistema de diseño — todo lo necesario para replicar cada pantalla, componente y patrón.' },
     },
     home: {
       overviewLabel: 'Resumen',
@@ -352,6 +385,16 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       shadows: 'Sombras',
       typographyTokens: 'Tipografia',
       sidebarTokens: 'Tokens da Barra Lateral',
+      reference: 'Referência',
+      refStack: 'Stack e Config',
+      refPrinciples: 'Princípios',
+      refColors: 'Cores',
+      refTypography: 'Tipografia',
+      refComponents: 'Componentes',
+      refPatterns: 'Padrões',
+      refContentTokens: 'Tokens de Conteúdo',
+      refFintechFlows: 'Fluxos Fintech',
+      refPresentation: 'Apresentação',
       version: 'Versão 1.0.0',
     },
     pages: {
@@ -363,6 +406,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       components:    { title: 'Componentes', description: 'Uma biblioteca de elementos de interface para criar interfaces consistentes, acessíveis e alinhadas à marca.' },
       tokens:        { title: 'Design Tokens', description: 'Design tokens mapeados às convenções de nomenclatura do shadcn/ui.' },
       illustrations: { title: 'Ilustrações', description: 'A biblioteca de ilustrações do Felix. Baixe SVG para web e PNG para apresentações e documentos.' },
+      reference:     { title: 'Referência', description: 'Referência completa do sistema de design — tudo o que é necessário para replicar cada tela, componente e padrão.' },
     },
     home: {
       overviewLabel: 'Visão Geral',

@@ -11,6 +11,7 @@ export interface ContentTokens {
     badge: string
     continue: string
     cancel: string
+    previous: string
     selected: string
     change: string
   }
@@ -61,6 +62,12 @@ export interface ContentTokens {
   }
   storeSelection: {
     title: string
+    addressLabel: string
+    addressPlaceholder: string
+    storeFeeLabel: string
+    limitBadge: string
+    infoText: string
+    selectStore: string
     minMax: string
     greenDot: string
   }
@@ -136,6 +143,7 @@ export const content: Record<Language, ContentTokens> = {
       badge: 'Authorized UniTeller Agent',
       continue: 'Continue',
       cancel: 'Cancel',
+      previous: 'Previous',
       selected: 'Selected',
       change: 'Change',
     },
@@ -149,7 +157,7 @@ export const content: Record<Language, ContentTokens> = {
       applePayName: 'Apple Pay',
       applePayDesc: 'Pay with Face ID or Touch ID.',
       bankName: 'Bank account',
-      bankDesc: 'From your checking or savings account.',
+      bankDesc: 'Checking or savings account.',
       cashName: 'Cash at a store',
       cashDesc: 'Pay cash at a store near you.',
       badgeNoFeeDebit: 'No fee for debit',
@@ -186,6 +194,12 @@ export const content: Record<Language, ContentTokens> = {
     },
     storeSelection: {
       title: 'Where do you want to pay?',
+      addressLabel: 'Address',
+      addressPlaceholder: '8040 Brothers Walk Lane, Jacksonville',
+      storeFeeLabel: '{fee} store fee',
+      limitBadge: 'Limit $20 - $500',
+      infoText: 'Select this store to generate your code, then you can pay at any {store}.',
+      selectStore: 'Select store',
       minMax: 'Min: $20 · Max: $500',
       greenDot: 'Service provided by Green Dot®. ©2024 Green Dot Corporation. All rights reserved. Green Dot Corporation NMLS #914924; Green Dot Bank NMLS #908739.',
     },
@@ -260,6 +274,7 @@ export const content: Record<Language, ContentTokens> = {
       badge: 'Agente Autorizado UniTeller',
       continue: 'Continuar',
       cancel: 'Cancelar',
+      previous: 'Anterior',
       selected: 'Seleccionado',
       change: 'Cambiar',
     },
@@ -310,6 +325,12 @@ export const content: Record<Language, ContentTokens> = {
     },
     storeSelection: {
       title: '¿Dónde quieres pagar?',
+      addressLabel: 'Dirección',
+      addressPlaceholder: '8040 Brothers Walk Lane, Jacksonville',
+      storeFeeLabel: '{fee} comisión de tienda',
+      limitBadge: 'Límite $20 - $500',
+      infoText: 'Selecciona esta tienda para generar tu código, luego puedes pagar en cualquier {store}.',
+      selectStore: 'Seleccionar tienda',
       minMax: 'Mín: $20 · Máx: $500',
       greenDot: 'Servicio proporcionado por Green Dot®. ©2024 Green Dot Corporation. Todos los derechos reservados. Green Dot Corporation NMLS #914924; Green Dot Bank NMLS #908739.',
     },
@@ -384,6 +405,7 @@ export const content: Record<Language, ContentTokens> = {
       badge: 'Agente Autorizado UniTeller',
       continue: 'Continuar',
       cancel: 'Cancelar',
+      previous: 'Anterior',
       selected: 'Selecionado',
       change: 'Alterar',
     },
@@ -434,6 +456,12 @@ export const content: Record<Language, ContentTokens> = {
     },
     storeSelection: {
       title: 'Onde você quer pagar?',
+      addressLabel: 'Endereço',
+      addressPlaceholder: '8040 Brothers Walk Lane, Jacksonville',
+      storeFeeLabel: '{fee} taxa da loja',
+      limitBadge: 'Limite $20 - $500',
+      infoText: 'Selecione esta loja para gerar seu código, então você pode pagar em qualquer {store}.',
+      selectStore: 'Selecionar loja',
       minMax: 'Mín: $20 · Máx: $500',
       greenDot: 'Serviço fornecido pela Green Dot®. ©2024 Green Dot Corporation. Todos os direitos reservados. Green Dot Corporation NMLS #914924; Green Dot Bank NMLS #908739.',
     },

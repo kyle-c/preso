@@ -157,7 +157,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       principles:    { title: 'Design Principles', description: 'Five principles that define how every experience at Felix Pago should feel.' },
       editorial:     { title: 'Editorial Guidelines', description: 'Voice, tone, and writing standards for every string in the Felix Pago product.' },
       colors:        { title: 'Colors', description: 'Primary and secondary color palettes with WCAG-compliant colorways and usage guidelines.' },
-      typography:    { title: 'Typography', description: 'Typesetting is at the heart of our brand's visual communication. Consistent application enhances clarity and brand cohesion.' },
+      typography:    { title: 'Typography', description: "Typesetting is at the heart of our brand's visual communication. Consistent application enhances clarity and brand cohesion." },
       components:    { title: 'Components', description: 'A library of UI building blocks for creating consistent, accessible, and on-brand interfaces.' },
       tokens:        { title: 'Design Tokens', description: 'Design tokens mapped to shadcn/ui naming conventions.' },
       illustrations: { title: 'Illustrations', description: 'The Felix illustration library. Download SVG for web and product use, PNG for presentations and documents.' },

@@ -1,5 +1,8 @@
+'use client'
+
 import { DesignSystemLayout } from "@/components/design-system/design-system-layout"
 import { Section } from "@/components/design-system/section"
+import { useDSLang } from "@/components/design-system/ds-lang-context"
 
 type Illustration = {
   name: string
@@ -7,18 +10,18 @@ type Illustration = {
   hasPng: boolean
 }
 
+type IllusCatKey = 'brand' | 'flags3d' | 'flagsOg' | 'hands' | 'money' | 'communication' | 'status' | 'navigation' | 'other'
+
 type Category = {
   id: string
-  label: string
-  description?: string
+  catKey: IllusCatKey
   items: Illustration[]
 }
 
 const categories: Category[] = [
   {
     id: "brand",
-    label: "Brand & Characters",
-    description: "Core brand illustrations featuring the Félix character used across the product experience.",
+    catKey: "brand",
     items: [
       { name: "Félix Illo 1", token: "illustration/brand/felix-1", hasPng: true },
       { name: "Félix Illo 2", token: "illustration/brand/felix-2", hasPng: true },
@@ -29,8 +32,7 @@ const categories: Category[] = [
   },
   {
     id: "flags-3d",
-    label: "Flags — 3D",
-    description: "Three-dimensional flag illustrations for supported send-to countries.",
+    catKey: "flags3d",
     items: [
       { name: "Flag 3d MX", token: "illustration/flags-3d/mx", hasPng: true },
       { name: "Flag 3d GT", token: "illustration/flags-3d/gt", hasPng: true },
@@ -44,8 +46,7 @@ const categories: Category[] = [
   },
   {
     id: "flags-og",
-    label: "Flags — Original Style",
-    description: "Flat-style flag illustrations in the original hand-drawn aesthetic.",
+    catKey: "flagsOg",
     items: [
       { name: "Flag OG - Mexico", token: "illustration/flags-og/mx", hasPng: true },
       { name: "Flag OG - Guatemala", token: "illustration/flags-og/gt", hasPng: true },
@@ -58,8 +59,7 @@ const categories: Category[] = [
   },
   {
     id: "hands",
-    label: "Hands",
-    description: "Hand illustrations for CTAs, feature explanations, and onboarding moments.",
+    catKey: "hands",
     items: [
       { name: "Hand - Dollar Bills 1", token: "illustration/hands/dollar-bills-1", hasPng: true },
       { name: "Hand - Dollar Bills 2", token: "illustration/hands/dollar-bills-2", hasPng: true },
@@ -76,8 +76,7 @@ const categories: Category[] = [
   },
   {
     id: "money",
-    label: "Money & Payments",
-    description: "Illustrations for payment flows, transfer confirmations, and financial feature moments.",
+    catKey: "money",
     items: [
       { name: "Dollar bill", token: "illustration/money/dollar-bill", hasPng: true },
       { name: "Dollar bills + Coins A", token: "illustration/money/dollar-bills-coins-a", hasPng: true },
@@ -112,8 +111,7 @@ const categories: Category[] = [
   },
   {
     id: "communication",
-    label: "Communication",
-    description: "Illustrations for messaging, notifications, support, and social sharing.",
+    catKey: "communication",
     items: [
       { name: "Speech Bubble", token: "illustration/communication/speech-bubble", hasPng: true },
       { name: "Speech Bubble 2", token: "illustration/communication/speech-bubble-2", hasPng: true },
@@ -130,8 +128,7 @@ const categories: Category[] = [
   },
   {
     id: "status",
-    label: "Status & Alerts",
-    description: "Illustrations for confirmation, error, loading, and other state communication.",
+    catKey: "status",
     items: [
       { name: "Check", token: "illustration/status/check", hasPng: true },
       { name: "Party Popper", token: "illustration/status/party-popper", hasPng: true },
@@ -145,8 +142,7 @@ const categories: Category[] = [
   },
   {
     id: "navigation",
-    label: "Navigation & Maps",
-    description: "Location and map illustrations for the store finder and cash payment flows.",
+    catKey: "navigation",
     items: [
       { name: "Map", token: "illustration/navigation/map", hasPng: true },
       { name: "Map + F symbol", token: "illustration/navigation/map-f", hasPng: true },
@@ -155,8 +151,7 @@ const categories: Category[] = [
   },
   {
     id: "other",
-    label: "Other",
-    description: "Supporting illustrations for product features, onboarding, and utility moments.",
+    catKey: "other",
     items: [
       { name: "Bank", token: "illustration/other/bank", hasPng: true },
       { name: "Bot", token: "illustration/other/bot", hasPng: true },
@@ -169,7 +164,7 @@ const categories: Category[] = [
   },
 ]
 
-function IllustrationCard({ item }: { item: Illustration }) {
+function IllustrationCard({ item, svgLabel, pngLabel }: { item: Illustration; svgLabel: string; pngLabel: string }) {
   const svgPath = `/illustrations/${encodeURIComponent(item.name)}.svg`
   const pngPath = `/illustrations/pngs/${encodeURIComponent(item.name)}.png`
 
@@ -203,7 +198,7 @@ function IllustrationCard({ item }: { item: Illustration }) {
             download={`${item.name}.svg`}
             className="flex h-7 flex-1 items-center justify-center rounded-lg border border-border bg-linen text-[11px] font-semibold text-foreground/70 transition-colors hover:bg-stone hover:text-foreground"
           >
-            SVG
+            {svgLabel}
           </a>
           {item.hasPng ? (
             <a
@@ -211,11 +206,11 @@ function IllustrationCard({ item }: { item: Illustration }) {
               download={`${item.name}.png`}
               className="flex h-7 flex-1 items-center justify-center rounded-lg border border-border bg-linen text-[11px] font-semibold text-foreground/70 transition-colors hover:bg-stone hover:text-foreground"
             >
-              PNG
+              {pngLabel}
             </a>
           ) : (
             <span className="flex h-7 flex-1 items-center justify-center rounded-lg border border-border/50 bg-stone/30 text-[11px] font-semibold text-foreground/30 cursor-not-allowed select-none">
-              PNG
+              {pngLabel}
             </span>
           )}
         </div>
@@ -225,25 +220,28 @@ function IllustrationCard({ item }: { item: Illustration }) {
 }
 
 export default function IllustrationsPage() {
+  const { t } = useDSLang()
+  const illus = t.illustrations
+
   return (
-    <DesignSystemLayout
-      title="Illustrations"
-      description="The Felix illustration library. Download SVG for web and product use, PNG for presentations and documents."
-    >
-      {categories.map((category) => (
-        <Section
-          key={category.id}
-          id={category.id}
-          title={category.label}
-          description={category.description}
-        >
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {category.items.map((item) => (
-              <IllustrationCard key={item.name} item={item} />
-            ))}
-          </div>
-        </Section>
-      ))}
+    <DesignSystemLayout title="">
+      {categories.map((category) => {
+        const cat = illus[category.catKey] as { label: string; description: string }
+        return (
+          <Section
+            key={category.id}
+            id={category.id}
+            title={cat.label}
+            description={cat.description}
+          >
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              {category.items.map((item) => (
+                <IllustrationCard key={item.name} item={item} svgLabel={illus.svg} pngLabel={illus.png} />
+              ))}
+            </div>
+          </Section>
+        )
+      })}
     </DesignSystemLayout>
   )
 }

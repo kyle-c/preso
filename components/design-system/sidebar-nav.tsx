@@ -12,104 +12,115 @@ import {
   BookOpen,
   PenLine,
   Images,
+  Globe,
 } from "lucide-react"
 import { FelixLogo } from "./felix-logo"
-
-const navItems = [
-  {
-    title: "Overview",
-    href: "/",
-    icon: Home,
-  },
-  {
-    title: "Design Principles",
-    href: "/principles",
-    icon: BookOpen,
-    children: [
-      { title: "The Principles", href: "/principles#principles" },
-      { title: "Resources", href: "/principles#resources" },
-      { title: "When Principles Overlap", href: "/principles#conflicts" },
-    ],
-  },
-  {
-    title: "Editorial Guidelines",
-    href: "/editorial-guidelines",
-    icon: PenLine,
-    children: [
-      { title: "Voice & Tone", href: "/editorial-guidelines#voice" },
-      { title: "Writing Patterns", href: "/editorial-guidelines#patterns" },
-      { title: "Multilingual", href: "/editorial-guidelines#multilingual" },
-      { title: "Content Tokens", href: "/editorial-guidelines#tokens" },
-      { title: "Common Pitfalls", href: "/editorial-guidelines#pitfalls" },
-      { title: "Quick Reference", href: "/editorial-guidelines#reference" },
-    ],
-  },
-  {
-    title: "Colors",
-    href: "/colors",
-    icon: Palette,
-    children: [
-      { title: "Primary Palette", href: "/colors#primary" },
-      { title: "Secondary Palette", href: "/colors#secondary" },
-      { title: "Colorways", href: "/colors#colorways" },
-    ],
-  },
-  {
-    title: "Typography",
-    href: "/typography",
-    icon: Type,
-    children: [
-      { title: "Font Families", href: "/typography#fonts" },
-      { title: "Weights", href: "/typography#weights" },
-      { title: "Type Scale", href: "/typography#scale" },
-    ],
-  },
-  {
-    title: "Illustrations",
-    href: "/illustrations",
-    icon: Images,
-    children: [
-      { title: "Brand & Characters", href: "/illustrations#brand" },
-      { title: "Flags — 3D", href: "/illustrations#flags-3d" },
-      { title: "Flags — Original", href: "/illustrations#flags-og" },
-      { title: "Hands", href: "/illustrations#hands" },
-      { title: "Money & Payments", href: "/illustrations#money" },
-      { title: "Communication", href: "/illustrations#communication" },
-      { title: "Status & Alerts", href: "/illustrations#status" },
-      { title: "Navigation & Maps", href: "/illustrations#navigation" },
-      { title: "Other", href: "/illustrations#other" },
-    ],
-  },
-  {
-    title: "Components",
-    href: "/components",
-    icon: Component,
-    children: [
-      { title: "Buttons", href: "/components#buttons" },
-      { title: "Cards", href: "/components#cards" },
-      { title: "Inputs", href: "/components#inputs" },
-      { title: "Badges", href: "/components#badges" },
-    ],
-  },
-  {
-    title: "Tokens",
-    href: "/tokens",
-    icon: Blend,
-    children: [
-      { title: "Semantic Tokens", href: "/tokens#semantic" },
-      { title: "Brand Tokens", href: "/tokens#brand" },
-      { title: "Chart Tokens", href: "/tokens#chart" },
-      { title: "Spacing", href: "/tokens#spacing" },
-      { title: "Border Radius", href: "/tokens#border-radius" },
-      { title: "Shadows", href: "/tokens#shadows" },
-      { title: "Typography", href: "/tokens#typography" },
-      { title: "Sidebar Tokens", href: "/tokens#sidebar" },
-    ],
-  },
-]
+import { useDSLang } from "./ds-lang-context"
+import type { DSLang } from "@/lib/ds-i18n"
 
 export function SidebarNav() {
   const pathname = usePathname()
+  const { t, lang, setLang } = useDSLang()
+  const n = t.nav
+
+  const navItems = [
+    {
+      title: n.overview,
+      href: "/",
+      icon: Home,
+    },
+    {
+      title: n.designPrinciples,
+      href: "/principles",
+      icon: BookOpen,
+      children: [
+        { title: n.thePrinciples, href: "/principles#principles" },
+        { title: n.resources, href: "/principles#resources" },
+        { title: n.whenPrinciplesOverlap, href: "/principles#conflicts" },
+      ],
+    },
+    {
+      title: n.editorialGuidelines,
+      href: "/editorial-guidelines",
+      icon: PenLine,
+      children: [
+        { title: n.voiceTone, href: "/editorial-guidelines#voice" },
+        { title: n.writingPatterns, href: "/editorial-guidelines#patterns" },
+        { title: n.multilingual, href: "/editorial-guidelines#multilingual" },
+        { title: n.contentTokens, href: "/editorial-guidelines#tokens" },
+        { title: n.commonPitfalls, href: "/editorial-guidelines#pitfalls" },
+        { title: n.quickReference, href: "/editorial-guidelines#reference" },
+      ],
+    },
+    {
+      title: n.colors,
+      href: "/colors",
+      icon: Palette,
+      children: [
+        { title: n.primaryPalette, href: "/colors#primary" },
+        { title: n.secondaryPalette, href: "/colors#secondary" },
+        { title: n.colorways, href: "/colors#colorways" },
+      ],
+    },
+    {
+      title: n.typography,
+      href: "/typography",
+      icon: Type,
+      children: [
+        { title: n.fontFamilies, href: "/typography#fonts" },
+        { title: n.weights, href: "/typography#weights" },
+        { title: n.typeScale, href: "/typography#scale" },
+      ],
+    },
+    {
+      title: n.illustrations,
+      href: "/illustrations",
+      icon: Images,
+      children: [
+        { title: n.brandCharacters, href: "/illustrations#brand" },
+        { title: n.flags3D, href: "/illustrations#flags-3d" },
+        { title: n.flagsOriginal, href: "/illustrations#flags-og" },
+        { title: n.hands, href: "/illustrations#hands" },
+        { title: n.moneyPayments, href: "/illustrations#money" },
+        { title: n.communication, href: "/illustrations#communication" },
+        { title: n.statusAlerts, href: "/illustrations#status" },
+        { title: n.navigationMaps, href: "/illustrations#navigation" },
+        { title: n.other, href: "/illustrations#other" },
+      ],
+    },
+    {
+      title: n.components,
+      href: "/components",
+      icon: Component,
+      children: [
+        { title: n.buttons, href: "/components#buttons" },
+        { title: n.cards, href: "/components#cards" },
+        { title: n.inputs, href: "/components#inputs" },
+        { title: n.badges, href: "/components#badges" },
+      ],
+    },
+    {
+      title: n.tokens,
+      href: "/tokens",
+      icon: Blend,
+      children: [
+        { title: n.semanticTokens, href: "/tokens#semantic" },
+        { title: n.brandTokens, href: "/tokens#brand" },
+        { title: n.chartTokens, href: "/tokens#chart" },
+        { title: n.spacing, href: "/tokens#spacing" },
+        { title: n.borderRadius, href: "/tokens#border-radius" },
+        { title: n.shadows, href: "/tokens#shadows" },
+        { title: n.typographyTokens, href: "/tokens#typography" },
+        { title: n.sidebarTokens, href: "/tokens#sidebar" },
+      ],
+    },
+  ]
+
+  const langOptions: { code: DSLang; label: string }[] = [
+    { code: 'en',    label: 'EN' },
+    { code: 'es-mx', label: 'ES' },
+    { code: 'pt-br', label: 'PT' },
+  ]
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-sidebar-border bg-sidebar">
@@ -120,7 +131,7 @@ export function SidebarNav() {
             <FelixLogo className="h-6 w-auto text-turquoise" />
           </Link>
           <span className="text-xs font-medium uppercase tracking-[0.01em] leading-[1.4] text-turquoise-600">
-            Design System
+            {n.designSystem}
           </span>
         </div>
 
@@ -170,9 +181,29 @@ export function SidebarNav() {
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-sidebar-border p-4">
+        <div className="border-t border-sidebar-border p-4 space-y-3">
+          {/* Language picker */}
+          <div className="flex items-center gap-2">
+            <Globe className="h-3.5 w-3.5 text-sidebar-foreground/40 flex-shrink-0" />
+            <div className="flex gap-1">
+              {langOptions.map(({ code, label }) => (
+                <button
+                  key={code}
+                  onClick={() => setLang(code)}
+                  className={cn(
+                    "px-2 py-0.5 rounded text-xs font-semibold transition-colors",
+                    lang === code
+                      ? "bg-turquoise/20 text-turquoise"
+                      : "text-sidebar-foreground/40 hover:text-sidebar-foreground/70"
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
           <p className="text-xs leading-[1.4] tracking-[0.01em] text-sidebar-foreground/60">
-            Version 1.0.0
+            {n.version}
           </p>
         </div>
       </div>

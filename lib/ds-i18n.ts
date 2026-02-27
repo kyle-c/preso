@@ -48,6 +48,7 @@ export interface DSStrings {
     typographyTokens: string
     sidebarTokens: string
     reference: string
+    referenceMd: string
     refStack: string
     refPrinciples: string
     refColors: string
@@ -162,6 +163,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       typographyTokens: 'Typography',
       sidebarTokens: 'Sidebar Tokens',
       reference: 'Reference',
+      referenceMd: 'Raw Markdown',
       refStack: 'Stack & Setup',
       refPrinciples: 'Principles',
       refColors: 'Colors',
@@ -274,6 +276,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       typographyTokens: 'Tipografía',
       sidebarTokens: 'Tokens de Barra Lateral',
       reference: 'Referencia',
+      referenceMd: 'Markdown Crudo',
       refStack: 'Stack y Config',
       refPrinciples: 'Principios',
       refColors: 'Colores',
@@ -386,6 +389,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
       typographyTokens: 'Tipografia',
       sidebarTokens: 'Tokens da Barra Lateral',
       reference: 'Referência',
+      referenceMd: 'Markdown Bruto',
       refStack: 'Stack e Config',
       refPrinciples: 'Princípios',
       refColors: 'Cores',

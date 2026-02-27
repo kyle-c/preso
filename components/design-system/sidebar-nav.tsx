@@ -14,6 +14,7 @@ import {
   Images,
   Globe,
   FileText,
+  FileCode2,
 } from "lucide-react"
 import { FelixLogo } from "./felix-logo"
 import { useDSLang } from "./ds-lang-context"
@@ -132,6 +133,11 @@ export function SidebarNav() {
         { title: n.refFintechFlows, href: "/reference#fintech-flow-architecture" },
         { title: n.refPresentation, href: "/reference#presentation-system" },
       ],
+    },
+    {
+      title: n.referenceMd,
+      href: "/md",
+      icon: FileCode2,
     },
   ]
 

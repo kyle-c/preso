@@ -3,6 +3,7 @@ import { Section } from "@/components/design-system/section"
 
 type Illustration = {
   name: string
+  token: string
   hasPng: boolean
 }
 
@@ -19,11 +20,11 @@ const categories: Category[] = [
     label: "Brand & Characters",
     description: "Core brand illustrations featuring the Félix character used across the product experience.",
     items: [
-      { name: "Félix Illo 1", hasPng: true },
-      { name: "Félix Illo 2", hasPng: true },
-      { name: "Félix Illo 3", hasPng: true },
-      { name: "Félix Illo 4", hasPng: true },
-      { name: "Félix Illo 5", hasPng: true },
+      { name: "Félix Illo 1", token: "illustration/brand/felix-1", hasPng: true },
+      { name: "Félix Illo 2", token: "illustration/brand/felix-2", hasPng: true },
+      { name: "Félix Illo 3", token: "illustration/brand/felix-3", hasPng: true },
+      { name: "Félix Illo 4", token: "illustration/brand/felix-4", hasPng: true },
+      { name: "Félix Illo 5", token: "illustration/brand/felix-5", hasPng: true },
     ],
   },
   {
@@ -31,14 +32,14 @@ const categories: Category[] = [
     label: "Flags — 3D",
     description: "Three-dimensional flag illustrations for supported send-to countries.",
     items: [
-      { name: "Flag 3d MX", hasPng: true },
-      { name: "Flag 3d GT", hasPng: true },
-      { name: "Flag 3d SV", hasPng: true },
-      { name: "Flag 3d a HND", hasPng: true },
-      { name: "Flag 3d NIC", hasPng: true },
-      { name: "Flag 3d RD", hasPng: true },
-      { name: "Flag 3d CO", hasPng: true },
-      { name: "Flags", hasPng: true },
+      { name: "Flag 3d MX", token: "illustration/flags-3d/mx", hasPng: true },
+      { name: "Flag 3d GT", token: "illustration/flags-3d/gt", hasPng: true },
+      { name: "Flag 3d SV", token: "illustration/flags-3d/sv", hasPng: true },
+      { name: "Flag 3d a HND", token: "illustration/flags-3d/hnd", hasPng: true },
+      { name: "Flag 3d NIC", token: "illustration/flags-3d/nic", hasPng: true },
+      { name: "Flag 3d RD", token: "illustration/flags-3d/rd", hasPng: true },
+      { name: "Flag 3d CO", token: "illustration/flags-3d/co", hasPng: true },
+      { name: "Flags", token: "illustration/flags-3d/all", hasPng: true },
     ],
   },
   {
@@ -46,13 +47,13 @@ const categories: Category[] = [
     label: "Flags — Original Style",
     description: "Flat-style flag illustrations in the original hand-drawn aesthetic.",
     items: [
-      { name: "Flag OG - Mexico", hasPng: true },
-      { name: "Flag OG - Guatemala", hasPng: true },
-      { name: "Flag OG - El Salvador", hasPng: true },
-      { name: "Flag OG - Honduras", hasPng: true },
-      { name: "Flag OG - Nicaragua", hasPng: true },
-      { name: "Flag OG - Republica Dominicana", hasPng: true },
-      { name: "Flag OG - Colombia", hasPng: true },
+      { name: "Flag OG - Mexico", token: "illustration/flags-og/mx", hasPng: true },
+      { name: "Flag OG - Guatemala", token: "illustration/flags-og/gt", hasPng: true },
+      { name: "Flag OG - El Salvador", token: "illustration/flags-og/sv", hasPng: true },
+      { name: "Flag OG - Honduras", token: "illustration/flags-og/hnd", hasPng: true },
+      { name: "Flag OG - Nicaragua", token: "illustration/flags-og/nic", hasPng: true },
+      { name: "Flag OG - Republica Dominicana", token: "illustration/flags-og/rd", hasPng: true },
+      { name: "Flag OG - Colombia", token: "illustration/flags-og/co", hasPng: true },
     ],
   },
   {
@@ -60,17 +61,17 @@ const categories: Category[] = [
     label: "Hands",
     description: "Hand illustrations for CTAs, feature explanations, and onboarding moments.",
     items: [
-      { name: "Hand - Dollar Bills 1", hasPng: true },
-      { name: "Hand - Dollar Bills 2", hasPng: true },
-      { name: "Hand - Dollar Bills 3", hasPng: true },
-      { name: "Hand - Card 1", hasPng: true },
-      { name: "Hand - Card 2", hasPng: true },
-      { name: "Hand - Cell Phone OK", hasPng: true },
-      { name: "Hand - Star - Perks", hasPng: true },
-      { name: "Hand - Stars", hasPng: true },
-      { name: "Hand - Tool", hasPng: true },
-      { name: "Hands - 2 Cell Phones - Love", hasPng: true },
-      { name: "Hands - 2 Cell Phones - Juntos we Succeed", hasPng: true },
+      { name: "Hand - Dollar Bills 1", token: "illustration/hands/dollar-bills-1", hasPng: true },
+      { name: "Hand - Dollar Bills 2", token: "illustration/hands/dollar-bills-2", hasPng: true },
+      { name: "Hand - Dollar Bills 3", token: "illustration/hands/dollar-bills-3", hasPng: true },
+      { name: "Hand - Card 1", token: "illustration/hands/card-1", hasPng: true },
+      { name: "Hand - Card 2", token: "illustration/hands/card-2", hasPng: true },
+      { name: "Hand - Cell Phone OK", token: "illustration/hands/cell-phone-ok", hasPng: true },
+      { name: "Hand - Star - Perks", token: "illustration/hands/star-perks", hasPng: true },
+      { name: "Hand - Stars", token: "illustration/hands/stars", hasPng: true },
+      { name: "Hand - Tool", token: "illustration/hands/tool", hasPng: true },
+      { name: "Hands - 2 Cell Phones - Love", token: "illustration/hands/2-phones-love", hasPng: true },
+      { name: "Hands - 2 Cell Phones - Juntos we Succeed", token: "illustration/hands/2-phones-juntos", hasPng: true },
     ],
   },
   {
@@ -78,35 +79,35 @@ const categories: Category[] = [
     label: "Money & Payments",
     description: "Illustrations for payment flows, transfer confirmations, and financial feature moments.",
     items: [
-      { name: "Dollar bill", hasPng: true },
-      { name: "Dollar bills + Coins A", hasPng: true },
-      { name: "Dollar bills + Coins B - Turquoise", hasPng: true },
-      { name: "Flying Dollar Bills - Turquoise", hasPng: true },
-      { name: "Coin - Lime", hasPng: true },
-      { name: "Coins x2 v1", hasPng: true },
-      { name: "Coins x2 v2", hasPng: true },
-      { name: "Stack of coins - Lime", hasPng: true },
-      { name: "Cloud Coin - Turquoise", hasPng: true },
-      { name: "Cards", hasPng: true },
-      { name: "ATM + cell phone", hasPng: true },
-      { name: "Credit Score + Calculator", hasPng: true },
-      { name: "Calculator + Stack of coins", hasPng: true },
-      { name: "Cell Phone + Flying Dollar Bills - Turquoise", hasPng: true },
-      { name: "Cell Phone + Flying Dollar Bills - Turquoise 2", hasPng: true },
-      { name: "Paper Airplane + Coin - Turquoise", hasPng: true },
-      { name: "Paper Airplane + Dollar Bills", hasPng: true },
-      { name: "3 Paper Airplanes + Coins", hasPng: true },
-      { name: "Gift Box + Coins", hasPng: true },
-      { name: "Gift Box + Hands + Bills", hasPng: true },
-      { name: "Magic hat and magic wand + dollar bill", hasPng: true },
-      { name: "Rocket Launch - Growth + Coin - Turquoise", hasPng: true },
-      { name: "Rocket Launch + Coin - Growth - Lime", hasPng: true },
-      { name: "Speaker + Dollar Bill", hasPng: true },
-      { name: "Payday + Calendar + Cell Phone", hasPng: true },
-      { name: "Repeat A", hasPng: true },
-      { name: "Repeat B", hasPng: true },
-      { name: "card", hasPng: false },
-      { name: "cash", hasPng: false },
+      { name: "Dollar bill", token: "illustration/money/dollar-bill", hasPng: true },
+      { name: "Dollar bills + Coins A", token: "illustration/money/dollar-bills-coins-a", hasPng: true },
+      { name: "Dollar bills + Coins B - Turquoise", token: "illustration/money/dollar-bills-coins-b", hasPng: true },
+      { name: "Flying Dollar Bills - Turquoise", token: "illustration/money/flying-bills", hasPng: true },
+      { name: "Coin - Lime", token: "illustration/money/coin-lime", hasPng: true },
+      { name: "Coins x2 v1", token: "illustration/money/coins-v1", hasPng: true },
+      { name: "Coins x2 v2", token: "illustration/money/coins-v2", hasPng: true },
+      { name: "Stack of coins - Lime", token: "illustration/money/coin-stack", hasPng: true },
+      { name: "Cloud Coin - Turquoise", token: "illustration/money/cloud-coin", hasPng: true },
+      { name: "Cards", token: "illustration/money/cards", hasPng: true },
+      { name: "ATM + cell phone", token: "illustration/money/atm-phone", hasPng: true },
+      { name: "Credit Score + Calculator", token: "illustration/money/credit-score", hasPng: true },
+      { name: "Calculator + Stack of coins", token: "illustration/money/calculator-coins", hasPng: true },
+      { name: "Cell Phone + Flying Dollar Bills - Turquoise", token: "illustration/money/phone-bills", hasPng: true },
+      { name: "Cell Phone + Flying Dollar Bills - Turquoise 2", token: "illustration/money/phone-bills-2", hasPng: true },
+      { name: "Paper Airplane + Coin - Turquoise", token: "illustration/money/paper-plane-coin", hasPng: true },
+      { name: "Paper Airplane + Dollar Bills", token: "illustration/money/paper-plane-bills", hasPng: true },
+      { name: "3 Paper Airplanes + Coins", token: "illustration/money/3-paper-planes", hasPng: true },
+      { name: "Gift Box + Coins", token: "illustration/money/gift-coins", hasPng: true },
+      { name: "Gift Box + Hands + Bills", token: "illustration/money/gift-hands-bills", hasPng: true },
+      { name: "Magic hat and magic wand + dollar bill", token: "illustration/money/magic-hat", hasPng: true },
+      { name: "Rocket Launch - Growth + Coin - Turquoise", token: "illustration/money/rocket-coin-turquoise", hasPng: true },
+      { name: "Rocket Launch + Coin - Growth - Lime", token: "illustration/money/rocket-coin-lime", hasPng: true },
+      { name: "Speaker + Dollar Bill", token: "illustration/money/speaker-bill", hasPng: true },
+      { name: "Payday + Calendar + Cell Phone", token: "illustration/money/payday", hasPng: true },
+      { name: "Repeat A", token: "illustration/money/repeat-a", hasPng: true },
+      { name: "Repeat B", token: "illustration/money/repeat-b", hasPng: true },
+      { name: "card", token: "illustration/money/card", hasPng: false },
+      { name: "cash", token: "illustration/money/cash", hasPng: false },
     ],
   },
   {
@@ -114,17 +115,17 @@ const categories: Category[] = [
     label: "Communication",
     description: "Illustrations for messaging, notifications, support, and social sharing.",
     items: [
-      { name: "Speech Bubble", hasPng: true },
-      { name: "Speech Bubble 2", hasPng: true },
-      { name: "Speech Bubbles", hasPng: true },
-      { name: "Speech Bubbles + Hearts", hasPng: true },
-      { name: "Letter in Envelope", hasPng: true },
-      { name: "Headphones", hasPng: true },
-      { name: "Speaker", hasPng: true },
-      { name: "Heart -Félix", hasPng: true },
-      { name: "Survey", hasPng: true },
-      { name: "Verification WA 1", hasPng: true },
-      { name: "Verification WA 3", hasPng: true },
+      { name: "Speech Bubble", token: "illustration/communication/speech-bubble", hasPng: true },
+      { name: "Speech Bubble 2", token: "illustration/communication/speech-bubble-2", hasPng: true },
+      { name: "Speech Bubbles", token: "illustration/communication/speech-bubbles", hasPng: true },
+      { name: "Speech Bubbles + Hearts", token: "illustration/communication/speech-bubbles-hearts", hasPng: true },
+      { name: "Letter in Envelope", token: "illustration/communication/letter", hasPng: true },
+      { name: "Headphones", token: "illustration/communication/headphones", hasPng: true },
+      { name: "Speaker", token: "illustration/communication/speaker", hasPng: true },
+      { name: "Heart -Félix", token: "illustration/communication/heart", hasPng: true },
+      { name: "Survey", token: "illustration/communication/survey", hasPng: true },
+      { name: "Verification WA 1", token: "illustration/communication/verification-1", hasPng: true },
+      { name: "Verification WA 3", token: "illustration/communication/verification-3", hasPng: true },
     ],
   },
   {
@@ -132,14 +133,14 @@ const categories: Category[] = [
     label: "Status & Alerts",
     description: "Illustrations for confirmation, error, loading, and other state communication.",
     items: [
-      { name: "Check", hasPng: true },
-      { name: "Party Popper", hasPng: true },
-      { name: "Attention", hasPng: true },
-      { name: "Attention - Siren", hasPng: true },
-      { name: "Error", hasPng: true },
-      { name: "Fast", hasPng: true },
-      { name: "Lock", hasPng: true },
-      { name: "Diffusion", hasPng: true },
+      { name: "Check", token: "illustration/status/check", hasPng: true },
+      { name: "Party Popper", token: "illustration/status/party-popper", hasPng: true },
+      { name: "Attention", token: "illustration/status/attention", hasPng: true },
+      { name: "Attention - Siren", token: "illustration/status/siren", hasPng: true },
+      { name: "Error", token: "illustration/status/error", hasPng: true },
+      { name: "Fast", token: "illustration/status/fast", hasPng: true },
+      { name: "Lock", token: "illustration/status/lock", hasPng: true },
+      { name: "Diffusion", token: "illustration/status/diffusion", hasPng: true },
     ],
   },
   {
@@ -147,9 +148,9 @@ const categories: Category[] = [
     label: "Navigation & Maps",
     description: "Location and map illustrations for the store finder and cash payment flows.",
     items: [
-      { name: "Map", hasPng: true },
-      { name: "Map + F symbol", hasPng: true },
-      { name: "Map Marker", hasPng: true },
+      { name: "Map", token: "illustration/navigation/map", hasPng: true },
+      { name: "Map + F symbol", token: "illustration/navigation/map-f", hasPng: true },
+      { name: "Map Marker", token: "illustration/navigation/map-marker", hasPng: true },
     ],
   },
   {
@@ -157,13 +158,13 @@ const categories: Category[] = [
     label: "Other",
     description: "Supporting illustrations for product features, onboarding, and utility moments.",
     items: [
-      { name: "Bank", hasPng: true },
-      { name: "Bot", hasPng: true },
-      { name: "Laptop Dark", hasPng: true },
-      { name: "Laptop Dark-1", hasPng: true },
-      { name: "Magnifying Glass", hasPng: true },
-      { name: "Passport", hasPng: true },
-      { name: "ray", hasPng: true },
+      { name: "Bank", token: "illustration/other/bank", hasPng: true },
+      { name: "Bot", token: "illustration/other/bot", hasPng: true },
+      { name: "Laptop Dark", token: "illustration/other/laptop-dark", hasPng: true },
+      { name: "Laptop Dark-1", token: "illustration/other/laptop-dark-1", hasPng: true },
+      { name: "Magnifying Glass", token: "illustration/other/magnifying-glass", hasPng: true },
+      { name: "Passport", token: "illustration/other/passport", hasPng: true },
+      { name: "ray", token: "illustration/other/ray", hasPng: true },
     ],
   },
 ]
@@ -186,11 +187,16 @@ function IllustrationCard({ item }: { item: Illustration }) {
         />
       </div>
 
-      {/* Name + Actions */}
-      <div className="flex flex-col gap-3 p-3">
-        <p className="text-[13px] font-medium leading-snug text-foreground line-clamp-2 min-h-[2.5rem]">
-          {item.name}
-        </p>
+      {/* Name + Token + Actions */}
+      <div className="flex flex-col gap-2.5 p-3">
+        <div>
+          <p className="text-[13px] font-medium leading-snug text-foreground line-clamp-2">
+            {item.name}
+          </p>
+          <p className="mt-0.5 text-[10px] font-mono text-muted-foreground/60 leading-tight truncate">
+            {item.token}
+          </p>
+        </div>
         <div className="flex gap-1.5">
           <a
             href={svgPath}

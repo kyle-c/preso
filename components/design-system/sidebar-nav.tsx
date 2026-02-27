@@ -55,6 +55,16 @@ const navItems = [
     ],
   },
   {
+    title: "Typography",
+    href: "/typography",
+    icon: Type,
+    children: [
+      { title: "Font Families", href: "/typography#fonts" },
+      { title: "Weights", href: "/typography#weights" },
+      { title: "Type Scale", href: "/typography#scale" },
+    ],
+  },
+  {
     title: "Illustrations",
     href: "/illustrations",
     icon: Images,
@@ -68,16 +78,6 @@ const navItems = [
       { title: "Status & Alerts", href: "/illustrations#status" },
       { title: "Navigation & Maps", href: "/illustrations#navigation" },
       { title: "Other", href: "/illustrations#other" },
-    ],
-  },
-  {
-    title: "Typography",
-    href: "/typography",
-    icon: Type,
-    children: [
-      { title: "Font Families", href: "/typography#fonts" },
-      { title: "Weights", href: "/typography#weights" },
-      { title: "Type Scale", href: "/typography#scale" },
     ],
   },
   {

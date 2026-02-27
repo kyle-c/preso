@@ -4,23 +4,19 @@ import { DesignSystemLayout } from "@/components/design-system/design-system-lay
 import { Section } from "@/components/design-system/section"
 import { useDSLang, renderBold } from "@/components/design-system/ds-lang-context"
 import Link from "next/link"
-import { Palette, Type, Component, Blend, Compass, Images } from "lucide-react"
-
-const featureColors = ['bg-sky', 'bg-turquoise', 'bg-cactus', 'bg-mango', 'bg-blueberry', 'bg-lime'] as const
-const featureIcons = [Compass, Palette, Type, Component, Blend, Images]
-const featureHrefs = ['/principles', '/colors', '/typography', '/components', '/tokens', '/illustrations'] as const
+import Image from "next/image"
 
 export default function HomePage() {
   const { t } = useDSLang()
   const h = t.home
 
   const features = [
-    { ...h.feat.principles,   href: '/principles',   icon: Compass,    color: 'bg-sky' },
-    { ...h.feat.colors,       href: '/colors',       icon: Palette,    color: 'bg-turquoise' },
-    { ...h.feat.typography,   href: '/typography',   icon: Type,       color: 'bg-cactus' },
-    { ...h.feat.components,   href: '/components',   icon: Component,  color: 'bg-mango' },
-    { ...h.feat.tokens,       href: '/tokens',       icon: Blend,      color: 'bg-blueberry' },
-    { ...h.feat.illustrations,href: '/illustrations',icon: Images,     color: 'bg-lime' },
+    { ...h.feat.principles,   href: '/principles',    img: '/navicons/principles.png' },
+    { ...h.feat.colors,       href: '/colors',        img: '/navicons/colors.png' },
+    { ...h.feat.typography,   href: '/typography',    img: '/navicons/typography.png' },
+    { ...h.feat.components,   href: '/components',    img: '/navicons/components.png' },
+    { ...h.feat.tokens,       href: '/tokens',        img: '/navicons/tokens.png' },
+    { ...h.feat.illustrations,href: '/illustrations', img: '/navicons/illustrations.png' },
   ]
 
   return (
@@ -74,24 +70,23 @@ export default function HomePage() {
         description={h.gettingStartedDesc}
       >
         <div className="grid gap-6 md:grid-cols-2">
-          {features.map((feature) => {
-            const Icon = feature.icon
-            return (
+          {features.map((feature) => (
               <Link
                 key={feature.href}
                 href={feature.href}
-                className="group rounded-xl border border-border bg-white p-6 transition-all hover:shadow-md hover:-translate-y-0.5"
+                className="group flex items-center gap-5 rounded-xl border border-border bg-white p-5 transition-all hover:shadow-md hover:-translate-y-0.5"
               >
-                <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg ${feature.color}`}>
-                  <Icon className="h-6 w-6 text-slate" />
+                <div className="h-32 w-32 flex-shrink-0">
+                  <Image src={feature.img} alt={feature.title} width={128} height={128} className="object-contain" />
                 </div>
-                <h3 className="mb-2 font-display text-xl font-bold text-foreground group-hover:text-link">
-                  {feature.title}
-                </h3>
-                <p className="text-muted-foreground">{feature.desc}</p>
+                <div className="min-w-0">
+                  <h3 className="mb-1.5 font-display text-2xl font-bold text-foreground group-hover:text-link">
+                    {feature.title}
+                  </h3>
+                  <p className="text-[15px] leading-relaxed text-muted-foreground">{feature.desc}</p>
+                </div>
               </Link>
-            )
-          })}
+          ))}
         </div>
       </Section>
 

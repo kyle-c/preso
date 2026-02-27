@@ -36,6 +36,7 @@ export interface ContentTokens {
   }
   address: {
     titleBilling: string
+    titleBank: string
     titleCash: string
     helperCash: string
     fieldAddress: string
@@ -79,6 +80,11 @@ export interface ContentTokens {
     sendNow: string
     legal: string
     learnMore: string
+    changeSheetTitle: string
+    changeCard: string
+    changeBank: string
+    changeStore: string
+    changeMethod: string
   }
   success: {
     title: string
@@ -87,6 +93,40 @@ export interface ContentTokens {
     referralBody: string
     shareWhatsApp: string
     backToWhatsApp: string
+  }
+  bankConsent: {
+    title: string
+    body: string
+    agree: string
+  }
+  bankConnect: {
+    title: string
+    subtitle: string
+    fieldFirstName: string
+    fieldMiddleName: string
+    fieldLastName: string
+    linkAccount: string
+  }
+  stripe: {
+    selectTitle: string
+    selectSearch: string
+    introTitle: string
+    introFast: string
+    introFastDesc: string
+    introEncrypted: string
+    introEncryptedDesc: string
+    introConsent: string
+    introAccept: string
+    introManual: string
+    accountTitle: string
+    accountConnect: string
+    linkTitle: string
+    linkDesc: string
+    linkSave: string
+    linkSkip: string
+    completedTitle: string
+    completedSubtitle: string
+    completedDone: string
   }
 }
 
@@ -121,6 +161,7 @@ export const content: Record<Language, ContentTokens> = {
     },
     address: {
       titleBilling: "What's the billing address on your card?",
+      titleBank: 'Enter the address linked to your account',
       titleCash: "What's your address?",
       helperCash: "We'll use this to find the closest store locations where you can pay.",
       fieldAddress: 'Address *',
@@ -164,6 +205,11 @@ export const content: Record<Language, ContentTokens> = {
       sendNow: 'Send now',
       legal: "For questions or complaints about Zero Hash LLC, contact your state's regulatory agency.",
       learnMore: 'Learn more.',
+      changeSheetTitle: 'Change payment',
+      changeCard: 'Use a different card',
+      changeBank: 'Use a different bank account',
+      changeStore: 'Use a different store',
+      changeMethod: 'Change payment method',
     },
     success: {
       title: 'Your payment went through!',
@@ -172,6 +218,40 @@ export const content: Record<Language, ContentTokens> = {
       referralBody: 'Earn $20 USD for each friend who makes their first transfer',
       shareWhatsApp: 'Share on WhatsApp',
       backToWhatsApp: 'Back to WhatsApp',
+    },
+    bankConsent: {
+      title: 'Consent for bank charges',
+      body: 'By clicking I agree, you authorize Félix Pago to charge the previously specified bank account for any amount owed for expenses derived from the use of Félix Pago services and/or the purchase of Félix Pago products, in accordance with the website and the terms of Félix Pago, until this authorization is revoked. You may modify or cancel this authorization at any time by notifying Félix Pago.',
+      agree: 'I agree',
+    },
+    bankConnect: {
+      title: 'Connect your account',
+      subtitle: "Enter the account holder's information",
+      fieldFirstName: 'First name *',
+      fieldMiddleName: 'Middle name',
+      fieldLastName: 'Last name *',
+      linkAccount: 'Link account',
+    },
+    stripe: {
+      selectTitle: 'Select your bank',
+      selectSearch: 'Search',
+      introTitle: 'Félix uses Stripe to connect your accounts',
+      introFast: 'Fast and simple',
+      introFastDesc: 'Connect your account in seconds.',
+      introEncrypted: 'Your data is encrypted',
+      introEncryptedDesc: 'Félix can access your data. You can disconnect at any time.',
+      introConsent: "By continuing, you accept Stripe's Terms and Privacy Policy.",
+      introAccept: 'Accept and continue',
+      introManual: 'Or verify manually (may take 1–2 business days)',
+      accountTitle: 'Choose an account',
+      accountConnect: 'Connect Account',
+      linkTitle: 'Save your account with Link',
+      linkDesc: 'Connect faster everywhere that accepts Link. Link encrypts your data and never shares your login information.',
+      linkSave: 'Save with Link',
+      linkSkip: 'Finish without saving',
+      completedTitle: 'Completed successfully',
+      completedSubtitle: 'Your account has been connected.',
+      completedDone: 'Done',
     },
   },
 
@@ -205,6 +285,7 @@ export const content: Record<Language, ContentTokens> = {
     },
     address: {
       titleBilling: '¿Cuál es la dirección de facturación de tu tarjeta?',
+      titleBank: 'Ingresa la dirección vinculada a tu cuenta',
       titleCash: '¿Cuál es tu dirección?',
       helperCash: 'Usaremos esto para encontrar las tiendas más cercanas donde puedes pagar.',
       fieldAddress: 'Dirección *',
@@ -248,6 +329,11 @@ export const content: Record<Language, ContentTokens> = {
       sendNow: 'Enviar ahora',
       legal: 'Para preguntas o quejas sobre Zero Hash LLC, contacta a la agencia reguladora de tu estado.',
       learnMore: 'Más información.',
+      changeSheetTitle: 'Cambiar pago',
+      changeCard: 'Usar otra tarjeta',
+      changeBank: 'Usar otra cuenta bancaria',
+      changeStore: 'Usar otra tienda',
+      changeMethod: 'Cambiar método de pago',
     },
     success: {
       title: '¡Tu pago fue exitoso!',
@@ -256,6 +342,40 @@ export const content: Record<Language, ContentTokens> = {
       referralBody: 'Gana $20 USD por cada amigo que realice su primera transferencia',
       shareWhatsApp: 'Compartir en WhatsApp',
       backToWhatsApp: 'Volver a WhatsApp',
+    },
+    bankConsent: {
+      title: 'Consentimiento para cargos bancarios',
+      body: 'Al hacer clic en Estoy de acuerdo, usted autoriza a Félix Pago a cargar en la cuenta bancaria especificada anteriormente cualquier importe adeudado por los gastos derivados del uso de los servicios de Félix Pago y/o la compra de productos de Félix Pago, de conformidad con el sitio web y los términos de Félix Pago, hasta que se revoque esta autorización. Puede modificar o cancelar esta autorización en cualquier momento notificándolo a Félix Pago.',
+      agree: 'De acuerdo',
+    },
+    bankConnect: {
+      title: 'Conecta tu cuenta',
+      subtitle: 'Ingresa los datos del titular de la cuenta',
+      fieldFirstName: 'Nombre *',
+      fieldMiddleName: 'Segundo nombre',
+      fieldLastName: 'Apellidos *',
+      linkAccount: 'Vincular cuenta',
+    },
+    stripe: {
+      selectTitle: 'Selecciona el banco',
+      selectSearch: 'Busca',
+      introTitle: 'Félix utiliza Stripe para conectar tus cuentas',
+      introFast: 'Rápido y sencillo',
+      introFastDesc: 'Conecta tu cuenta en cuestión de segundos.',
+      introEncrypted: 'Tus datos están cifrados',
+      introEncryptedDesc: 'Félix puede acceder a los datos. Puedes desconectarte en cualquier momento.',
+      introConsent: 'Al continuar, aceptas las Condiciones y Política de privacidad de Stripe.',
+      introAccept: 'Acepta y continúa',
+      introManual: 'O verifica manualmente (puede tardar de 1 a 2 días hábiles)',
+      accountTitle: 'Elige una cuenta',
+      accountConnect: 'Cuenta Connect',
+      linkTitle: 'Guarda la cuenta con Link',
+      linkDesc: 'Conecta más rápido en todos los comercios que acepten Link. Link cifra tus datos y nunca comparte tus datos de inicio de sesión.',
+      linkSave: 'Guárdala con Link',
+      linkSkip: 'Termina sin guardar',
+      completedTitle: 'Completado correctamente',
+      completedSubtitle: 'Tu cuenta se ha conectado.',
+      completedDone: 'Listo',
     },
   },
 
@@ -289,6 +409,7 @@ export const content: Record<Language, ContentTokens> = {
     },
     address: {
       titleBilling: 'Qual é o endereço de cobrança do seu cartão?',
+      titleBank: 'Insira o endereço vinculado à sua conta',
       titleCash: 'Qual é o seu endereço?',
       helperCash: 'Usaremos isso para encontrar as lojas mais próximas onde você pode pagar.',
       fieldAddress: 'Endereço *',
@@ -332,6 +453,11 @@ export const content: Record<Language, ContentTokens> = {
       sendNow: 'Enviar agora',
       legal: 'Para dúvidas ou reclamações sobre a Zero Hash LLC, entre em contato com o órgão regulador do seu estado.',
       learnMore: 'Saiba mais.',
+      changeSheetTitle: 'Alterar pagamento',
+      changeCard: 'Usar outro cartão',
+      changeBank: 'Usar outra conta bancária',
+      changeStore: 'Usar outra loja',
+      changeMethod: 'Alterar forma de pagamento',
     },
     success: {
       title: 'Seu pagamento foi realizado!',
@@ -340,6 +466,40 @@ export const content: Record<Language, ContentTokens> = {
       referralBody: 'Ganhe $20 USD por cada amigo que fizer sua primeira transferência',
       shareWhatsApp: 'Compartilhar no WhatsApp',
       backToWhatsApp: 'Voltar ao WhatsApp',
+    },
+    bankConsent: {
+      title: 'Consentimento para cobranças bancárias',
+      body: 'Ao clicar em Concordo, você autoriza o Félix Pago a debitar na conta bancária especificada anteriormente qualquer valor devido por despesas decorrentes do uso dos serviços do Félix Pago e/ou da compra de produtos do Félix Pago, de acordo com o site e os termos do Félix Pago, até que esta autorização seja revogada. Você pode modificar ou cancelar esta autorização a qualquer momento notificando o Félix Pago.',
+      agree: 'Concordo',
+    },
+    bankConnect: {
+      title: 'Conecte sua conta',
+      subtitle: 'Insira os dados do titular da conta',
+      fieldFirstName: 'Nome *',
+      fieldMiddleName: 'Nome do meio',
+      fieldLastName: 'Sobrenome *',
+      linkAccount: 'Vincular conta',
+    },
+    stripe: {
+      selectTitle: 'Selecione seu banco',
+      selectSearch: 'Buscar',
+      introTitle: 'Félix usa o Stripe para conectar suas contas',
+      introFast: 'Rápido e simples',
+      introFastDesc: 'Conecte sua conta em segundos.',
+      introEncrypted: 'Seus dados são criptografados',
+      introEncryptedDesc: 'O Félix pode acessar seus dados. Você pode se desconectar a qualquer momento.',
+      introConsent: 'Ao continuar, você aceita os Termos e a Política de Privacidade do Stripe.',
+      introAccept: 'Aceitar e continuar',
+      introManual: 'Ou verifique manualmente (pode levar de 1 a 2 dias úteis)',
+      accountTitle: 'Escolha uma conta',
+      accountConnect: 'Conectar Conta',
+      linkTitle: 'Salve sua conta com o Link',
+      linkDesc: 'Conecte mais rápido em todos os comerciantes que aceitam Link. O Link criptografa seus dados e nunca compartilha suas informações de login.',
+      linkSave: 'Salvar com Link',
+      linkSkip: 'Finalizar sem salvar',
+      completedTitle: 'Concluído com sucesso',
+      completedSubtitle: 'Sua conta foi conectada.',
+      completedDone: 'Pronto',
     },
   },
 }

@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { FelixLogo } from '@/components/design-system/felix-logo'
 import { Button } from '@/components/ui/button'
 import { FloatingInput } from '@/components/ui/floating-input'
-import { ChevronLeft, Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin, Layers } from 'lucide-react'
+import { ChevronLeft, Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin, Layers, X, Search, Shield, Zap, Check, Building2 } from 'lucide-react'
 import { type Language, type ContentTokens, languages, content } from './content'
 
 // ─── Language context ────────────────────────────────────────────────────────
@@ -202,7 +202,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           title={t.paymentMethod.bankName}
           desc={t.paymentMethod.bankDesc}
           badges={[t.paymentMethod.badgeNoFee, t.paymentMethod.badgeBusinessDays]}
-          illustration="/illustrations/bank.svg"
+          illustration="/illustrations/Bank.svg"
           imgClassName="h-[58px]"
           selectedLabel={t.common.selected}
         />
@@ -237,6 +237,7 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
   const [state, setState] = useState('')
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const isCash = paymentMethod === 'cash'
+  const isBank = paymentMethod === 'bank'
 
   function validate(field: string, value: string): string | undefined {
     if (field === 'address') return !value ? 'Address is required' : undefined
@@ -265,7 +266,7 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
 
       <div className="flex-1 px-6 pb-6 overflow-y-auto">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-2">
-          {isCash ? t.address.titleCash : t.address.titleBilling}
+          {isCash ? t.address.titleCash : isBank ? t.address.titleBank : t.address.titleBilling}
         </h1>
         {isCash && (
           <p className="text-[14px] text-mocha mb-5 leading-snug">{t.address.helperCash}</p>
@@ -540,15 +541,18 @@ function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: 
   )
 }
 
-function ReviewScreen({ onNext, onBack, onChangePayment, paymentMethod, selectedStore }: {
+function ReviewScreen({ onNext, onBack, onChangeContextual, onChangePaymentMethod, paymentMethod, selectedStore, defaultShowSheet = false }: {
   onNext: () => void
   onBack: () => void
-  onChangePayment: () => void
+  onChangeContextual: () => void
+  onChangePaymentMethod: () => void
   paymentMethod: string
   selectedStore: string
+  defaultShowSheet?: boolean
 }) {
   const t = useT()
   const [feesExpanded, setFeesExpanded] = useState(false)
+  const [showSheet, setShowSheet] = useState(defaultShowSheet)
 
   const store = stores.find(s => s.id === selectedStore)
   const storeFee = paymentMethod === 'cash' ? parseFloat(store?.fee.replace('$', '') ?? '0') : 0
@@ -559,7 +563,7 @@ function ReviewScreen({ onNext, onBack, onChangePayment, paymentMethod, selected
   const storeFeeLabel = t.review.storeFee.replace('{store}', store?.name ?? '')
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="relative flex flex-col h-full">
       <ScreenHeader />
 
       <div className="px-6 pt-3 pb-1">
@@ -584,11 +588,11 @@ function ReviewScreen({ onNext, onBack, onChangePayment, paymentMethod, selected
           <div className="px-4 py-3.5 flex items-center justify-between">
             <span className="text-[13px] text-mocha">{t.review.paymentMethodLabel}</span>
             <div className="flex items-center gap-2">
-              {paymentMethod === 'cash' ? <MapPin className="h-4 w-4 text-slate/40" /> : <CreditCard className="h-4 w-4 text-slate/40" />}
+              {paymentMethod === 'cash' ? <MapPin className="h-4 w-4 text-slate/40" /> : paymentMethod === 'bank' ? <Building2 className="h-4 w-4 text-slate/40" /> : <CreditCard className="h-4 w-4 text-slate/40" />}
               <span className="font-semibold text-[14px] text-slate">
-                {paymentMethod === 'cash' ? (store?.name ?? t.paymentMethod.cashName) : '**** 5164'}
+                {paymentMethod === 'cash' ? (store?.name ?? t.paymentMethod.cashName) : paymentMethod === 'bank' ? 'Premier ····0010' : '**** 5164'}
               </span>
-              <button onClick={onChangePayment} className="text-[13px] font-semibold text-mocha underline decoration-mocha underline-offset-4 hover:text-slate hover:decoration-slate ml-1">
+              <button onClick={() => setShowSheet(true)} className="text-[13px] font-semibold text-mocha underline decoration-mocha underline-offset-4 hover:text-slate hover:decoration-slate ml-1">
                 {t.common.change}
               </button>
             </div>
@@ -650,6 +654,51 @@ function ReviewScreen({ onNext, onBack, onChangePayment, paymentMethod, selected
           </span>
         </p>
       </div>
+
+      {/* Action sheet overlay */}
+      {showSheet && (
+        <div className="absolute inset-0 z-50 flex flex-col justify-end">
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/40" onClick={() => setShowSheet(false)} />
+          {/* Sheet */}
+          <div className="relative bg-white rounded-t-2xl">
+            {/* Drag handle */}
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="w-9 h-1 rounded-full bg-slate/20" />
+            </div>
+            <div className="px-5 pb-2">
+              <h3 className="text-[17px] font-bold text-slate">{t.review.changeSheetTitle}</h3>
+            </div>
+            <div className="px-5">
+              <button
+                onClick={() => { setShowSheet(false); onChangeContextual() }}
+                className="w-full flex items-center gap-3 py-3.5 text-left"
+              >
+                {paymentMethod === 'cash' ? <MapPin className="h-5 w-5 text-slate/50" /> : paymentMethod === 'bank' ? <Building2 className="h-5 w-5 text-slate/50" /> : <CreditCard className="h-5 w-5 text-slate/50" />}
+                <span className="text-[15px] text-slate">
+                  {paymentMethod === 'cash' ? t.review.changeStore : paymentMethod === 'bank' ? t.review.changeBank : t.review.changeCard}
+                </span>
+              </button>
+              <div className="h-px bg-slate/10" />
+              <button
+                onClick={() => { setShowSheet(false); onChangePaymentMethod() }}
+                className="w-full flex items-center gap-3 py-3.5 text-left"
+              >
+                <Layers className="h-5 w-5 text-slate/50" />
+                <span className="text-[15px] text-slate">{t.review.changeMethod}</span>
+              </button>
+            </div>
+            <div className="px-5 pt-2 pb-6">
+              <button
+                onClick={() => setShowSheet(false)}
+                className="w-full py-3 rounded-xl bg-stone text-[15px] font-semibold text-mocha"
+              >
+                {t.common.cancel}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -674,7 +723,8 @@ function SuccessScreen() {
       <ScreenHeader />
 
       <div className="flex justify-center py-5">
-        <PaperPlane />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/illustrations/cashAirplane.svg" alt="" className="w-36 h-28 object-contain" />
       </div>
 
       <div className="text-center mb-6">
@@ -697,9 +747,323 @@ function SuccessScreen() {
   )
 }
 
+// ─── Bank flow screens ───────────────────────────────────────────────────────
+
+function BankConsentScreen({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+  const t = useT()
+  return (
+    <div className="flex flex-col h-full">
+      <ScreenHeader />
+      <div className="px-6 pt-3 pb-1 flex items-center gap-3">
+        <BackButton onClick={onBack} />
+        <div className="flex-1" />
+        <button onClick={onBack} className="flex h-9 w-9 items-center justify-center rounded-full border border-slate/15 text-slate hover:bg-white">
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+      <div className="flex-1 px-6 pb-6 overflow-y-auto">
+        <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mt-2 mb-4">
+          {t.bankConsent.title}
+        </h1>
+        <p className="text-[14px] text-mocha leading-relaxed mb-8">
+          {t.bankConsent.body}
+        </p>
+        <Button size="lg" className="w-full text-[15px]" onClick={onNext}>
+          {t.bankConsent.agree}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function BankConnectScreen({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+  const t = useT()
+  const [firstName, setFirstName] = useState('')
+  const [middleName, setMiddleName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const canContinue = !!firstName && !!lastName
+
+  const fieldClass = '!rounded-2xl bg-white'
+  const labelClass = 'bg-white text-mocha'
+
+  return (
+    <div className="flex flex-col h-full">
+      <ScreenHeader />
+      <div className="px-6 pt-3 pb-1">
+        <BackButton onClick={onBack} />
+      </div>
+      <div className="flex-1 px-6 pb-6 overflow-y-auto">
+        <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-1">
+          {t.bankConnect.title}
+        </h1>
+        <p className="text-[14px] text-mocha mb-5 leading-snug">{t.bankConnect.subtitle}</p>
+        <div className="space-y-4">
+          <FloatingInput label={t.bankConnect.fieldFirstName} className={fieldClass} labelClassName={labelClass} value={firstName} onChange={e => setFirstName(e.target.value)} />
+          <FloatingInput label={t.bankConnect.fieldMiddleName} className={fieldClass} labelClassName={labelClass} value={middleName} onChange={e => setMiddleName(e.target.value)} />
+          <FloatingInput label={t.bankConnect.fieldLastName} className={fieldClass} labelClassName={labelClass} value={lastName} onChange={e => setLastName(e.target.value)} />
+        </div>
+        <div className="pt-8">
+          <Button size="lg" className="w-full text-[15px]" onClick={onNext} disabled={!canContinue}>
+            {t.bankConnect.linkAccount}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Stripe-branded header for third-party screens
+function StripeHeader({ onClose }: { onClose?: () => void }) {
+  return (
+    <div className="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-[#635bff] to-[#7b73ff]">
+      <div className="flex items-center gap-2">
+        <span className="text-[16px] font-bold text-white tracking-tight">stripe</span>
+        <span className="bg-white/20 text-white text-[10px] font-semibold px-2 py-0.5 rounded">Test</span>
+      </div>
+      {onClose && (
+        <button onClick={onClose} className="flex h-7 w-7 items-center justify-center rounded-full text-white/70 hover:text-white hover:bg-white/10">
+          <X className="h-4 w-4" />
+        </button>
+      )}
+    </div>
+  )
+}
+
+const simulatedBanks = [
+  { id: 'chase', name: 'Chase', domain: 'chase.com' },
+  { id: 'bofa', name: 'Bank of America', domain: 'bankofamerica.com' },
+  { id: 'wells', name: 'Wells Fargo', domain: 'wellsfargo.com' },
+  { id: 'citi', name: 'Citibank', domain: 'citibank.com' },
+  { id: 'usbank', name: 'US Bank', domain: 'usbank.com' },
+  { id: 'capital', name: 'Capital One', domain: 'capitalone.com' },
+]
+
+const simulatedAccounts = [
+  { id: 'checking', name: 'Premier Checking', last4: '0010', selected: false },
+  { id: 'savings', name: 'High-Yield Savings', last4: '4321', selected: false },
+  { id: 'business', name: 'Business Checking', last4: '3335', selected: false },
+]
+
+function StripeBankSelectScreen({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+  const t = useT()
+  const [selected, setSelected] = useState<string | null>(null)
+  const [query, setQuery] = useState('')
+  const filtered = simulatedBanks.filter(b => b.name.toLowerCase().includes(query.toLowerCase()))
+
+  return (
+    <div className="flex flex-col h-full bg-white">
+      <StripeHeader onClose={onBack} />
+      <div className="flex-1 px-5 pb-5 overflow-y-auto">
+        <h2 className="font-bold text-[20px] text-slate mt-5 mb-4">{t.stripe.selectTitle}</h2>
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-mocha/40" />
+          <input
+            type="text"
+            placeholder={t.stripe.selectSearch}
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            className="w-full h-11 rounded-xl border border-slate/15 bg-stone/30 pl-10 pr-4 text-[14px] text-slate placeholder:text-mocha/40 outline-none focus:border-[#635bff] focus:ring-2 focus:ring-[#635bff]/20"
+          />
+        </div>
+        <div className="space-y-1">
+          {filtered.map(bank => (
+            <button
+              key={bank.id}
+              onClick={() => { setSelected(bank.id); setTimeout(onNext, 200) }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all ${
+                selected === bank.id ? 'bg-[#635bff]/10 border border-[#635bff]/30' : 'hover:bg-stone/40 border border-transparent'
+              }`}
+            >
+              <div className="h-9 w-9 rounded-full bg-[#635bff]/10 flex items-center justify-center flex-shrink-0">
+                <Building2 className="h-4 w-4 text-[#635bff]" />
+              </div>
+              <div>
+                <p className="font-semibold text-[14px] text-slate">{bank.name}</p>
+                <p className="text-[12px] text-mocha/50">{bank.domain}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function StripeIntroScreen({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+  const t = useT()
+  return (
+    <div className="flex flex-col h-full bg-white">
+      <StripeHeader onClose={onBack} />
+      <div className="flex-1 px-6 pb-5 overflow-y-auto">
+        <div className="flex items-center justify-center gap-4 pt-8 pb-6">
+          <div className="h-14 w-14 rounded-2xl bg-turquoise flex items-center justify-center">
+            <FelixLogo className="h-7 text-slate" />
+          </div>
+          <div className="flex gap-1">
+            <div className="h-1.5 w-1.5 rounded-full bg-[#635bff]/30" />
+            <div className="h-1.5 w-1.5 rounded-full bg-[#635bff]/50" />
+            <div className="h-1.5 w-1.5 rounded-full bg-[#635bff]/70" />
+          </div>
+          <div className="h-14 w-14 rounded-2xl bg-[#635bff] flex items-center justify-center">
+            <span className="text-white text-[18px] font-bold tracking-tight">S</span>
+          </div>
+        </div>
+
+        <h2 className="font-bold text-[20px] text-slate text-center mb-6 leading-snug">{t.stripe.introTitle}</h2>
+
+        <div className="space-y-5 mb-6">
+          <div className="flex gap-3">
+            <div className="h-9 w-9 rounded-full bg-[#635bff]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Zap className="h-4 w-4 text-[#635bff]" />
+            </div>
+            <div>
+              <p className="font-semibold text-[14px] text-slate">{t.stripe.introFast}</p>
+              <p className="text-[13px] text-mocha leading-snug">{t.stripe.introFastDesc}</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <div className="h-9 w-9 rounded-full bg-[#635bff]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Shield className="h-4 w-4 text-[#635bff]" />
+            </div>
+            <div>
+              <p className="font-semibold text-[14px] text-slate">{t.stripe.introEncrypted}</p>
+              <p className="text-[13px] text-mocha leading-snug">{t.stripe.introEncryptedDesc}</p>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-[11px] text-mocha/60 text-center mb-5 leading-relaxed">
+          {t.stripe.introConsent}
+        </p>
+
+        <Button size="lg" className="w-full text-[15px] !bg-[#635bff] hover:!bg-[#5248e6] !text-white !border-0" onClick={onNext}>
+          {t.stripe.introAccept}
+        </Button>
+        <p className="text-[12px] text-mocha text-center mt-3 underline underline-offset-2 decoration-mocha/40 cursor-pointer">
+          {t.stripe.introManual}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function StripeAccountScreen({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+  const t = useT()
+  const [selected, setSelected] = useState<string | null>(null)
+
+  return (
+    <div className="flex flex-col h-full bg-white">
+      <StripeHeader onClose={onBack} />
+      <div className="flex-1 px-5 pb-5 overflow-y-auto">
+        <div className="flex justify-center pt-6 pb-4">
+          <div className="h-12 w-12 rounded-2xl bg-[#635bff]/10 flex items-center justify-center">
+            <Building2 className="h-6 w-6 text-[#635bff]" />
+          </div>
+        </div>
+        <h2 className="font-bold text-[20px] text-slate text-center mb-5">{t.stripe.accountTitle}</h2>
+        <div className="space-y-2.5 mb-6">
+          {simulatedAccounts.map(account => (
+            <button
+              key={account.id}
+              onClick={() => setSelected(account.id)}
+              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border transition-all text-left ${
+                selected === account.id
+                  ? 'border-[#635bff] bg-[#635bff]/5 shadow-sm'
+                  : 'border-slate/15 hover:border-slate/30'
+              }`}
+            >
+              <div>
+                <p className="font-semibold text-[14px] text-slate">{account.name}</p>
+                <p className="text-[12px] text-mocha/50 mt-0.5">····{account.last4}</p>
+              </div>
+              {selected === account.id && (
+                <div className="h-5 w-5 rounded-full bg-[#635bff] flex items-center justify-center">
+                  <Check className="h-3 w-3 text-white" />
+                </div>
+              )}
+            </button>
+          ))}
+        </div>
+        <Button size="lg" className="w-full text-[15px] !bg-[#635bff] hover:!bg-[#5248e6] !text-white !border-0" onClick={onNext} disabled={!selected}>
+          {t.stripe.accountConnect}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function StripeLinkScreen({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+  const t = useT()
+  return (
+    <div className="flex flex-col h-full bg-white">
+      <StripeHeader onClose={onBack} />
+      <div className="flex-1 px-5 pb-5 overflow-y-auto">
+        <div className="flex justify-center pt-6 pb-4">
+          <div className="h-12 w-12 rounded-2xl bg-[#00d66f]/10 flex items-center justify-center">
+            <Lock className="h-6 w-6 text-[#00d66f]" />
+          </div>
+        </div>
+        <h2 className="font-bold text-[20px] text-slate text-center mb-2">{t.stripe.linkTitle}</h2>
+        <p className="text-[13px] text-mocha text-center mb-6 leading-snug px-2">{t.stripe.linkDesc}</p>
+
+        <div className="space-y-3 mb-6">
+          <input
+            type="email"
+            placeholder="you@felixpago.com"
+            className="w-full h-12 rounded-xl border border-slate/15 bg-stone/30 px-4 text-[14px] text-slate placeholder:text-mocha/40 outline-none focus:border-[#635bff] focus:ring-2 focus:ring-[#635bff]/20"
+          />
+          <div className="flex gap-2">
+            <div className="flex items-center gap-1.5 h-12 rounded-xl border border-slate/15 bg-stone/30 px-3">
+              <span className="text-[14px]">🇺🇸</span>
+              <span className="text-[13px] text-slate font-medium">+1</span>
+            </div>
+            <input
+              type="tel"
+              placeholder="Phone number"
+              className="flex-1 h-12 rounded-xl border border-slate/15 bg-stone/30 px-4 text-[14px] text-slate placeholder:text-mocha/40 outline-none focus:border-[#635bff] focus:ring-2 focus:ring-[#635bff]/20"
+            />
+          </div>
+        </div>
+
+        <p className="text-[11px] text-mocha/60 text-center mb-5 leading-relaxed">
+          {t.stripe.introConsent}
+        </p>
+
+        <Button size="lg" className="w-full text-[15px] !bg-[#00d66f] hover:!bg-[#00c060] !text-white !border-0" onClick={onNext}>
+          {t.stripe.linkSave}
+        </Button>
+        <button onClick={onNext} className="w-full text-center text-[13px] text-mocha mt-3 hover:text-slate transition-colors">
+          {t.stripe.linkSkip}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function StripeCompletedScreen({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+  const t = useT()
+  return (
+    <div className="flex flex-col h-full bg-white">
+      <StripeHeader onClose={onBack} />
+      <div className="flex-1 flex flex-col items-center justify-center px-6 pb-10">
+        <div className="h-16 w-16 rounded-full bg-[#00d66f] flex items-center justify-center mb-5">
+          <Check className="h-8 w-8 text-white" />
+        </div>
+        <h2 className="font-bold text-[22px] text-slate text-center mb-2">{t.stripe.completedTitle}</h2>
+        <p className="text-[14px] text-mocha text-center mb-8">{t.stripe.completedSubtitle}</p>
+        <Button size="lg" className="w-full text-[15px] !bg-[#635bff] hover:!bg-[#5248e6] !text-white !border-0" onClick={onNext}>
+          {t.stripe.completedDone}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
 // ─── Token inspector ──────────────────────────────────────────────────────────
 
 const INSPECTOR_STORAGE_KEY = 'felix-content-tokens-v2'
+const SCREEN_STATUS_KEY = 'felix-screen-statuses'
+type ScreenStatus = 'todo' | 'in-review' | 'done'
 
 // Grouped token structure for the inspector
 type TRef   = { s: keyof ContentTokens; k: string }
@@ -743,6 +1107,7 @@ const screenGroups: Record<string, TGroup[]> = {
     { label: null, items: [{ s: 'common', k: 'badge' }]},
     { label: 'ADDRESS FORM', items: [
       { s: 'address', k: 'titleBilling' },
+      { s: 'address', k: 'titleBank' },
       { s: 'address', k: 'titleCash' },
       { s: 'address', k: 'helperCash' },
       { s: 'address', k: 'fieldAddress' },
@@ -832,6 +1197,63 @@ const screenGroups: Record<string, TGroup[]> = {
     { label: 'ACTIONS', items: [
       { s: 'success', k: 'shareWhatsApp' },
       { s: 'success', k: 'backToWhatsApp' },
+    ]},
+  ],
+  bankConsent: [
+    { label: null, items: [{ s: 'common', k: 'badge' }]},
+    { label: 'BANK CONSENT', items: [
+      { s: 'bankConsent', k: 'title' },
+      { s: 'bankConsent', k: 'body' },
+      { s: 'bankConsent', k: 'agree' },
+    ]},
+  ],
+  bankConnect: [
+    { label: null, items: [{ s: 'common', k: 'badge' }]},
+    { label: 'CONNECT ACCOUNT', items: [
+      { s: 'bankConnect', k: 'title' },
+      { s: 'bankConnect', k: 'subtitle' },
+      { s: 'bankConnect', k: 'fieldFirstName' },
+      { s: 'bankConnect', k: 'fieldMiddleName' },
+      { s: 'bankConnect', k: 'fieldLastName' },
+      { s: 'bankConnect', k: 'linkAccount' },
+    ]},
+  ],
+  stripeSelect: [
+    { label: 'SELECT BANK', items: [
+      { s: 'stripe', k: 'selectTitle' },
+      { s: 'stripe', k: 'selectSearch' },
+    ]},
+  ],
+  stripeIntro: [
+    { label: 'STRIPE INTRO', items: [
+      { s: 'stripe', k: 'introTitle' },
+      { s: 'stripe', k: 'introFast' },
+      { s: 'stripe', k: 'introFastDesc' },
+      { s: 'stripe', k: 'introEncrypted' },
+      { s: 'stripe', k: 'introEncryptedDesc' },
+      { s: 'stripe', k: 'introAccept' },
+      { s: 'stripe', k: 'introManual' },
+    ]},
+  ],
+  stripeAccount: [
+    { label: 'CHOOSE ACCOUNT', items: [
+      { s: 'stripe', k: 'accountTitle' },
+      { s: 'stripe', k: 'accountConnect' },
+    ]},
+  ],
+  stripeLink: [
+    { label: 'SAVE WITH LINK', items: [
+      { s: 'stripe', k: 'linkTitle' },
+      { s: 'stripe', k: 'linkDesc' },
+      { s: 'stripe', k: 'linkSave' },
+      { s: 'stripe', k: 'linkSkip' },
+    ]},
+  ],
+  stripeComplete: [
+    { label: 'COMPLETED', items: [
+      { s: 'stripe', k: 'completedTitle' },
+      { s: 'stripe', k: 'completedSubtitle' },
+      { s: 'stripe', k: 'completedDone' },
     ]},
   ],
 }
@@ -960,28 +1382,25 @@ function CanvasMiniPhone({
   children,
   editableContent,
   language,
-  screenKey,
   uid,
   selectedUid,
   onSelect,
+  status,
 }: {
   label: string
   progress?: number
   children: React.ReactNode
   editableContent: Record<Language, ContentTokens>
   language: Language
-  screenKey: string
   uid: string
   selectedUid: string | null
   onSelect: (uid: string) => void
+  status: ScreenStatus
 }) {
   const isSelected = selectedUid === uid
-  const groups = screenGroups[screenKey] ?? []
-  const t = editableContent[language]
 
   return (
     <div className="relative flex-shrink-0">
-      {/* Phone + label */}
       <div
         className="flex flex-col items-center gap-3 cursor-pointer"
         onClick={() => onSelect(isSelected ? '' : uid)}
@@ -1009,38 +1428,18 @@ function CanvasMiniPhone({
         <p className={`text-[10px] font-medium tracking-wide transition-colors ${isSelected ? 'text-white/70' : 'text-white/35'}`}>
           {label}
         </p>
+        {/* Status badge */}
+        {status === 'in-review' && (
+          <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[8px] font-semibold bg-amber-400/90 text-amber-950 px-2 py-0.5 rounded-full whitespace-nowrap">
+            In Review
+          </span>
+        )}
+        {status === 'done' && (
+          <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[8px] font-semibold bg-emerald-400/90 text-emerald-950 px-2 py-0.5 rounded-full whitespace-nowrap">
+            Done
+          </span>
+        )}
       </div>
-
-      {/* Token annotation panel */}
-      {isSelected && groups.length > 0 && (
-        <div
-          className="absolute top-0 z-20 w-[172px] bg-[#252525] border border-white/[0.09] rounded-2xl overflow-hidden shadow-2xl"
-          style={{ left: CANVAS_W + 10 }}
-          onClick={e => e.stopPropagation()}
-        >
-          <div className="px-3 pt-3 pb-1 border-b border-white/[0.07]">
-            <p className="text-[9px] font-semibold text-white/30 uppercase tracking-widest">{label}</p>
-          </div>
-          <div className="px-3 py-2.5 space-y-3 max-h-[260px] overflow-y-auto">
-            {groups.map((group, gi) => (
-              <div key={gi}>
-                {group.label && (
-                  <p className="text-[8px] font-semibold text-white/20 uppercase tracking-widest mb-1.5">{group.label}</p>
-                )}
-                {group.items.map(({ s, k }) => {
-                  const val = (t[s] as Record<string, string>)[k]
-                  return (
-                    <div key={`${s}.${k}`} className="mb-1.5">
-                      <p className="text-[9px] font-mono text-[#60a5fa]/70 leading-none mb-0.5">{k}</p>
-                      <p className="text-[10px] text-white/45 leading-snug line-clamp-2">{val}</p>
-                    </div>
-                  )
-                })}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
@@ -1059,16 +1458,230 @@ function CanvasArrow() {
   )
 }
 
+function CanvasSidebar({
+  selectedUid,
+  screenLabel,
+  screenKey,
+  tokens,
+  language,
+  status,
+  onStatusChange,
+  onChange,
+  onDeselect,
+}: {
+  selectedUid: string | null
+  screenLabel: string
+  screenKey: string
+  tokens: Record<Language, ContentTokens>
+  language: Language
+  status: ScreenStatus
+  onStatusChange: (s: ScreenStatus) => void
+  onChange: (section: keyof ContentTokens, key: string, lang: Language, value: string) => void
+  onDeselect: () => void
+}) {
+  const [openId, setOpenId] = useState<string | null>(null)
+  const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>({})
+  const visibleGroups = screenGroups[screenKey] ?? []
+
+  useEffect(() => { setOpenId(null); setDrafts({}) }, [selectedUid])
+
+  function initDrafts(id: string, s: keyof ContentTokens, k: string) {
+    setDrafts(prev => {
+      if (prev[id]) return prev
+      const initial: Record<string, string> = {}
+      languages.forEach(l => { initial[l.code] = (tokens[l.code][s] as Record<string, string>)[k] })
+      return { ...prev, [id]: initial }
+    })
+  }
+
+  function save(id: string, s: keyof ContentTokens, k: string) {
+    const d = drafts[id] ?? {}
+    languages.forEach(l => onChange(s, k, l.code, d[l.code] ?? ''))
+    setOpenId(null)
+  }
+
+  function toggle(id: string, s: keyof ContentTokens, k: string) {
+    if (openId === id) { setOpenId(null); return }
+    initDrafts(id, s, k)
+    setOpenId(id)
+  }
+
+  const statusTabs: { value: ScreenStatus; label: string }[] = [
+    { value: 'todo', label: 'To-do' },
+    { value: 'in-review', label: 'In-Review' },
+    { value: 'done', label: 'Done' },
+  ]
+
+  if (!selectedUid) {
+    return (
+      <div className="w-[320px] shrink-0 border-l border-white/[0.12] bg-[#2a2a2a] flex items-center justify-center">
+        <p className="text-[13px] text-white/40">Click a screen to inspect tokens</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="w-[320px] shrink-0 border-l border-white/[0.12] bg-[#2a2a2a] flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="shrink-0 px-4 pt-4 pb-3 border-b border-white/[0.12]">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-[14px] font-semibold text-white truncate">{screenLabel}</p>
+          <button
+            onClick={onDeselect}
+            className="text-[12px] text-white/50 hover:text-white/80 transition-colors whitespace-nowrap ml-2"
+          >
+            ← All
+          </button>
+        </div>
+        {/* Status tabs */}
+        <div className="flex gap-1">
+          {statusTabs.map(tab => (
+            <button
+              key={tab.value}
+              onClick={() => onStatusChange(tab.value)}
+              className={`flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-colors ${
+                status === tab.value
+                  ? tab.value === 'done'
+                    ? 'bg-emerald-500/25 text-emerald-300'
+                    : tab.value === 'in-review'
+                      ? 'bg-amber-500/25 text-amber-300'
+                      : 'bg-white/15 text-white/80'
+                  : 'text-white/40 hover:text-white/60 hover:bg-white/[0.06]'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Token list */}
+      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
+        {visibleGroups.map((group, gi) =>
+          group.label === null ? (
+            group.items.map(ref => {
+              const id = `${ref.s}.${ref.k}`
+              const currentVal = (tokens[language][ref.s] as Record<string, string>)[ref.k]
+              const isOpen = openId === id
+
+              return (
+                <div key={id}>
+                  <button
+                    className="flex items-baseline gap-2 py-1.5 w-full text-left cursor-pointer hover:bg-white/[0.04] rounded-lg px-1 -mx-1 transition-colors"
+                    onClick={() => toggle(id, ref.s, ref.k)}
+                  >
+                    <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isOpen ? 'text-[#93bbfc]' : 'text-[#60a5fa]/80'}`}>
+                      {ref.k}
+                    </code>
+                    <span className="text-[12px] text-white/60 truncate leading-snug">{currentVal}</span>
+                  </button>
+                  {isOpen && (
+                    <div className="mb-3 bg-[#333] rounded-xl border border-white/[0.12] p-3 space-y-2.5">
+                      <p className="text-[11px] font-mono text-[#93bbfc]">{ref.s}.{ref.k}</p>
+                      {languages.map(lang => (
+                        <div key={lang.code}>
+                          <label className="text-[10px] font-semibold text-white/50 uppercase tracking-wider mb-1 block">
+                            {lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'}
+                          </label>
+                          <textarea
+                            value={drafts[id]?.[lang.code] ?? ''}
+                            onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [lang.code]: e.target.value } }))}
+                            rows={2}
+                            className="w-full text-[13px] text-white/90 bg-[#252525] border border-white/15 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#60a5fa]/40"
+                          />
+                        </div>
+                      ))}
+                      <button
+                        onClick={() => save(id, ref.s, ref.k)}
+                        className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-lg hover:bg-turquoise/90 transition-colors"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )
+            })
+          ) : (
+            <div key={gi} className="bg-white/[0.06] rounded-xl px-3 pt-2.5 pb-1 mb-1">
+              <p className="text-[9px] font-semibold text-white/40 uppercase tracking-widest mb-1">
+                {group.label}
+              </p>
+              {group.items.map(ref => {
+                const id = `${ref.s}.${ref.k}`
+                const currentVal = (tokens[language][ref.s] as Record<string, string>)[ref.k]
+                const isOpen = openId === id
+
+                return (
+                  <div key={id}>
+                    <button
+                      className="flex items-baseline gap-2 py-1.5 w-full text-left cursor-pointer hover:bg-white/[0.04] rounded-lg px-1 -mx-1 transition-colors"
+                      onClick={() => toggle(id, ref.s, ref.k)}
+                    >
+                      <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isOpen ? 'text-[#93bbfc]' : 'text-[#60a5fa]/80'}`}>
+                        {ref.k}
+                      </code>
+                      <span className="text-[12px] text-white/60 truncate leading-snug">{currentVal}</span>
+                    </button>
+                    {isOpen && (
+                      <div className="mb-3 bg-[#333] rounded-xl border border-white/[0.12] p-3 space-y-2.5">
+                        <p className="text-[11px] font-mono text-[#93bbfc]">{ref.s}.{ref.k}</p>
+                        {languages.map(lang => (
+                          <div key={lang.code}>
+                            <label className="text-[10px] font-semibold text-white/50 uppercase tracking-wider mb-1 block">
+                              {lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'}
+                            </label>
+                            <textarea
+                              value={drafts[id]?.[lang.code] ?? ''}
+                              onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [lang.code]: e.target.value } }))}
+                              rows={2}
+                              className="w-full text-[13px] text-white/90 bg-[#252525] border border-white/15 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#60a5fa]/40"
+                            />
+                          </div>
+                        ))}
+                        <button
+                          onClick={() => save(id, ref.s, ref.k)}
+                          className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-lg hover:bg-turquoise/90 transition-colors"
+                        >
+                          Save
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          )
+        )}
+      </div>
+    </div>
+  )
+}
+
 function FlowCanvasOverlay({
   editableContent,
   language,
+  onLanguageChange,
   onClose,
+  onChange,
 }: {
   editableContent: Record<Language, ContentTokens>
   language: Language
+  onLanguageChange: (lang: Language) => void
   onClose: () => void
+  onChange: (section: keyof ContentTokens, key: string, lang: Language, value: string) => void
 }) {
   const [selectedUid, setSelectedUid] = useState<string | null>(null)
+  const [statuses, setStatuses] = useState<Record<string, ScreenStatus>>(() => {
+    try { return JSON.parse(localStorage.getItem(SCREEN_STATUS_KEY) || '{}') } catch { return {} }
+  })
+  function setStatus(uid: string, s: ScreenStatus) {
+    setStatuses(prev => {
+      const next = { ...prev, [uid]: s }
+      localStorage.setItem(SCREEN_STATUS_KEY, JSON.stringify(next))
+      return next
+    })
+  }
   const viewRef = useRef<HTMLDivElement>(null)
   const canvas = useRef({ zoom: 1, ox: 0, oy: 0 })
   const [, repaint] = useState(0)
@@ -1082,8 +1695,8 @@ function FlowCanvasOverlay({
     if (!el) return
     const vw = el.clientWidth
     const vh = el.clientHeight
-    const cw = 5 * CANVAS_W + 4 * 40 + 160
-    const ch = 2 * (CANVAS_H + 36 + 56) + 120
+    const cw = 11 * CANVAS_W + 10 * 40 + 160
+    const ch = 3 * (CANVAS_H + 36 + 56) + 120
     const zoom = Math.min((vw - 120) / cw, (vh - 100) / ch, 1.2)
     canvas.current = { zoom, ox: (vw - cw * zoom) / 2, oy: 60 }
     re()
@@ -1149,8 +1762,8 @@ function FlowCanvasOverlay({
     if (!el) return
     const vw = el.clientWidth
     const vh = el.clientHeight
-    const cw = 5 * CANVAS_W + 4 * 40 + 160
-    const ch = 2 * (CANVAS_H + 36 + 56) + 120
+    const cw = 11 * CANVAS_W + 10 * 40 + 160
+    const ch = 3 * (CANVAS_H + 36 + 56) + 120
     const zoom = Math.min((vw - 120) / cw, (vh - 100) / ch, 1.2)
     canvas.current = { zoom, ox: (vw - cw * zoom) / 2, oy: 60 }
     repaint(n => n + 1)
@@ -1159,9 +1772,18 @@ function FlowCanvasOverlay({
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
-      if ((e.key === '+' || e.key === '=') && !e.ctrlKey && !e.metaKey) zoomBy(1.15)
-      if (e.key === '-' && !e.ctrlKey && !e.metaKey) zoomBy(1 / 1.15)
-      if (e.key === '0') fit()
+      if (e.key === '+' || e.key === '=') {
+        if (e.metaKey || e.ctrlKey) e.preventDefault()
+        zoomBy(1.15)
+      }
+      if (e.key === '-') {
+        if (e.metaKey || e.ctrlKey) e.preventDefault()
+        zoomBy(1 / 1.15)
+      }
+      if (e.key === '0') {
+        if (e.metaKey || e.ctrlKey) e.preventDefault()
+        fit()
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -1171,12 +1793,30 @@ function FlowCanvasOverlay({
   const mp = (label: string, sk: string, progress: number, node: React.ReactNode) => ({ label, sk, progress, node })
   const flows = [
     {
-      id: 'card', label: 'Card / Bank Flow', dot: '#60a5fa',
+      id: 'card', label: 'Card Flow', dot: '#60a5fa',
       screens: [
         mp('Payment Method', 'payment', 25, <PaymentMethodScreen onNext={() => {}} />),
         mp('Billing Address', 'address', 50, <AddressScreen onNext={() => {}} onBack={() => {}} paymentMethod="card" />),
         mp('Card Details', 'card', 75, <CardDetailsScreen onNext={() => {}} onBack={() => {}} />),
-        mp('Review', 'review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangePayment={() => {}} paymentMethod="card" selectedStore="" />),
+        mp('Review', 'review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="card" selectedStore="" />),
+        mp('Change Sheet', 'changeSheet', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="card" selectedStore="" defaultShowSheet />),
+        mp('Success', 'success', 100, <SuccessScreen />),
+      ],
+    },
+    {
+      id: 'bank', label: 'Bank Flow', dot: '#a78bfa',
+      screens: [
+        mp('Payment Method', 'payment', 10, <PaymentMethodScreen onNext={() => {}} />),
+        mp('Bank Consent', 'bankConsent', 20, <BankConsentScreen onNext={() => {}} onBack={() => {}} />),
+        mp('Bank Address', 'address', 30, <AddressScreen onNext={() => {}} onBack={() => {}} paymentMethod="bank" />),
+        mp('Connect Account', 'bankConnect', 40, <BankConnectScreen onNext={() => {}} onBack={() => {}} />),
+        mp('Select Bank', 'stripeSelect', 50, <StripeBankSelectScreen onNext={() => {}} onBack={() => {}} />),
+        mp('Stripe Intro', 'stripeIntro', 60, <StripeIntroScreen onNext={() => {}} onBack={() => {}} />),
+        mp('Choose Account', 'stripeAccount', 70, <StripeAccountScreen onNext={() => {}} onBack={() => {}} />),
+        mp('Save with Link', 'stripeLink', 80, <StripeLinkScreen onNext={() => {}} onBack={() => {}} />),
+        mp('Connected', 'stripeComplete', 90, <StripeCompletedScreen onNext={() => {}} onBack={() => {}} />),
+        mp('Review', 'review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="bank" selectedStore="" />),
+        mp('Change Sheet', 'changeSheet', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="bank" selectedStore="" defaultShowSheet />),
         mp('Success', 'success', 100, <SuccessScreen />),
       ],
     },
@@ -1186,21 +1826,51 @@ function FlowCanvasOverlay({
         mp('Payment Method', 'payment', 25, <PaymentMethodScreen onNext={() => {}} />),
         mp('Cash Address', 'address', 50, <AddressScreen onNext={() => {}} onBack={() => {}} paymentMethod="cash" />),
         mp('Store Selection', 'store', 75, <StoreSelectionScreen onBack={() => {}} onNext={() => {}} />),
-        mp('Review', 'review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangePayment={() => {}} paymentMethod="cash" selectedStore="walgreens" />),
+        mp('Review', 'review', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="cash" selectedStore="walgreens" />),
+        mp('Change Sheet', 'changeSheet', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="cash" selectedStore="walgreens" defaultShowSheet />),
         mp('Success', 'success', 100, <SuccessScreen />),
       ],
     },
   ]
+
+  // Derive selected screen info for the sidebar
+  const selectedFlow = flows.find(f => f.screens.some(s => `${f.id}-${s.sk}` === selectedUid))
+  const selectedScreen = selectedFlow?.screens.find(s => `${selectedFlow.id}-${s.sk}` === selectedUid)
 
   const { zoom, ox, oy } = canvas.current
   const btnCls = 'h-7 px-2.5 rounded-md text-[12px] font-semibold text-white/45 hover:text-white hover:bg-white/10 transition-colors'
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-[#1c1c1c] select-none">
-      {/* Toolbar */}
+      {/* Toolbar — full width */}
       <div className="shrink-0 flex items-center justify-between px-5 h-11 border-b border-white/[0.07]">
-        <span className="text-[13px] font-semibold text-white/30">Flow Canvas</span>
+        <div className="flex items-center gap-3">
+          <span className="text-[13px] font-semibold text-white/30">Flow Canvas</span>
+          <a
+            href="/fintech/tokens"
+            className="h-7 px-3 rounded-md text-[12px] font-semibold bg-white/10 text-white/70 hover:bg-white/15 hover:text-white transition-colors flex items-center"
+          >
+            Tokens
+          </a>
+        </div>
         <div className="flex items-center gap-0.5">
+          {/* Language toggles */}
+          {languages.map(lang => {
+            const label = lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES' : 'PT'
+            const active = language === lang.code
+            return (
+              <button
+                key={lang.code}
+                onClick={() => onLanguageChange(lang.code)}
+                className={`h-7 px-2.5 rounded-md text-[12px] font-semibold transition-colors ${
+                  active ? 'bg-white/15 text-white' : 'text-white/35 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {label}
+              </button>
+            )
+          })}
+          <div className="w-px h-4 bg-white/10 mx-2" />
           <button className={btnCls} onClick={() => zoomBy(1 / 1.2)}>−</button>
           <span className="text-[12px] tabular-nums text-white/35 w-12 text-center">{Math.round(zoom * 100)}%</span>
           <button className={btnCls} onClick={() => zoomBy(1.2)}>+</button>
@@ -1215,72 +1885,88 @@ function FlowCanvasOverlay({
         </button>
       </div>
 
-      {/* Canvas viewport */}
-      <div
-        ref={viewRef}
-        className="flex-1 overflow-hidden"
-        style={{ cursor: dragging.current ? 'grabbing' : 'grab' }}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={stopDrag}
-        onMouseLeave={stopDrag}
-      >
-        {/* Dot-grid background */}
+      {/* Body — horizontal split */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Canvas viewport — takes remaining space */}
         <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
-          }}
-        />
-
-        {/* Transformable canvas */}
-        <div
-          style={{
-            position: 'absolute',
-            transform: `translate(${ox}px, ${oy}px) scale(${zoom})`,
-            transformOrigin: '0 0',
-          }}
+          ref={viewRef}
+          className="flex-1 relative overflow-hidden"
+          style={{ cursor: dragging.current ? 'grabbing' : 'grab' }}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={stopDrag}
+          onMouseLeave={stopDrag}
         >
-          <div className="space-y-16">
-            {flows.map(flow => (
-              <div key={flow.id}>
-                <div className="flex items-center gap-2 mb-8">
-                  <div className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: flow.dot }} />
-                  <p className="text-[11px] font-semibold text-white/22 uppercase tracking-widest">{flow.label}</p>
-                  <div className="h-px w-32 bg-white/[0.05]" />
+          {/* Dot-grid background */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
+              backgroundSize: '24px 24px',
+            }}
+          />
+
+          {/* Transformable canvas */}
+          <div
+            style={{
+              position: 'absolute',
+              transform: `translate(${ox}px, ${oy}px) scale(${zoom})`,
+              transformOrigin: '0 0',
+            }}
+          >
+            <div className="space-y-16">
+              {flows.map(flow => (
+                <div key={flow.id}>
+                  <div className="flex items-center gap-2 mb-8">
+                    <div className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: flow.dot }} />
+                    <p className="text-[11px] font-semibold text-white/22 uppercase tracking-widest">{flow.label}</p>
+                    <div className="h-px w-32 bg-white/[0.05]" />
+                  </div>
+                  <div className="flex items-start">
+                    {flow.screens.flatMap((screen, i) => {
+                      const uid = `${flow.id}-${screen.sk}`
+                      const nodes: React.ReactNode[] = [
+                        <CanvasMiniPhone
+                          key={uid}
+                          label={screen.label}
+                          uid={uid}
+                          selectedUid={selectedUid}
+                          onSelect={setSelectedUid}
+                          progress={screen.progress}
+                          editableContent={editableContent}
+                          language={language}
+                          status={statuses[uid] ?? 'todo'}
+                        >
+                          {screen.node}
+                        </CanvasMiniPhone>,
+                      ]
+                      if (i < flow.screens.length - 1) nodes.push(<CanvasArrow key={`arrow-${i}`} />)
+                      return nodes
+                    })}
+                  </div>
                 </div>
-                <div className="flex items-start">
-                  {flow.screens.flatMap((screen, i) => {
-                    const uid = `${flow.id}-${screen.sk}`
-                    const nodes: React.ReactNode[] = [
-                      <CanvasMiniPhone
-                        key={uid}
-                        label={screen.label}
-                        screenKey={screen.sk}
-                        uid={uid}
-                        selectedUid={selectedUid}
-                        onSelect={setSelectedUid}
-                        progress={screen.progress}
-                        editableContent={editableContent}
-                        language={language}
-                      >
-                        {screen.node}
-                      </CanvasMiniPhone>,
-                    ]
-                    if (i < flow.screens.length - 1) nodes.push(<CanvasArrow key={`arrow-${i}`} />)
-                    return nodes
-                  })}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Hint */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[11px] text-white/18 pointer-events-none">
+            Scroll to pan · ⌘ scroll to zoom · Click a screen to inspect tokens
           </div>
         </div>
-      </div>
 
-      {/* Hint */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[11px] text-white/18 pointer-events-none">
-        Scroll to pan · ⌘ scroll to zoom · Click a screen to inspect tokens
+        {/* Right sidebar */}
+        <CanvasSidebar
+          selectedUid={selectedUid}
+          screenLabel={selectedScreen?.label ?? ''}
+          screenKey={selectedScreen?.sk ?? ''}
+          tokens={editableContent}
+          language={language}
+          status={selectedUid ? (statuses[selectedUid] ?? 'todo') : 'todo'}
+          onStatusChange={s => selectedUid && setStatus(selectedUid, s)}
+          onChange={onChange}
+          onDeselect={() => setSelectedUid(null)}
+        />
       </div>
     </div>
   )
@@ -1321,22 +2007,56 @@ function PhoneControls({ current, onChange }: { current: Language; onChange: (l:
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function FintechTestFlowPage() {
-  const [screen, setScreen] = useState<'payment' | 'address' | 'store' | 'card' | 'review' | 'success'>('payment')
+  const [screen, setScreen] = useState<'payment' | 'address' | 'store' | 'card' | 'review' | 'success' | 'bankConsent' | 'bankConnect' | 'stripeSelect' | 'stripeIntro' | 'stripeAccount' | 'stripeLink' | 'stripeComplete'>('payment')
   const [paymentMethod, setPaymentMethod] = useState<string>('card')
   const [selectedStore, setSelectedStore] = useState<string>('')
   const [language, setLanguage] = useState<Language>('en')
   const [showCanvas, setShowCanvas] = useState(false)
+  const [ready, setReady] = useState(false)
+
+  // Read hash on mount and mark ready — prevents flash of prototype when refreshing in canvas view
+  useEffect(() => {
+    if (window.location.hash === '#canvas') setShowCanvas(true)
+    setReady(true)
+  }, [])
+
+  // Sync canvas state to URL hash
+  useEffect(() => {
+    if (!ready) return
+    const hash = showCanvas ? '#canvas' : ''
+    if (window.location.hash !== hash) {
+      window.history.replaceState(null, '', hash || window.location.pathname)
+    }
+  }, [showCanvas, ready])
+
+  // Browser tab title
+  useEffect(() => {
+    document.title = showCanvas ? 'Checkout Experience: Canvas' : 'Checkout Experience: Prototype'
+  }, [showCanvas])
 
   // Mutable token state — shared between the flow and the inspector
   const [editableContent, setEditableContent] = useState<Record<Language, ContentTokens>>(() =>
     JSON.parse(JSON.stringify(content))
   )
 
-  // Load persisted edits on mount
+  // Load persisted edits on mount — merge over defaults so new sections are always present
   useEffect(() => {
     try {
       const saved = localStorage.getItem(INSPECTOR_STORAGE_KEY)
-      if (saved) setEditableContent(JSON.parse(saved))
+      if (saved) {
+        const parsed = JSON.parse(saved) as Record<Language, ContentTokens>
+        const merged = JSON.parse(JSON.stringify(content)) as Record<Language, ContentTokens>
+        for (const lang of Object.keys(merged) as Language[]) {
+          if (parsed[lang]) {
+            for (const section of Object.keys(merged[lang]) as (keyof ContentTokens)[]) {
+              if (parsed[lang][section]) {
+                Object.assign(merged[lang][section], parsed[lang][section])
+              }
+            }
+          }
+        }
+        setEditableContent(merged)
+      }
     } catch {}
   }, [])
 
@@ -1349,6 +2069,8 @@ export default function FintechTestFlowPage() {
     })
   }
 
+  if (!ready) return <div className="min-h-screen bg-stone" />
+
   return (
     <LangContext.Provider value={editableContent[language]}>
       <div className="min-h-screen bg-stone overflow-y-auto">
@@ -1357,12 +2079,44 @@ export default function FintechTestFlowPage() {
           {/* Phone column: controls above, device below */}
           <div className="flex flex-col items-stretch w-[390px] shrink-0">
             <PhoneControls current={language} onChange={setLanguage} />
-            <PhoneFrame progress={{ payment: 25, address: 50, store: 75, card: 75, review: 100, success: 100 }[screen]}>
+            <PhoneFrame progress={{
+              payment: 10, bankConsent: 20, address: 40, bankConnect: 45,
+              stripeSelect: 50, stripeIntro: 60, stripeAccount: 70, stripeLink: 80, stripeComplete: 90,
+              store: 75, card: 75, review: 100, success: 100,
+            }[screen]}>
               {screen === 'payment' && (
-                <PaymentMethodScreen onNext={(method) => { setPaymentMethod(method); setScreen('address') }} />
+                <PaymentMethodScreen onNext={(method) => {
+                  setPaymentMethod(method)
+                  setScreen(method === 'bank' ? 'bankConsent' : 'address')
+                }} />
+              )}
+              {screen === 'bankConsent' && (
+                <BankConsentScreen onBack={() => setScreen('payment')} onNext={() => setScreen('address')} />
               )}
               {screen === 'address' && (
-                <AddressScreen onBack={() => setScreen('payment')} onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} paymentMethod={paymentMethod} />
+                <AddressScreen
+                  onBack={() => setScreen(paymentMethod === 'bank' ? 'bankConsent' : 'payment')}
+                  onNext={() => setScreen(paymentMethod === 'cash' ? 'store' : paymentMethod === 'bank' ? 'bankConnect' : 'card')}
+                  paymentMethod={paymentMethod}
+                />
+              )}
+              {screen === 'bankConnect' && (
+                <BankConnectScreen onBack={() => setScreen('address')} onNext={() => setScreen('stripeSelect')} />
+              )}
+              {screen === 'stripeSelect' && (
+                <StripeBankSelectScreen onBack={() => setScreen('bankConnect')} onNext={() => setScreen('stripeIntro')} />
+              )}
+              {screen === 'stripeIntro' && (
+                <StripeIntroScreen onBack={() => setScreen('stripeSelect')} onNext={() => setScreen('stripeAccount')} />
+              )}
+              {screen === 'stripeAccount' && (
+                <StripeAccountScreen onBack={() => setScreen('stripeIntro')} onNext={() => setScreen('stripeLink')} />
+              )}
+              {screen === 'stripeLink' && (
+                <StripeLinkScreen onBack={() => setScreen('stripeAccount')} onNext={() => setScreen('stripeComplete')} />
+              )}
+              {screen === 'stripeComplete' && (
+                <StripeCompletedScreen onBack={() => setScreen('stripeLink')} onNext={() => setScreen('review')} />
               )}
               {screen === 'store' && (
                 <StoreSelectionScreen onBack={() => setScreen('address')} onNext={(storeId) => { setSelectedStore(storeId); setScreen('review') }} />
@@ -1371,7 +2125,14 @@ export default function FintechTestFlowPage() {
                 <CardDetailsScreen onBack={() => setScreen('address')} onNext={() => setScreen('review')} />
               )}
               {screen === 'review' && (
-                <ReviewScreen onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : 'card')} onNext={() => setScreen('success')} onChangePayment={() => setScreen('payment')} paymentMethod={paymentMethod} selectedStore={selectedStore} />
+                <ReviewScreen
+                  onBack={() => setScreen(paymentMethod === 'cash' ? 'store' : paymentMethod === 'bank' ? 'stripeComplete' : 'card')}
+                  onNext={() => setScreen('success')}
+                  onChangeContextual={() => setScreen(paymentMethod === 'cash' ? 'store' : paymentMethod === 'bank' ? 'stripeSelect' : 'card')}
+                  onChangePaymentMethod={() => setScreen('payment')}
+                  paymentMethod={paymentMethod}
+                  selectedStore={selectedStore}
+                />
               )}
               {screen === 'success' && (
                 <SuccessScreen />
@@ -1403,7 +2164,9 @@ export default function FintechTestFlowPage() {
         <FlowCanvasOverlay
           editableContent={editableContent}
           language={language}
+          onLanguageChange={setLanguage}
           onClose={() => setShowCanvas(false)}
+          onChange={updateToken}
         />
       )}
     </LangContext.Provider>

@@ -88,7 +88,7 @@ function AddressScreen({ onBack, onNext }: { onBack: () => void; onNext: () => v
       {/* Header with logo */}
       <div className="flex flex-col items-center pt-4 pb-1">
         <FelixLogo className="h-8 text-slate" />
-        <div className="mt-2.5 rounded-full bg-stone px-2.5 py-0.5">
+        <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
           <span className="text-[10px] font-semibold text-slate">
             Authorized UniTeller Agent
           </span>
@@ -223,7 +223,7 @@ function PaymentScreen({ onBack }: { onBack: () => void }) {
       {/* Logo */}
       <div className="flex flex-col items-center pt-4 pb-1">
         <FelixLogo className="h-8 text-slate" />
-        <div className="mt-2.5 rounded-full bg-stone px-2.5 py-0.5">
+        <div className="mt-2.5 rounded-full bg-turquoise px-2.5 py-0.5">
           <span className="text-[10px] font-semibold text-slate">
             Authorized UniTeller Agent
           </span>

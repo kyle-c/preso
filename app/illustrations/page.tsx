@@ -8,6 +8,7 @@ type Illustration = {
   name: string
   token: string
   hasPng: boolean
+  hasSvg?: boolean // defaults to true
 }
 
 type IllusCatKey = 'brand' | 'flags3d' | 'flagsOg' | 'hands' | 'money' | 'communication' | 'status' | 'navigation' | 'other'
@@ -105,6 +106,7 @@ const categories: Category[] = [
       { name: "Payday + Calendar + Cell Phone", token: "illustration/money/payday", hasPng: true },
       { name: "Repeat A", token: "illustration/money/repeat-a", hasPng: true },
       { name: "Repeat B", token: "illustration/money/repeat-b", hasPng: true },
+      { name: "cashAirplane", token: "illustration/money/cash-airplane", hasPng: true },
       { name: "card", token: "illustration/money/card", hasPng: false },
       { name: "cash", token: "illustration/money/cash", hasPng: false },
     ],
@@ -165,21 +167,33 @@ const categories: Category[] = [
 ]
 
 function IllustrationCard({ item, svgLabel, pngLabel }: { item: Illustration; svgLabel: string; pngLabel: string }) {
+  const hasSvg = item.hasSvg !== false
   const svgPath = `/illustrations/${encodeURIComponent(item.name)}.svg`
-  const pngPath = `/illustrations/pngs/${encodeURIComponent(item.name)}.png`
+  const pngPath = hasSvg
+    ? `/illustrations/PNGs/${encodeURIComponent(item.name)}.png`
+    : `/illustrations/${encodeURIComponent(item.name)}.png`
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl border border-border bg-white">
       {/* Preview */}
       <div className="relative flex h-36 items-center justify-center bg-stone/40 p-4"
            style={{ backgroundImage: 'radial-gradient(circle, #d1cdc7 1px, transparent 1px)', backgroundSize: '16px 16px' }}>
-        <object
-          type="image/svg+xml"
-          data={svgPath}
-          className="h-full w-full"
-          style={{ pointerEvents: 'none' }}
-          aria-label={item.name}
-        />
+        {hasSvg ? (
+          <object
+            type="image/svg+xml"
+            data={svgPath}
+            className="h-full w-full"
+            style={{ pointerEvents: 'none' }}
+            aria-label={item.name}
+          />
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={pngPath}
+            alt={item.name}
+            className="h-full w-auto object-contain"
+          />
+        )}
       </div>
 
       {/* Name + Token + Actions */}
@@ -193,13 +207,19 @@ function IllustrationCard({ item, svgLabel, pngLabel }: { item: Illustration; sv
           </p>
         </div>
         <div className="flex gap-1.5">
-          <a
-            href={svgPath}
-            download={`${item.name}.svg`}
-            className="flex h-7 flex-1 items-center justify-center rounded-lg border border-border bg-linen text-[11px] font-semibold text-foreground/70 transition-colors hover:bg-stone hover:text-foreground"
-          >
-            {svgLabel}
-          </a>
+          {hasSvg ? (
+            <a
+              href={svgPath}
+              download={`${item.name}.svg`}
+              className="flex h-7 flex-1 items-center justify-center rounded-lg border border-border bg-linen text-[11px] font-semibold text-foreground/70 transition-colors hover:bg-stone hover:text-foreground"
+            >
+              {svgLabel}
+            </a>
+          ) : (
+            <span className="flex h-7 flex-1 items-center justify-center rounded-lg border border-border/50 bg-stone/30 text-[11px] font-semibold text-foreground/30 cursor-not-allowed select-none">
+              {svgLabel}
+            </span>
+          )}
           {item.hasPng ? (
             <a
               href={pngPath}
@@ -236,7 +256,7 @@ export default function IllustrationsPage() {
           >
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {category.items.map((item) => (
-                <IllustrationCard key={item.name} item={item} svgLabel={illus.svg} pngLabel={illus.png} />
+                <IllustrationCard key={item.token} item={item} svgLabel={illus.svg} pngLabel={illus.png} />
               ))}
             </div>
           </Section>

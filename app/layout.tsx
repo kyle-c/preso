@@ -9,7 +9,11 @@ export const metadata: Metadata = {
   description: 'A comprehensive design system for Felix Pago built with shadcn/ui',
   generator: 'v0.app',
   icons: {
-    icon: '/favicon.png',
+    icon: [
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-icon.png',
   },
 }
 

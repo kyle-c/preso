@@ -99,17 +99,6 @@ const objectives: Objective[] = [
   },
 ]
 
-/* ─────────────────── Status Dot Colors ──────────────────── */
-
-function statusDotClass(s: StatusColor) {
-  switch (s) {
-    case 'olive': return 'bg-[#A8B38B]'
-    case 'red': return 'bg-[#C0392B]'
-    case 'green': return 'bg-[#4B7F52]'
-    case 'yellow': return 'bg-[#F1D71F]'
-  }
-}
-
 /* ──────────────────────── Footer ─────────────────────────── */
 
 function SlideFooter({ num }: { num: number }) {
@@ -132,22 +121,6 @@ function PillBadge({ children }: { children: React.ReactNode }) {
   )
 }
 
-/* ──────────────────── Progress Bar ───────────────────────── */
-
-function ProgressBarCell({ pct }: { pct: number }) {
-  const filled = Math.min(pct, 100)
-  return (
-    <div className="relative w-full">
-      <div className="flex h-7 sm:h-8 w-full overflow-hidden rounded-sm">
-        <div className="bg-turquoise flex items-center justify-center transition-all" style={{ width: `${filled}%` }}>
-          <span className="text-[10px] sm:text-xs font-semibold text-slate">{pct}%</span>
-        </div>
-        <div className="bg-slate flex-1" />
-      </div>
-    </div>
-  )
-}
-
 /* ═══════════════════════════════════════════════════════════ */
 /*                     SLIDE COMPONENTS                       */
 /* ═══════════════════════════════════════════════════════════ */
@@ -155,35 +128,43 @@ function ProgressBarCell({ pct }: { pct: number }) {
 /* ── Slide 1: Felix North Star ────────────────────────────── */
 function SlideNorthStar() {
   return (
-    <div className="relative h-full w-full bg-stone flex flex-col">
-      <div className="flex-1 flex items-center px-8 sm:px-12 lg:px-16 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 w-full max-w-[1400px] mx-auto">
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      {/* Decorative background illustration — more visible */}
+      <div className="absolute -bottom-4 -left-4 w-[320px] h-[320px] lg:w-[420px] lg:h-[420px] opacity-[0.15] pointer-events-none">
+        <object type="image/svg+xml" data="/illustrations/Hands%20-%202%20Cell%20Phones%20-%20Love.svg" className="h-full w-full" style={{ pointerEvents: 'none' }} aria-hidden="true" />
+      </div>
+
+      <div className="flex-1 flex items-center px-8 sm:px-12 lg:px-16 py-10 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 w-full max-w-[1400px] mx-auto">
           {/* Left */}
           <div className="flex flex-col justify-center">
-            <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1] tracking-tight mb-6 lg:mb-8">
-              F&eacute;lix North Star
+            <div className="mb-6 lg:mb-8 w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] lg:w-[200px] lg:h-[200px]">
+              <object type="image/svg+xml" data="/illustrations/F%C3%A9lix%20Illo%201.svg" className="h-full w-full" style={{ pointerEvents: 'none' }} aria-label="Félix mascot" />
+            </div>
+            <h1 className="font-display font-black text-foreground text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight mb-6 lg:mb-8">
+              F&eacute;lix<br />North Star
             </h1>
-            <p className="text-base sm:text-lg lg:text-xl text-foreground/80 leading-relaxed max-w-lg">
+            <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-lg">
               Become the companion for Latinos in the United States enabling them to access financial services throughout their journey as immigrants.
             </p>
           </div>
 
           {/* Right */}
-          <div className="bg-white rounded-2xl lg:rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
-            <div className="mb-6">
+          <div className="bg-white rounded-2xl lg:rounded-3xl p-7 sm:p-9 lg:p-12 border border-border shadow-sm">
+            <div className="mb-8 lg:mb-10">
               <PillBadge>Mission</PillBadge>
-              <p className="mt-4 text-base sm:text-lg text-foreground leading-relaxed">
+              <p className="mt-5 text-xl sm:text-2xl lg:text-[28px] text-foreground leading-relaxed">
                 To empower Latinos in the US to care for what matters most back home.
               </p>
             </div>
 
             <div>
               <PillBadge>Key Principles</PillBadge>
-              <ul className="mt-5 space-y-3">
+              <ul className="mt-6 space-y-4">
                 {principles.map((p) => (
-                  <li key={p} className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-foreground/70 mt-0.5" strokeWidth={1.5} />
-                    <span className="text-sm sm:text-base text-foreground leading-snug">{p}</span>
+                  <li key={p} className="flex items-start gap-3.5">
+                    <CheckCircle2 className="h-6 w-6 flex-shrink-0 text-foreground/70 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-lg sm:text-xl lg:text-[22px] text-foreground leading-snug">{p}</span>
                   </li>
                 ))}
               </ul>
@@ -197,85 +178,98 @@ function SlideNorthStar() {
 }
 
 /* ── Slide 2: Rules of the Land ───────────────────────────── */
+function RuleCard({ num, children }: { num: number; children: React.ReactNode }) {
+  return (
+    <div className="relative rounded-xl border border-border bg-white overflow-hidden p-8 sm:p-10 lg:p-12">
+      <span className="absolute right-5 top-1 select-none font-display text-[120px] sm:text-[150px] lg:text-[180px] font-black leading-none text-concrete/20 pointer-events-none">
+        {num}
+      </span>
+      <div className="relative flex flex-col gap-5">
+        {children}
+      </div>
+    </div>
+  )
+}
+
 function SlideRules() {
   return (
     <div className="relative h-full w-full bg-stone flex flex-col">
-      <div className="flex-1 flex flex-col px-8 sm:px-12 lg:px-16 py-8 sm:py-12 overflow-hidden">
-        <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1] tracking-tight mb-6 lg:mb-8">
-          Rules of the land
-        </h1>
+      <div className="flex-1 flex flex-col items-center justify-center px-16 sm:px-20 lg:px-24 py-8 sm:py-10 overflow-hidden">
+        <div className="w-full">
+          <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-6 sm:mb-8 lg:mb-10">
+            Rules of the land
+          </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5 flex-1 max-w-[1400px] w-full">
-          {/* Card 1 */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 lg:p-7 flex flex-col">
-            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-turquoise flex items-center justify-center mb-4">
-              <span className="font-display font-extrabold text-slate text-sm sm:text-base">1</span>
-            </div>
-            <p className="font-display font-extrabold text-foreground text-sm sm:text-base mb-2">Share Impactful Updates</p>
-            <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed mb-3">
-              Focus on key metrics, efficiency, and valuable insights aligned with company values.
-            </p>
-            <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed">
-              For each highlight or learning, consider: <em>Does this show impact? How does it connect to our quarterly goals?</em>
-            </p>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
+            {/* Card 1 — Share Impactful Updates */}
+            <RuleCard num={1}>
+              <h3 className="font-display font-extrabold text-foreground text-2xl lg:text-3xl leading-snug max-w-[65%]">
+                Share Impactful Updates
+              </h3>
+              <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+                Focus on key metrics, efficiency, and valuable insights aligned with company values.
+              </p>
+              <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+                For each highlight or learning, consider: <em className="text-foreground/70">Does this show impact? How does it connect to our quarterly goals?</em>
+              </p>
+            </RuleCard>
 
-          {/* Card 3 */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 lg:p-7 flex flex-col md:row-start-1 md:col-start-2">
-            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-turquoise flex items-center justify-center mb-4">
-              <span className="font-display font-extrabold text-slate text-sm sm:text-base">3</span>
-            </div>
-            <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed">
-              <span className="font-display font-extrabold text-foreground">Limit Demos:</span> Have links ready and keep demos under 2 minutes.
-            </p>
-          </div>
-
-          {/* Card 2 */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 lg:p-7 flex flex-col md:row-start-2 md:col-start-1">
-            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-turquoise flex items-center justify-center mb-4">
-              <span className="font-display font-extrabold text-slate text-sm sm:text-base">2</span>
-            </div>
-            <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed mb-2">
-              <span className="font-display font-extrabold text-foreground">Be Concise:</span> Keep updates brief and to the point.
-            </p>
-            <ul className="space-y-1 mb-2">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-foreground/60 mt-0.5" strokeWidth={1.5} />
-                <span className="text-xs sm:text-sm text-foreground/80 leading-relaxed">Add the number of minutes you&apos;ll take to present.</span>
-              </li>
-            </ul>
-            <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed mb-2">
-              We&apos;ll track your presentation with a timer based on that.
-            </p>
-            <ul className="space-y-1">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-foreground/60 mt-0.5" strokeWidth={1.5} />
-                <span className="text-xs sm:text-sm text-foreground/80 leading-relaxed">If sharing some slides, no more than 4</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Card 4 */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 lg:p-7 flex flex-col md:row-start-2 md:col-start-2">
-            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-turquoise flex items-center justify-center mb-4">
-              <span className="font-display font-extrabold text-slate text-sm sm:text-base">4</span>
-            </div>
-            <p className="font-display font-extrabold text-foreground text-sm sm:text-base mb-3">Use a Clear Structure</p>
-            <ul className="space-y-2">
-              {[
-                { text: 'Objective: Goal of the initiative', bold: false },
-                { text: 'Action: What was done', bold: false },
-                { text: 'Impact: Results or learnings', bold: true },
-                { text: 'Next Steps (If applicable)', bold: false },
-              ].map((item) => (
-                <li key={item.text} className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-foreground/60 mt-0.5" strokeWidth={1.5} />
-                  <span className={`text-xs sm:text-sm leading-relaxed ${item.bold ? 'font-display font-extrabold text-foreground' : 'text-foreground/80'}`}>
-                    {item.text}
-                  </span>
+            {/* Card 2 — Be Concise */}
+            <RuleCard num={2}>
+              <h3 className="font-display font-extrabold text-foreground text-2xl lg:text-3xl leading-snug max-w-[65%]">
+                Be Concise:
+              </h3>
+              <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+                Keep updates brief and to the point.
+              </p>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3.5">
+                  <CheckCircle2 className="h-7 w-7 flex-shrink-0 text-foreground/50 mt-0.5" strokeWidth={1.5} />
+                  <span className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">Add the number of minutes you&apos;ll take to present.</span>
                 </li>
-              ))}
-            </ul>
+              </ul>
+              <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+                We&apos;ll track your presentation with a timer based on that.
+              </p>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3.5">
+                  <CheckCircle2 className="h-7 w-7 flex-shrink-0 text-foreground/50 mt-0.5" strokeWidth={1.5} />
+                  <span className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">If sharing some slides, no more than 4</span>
+                </li>
+              </ul>
+            </RuleCard>
+
+            {/* Card 3 — Limit Demos */}
+            <RuleCard num={3}>
+              <h3 className="font-display font-extrabold text-foreground text-2xl lg:text-3xl leading-snug max-w-[65%]">
+                Limit Demos:
+              </h3>
+              <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+                Have links ready and keep demos under 2 minutes.
+              </p>
+            </RuleCard>
+
+            {/* Card 4 — Use a Clear Structure */}
+            <RuleCard num={4}>
+              <h3 className="font-display font-extrabold text-foreground text-2xl lg:text-3xl leading-snug max-w-[65%]">
+                Use a Clear Structure
+              </h3>
+              <ul className="space-y-4">
+                {[
+                  { text: 'Objective: Goal of the initiative', bold: false },
+                  { text: 'Action: What was done', bold: false },
+                  { text: 'Impact: Results or learnings', bold: true },
+                  { text: 'Next Steps (If applicable)', bold: false },
+                ].map((item) => (
+                  <li key={item.text} className="flex items-start gap-3.5">
+                    <CheckCircle2 className="h-7 w-7 flex-shrink-0 text-foreground/50 mt-0.5" strokeWidth={1.5} />
+                    <span className={`text-xl lg:text-2xl leading-relaxed ${item.bold ? 'font-display font-extrabold text-foreground' : 'text-muted-foreground'}`}>
+                      {item.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </RuleCard>
           </div>
         </div>
       </div>
@@ -287,44 +281,47 @@ function SlideRules() {
 /* ── Slide 3: Agenda ──────────────────────────────────────── */
 function SlideAgenda() {
   return (
-    <div className="relative h-full w-full bg-stone flex flex-col">
-      <div className="flex-1 flex flex-col px-8 sm:px-12 lg:px-16 py-8 sm:py-12">
-        <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1] tracking-tight mb-8 lg:mb-10">
-          Feb. 23th - Feb. 27th
-        </h1>
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      {/* Decorative background illustration */}
+      <div className="absolute -bottom-4 -right-4 w-[320px] h-[320px] lg:w-[420px] lg:h-[420px] opacity-[0.15] pointer-events-none">
+        <object type="image/svg+xml" data="/illustrations/Paper%20Airplane%20%2B%20Coin%20-%20Turquoise.svg" className="h-full w-full" style={{ pointerEvents: 'none' }} aria-hidden="true" />
+      </div>
 
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-[1400px] w-full">
-          {/* Illustration */}
-          <div className="flex items-center justify-center rounded-2xl border border-border bg-white p-6 sm:p-8 h-full max-h-[400px]">
-            <object
-              type="image/svg+xml"
-              data="/illustrations/3 Paper Airplanes + Coins.svg"
-              className="h-full w-full max-h-[320px]"
-              style={{ pointerEvents: 'none' }}
-              aria-label="Paper airplanes and coins illustration"
-            />
-          </div>
-
-          {/* Agenda */}
-          <div>
-            <h2 className="font-display font-extrabold text-foreground text-2xl sm:text-3xl mb-6 sm:mb-8">
-              Agenda
-            </h2>
-            <ul className="space-y-4 sm:space-y-5">
+      <div className="flex-1 flex items-center px-8 sm:px-12 lg:px-16 py-10 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 w-full max-w-[1400px] mx-auto">
+          {/* Left — Agenda card */}
+          <div className="bg-white rounded-2xl lg:rounded-3xl p-7 sm:p-9 lg:p-12 border border-border shadow-sm">
+            <div className="mb-8 lg:mb-10">
+              <PillBadge>Agenda</PillBadge>
+            </div>
+            <ul className="space-y-6 sm:space-y-8">
               {agenda.map((item) => (
-                <li key={item.label} className="flex items-baseline gap-3">
-                  <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 text-foreground mt-1" strokeWidth={2} />
-                  <span className="text-base sm:text-lg lg:text-xl text-foreground leading-snug">
+                <li key={item.label} className="flex items-center gap-4">
+                  <ArrowRight className="h-6 w-6 sm:h-7 sm:w-7 flex-shrink-0 text-foreground" strokeWidth={2.5} />
+                  <span className="text-xl sm:text-2xl lg:text-[28px] text-foreground leading-snug">
                     {item.link ? (
                       <span className="underline underline-offset-4 font-semibold">{item.label}</span>
                     ) : (
                       <span className="font-semibold">{item.label}</span>
                     )}
-                    <span className="font-normal text-foreground/70"> - {item.time}</span>
+                    <span className="font-normal text-muted-foreground"> — {item.time}</span>
                   </span>
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* Right — Title + Illustration */}
+          <div className="flex flex-col justify-start items-start lg:items-end">
+            <div className="-mt-16 sm:-mt-20 lg:-mt-28 mb-4 lg:mb-6 w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] lg:w-[200px] lg:h-[200px]">
+              <object type="image/svg+xml" data="/illustrations/3%20Paper%20Airplanes%20%2B%20Coins.svg" className="h-full w-full" style={{ pointerEvents: 'none' }} aria-label="Paper airplanes and coins" />
+            </div>
+            <h1 className="font-display font-black text-foreground text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight mb-6 lg:mb-8 lg:text-right">
+              Feb. 23rd —<br />Feb. 27th
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-lg lg:text-right">
+              Weekly sync for all teams. Come prepared with your updates and keep it concise.
+            </p>
           </div>
         </div>
       </div>
@@ -335,78 +332,93 @@ function SlideAgenda() {
 
 /* ── Slide 4: Goals for Q1 2026 ───────────────────────────── */
 
-function ObjectiveBadge({ label, bg }: { label: string; bg: 'turquoise' | 'lime' | 'black' }) {
-  const bgMap = {
-    turquoise: 'bg-turquoise text-slate',
-    lime: 'bg-lime text-slate',
-    black: 'bg-slate text-linen',
+function statusLabel(s: StatusColor) {
+  switch (s) {
+    case 'green': return 'On Track'
+    case 'olive': return 'In Progress'
+    case 'red': return 'At Risk'
+    case 'yellow': return 'Not Started'
   }
-  return (
-    <div className={`rounded-xl px-4 py-4 sm:py-5 ${bgMap[bg]}`}>
-      <p className="font-display font-extrabold text-xs sm:text-sm leading-snug whitespace-pre-line">
-        {label}
-      </p>
-    </div>
-  )
+}
+
+function statusBgClass(s: StatusColor) {
+  switch (s) {
+    case 'green': return 'bg-cactus/15 text-evergreen'
+    case 'olive': return 'bg-lime/20 text-slate'
+    case 'red': return 'bg-papaya/15 text-papaya'
+    case 'yellow': return 'bg-mango/15 text-mango'
+  }
+}
+
+const accentMap = {
+  turquoise: 'bg-turquoise',
+  lime: 'bg-lime',
+  black: 'bg-slate',
 }
 
 function SlideGoals() {
   return (
-    <div className="relative h-full w-full bg-linen flex flex-col">
-      <div className="flex-1 flex flex-col px-5 sm:px-8 lg:px-12 py-6 sm:py-8 overflow-auto">
-        {/* Header row */}
-        <div className="flex items-start justify-between mb-4 sm:mb-6">
-          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-[1] tracking-tight">
-            Goals for Q1 2026
-          </h1>
-          <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm font-semibold flex-shrink-0 mt-1">
-            <span className="flex items-center gap-1.5"><span className="inline-block h-3 w-5 sm:h-4 sm:w-6 rounded-sm bg-turquoise" /> Progress</span>
-            <span className="flex items-center gap-1.5"><span className="inline-block h-3 w-5 sm:h-4 sm:w-6 rounded-sm bg-slate" /> Road ahead</span>
-          </div>
-        </div>
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      <div className="absolute -bottom-4 -right-4 w-[320px] h-[320px] lg:w-[400px] lg:h-[400px] opacity-[0.12] pointer-events-none -rotate-12">
+        <object type="image/svg+xml" data="/illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" className="h-full w-full" style={{ pointerEvents: 'none' }} aria-hidden="true" />
+      </div>
 
-        {/* Column headers */}
-        <div className="grid gap-2 sm:gap-3 mb-3 sm:mb-4" style={{ gridTemplateColumns: '1fr 1.4fr 0.5fr 1.2fr' }}>
-          <p className="font-display font-extrabold text-foreground text-xs sm:text-sm">Annual Objectives</p>
-          <p className="font-display font-extrabold text-foreground text-xs sm:text-sm">Q1 Key Results</p>
-          <p className="font-display font-extrabold text-foreground text-xs sm:text-sm text-center">Q Status</p>
-          <p className="font-display font-extrabold text-foreground text-xs sm:text-sm">QTD progress</p>
-        </div>
+      <div className="flex-1 flex flex-col justify-center px-16 sm:px-20 lg:px-24 pt-14 sm:pt-16 lg:pt-20 pb-6 sm:pb-8 lg:pb-10 overflow-auto relative z-10">
+        <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-6 sm:mb-8 lg:mb-10">
+          Goals for Q1 2026
+        </h1>
 
-        {/* Rows */}
-        <div className="space-y-3 sm:space-y-4 flex-1">
+        <div className="space-y-5 lg:space-y-6 flex-1">
           {objectives.map((obj) => (
-            <div key={obj.label} className="grid gap-2 sm:gap-3 items-start" style={{ gridTemplateColumns: '1fr 1.4fr 0.5fr 1.2fr' }}>
-              {/* Objective badge spanning its rows */}
-              <div className="row-span-full flex items-stretch">
-                <ObjectiveBadge label={obj.label} bg={obj.bg} />
+            <div key={obj.label} className="rounded-xl border border-border bg-white overflow-hidden">
+              {/* Objective header with colored accent */}
+              <div className="flex items-stretch">
+                <div className={`w-2 ${accentMap[obj.bg]} flex-shrink-0`} />
+                <div className="flex-1 px-6 sm:px-8 py-4 sm:py-5 border-b border-border">
+                  <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl lg:text-2xl leading-snug">
+                    {obj.label.replace(/\n/g, ' ')}
+                  </h3>
+                </div>
               </div>
 
-              {/* Key results */}
-              <div className="space-y-3 sm:space-y-4 col-start-2 col-end-5">
+              {/* Key Results */}
+              <div className="divide-y divide-border/60">
                 {obj.rows.map((row) => (
-                  <div key={row.kr} className="grid gap-2 sm:gap-3 items-center" style={{ gridTemplateColumns: '1.4fr 0.5fr 1.2fr' }}>
-                    <div className="flex items-start gap-2">
-                      <span className="mt-1.5 h-2 w-2 rounded-full bg-foreground flex-shrink-0" />
-                      <p className="text-xs sm:text-sm text-foreground leading-snug">
-                        <span className="font-semibold">{row.kr}</span>
-                        {row.krSuffix && <span className="font-normal">{row.krSuffix}</span>}
+                  <div key={row.kr} className="flex items-center gap-4 sm:gap-6 lg:gap-8 px-8 sm:px-10 py-4 sm:py-5">
+                    {/* KR description */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-base sm:text-lg lg:text-xl text-foreground leading-snug">
+                        {row.kr}
+                        {row.krSuffix && <span className="text-muted-foreground">{row.krSuffix}</span>}
                       </p>
                     </div>
-                    <div className="flex justify-center">
-                      <div className={`h-6 w-6 sm:h-7 sm:w-7 rounded-full ${statusDotClass(row.status)}`} />
-                    </div>
-                    <div>
+
+                    {/* Status pill */}
+                    <span className={`flex-shrink-0 rounded-full px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold ${statusBgClass(row.status)}`}>
+                      {statusLabel(row.status)}
+                    </span>
+
+                    {/* Progress bar or pending */}
+                    <div className="flex-shrink-0 w-[200px] sm:w-[260px] lg:w-[320px]">
                       {row.pct > 0 ? (
                         <div>
-                          <ProgressBarCell pct={row.pct} />
+                          <div className="flex h-7 sm:h-8 w-full overflow-hidden rounded-lg">
+                            <div className="bg-turquoise flex items-center justify-center transition-all" style={{ width: `${Math.min(row.pct, 100)}%` }}>
+                              {row.pct >= 25 && <span className="text-xs sm:text-sm font-display font-extrabold text-slate">{row.pct}%</span>}
+                            </div>
+                            <div className="bg-stone flex-1 flex items-center justify-center">
+                              {row.pct < 25 && <span className="text-xs sm:text-sm font-display font-extrabold text-muted-foreground">{row.pct}%</span>}
+                            </div>
+                          </div>
                           <div className="flex justify-between mt-0.5">
-                            <span className="text-[10px] text-muted-foreground">{row.rangeMin}</span>
-                            <span className="text-[10px] text-muted-foreground">{row.rangeMax}</span>
+                            <span className="text-[10px] sm:text-xs text-muted-foreground/60">{row.rangeMin}</span>
+                            <span className="text-[10px] sm:text-xs text-muted-foreground/60">{row.rangeMax}</span>
                           </div>
                         </div>
                       ) : (
-                        <div className="h-7 sm:h-8" />
+                        <div className="flex h-7 sm:h-8 w-full items-center justify-center rounded-lg bg-stone">
+                          <span className="text-xs sm:text-sm text-muted-foreground/50 italic">Pending</span>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -516,7 +528,7 @@ export default function PresoSamplePage() {
       </div>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-2">
+      <div className="absolute bottom-10 sm:bottom-12 left-1/2 -translate-x-1/2 z-50 flex gap-2">
         {slides.map((_, i) => (
           <button
             key={i}
@@ -560,7 +572,7 @@ export default function PresoSamplePage() {
       </button>
 
       {/* Mobile swipe hint */}
-      <div className="md:hidden absolute bottom-14 left-1/2 -translate-x-1/2 z-40">
+      <div className="md:hidden absolute bottom-20 left-1/2 -translate-x-1/2 z-40">
         <div className="px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-border">
           <span className="text-xs text-muted-foreground">Swipe to navigate</span>
         </div>

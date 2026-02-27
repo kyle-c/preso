@@ -23,7 +23,7 @@ export function SidebarNav() {
   const { t, lang, setLang } = useDSLang()
   const n = t.nav
 
-  const navItems = [
+  const navItems: ({ title: string; href: string; icon: typeof Home; children?: { title: string; href: string }[]; dividerBefore?: boolean })[] = [
     {
       title: n.overview,
       href: "/",
@@ -37,19 +37,6 @@ export function SidebarNav() {
         { title: n.thePrinciples, href: "/principles#principles" },
         { title: n.resources, href: "/principles#resources" },
         { title: n.whenPrinciplesOverlap, href: "/principles#conflicts" },
-      ],
-    },
-    {
-      title: n.editorialGuidelines,
-      href: "/editorial-guidelines",
-      icon: PenLine,
-      children: [
-        { title: n.voiceTone, href: "/editorial-guidelines#voice" },
-        { title: n.writingPatterns, href: "/editorial-guidelines#patterns" },
-        { title: n.multilingual, href: "/editorial-guidelines#multilingual" },
-        { title: n.contentTokens, href: "/editorial-guidelines#tokens" },
-        { title: n.commonPitfalls, href: "/editorial-guidelines#pitfalls" },
-        { title: n.quickReference, href: "/editorial-guidelines#reference" },
       ],
     },
     {
@@ -114,6 +101,20 @@ export function SidebarNav() {
         { title: n.sidebarTokens, href: "/tokens#sidebar" },
       ],
     },
+    {
+      title: n.editorialGuidelines,
+      href: "/editorial-guidelines",
+      icon: PenLine,
+      dividerBefore: true,
+      children: [
+        { title: n.voiceTone, href: "/editorial-guidelines#voice" },
+        { title: n.writingPatterns, href: "/editorial-guidelines#patterns" },
+        { title: n.multilingual, href: "/editorial-guidelines#multilingual" },
+        { title: n.contentTokens, href: "/editorial-guidelines#tokens" },
+        { title: n.commonPitfalls, href: "/editorial-guidelines#pitfalls" },
+        { title: n.quickReference, href: "/editorial-guidelines#reference" },
+      ],
+    },
   ]
 
   const langOptions: { code: DSLang; label: string }[] = [
@@ -143,6 +144,9 @@ export function SidebarNav() {
 
             return (
               <div key={item.href}>
+                {item.dividerBefore && (
+                  <div className="my-2 mx-3 h-px bg-sidebar-border" />
+                )}
                 <Link
                   href={item.href}
                   className={cn(

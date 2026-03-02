@@ -4,8 +4,11 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { FelixLogo } from '@/components/design-system/felix-logo'
 import { Button } from '@/components/ui/button'
 import { FloatingInput } from '@/components/ui/floating-input'
-import { Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin, Layers, X, Search, Shield, Zap, Check, Building2, SlidersHorizontal, Info, DollarSign, Crosshair, Plus } from 'lucide-react'
-import { type Language, type ContentTokens, languages, content } from './content'
+import { FormField, formatCardNumber, formatExpiry, formatCVV } from '@/components-next/form-field'
+import { Wifi, Battery, Signal, Lock, CreditCard, ChevronDown, MapPin, Layers, X, Search, Shield, Zap, Check, Building2, SlidersHorizontal, Info, DollarSign, Crosshair, Plus, Pin } from 'lucide-react'
+import { type Language, type ContentTokens, countries, staticCountries, pinnableCountries, content } from './content'
+
+const PINNED_COUNTRY_KEY = 'felix-pinned-country'
 
 // ─── Language context ────────────────────────────────────────────────────────
 
@@ -181,7 +184,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           desc={t.paymentMethod.creditDebitDesc}
           badges={[t.paymentMethod.badgeNoFeeDebit, t.paymentMethod.badgeInstant]}
           illustration="/illustrations/card.svg"
-          imgClassName="h-[54px]"
+          imgClassName="h-[40px]"
           selectedLabel={t.common.selected}
         />
         <PayMethodCard
@@ -192,7 +195,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           desc={t.paymentMethod.bankDesc}
           badges={[t.paymentMethod.badgeNoFee, t.paymentMethod.badgeBusinessDays]}
           illustration="/illustrations/Bank.svg"
-          imgClassName="h-[58px]"
+          imgClassName="h-[40px]"
           selectedLabel={t.common.selected}
         />
         <PayMethodCard
@@ -203,7 +206,7 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
           desc={t.paymentMethod.cashDesc}
           badges={[t.paymentMethod.badgeCashFee, t.paymentMethod.badgeSameDay]}
           illustration="/illustrations/cash.svg"
-          imgClassName="h-[50px]"
+          imgClassName="h-[40px]"
           selectedLabel={t.common.selected}
         />
       </div>
@@ -212,7 +215,6 @@ function PaymentMethodScreen({ onNext }: { onNext: (method: string) => void }) {
         <Button size="lg" className="w-full text-[15px]" onClick={() => onNext(selected!)} disabled={!selected}>
           {t.common.continue}
         </Button>
-        <Button variant="outline" size="lg" className="w-full text-[15px]">{t.common.cancel}</Button>
       </div>
     </div>
   )
@@ -224,22 +226,15 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
   const [zip, setZip] = useState('')
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
-  const [touched, setTouched] = useState<Record<string, boolean>>({})
+  const [touched, setTouched] = useState(false)
   const isCash = paymentMethod === 'cash'
   const isBank = paymentMethod === 'bank'
 
-  function validate(field: string, value: string): string | undefined {
-    if (field === 'address') return !value ? 'Address is required' : undefined
-    if (field === 'zip') return !value ? 'ZIP code is required' : !/^\d{5}$/.test(value) ? 'Enter a valid 5-digit ZIP' : undefined
-    if (field === 'city') return !value ? 'City is required' : undefined
-    if (field === 'state') return !value ? 'State is required' : undefined
-  }
+  const validateAddress = (v: string) => !v ? 'Address is required' : undefined
+  const validateZip = (v: string) => !v ? 'ZIP code is required' : !/^\d{5}$/.test(v) ? 'Enter a valid 5-digit ZIP' : undefined
+  const validateCity = (v: string) => !v ? 'City is required' : undefined
 
-  const err = (f: string, v: string) => touched[f] ? validate(f, v) : undefined
-  const valid = (f: string, v: string) => !!(touched[f] && !validate(f, v) && v)
-  const touch = (f: string) => setTouched(p => ({ ...p, [f]: true }))
-
-  const canContinue = !validate('address', address) && !validate('zip', zip) && !validate('city', city) && !validate('state', state)
+  const canContinue = !validateAddress(address) && !validateZip(zip) && !validateCity(city) && !!state
 
   const fieldClass = '!rounded-2xl bg-white'
   const labelClass = 'bg-white text-mocha'
@@ -258,31 +253,32 @@ function AddressScreen({ onNext, onBack, paymentMethod }: { onNext: () => void; 
         {!isCash && <div className="mb-6" />}
 
         <div className="space-y-4">
-          <FloatingInput
+          <FormField
             label={t.address.fieldAddress} className={fieldClass} labelClassName={labelClass}
-            value={address} onChange={e => setAddress(e.target.value)} onBlur={() => touch('address')}
-            error={err('address', address)} isValid={valid('address', address)}
+            value={address} onChange={setAddress}
+            validate={validateAddress}
           />
           <FloatingInput label={t.address.fieldApt} className={fieldClass} labelClassName={labelClass} />
-          <FloatingInput
+          <FormField
             label={t.address.fieldZip} className={fieldClass} labelClassName={labelClass}
-            value={zip} onChange={e => setZip(e.target.value.replace(/\D/g, '').slice(0, 5))} onBlur={() => touch('zip')}
-            error={err('zip', zip)} isValid={valid('zip', zip)}
+            value={zip} onChange={setZip}
+            format={(v) => v.replace(/\D/g, '').slice(0, 5)}
+            validate={validateZip}
             inputMode="numeric"
           />
-          <FloatingInput
+          <FormField
             label={t.address.fieldCity} className={fieldClass} labelClassName={labelClass}
-            value={city} onChange={e => setCity(e.target.value)} onBlur={() => touch('city')}
-            error={err('city', city)} isValid={valid('city', city)}
+            value={city} onChange={setCity}
+            validate={validateCity}
           />
           <div className="relative">
             <select
               value={state}
-              onChange={e => { setState(e.target.value); touch('state') }}
-              onBlur={() => touch('state')}
+              onChange={e => { setState(e.target.value); setTouched(true) }}
+              onBlur={() => setTouched(true)}
               className={`h-14 w-full rounded-2xl bg-white border px-4 pr-10 text-base appearance-none transition-colors outline-none cursor-pointer focus:ring-[3px] ${
-                touched.state && !state
-                  ? 'border-red-400 ring-[3px] ring-red-400/20 text-slate'
+                touched && !state
+                  ? 'border-destructive ring-[3px] ring-destructive/20 text-slate'
                   : state
                     ? 'border-turquoise/60 focus:border-turquoise focus:ring-turquoise/25 text-slate'
                     : 'border-border focus:border-turquoise focus:ring-turquoise/25 text-muted-foreground'
@@ -361,34 +357,19 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
   const [cardNumber, setCardNumber] = useState('')
   const [expiry, setExpiry] = useState('')
   const [cvv, setCvv] = useState('')
-  const [touched, setTouched] = useState<Record<string, boolean>>({})
 
-  function validate(field: string, value: string): string | undefined {
-    if (field === 'name') return !value ? 'Name is required' : undefined
-    if (field === 'cardNumber') return !value ? 'Card number is required' : value.replace(/\s/g, '').length < 16 ? 'Enter a 16-digit card number' : undefined
-    if (field === 'expiry') {
-      if (!value) return 'Expiry date is required'
-      if (!/^\d{2}\/\d{2}$/.test(value)) return 'Use MM/YY format'
-      const month = parseInt(value.slice(0, 2))
-      if (month < 1 || month > 12) return 'Invalid month'
-      return undefined
-    }
-    if (field === 'cvv') return !value ? 'CVV is required' : !/^\d{3,4}$/.test(value) ? 'Enter 3 or 4 digits' : undefined
+  const validateName = (v: string) => !v ? 'Name is required' : undefined
+  const validateCard = (v: string) => !v ? 'Card number is required' : v.replace(/\s/g, '').length < 16 ? 'Enter a 16-digit card number' : undefined
+  const validateExpiry = (v: string) => {
+    if (!v) return 'Expiry date is required'
+    if (!/^\d{2}\/\d{2}$/.test(v)) return 'Use MM/YY format'
+    const month = parseInt(v.slice(0, 2))
+    if (month < 1 || month > 12) return 'Invalid month'
+    return undefined
   }
+  const validateCvv = (v: string) => !v ? 'CVV is required' : !/^\d{3,4}$/.test(v) ? 'Enter 3 or 4 digits' : undefined
 
-  const err = (f: string, v: string) => touched[f] ? validate(f, v) : undefined
-  const valid = (f: string, v: string) => !!(touched[f] && !validate(f, v) && v)
-  const touch = (f: string) => setTouched(p => ({ ...p, [f]: true }))
-
-  const canContinue = !validate('name', name) && !validate('cardNumber', cardNumber) && !validate('expiry', expiry) && !validate('cvv', cvv)
-
-  function formatCard(v: string) {
-    return v.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim()
-  }
-  function formatExpiry(v: string) {
-    const d = v.replace(/\D/g, '').slice(0, 4)
-    return d.length >= 3 ? d.slice(0, 2) + '/' + d.slice(2) : d
-  }
+  const canContinue = !validateName(name) && !validateCard(cardNumber) && !validateExpiry(expiry) && !validateCvv(cvv)
 
   const fieldClass = '!rounded-2xl bg-white'
   const labelClass = 'bg-white text-mocha'
@@ -404,36 +385,30 @@ function CardDetailsScreen({ onNext, onBack }: { onNext: () => void; onBack: () 
 
         <div className="space-y-4">
           <div>
-            <FloatingInput
+            <FormField
               label={t.cardDetails.fieldFullName} className={fieldClass} labelClassName={labelClass}
-              value={name} onChange={e => setName(e.target.value)} onBlur={() => touch('name')}
-              error={err('name', name)} isValid={valid('name', name)}
+              value={name} onChange={setName}
+              validate={validateName}
               autoComplete="cc-name"
             />
-            {!err('name', name) && <p className="text-[12px] text-mocha mt-1.5 px-1 leading-snug">{t.cardDetails.helperName}</p>}
+            {!validateName(name) || !name ? <p className="text-[12px] text-mocha mt-1.5 px-1 leading-snug">{t.cardDetails.helperName}</p> : null}
           </div>
-          <FloatingInput
+          <FormField
             label={t.cardDetails.fieldCardNumber} className={fieldClass} labelClassName={labelClass}
-            value={cardNumber}
-            onChange={e => setCardNumber(formatCard(e.target.value))}
-            onBlur={() => touch('cardNumber')}
-            error={err('cardNumber', cardNumber)} isValid={valid('cardNumber', cardNumber)}
+            value={cardNumber} onChange={setCardNumber}
+            format={formatCardNumber} validate={validateCard}
             inputMode="numeric" autoComplete="cc-number"
           />
-          <FloatingInput
+          <FormField
             label={t.cardDetails.fieldExpiry} className={fieldClass} labelClassName={labelClass}
-            value={expiry}
-            onChange={e => setExpiry(formatExpiry(e.target.value))}
-            onBlur={() => touch('expiry')}
-            error={err('expiry', expiry)} isValid={valid('expiry', expiry)}
+            value={expiry} onChange={setExpiry}
+            format={formatExpiry} validate={validateExpiry}
             inputMode="numeric" autoComplete="cc-exp" maxLength={5}
           />
-          <FloatingInput
+          <FormField
             label={t.cardDetails.fieldCvv} className={fieldClass} labelClassName={labelClass}
-            value={cvv}
-            onChange={e => setCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
-            onBlur={() => touch('cvv')}
-            error={err('cvv', cvv)} isValid={valid('cvv', cvv)}
+            value={cvv} onChange={setCvv}
+            format={formatCVV} validate={validateCvv}
             inputMode="numeric" autoComplete="cc-csc" maxLength={4}
           />
         </div>
@@ -583,10 +558,10 @@ function StoreSelectionScreen({ onBack, onNext }: { onBack: () => void; onNext: 
               </svg>
               {/* Pin */}
               <div className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-full flex flex-col items-center z-10">
-                <div className="h-7 w-7 rounded-full bg-red-500 border-2 border-white shadow-lg flex items-center justify-center">
+                <div className="h-7 w-7 rounded-full bg-papaya border-2 border-white shadow-lg flex items-center justify-center">
                   <MapPin className="h-3.5 w-3.5 text-white fill-white" />
                 </div>
-                <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[5px] border-l-transparent border-r-transparent border-t-red-500 -mt-[1px]" />
+                <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[5px] border-l-transparent border-r-transparent border-t-papaya -mt-[1px]" />
               </div>
               <span className="absolute text-[8px] font-medium text-slate/30" style={{ left: '55%', top: '36%' }}>{selectedStore.name}</span>
             </div>
@@ -1246,6 +1221,29 @@ const INSPECTOR_STORAGE_KEY = 'felix-content-tokens-v2'
 const SCREEN_STATUS_KEY = 'felix-screen-statuses'
 type ScreenStatus = 'todo' | 'in-review' | 'done'
 
+/** Migrate flat status keys (e.g. 'card-payment') to namespaced (e.g. 'en:card-payment') */
+function migrateStatuses(raw: Record<string, ScreenStatus>): Record<string, ScreenStatus> {
+  const hasLegacy = Object.keys(raw).some(k => !k.includes(':'))
+  if (!hasLegacy) return raw
+  const migrated: Record<string, ScreenStatus> = {}
+  for (const [key, val] of Object.entries(raw)) {
+    if (key.includes(':')) {
+      migrated[key] = val
+    } else {
+      // Replicate to all 7 countries
+      for (const c of countries) {
+        migrated[`${c.code}:${key}`] = val
+      }
+    }
+  }
+  localStorage.setItem(SCREEN_STATUS_KEY, JSON.stringify(migrated))
+  return migrated
+}
+
+function countryLabel(code: Language): string {
+  return countries.find(c => c.code === code)?.shortLabel ?? code.toUpperCase()
+}
+
 // Grouped token structure for the inspector
 type TRef   = { s: keyof ContentTokens; k: string }
 type TGroup = { label: string | null; items: TRef[] }
@@ -1458,6 +1456,7 @@ function TokenInspector({
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [pinnedId, setPinnedId] = useState<string | null>(null)
   const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>({})
+  const [expandedLangs, setExpandedLangs] = useState<Record<string, Set<Language>>>({})
   const visibleGroups = screenGroups[screen] ?? []
 
   // Reset on screen change
@@ -1467,8 +1466,8 @@ function TokenInspector({
     setDrafts(prev => {
       if (prev[id]) return prev
       const initial: Record<string, string> = {}
-      languages.forEach(l => {
-        initial[l.code] = (tokens[l.code][s] as Record<string, string>)[k]
+      countries.forEach(c => {
+        initial[c.code] = (tokens[c.code][s] as Record<string, string>)[k]
       })
       return { ...prev, [id]: initial }
     })
@@ -1476,15 +1475,25 @@ function TokenInspector({
 
   function save(id: string, s: keyof ContentTokens, k: string) {
     const d = drafts[id] ?? {}
-    languages.forEach(l => onChange(s, k, l.code, d[l.code] ?? ''))
+    countries.forEach(c => onChange(s, k, c.code, d[c.code] ?? ''))
     setPinnedId(null)
     setHoveredId(null)
+  }
+
+  function toggleLang(id: string, lang: Language) {
+    setExpandedLangs(prev => {
+      const set = new Set(prev[id] ?? [])
+      if (set.has(lang)) set.delete(lang)
+      else set.add(lang)
+      return { ...prev, [id]: set }
+    })
   }
 
   function TokenRow({ s, k }: TRef) {
     const id = `${s}.${k}`
     const currentVal = (tokens[language][s] as Record<string, string>)[k]
     const isOpen = hoveredId === id || pinnedId === id
+    const openLangs = expandedLangs[id] ?? new Set<Language>()
 
     return (
       <div
@@ -1501,21 +1510,33 @@ function TokenInspector({
         {isOpen && (
           <div className="mb-3 bg-white rounded-2xl border border-slate/10 p-3 space-y-2.5 shadow-sm">
             <p className="text-[11px] font-mono text-blueberry">{s}.{k}</p>
-            {languages.map(lang => (
-              <div key={lang.code}>
-                <label className="text-[10px] font-semibold text-mocha uppercase tracking-wider mb-1 block">
-                  {lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'}
-                </label>
-                <textarea
-                  value={drafts[id]?.[lang.code] ?? ''}
-                  onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [lang.code]: e.target.value } }))}
-                  onFocus={() => setPinnedId(id)}
-                  onBlur={() => setPinnedId(null)}
-                  rows={2}
-                  className="w-full text-[13px] text-slate bg-stone border border-slate/15 rounded-xl px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-turquoise/40"
-                />
-              </div>
-            ))}
+            {countries.map(c => {
+              const isActive = c.code === language
+              const isExpanded = isActive || openLangs.has(c.code)
+              return (
+                <div key={c.code}>
+                  <button
+                    type="button"
+                    onClick={() => { if (!isActive) toggleLang(id, c.code) }}
+                    className={`flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider mb-1 w-full text-left ${isActive ? 'text-mocha' : 'text-mocha/50 hover:text-mocha/70'}`}
+                  >
+                    <span>{c.flag}</span>
+                    <span>{c.shortLabel}</span>
+                    {!isActive && <ChevronDown className={`h-2.5 w-2.5 ml-auto transition-transform ${isExpanded ? 'rotate-180' : ''}`} />}
+                  </button>
+                  {isExpanded && (
+                    <textarea
+                      value={drafts[id]?.[c.code] ?? ''}
+                      onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [c.code]: e.target.value } }))}
+                      onFocus={() => setPinnedId(id)}
+                      onBlur={() => setPinnedId(null)}
+                      rows={2}
+                      className="w-full text-[13px] text-slate bg-stone border border-slate/15 rounded-xl px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-turquoise/40"
+                    />
+                  )}
+                </div>
+              )
+            })}
             <button
               onClick={() => save(id, s, k)}
               className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-xl hover:bg-turquoise/90 transition-colors"
@@ -1644,6 +1665,83 @@ function CanvasArrow() {
   )
 }
 
+function CanvasSidebarTokenEditor({
+  id, s, k, tokens, language, drafts, setDrafts, openId, setOpenId, expandedLangs, setExpandedLangs, save, toggle,
+}: {
+  id: string; s: keyof ContentTokens; k: string
+  tokens: Record<Language, ContentTokens>; language: Language
+  drafts: Record<string, Record<string, string>>
+  setDrafts: React.Dispatch<React.SetStateAction<Record<string, Record<string, string>>>>
+  openId: string | null; setOpenId: (id: string | null) => void
+  expandedLangs: Record<string, Set<Language>>
+  setExpandedLangs: React.Dispatch<React.SetStateAction<Record<string, Set<Language>>>>
+  save: (id: string, s: keyof ContentTokens, k: string) => void
+  toggle: (id: string, s: keyof ContentTokens, k: string) => void
+}) {
+  const currentVal = (tokens[language][s] as Record<string, string>)[k]
+  const isOpen = openId === id
+  const openLangs = expandedLangs[id] ?? new Set<Language>()
+
+  function toggleLang(lang: Language) {
+    setExpandedLangs(prev => {
+      const set = new Set(prev[id] ?? [])
+      if (set.has(lang)) set.delete(lang)
+      else set.add(lang)
+      return { ...prev, [id]: set }
+    })
+  }
+
+  return (
+    <div key={id}>
+      <button
+        className="flex items-baseline gap-2 py-1.5 w-full text-left cursor-pointer hover:bg-white/[0.04] rounded-lg px-1 -mx-1 transition-colors"
+        onClick={() => toggle(id, s, k)}
+      >
+        <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isOpen ? 'text-[#93bbfc]' : 'text-[#60a5fa]/80'}`}>
+          {k}
+        </code>
+        <span className="text-[12px] text-white/60 truncate leading-snug">{currentVal}</span>
+      </button>
+      {isOpen && (
+        <div className="mb-3 bg-[#333] rounded-xl border border-white/[0.12] p-3 space-y-2.5">
+          <p className="text-[11px] font-mono text-[#93bbfc]">{s}.{k}</p>
+          {countries.map(c => {
+            const isActive = c.code === language
+            const isExpanded = isActive || openLangs.has(c.code)
+            return (
+              <div key={c.code}>
+                <button
+                  type="button"
+                  onClick={() => { if (!isActive) toggleLang(c.code) }}
+                  className={`flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider mb-1 w-full text-left ${isActive ? 'text-white/70' : 'text-white/40 hover:text-white/60'}`}
+                >
+                  <span>{c.flag}</span>
+                  <span>{c.shortLabel}</span>
+                  {!isActive && <ChevronDown className={`h-2.5 w-2.5 ml-auto transition-transform ${isExpanded ? 'rotate-180' : ''}`} />}
+                </button>
+                {isExpanded && (
+                  <textarea
+                    value={drafts[id]?.[c.code] ?? ''}
+                    onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [c.code]: e.target.value } }))}
+                    rows={2}
+                    className="w-full text-[13px] text-white/90 bg-[#252525] border border-white/15 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#60a5fa]/40"
+                  />
+                )}
+              </div>
+            )
+          })}
+          <button
+            onClick={() => save(id, s, k)}
+            className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-lg hover:bg-turquoise/90 transition-colors"
+          >
+            Save
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function CanvasSidebar({
   selectedUid,
   screenLabel,
@@ -1667,22 +1765,23 @@ function CanvasSidebar({
 }) {
   const [openId, setOpenId] = useState<string | null>(null)
   const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>({})
+  const [expandedLangs, setExpandedLangs] = useState<Record<string, Set<Language>>>({})
   const visibleGroups = screenGroups[screenKey] ?? []
 
-  useEffect(() => { setOpenId(null); setDrafts({}) }, [selectedUid])
+  useEffect(() => { setOpenId(null); setDrafts({}); setExpandedLangs({}) }, [selectedUid])
 
   function initDrafts(id: string, s: keyof ContentTokens, k: string) {
     setDrafts(prev => {
       if (prev[id]) return prev
       const initial: Record<string, string> = {}
-      languages.forEach(l => { initial[l.code] = (tokens[l.code][s] as Record<string, string>)[k] })
+      countries.forEach(c => { initial[c.code] = (tokens[c.code][s] as Record<string, string>)[k] })
       return { ...prev, [id]: initial }
     })
   }
 
   function save(id: string, s: keyof ContentTokens, k: string) {
     const d = drafts[id] ?? {}
-    languages.forEach(l => onChange(s, k, l.code, d[l.code] ?? ''))
+    countries.forEach(c => onChange(s, k, c.code, d[c.code] ?? ''))
     setOpenId(null)
   }
 
@@ -1705,6 +1804,8 @@ function CanvasSidebar({
       </div>
     )
   }
+
+  const editorProps = { tokens, language, drafts, setDrafts, openId, setOpenId, expandedLangs, setExpandedLangs, save, toggle }
 
   return (
     <div className="w-[320px] shrink-0 border-l border-white/[0.12] bg-[#2a2a2a] flex flex-col overflow-hidden">
@@ -1745,97 +1846,17 @@ function CanvasSidebar({
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
         {visibleGroups.map((group, gi) =>
           group.label === null ? (
-            group.items.map(ref => {
-              const id = `${ref.s}.${ref.k}`
-              const currentVal = (tokens[language][ref.s] as Record<string, string>)[ref.k]
-              const isOpen = openId === id
-
-              return (
-                <div key={id}>
-                  <button
-                    className="flex items-baseline gap-2 py-1.5 w-full text-left cursor-pointer hover:bg-white/[0.04] rounded-lg px-1 -mx-1 transition-colors"
-                    onClick={() => toggle(id, ref.s, ref.k)}
-                  >
-                    <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isOpen ? 'text-[#93bbfc]' : 'text-[#60a5fa]/80'}`}>
-                      {ref.k}
-                    </code>
-                    <span className="text-[12px] text-white/60 truncate leading-snug">{currentVal}</span>
-                  </button>
-                  {isOpen && (
-                    <div className="mb-3 bg-[#333] rounded-xl border border-white/[0.12] p-3 space-y-2.5">
-                      <p className="text-[11px] font-mono text-[#93bbfc]">{ref.s}.{ref.k}</p>
-                      {languages.map(lang => (
-                        <div key={lang.code}>
-                          <label className="text-[10px] font-semibold text-white/50 uppercase tracking-wider mb-1 block">
-                            {lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'}
-                          </label>
-                          <textarea
-                            value={drafts[id]?.[lang.code] ?? ''}
-                            onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [lang.code]: e.target.value } }))}
-                            rows={2}
-                            className="w-full text-[13px] text-white/90 bg-[#252525] border border-white/15 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#60a5fa]/40"
-                          />
-                        </div>
-                      ))}
-                      <button
-                        onClick={() => save(id, ref.s, ref.k)}
-                        className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-lg hover:bg-turquoise/90 transition-colors"
-                      >
-                        Save
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )
-            })
+            group.items.map(ref => (
+              <CanvasSidebarTokenEditor key={`${ref.s}.${ref.k}`} id={`${ref.s}.${ref.k}`} s={ref.s} k={ref.k} {...editorProps} />
+            ))
           ) : (
             <div key={gi} className="bg-white/[0.06] rounded-xl px-3 pt-2.5 pb-1 mb-1">
               <p className="text-[9px] font-semibold text-white/40 uppercase tracking-widest mb-1">
                 {group.label}
               </p>
-              {group.items.map(ref => {
-                const id = `${ref.s}.${ref.k}`
-                const currentVal = (tokens[language][ref.s] as Record<string, string>)[ref.k]
-                const isOpen = openId === id
-
-                return (
-                  <div key={id}>
-                    <button
-                      className="flex items-baseline gap-2 py-1.5 w-full text-left cursor-pointer hover:bg-white/[0.04] rounded-lg px-1 -mx-1 transition-colors"
-                      onClick={() => toggle(id, ref.s, ref.k)}
-                    >
-                      <code className={`text-[11px] font-mono shrink-0 underline underline-offset-2 decoration-dotted transition-colors ${isOpen ? 'text-[#93bbfc]' : 'text-[#60a5fa]/80'}`}>
-                        {ref.k}
-                      </code>
-                      <span className="text-[12px] text-white/60 truncate leading-snug">{currentVal}</span>
-                    </button>
-                    {isOpen && (
-                      <div className="mb-3 bg-[#333] rounded-xl border border-white/[0.12] p-3 space-y-2.5">
-                        <p className="text-[11px] font-mono text-[#93bbfc]">{ref.s}.{ref.k}</p>
-                        {languages.map(lang => (
-                          <div key={lang.code}>
-                            <label className="text-[10px] font-semibold text-white/50 uppercase tracking-wider mb-1 block">
-                              {lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'}
-                            </label>
-                            <textarea
-                              value={drafts[id]?.[lang.code] ?? ''}
-                              onChange={e => setDrafts(d => ({ ...d, [id]: { ...d[id], [lang.code]: e.target.value } }))}
-                              rows={2}
-                              className="w-full text-[13px] text-white/90 bg-[#252525] border border-white/15 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#60a5fa]/40"
-                            />
-                          </div>
-                        ))}
-                        <button
-                          onClick={() => save(id, ref.s, ref.k)}
-                          className="w-full py-2 bg-turquoise text-slate text-[13px] font-semibold rounded-lg hover:bg-turquoise/90 transition-colors"
-                        >
-                          Save
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
+              {group.items.map(ref => (
+                <CanvasSidebarTokenEditor key={`${ref.s}.${ref.k}`} id={`${ref.s}.${ref.k}`} s={ref.s} k={ref.k} {...editorProps} />
+              ))}
             </div>
           )
         )}
@@ -1848,26 +1869,36 @@ function FlowCanvasOverlay({
   editableContent,
   language,
   onLanguageChange,
+  pinnedCountry,
   onClose,
   onChange,
 }: {
   editableContent: Record<Language, ContentTokens>
   language: Language
   onLanguageChange: (lang: Language) => void
+  pinnedCountry: Language
   onClose: () => void
   onChange: (section: keyof ContentTokens, key: string, lang: Language, value: string) => void
 }) {
   const [selectedUid, setSelectedUid] = useState<string | null>(null)
-  const [statuses, setStatuses] = useState<Record<string, ScreenStatus>>(() => {
-    try { return JSON.parse(localStorage.getItem(SCREEN_STATUS_KEY) || '{}') } catch { return {} }
-  })
+  const [statuses, setStatuses] = useState<Record<string, ScreenStatus>>({})
+
+  // Load persisted statuses on mount — migrate old flat keys to namespaced
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(SCREEN_STATUS_KEY)
+      if (saved) setStatuses(migrateStatuses(JSON.parse(saved)))
+    } catch {}
+  }, [])
   function setStatus(uid: string, s: ScreenStatus) {
+    const nsKey = `${language}:${uid}`
     setStatuses(prev => {
-      const next = { ...prev, [uid]: s }
+      const next = { ...prev, [nsKey]: s }
       localStorage.setItem(SCREEN_STATUS_KEY, JSON.stringify(next))
       return next
     })
   }
+  const getStatus = (uid: string): ScreenStatus => statuses[`${language}:${uid}`] ?? 'todo'
   const viewRef = useRef<HTMLDivElement>(null)
   const canvas = useRef({ zoom: 1, ox: 0, oy: 0 })
   const [, repaint] = useState(0)
@@ -2055,19 +2086,36 @@ function FlowCanvasOverlay({
           </a>
         </div>
         <div className="flex items-center gap-0.5">
-          {/* Language toggles */}
-          {languages.map(lang => {
-            const label = lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES' : 'PT'
-            const active = language === lang.code
+          {/* Country tabs — static */}
+          {staticCountries.map(c => {
+            const active = language === c.code
             return (
               <button
-                key={lang.code}
-                onClick={() => onLanguageChange(lang.code)}
+                key={c.code}
+                onClick={() => onLanguageChange(c.code)}
                 className={`h-7 px-2.5 rounded-md text-[12px] font-semibold transition-colors ${
                   active ? 'bg-white/15 text-white' : 'text-white/35 hover:text-white hover:bg-white/10'
                 }`}
               >
-                {label}
+                {c.flag} {c.shortLabel}
+              </button>
+            )
+          })}
+          <div className="w-px h-4 bg-white/10 mx-1" />
+          {/* Country tabs — pinnable */}
+          {pinnableCountries.map(c => {
+            const active = language === c.code
+            const isPinned = pinnedCountry === c.code
+            return (
+              <button
+                key={c.code}
+                onClick={() => onLanguageChange(c.code)}
+                className={`relative h-7 px-2.5 rounded-md text-[12px] font-semibold transition-colors ${
+                  active ? 'bg-white/15 text-white' : isPinned ? 'text-white/60 hover:text-white hover:bg-white/10' : 'text-white/35 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {c.flag} {c.shortLabel}
+                {isPinned && !active && <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-turquoise" />}
               </button>
             )
           })}
@@ -2136,7 +2184,7 @@ function FlowCanvasOverlay({
                           progress={screen.progress}
                           editableContent={editableContent}
                           language={language}
-                          status={statuses[uid] ?? 'todo'}
+                          status={getStatus(uid)}
                         >
                           {screen.node}
                         </CanvasMiniPhone>,
@@ -2163,7 +2211,7 @@ function FlowCanvasOverlay({
           screenKey={selectedScreen?.sk ?? ''}
           tokens={editableContent}
           language={language}
-          status={selectedUid ? (statuses[selectedUid] ?? 'todo') : 'todo'}
+          status={selectedUid ? getStatus(selectedUid) : 'todo'}
           onStatusChange={s => selectedUid && setStatus(selectedUid, s)}
           onChange={onChange}
           onDeselect={() => setSelectedUid(null)}
@@ -2175,25 +2223,85 @@ function FlowCanvasOverlay({
 
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
-function PhoneControls({ current, onChange }: { current: Language; onChange: (l: Language) => void }) {
+function PhoneControls({
+  current,
+  onChange,
+  pinnedCountry,
+  onPinCountry,
+}: {
+  current: Language
+  onChange: (l: Language) => void
+  pinnedCountry: Language
+  onPinCountry: (l: Language) => void
+}) {
+  const [popoverOpen, setPopoverOpen] = useState(false)
+  const pinned = countries.find(c => c.code === pinnedCountry) ?? pinnableCountries[0]
+
   return (
     <div className="flex items-center justify-between w-full mb-4">
       <div className="flex items-center gap-1">
-        {languages.map(lang => {
-          const label = lang.code === 'en' ? 'EN' : lang.code === 'es-mx' ? 'ES-MX' : 'PT-BR'
-          const active = current === lang.code
+        {/* Static tabs: US, MX */}
+        {staticCountries.map(c => {
+          const active = current === c.code
           return (
             <button
-              key={lang.code}
-              onClick={() => onChange(lang.code)}
+              key={c.code}
+              onClick={() => onChange(c.code)}
               className={`px-3 py-1.5 rounded-full text-[13px] font-semibold transition-all ${
                 active ? 'bg-slate text-linen' : 'text-slate/50 hover:text-slate'
               }`}
             >
-              {label}
+              {c.flag} {c.shortLabel}
             </button>
           )
         })}
+
+        {/* Pinned country tab with dropdown */}
+        <div className="relative">
+          <div className="flex items-center">
+            <button
+              onClick={() => onChange(pinned.code)}
+              className={`pl-3 pr-1.5 py-1.5 rounded-l-full text-[13px] font-semibold transition-all ${
+                current === pinned.code ? 'bg-slate text-linen' : 'text-slate/50 hover:text-slate'
+              }`}
+            >
+              {pinned.flag} {pinned.shortLabel}
+            </button>
+            <button
+              onClick={() => setPopoverOpen(!popoverOpen)}
+              className={`pr-2.5 pl-0.5 py-1.5 rounded-r-full text-[13px] transition-all ${
+                current === pinned.code ? 'bg-slate text-linen' : 'text-slate/50 hover:text-slate'
+              }`}
+            >
+              <ChevronDown className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          {popoverOpen && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setPopoverOpen(false)} />
+              <div className="absolute top-full left-0 mt-1 z-50 bg-white rounded-xl shadow-xl border border-slate/10 py-1 min-w-[180px]">
+                {pinnableCountries.map(c => (
+                  <button
+                    key={c.code}
+                    onClick={() => {
+                      onPinCountry(c.code)
+                      onChange(c.code)
+                      setPopoverOpen(false)
+                    }}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 text-[13px] text-left transition-colors ${
+                      c.code === pinnedCountry ? 'bg-turquoise/10 font-semibold text-slate' : 'text-mocha hover:bg-stone'
+                    }`}
+                  >
+                    <span>{c.flag}</span>
+                    <span>{c.country}</span>
+                    {c.code === pinnedCountry && <Pin className="h-3 w-3 ml-auto text-turquoise" />}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
       <a
         href="/fintech/tokens"
@@ -2216,13 +2324,20 @@ export default function FintechTestFlowPage() {
   const [repeatSelectedStore, setRepeatSelectedStore] = useState<string>('')
   const [showSavedMethods, setShowSavedMethods] = useState(false)
   const [language, setLanguage] = useState<Language>('en')
+  const [pinnedCountry, setPinnedCountry] = useState<Language>('es-do')
   const [userType, setUserType] = useState<'new' | 'repeat'>('new')
   const [showCanvas, setShowCanvas] = useState(false)
   const [ready, setReady] = useState(false)
 
-  // Read hash on mount and mark ready — prevents flash of prototype when refreshing in canvas view
+  // Read hash on mount, restore pinned country, and mark ready
   useEffect(() => {
     if (window.location.hash === '#canvas') setShowCanvas(true)
+    try {
+      const saved = localStorage.getItem(PINNED_COUNTRY_KEY)
+      if (saved && pinnableCountries.some(c => c.code === saved)) {
+        setPinnedCountry(saved as Language)
+      }
+    } catch {}
     setReady(true)
   }, [])
 
@@ -2266,6 +2381,11 @@ export default function FintechTestFlowPage() {
     } catch {}
   }, [])
 
+  function pinCountry(code: Language) {
+    setPinnedCountry(code)
+    localStorage.setItem(PINNED_COUNTRY_KEY, code)
+  }
+
   function updateToken(section: keyof ContentTokens, key: string, lang: Language, value: string) {
     setEditableContent(prev => {
       const next = JSON.parse(JSON.stringify(prev))
@@ -2284,7 +2404,7 @@ export default function FintechTestFlowPage() {
 
           {/* Phone column: controls above, device below */}
           <div className="flex flex-col items-stretch w-[390px] shrink-0">
-            <PhoneControls current={language} onChange={setLanguage} />
+            <PhoneControls current={language} onChange={setLanguage} pinnedCountry={pinnedCountry} onPinCountry={pinCountry} />
             <PhoneFrame progress={userType === 'repeat'
               ? { review: 100, success: 100 }[repeatScreen]
               : {
@@ -2433,6 +2553,7 @@ export default function FintechTestFlowPage() {
           editableContent={editableContent}
           language={language}
           onLanguageChange={setLanguage}
+          pinnedCountry={pinnedCountry}
           onClose={() => setShowCanvas(false)}
           onChange={updateToken}
         />

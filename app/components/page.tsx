@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from "react"
 import { DesignSystemLayout } from "@/components/design-system/design-system-layout"
 import { Section } from "@/components/design-system/section"
 import { Button } from "@/components/ui/button"
@@ -5,7 +8,155 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { FloatingInput } from "@/components/ui/floating-input"
-import { ArrowRight, Send, Download, Plus, Check, X, Loader2 } from "lucide-react"
+import { StatusBadge } from "@/components-next/status-badge"
+import { FeatureCard } from "@/components-next/feature-card"
+import { FormField, formatCardNumber, formatExpiry as formatExpiryFmt, formatCVV, formatZIP } from "@/components-next/form-field"
+import { ArrowRight, Send, Download, Plus, Check, X, Loader2, ChevronDown } from "lucide-react"
+
+/* ── Interactive form demos ─────────────────────────────────── */
+
+function ErrorStatesDemo() {
+  return (
+    <div className="max-w-md space-y-4">
+      <FloatingInput label="Default" />
+      <FloatingInput label="With error" error="This field is required" />
+      <FloatingInput label="Valid state" isValid defaultValue="hello@felix.com" />
+      <FloatingInput label="Disabled" disabled />
+    </div>
+  )
+}
+
+function FormattedInputsDemo() {
+  const [card, setCard] = useState('')
+  const [expiry, setExpiry] = useState('')
+  const [cvv, setCvv] = useState('')
+  const [zip, setZip] = useState('')
+
+  return (
+    <div className="max-w-md space-y-4">
+      <FormField
+        label="Card number"
+        value={card}
+        onChange={setCard}
+        format={formatCardNumber}
+        inputMode="numeric"
+        autoComplete="cc-number"
+      />
+      <div className="grid grid-cols-2 gap-3">
+        <FormField
+          label="MM/YY"
+          value={expiry}
+          onChange={setExpiry}
+          format={formatExpiryFmt}
+          maxLength={5}
+          inputMode="numeric"
+          autoComplete="cc-exp"
+        />
+        <FormField
+          label="CVV"
+          value={cvv}
+          onChange={setCvv}
+          format={formatCVV}
+          maxLength={4}
+          inputMode="numeric"
+          autoComplete="cc-csc"
+        />
+      </div>
+      <FormField
+        label="ZIP code"
+        value={zip}
+        onChange={setZip}
+        format={formatZIP}
+        inputMode="numeric"
+      />
+    </div>
+  )
+}
+
+function ValidationDemo() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+
+  const validateName = (v: string) => !v.trim() ? 'Full name is required' : undefined
+  const validateEmail = (v: string) => {
+    if (!v.trim()) return 'Email is required'
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'Enter a valid email address'
+  }
+  const validatePhone = (v: string) => {
+    if (!v.trim()) return 'Phone number is required'
+    if (v.replace(/\D/g, '').length < 10) return 'Enter a 10-digit phone number'
+  }
+
+  const canContinue = !validateName(name) && !validateEmail(email) && !validatePhone(phone)
+
+  return (
+    <div className="max-w-md space-y-4">
+      <FormField
+        label="Full name"
+        value={name}
+        onChange={setName}
+        validate={validateName}
+      />
+      <FormField
+        label="Email address"
+        type="email"
+        value={email}
+        onChange={setEmail}
+        validate={validateEmail}
+      />
+      <FormField
+        label="Phone number"
+        type="tel"
+        value={phone}
+        onChange={setPhone}
+        validate={validatePhone}
+      />
+      <Button className="w-full" disabled={!canContinue}>
+        Continue
+      </Button>
+      <p className="text-xs text-muted-foreground text-center">
+        Tab through fields and leave them empty to see validation errors.
+      </p>
+    </div>
+  )
+}
+
+function CustomSelectDemo() {
+  const [state, setState] = useState('')
+  const [touched, setTouched] = useState(false)
+  const error = touched && !state ? 'Please select a state' : undefined
+
+  return (
+    <div className="max-w-md space-y-4">
+      <div className="relative">
+        <select
+          value={state}
+          onChange={e => setState(e.target.value)}
+          onBlur={() => setTouched(true)}
+          className={`h-14 w-full appearance-none rounded-xl border bg-transparent px-4 pt-4 pb-2 text-base text-foreground transition-colors outline-none ${
+            error
+              ? 'border-red-400 focus:border-red-400 focus:ring-[3px] focus:ring-red-400/20'
+              : state
+                ? 'border-turquoise/60 focus:border-turquoise focus:ring-[3px] focus:ring-turquoise/25'
+                : 'border-border focus:border-turquoise focus:ring-[3px] focus:ring-turquoise/25'
+          }`}
+        >
+          <option value="">Select a state...</option>
+          {['California', 'Texas', 'New York', 'Florida', 'Illinois', 'Arizona', 'Nevada', 'Colorado'].map(s => (
+            <option key={s} value={s}>{s}</option>
+          ))}
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        {error && <p className="mt-1.5 px-1 text-[12px] text-red-400 leading-snug">{error}</p>}
+      </div>
+      <FloatingInput label="City" />
+      <FloatingInput label="ZIP code" inputMode="numeric" maxLength={5} />
+    </div>
+  )
+}
+
+/* ── Page ────────────────────────────────────────────────────── */
 
 export default function ComponentsPage() {
   return (
@@ -82,7 +233,7 @@ export default function ComponentsPage() {
             </div>
           </div>
 
-          
+
         </div>
       </Section>
 
@@ -153,32 +304,25 @@ export default function ComponentsPage() {
         {/* Feature Cards */}
         <h4 className="mb-4 mt-8 text-sm font-medium text-muted-foreground">Feature Cards</h4>
         <div className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-xl bg-sky p-6">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-slate">
-              <Send className="h-6 w-6 text-turquoise" />
-            </div>
-            <h3 className="mb-2 font-display text-xl font-bold text-slate">Send Money</h3>
-            <p className="text-sm text-slate">
-              Transfer money to friends and family instantly with just a text message.
-            </p>
-          </div>
-
-          <div className="rounded-xl bg-cactus p-6">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-slate">
-              <Check className="h-6 w-6 text-cactus" />
-            </div>
-            <h3 className="mb-2 font-display text-xl font-bold text-slate">Build Credit</h3>
-            <p className="text-sm text-slate">
-              Improve your credit score with our innovative credit-building tools.
-            </p>
-          </div>
+          <FeatureCard
+            icon={<Send className="text-turquoise" />}
+            title="Send Money"
+            description="Transfer money to friends and family instantly with just a text message."
+            accent="bg-sky"
+          />
+          <FeatureCard
+            icon={<Check className="text-cactus" />}
+            title="Build Credit"
+            description="Improve your credit score with our innovative credit-building tools."
+            accent="bg-cactus"
+          />
         </div>
       </Section>
 
       <Section
         id="inputs"
         title="Form Inputs"
-        description="Input components for collecting user data."
+        description="Input components for collecting user data. FloatingInput supports error states, validation feedback, and input formatting out of the box."
         accessibility={{
           score: "8/10",
           wcag: "AA",
@@ -186,23 +330,44 @@ export default function ComponentsPage() {
             "Label text (Slate on Linen): 18.5:1 - AAA",
             "Placeholder (Evergreen on Linen): 5.2:1 - AA",
             "Input border (Mocha on Linen): 4.9:1 - AA",
-            "Brand input border (Concrete on Linen): 1.6:1 - low boundary visibility",
+            "Error text (Red-400 on Linen): 5.8:1 - AA",
+            "Valid border (Turquoise/60 on Linen): 2.1:1 - relies on color + thickness",
             "Disabled input at 50% opacity: ~2.6:1 - below 3:1 minimum",
           ],
         }}
       >
-        <div className="max-w-md space-y-6">
-          {/* Floating Label Inputs */}
-          <div className="space-y-4">
-            <FloatingInput label="Email address" type="email" />
-            <FloatingInput label="Phone number" type="tel" />
-            <FloatingInput label="Disabled input" disabled />
+        <div className="space-y-10">
+          {/* Error & Validation States */}
+          <div>
+            <h4 className="mb-4 text-sm font-medium text-muted-foreground">States</h4>
+            <ErrorStatesDemo />
+          </div>
+
+          {/* Formatted Inputs */}
+          <div>
+            <h4 className="mb-2 text-sm font-medium text-muted-foreground">Formatted Inputs</h4>
+            <p className="mb-4 text-sm text-muted-foreground">Auto-formatting for card numbers (groups of 4), expiry dates (MM/YY), CVV, and ZIP codes. Numeric-only inputs use <code className="rounded bg-stone px-1.5 py-0.5 text-xs font-mono text-foreground">inputMode=&quot;numeric&quot;</code>.</p>
+            <FormattedInputsDemo />
+          </div>
+
+          {/* Custom Select */}
+          <div>
+            <h4 className="mb-2 text-sm font-medium text-muted-foreground">Custom Select</h4>
+            <p className="mb-4 text-sm text-muted-foreground">Native select styled to match FloatingInput. Includes validation states and a custom chevron icon overlay.</p>
+            <CustomSelectDemo />
+          </div>
+
+          {/* Validation Pattern */}
+          <div>
+            <h4 className="mb-2 text-sm font-medium text-muted-foreground">Touched-State Validation</h4>
+            <p className="mb-4 text-sm text-muted-foreground">Errors appear only after a field loses focus, preventing premature validation while the user is still typing. The continue button stays disabled until all fields pass.</p>
+            <ValidationDemo />
           </div>
 
           {/* Brand Styled */}
           <div>
             <h4 className="mb-4 text-sm font-medium text-muted-foreground">Brand Styled</h4>
-            <div className="flex overflow-hidden rounded-full border-2 border-concrete bg-linen">
+            <div className="max-w-md flex overflow-hidden rounded-full border-2 border-concrete bg-linen">
               <input
                 type="email"
                 placeholder="Enter your email..."
@@ -249,15 +414,9 @@ export default function ComponentsPage() {
           <div>
             <h4 className="mb-4 text-sm font-medium text-muted-foreground">Status Badges</h4>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-cactus/20 px-3 py-1 text-xs font-medium text-evergreen">
-                <Check className="h-3 w-3" /> Completed
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-mango/20 px-3 py-1 text-xs font-medium text-slate">
-                <Loader2 className="h-3 w-3 animate-spin" /> Pending
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-papaya/20 px-3 py-1 text-xs font-medium text-slate">
-                <X className="h-3 w-3" /> Failed
-              </span>
+              <StatusBadge variant="success" icon={<Check />}>Completed</StatusBadge>
+              <StatusBadge variant="warning" icon={<Loader2 className="animate-spin" />}>Pending</StatusBadge>
+              <StatusBadge variant="error" icon={<X />}>Failed</StatusBadge>
             </div>
           </div>
 

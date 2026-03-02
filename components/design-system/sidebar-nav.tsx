@@ -13,8 +13,9 @@ import {
   PenLine,
   Images,
   Globe,
-  FileText,
   FileCode2,
+  Plug,
+  Coins,
 } from "lucide-react"
 import { FelixLogo } from "./felix-logo"
 import { useDSLang } from "./ds-lang-context"
@@ -25,7 +26,7 @@ export function SidebarNav() {
   const { t, lang, setLang } = useDSLang()
   const n = t.nav
 
-  const navItems: ({ title: string; href: string; icon: typeof Home; children?: { title: string; href: string }[]; dividerBefore?: boolean })[] = [
+  const navItems: ({ title: string; href: string; icon: typeof Home; badge?: string; disabled?: boolean; children?: { title: string; href: string }[]; dividerBefore?: boolean })[] = [
     {
       title: n.overview,
       href: "/",
@@ -118,26 +119,25 @@ export function SidebarNav() {
       ],
     },
     {
-      title: n.reference,
-      href: "/reference",
-      icon: FileText,
-      dividerBefore: true,
-      children: [
-        { title: n.refStack, href: "/reference#stack-setup" },
-        { title: n.refPrinciples, href: "/reference#design-principles" },
-        { title: n.refColors, href: "/reference#colors" },
-        { title: n.refTypography, href: "/reference#typography" },
-        { title: n.refComponents, href: "/reference#components" },
-        { title: n.refPatterns, href: "/reference#ui-patterns" },
-        { title: n.refContentTokens, href: "/reference#content-tokens-fintech-flow" },
-        { title: n.refFintechFlows, href: "/reference#fintech-flow-architecture" },
-        { title: n.refPresentation, href: "/reference#presentation-system" },
-      ],
+      title: n.fintechTokens,
+      href: "/fintech/tokens",
+      icon: Coins,
+      badge: n.soon,
+      disabled: true,
     },
     {
       title: n.referenceMd,
       href: "/md",
       icon: FileCode2,
+      badge: n.experimental,
+      dividerBefore: true,
+    },
+    {
+      title: n.mcp,
+      href: "/mcp",
+      icon: Plug,
+      badge: n.soon,
+      disabled: true,
     },
   ]
 
@@ -171,18 +171,37 @@ export function SidebarNav() {
                 {item.dividerBefore && (
                   <div className="my-2 mx-3 h-px bg-sidebar-border" />
                 )}
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium leading-[1.5] transition-colors",
-                    isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                      : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  {item.title}
-                </Link>
+                {item.disabled ? (
+                  <span
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium leading-[1.5] text-sidebar-foreground/40 cursor-default"
+                  >
+                    <Icon className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{item.title}</span>
+                    {item.badge && (
+                      <span className="ml-auto flex-shrink-0 rounded-full bg-sidebar-foreground/8 px-1.5 py-0.5 text-[9px] font-semibold text-sidebar-foreground/40 whitespace-nowrap">
+                        {item.badge}
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium leading-[1.5] transition-colors",
+                      isActive
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                        : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {item.title}
+                    {item.badge && (
+                      <span className="ml-auto rounded-full bg-turquoise/15 px-2 py-0.5 text-[10px] font-semibold text-turquoise">
+                        {item.badge}
+                      </span>
+                    )}
+                  </Link>
+                )}
                 {item.children && (
                   <div
                     className="grid transition-[grid-template-rows] duration-200 ease-in-out"

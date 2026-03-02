@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { content, languages, type Language, type ContentTokens } from '@/app/fintechtestflow/content'
+import { content, countries, type Language, type ContentTokens } from '@/app/fintechtestflow/content'
 
 const STORAGE_KEY = 'felix-content-tokens'
 
@@ -59,21 +59,38 @@ function EditableCell({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function FintechTokensPage() {
+  const [mounted, setMounted] = useState(false)
   const [tokens, setTokens] = useState<Record<Language, ContentTokens>>(() =>
     deepClone(content)
   )
   const [dirty, setDirty] = useState(false)
 
-  // Load from localStorage on mount
+  // Hydration guard + load from localStorage on mount (merge over defaults)
   useEffect(() => {
+    setMounted(true)
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) {
-        setTokens(JSON.parse(saved))
+        const parsed = JSON.parse(saved) as Record<Language, ContentTokens>
+        const merged = deepClone(content)
+        for (const lang of Object.keys(merged) as Language[]) {
+          if (parsed[lang]) {
+            for (const section of Object.keys(merged[lang]) as (keyof ContentTokens)[]) {
+              if (parsed[lang][section]) {
+                Object.assign(merged[lang][section], parsed[lang][section])
+              }
+            }
+          }
+        }
+        setTokens(merged)
         setDirty(true)
       }
     } catch {}
   }, [])
+
+  if (!mounted) {
+    return <div className="min-h-screen bg-linen" />
+  }
 
   function updateToken(lang: Language, section: keyof ContentTokens, key: string, value: string) {
     setTokens(prev => {
@@ -91,18 +108,20 @@ export default function FintechTokensPage() {
     setDirty(false)
   }
 
+  const gridCols = `200px repeat(${countries.length}, 1fr)`
+
   return (
     <div className="min-h-screen bg-linen px-8 py-12">
-      <div className="max-w-5xl mx-auto">
+      <div className="mx-auto" style={{ maxWidth: '100%' }}>
 
         {/* Header */}
-        <div className="mb-10">
+        <div className="mb-10 max-w-5xl">
           <p className="text-[13px] font-semibold text-mocha uppercase tracking-widest mb-2">Felix Design System</p>
           <h1 className="font-display text-[40px] font-extrabold leading-tight tracking-tight text-slate mb-3">
             Content Tokens
           </h1>
           <p className="text-[16px] text-mocha max-w-xl">
-            All user-facing strings for the payment flow, organized by screen. Supports English, Mexican Spanish, and Brazilian Portuguese.
+            All user-facing strings for the payment flow, organized by screen. Supports 7 markets: US, MX, BR, DR, CR, PE, and EC.
           </p>
           <div className="mt-4 flex items-center gap-3">
             <a
@@ -143,15 +162,15 @@ export default function FintechTokensPage() {
                   </code>
                 </div>
 
-                {/* Table */}
-                <div className="rounded-2xl border border-slate/10 overflow-hidden">
+                {/* Table with horizontal scroll */}
+                <div className="rounded-2xl border border-slate/10 overflow-x-auto">
                   {/* Table head */}
-                  <div className="grid bg-stone border-b border-slate/10" style={{ gridTemplateColumns: '200px 1fr 1fr 1fr' }}>
+                  <div className="grid bg-stone border-b border-slate/10" style={{ gridTemplateColumns: gridCols, minWidth: 1200 }}>
                     <div className="px-4 py-2.5 text-[11px] font-semibold text-mocha uppercase tracking-wider">Token</div>
-                    {languages.map(lang => (
-                      <div key={lang.code} className="px-4 py-2.5 text-[11px] font-semibold text-mocha uppercase tracking-wider flex items-center gap-1.5">
-                        <span>{lang.flag}</span>
-                        <span>{lang.label}</span>
+                    {countries.map(c => (
+                      <div key={c.code} className="px-4 py-2.5 text-[11px] font-semibold text-mocha uppercase tracking-wider flex items-center gap-1.5">
+                        <span>{c.flag}</span>
+                        <span>{c.shortLabel}</span>
                       </div>
                     ))}
                   </div>
@@ -161,22 +180,22 @@ export default function FintechTokensPage() {
                     <div
                       key={tokenKey}
                       className={`grid divide-x divide-slate/5 ${i % 2 === 0 ? 'bg-white' : 'bg-linen'}`}
-                      style={{ gridTemplateColumns: '200px 1fr 1fr 1fr' }}
+                      style={{ gridTemplateColumns: gridCols, minWidth: 1200 }}
                     >
                       {/* Token key */}
                       <div className="px-4 py-3 flex items-start">
                         <code className="text-[12px] font-mono text-blueberry">{tokenKey}</code>
                       </div>
 
-                      {/* Editable values per language */}
-                      {languages.map(lang => {
-                        const val = (tokens[lang.code][key] as Record<string, string>)[tokenKey]
+                      {/* Editable values per country */}
+                      {countries.map(c => {
+                        const val = (tokens[c.code][key] as Record<string, string>)[tokenKey]
                         return (
-                          <div key={lang.code} className="px-4 py-3">
+                          <div key={c.code} className="px-4 py-3">
                             <p className="text-[13px] text-slate">
                               <EditableCell
                                 value={val}
-                                onChange={v => updateToken(lang.code, key, tokenKey, v)}
+                                onChange={v => updateToken(c.code, key, tokenKey, v)}
                               />
                             </p>
                           </div>

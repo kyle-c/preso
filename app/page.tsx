@@ -22,40 +22,42 @@ export default function HomePage() {
   return (
     <DesignSystemLayout title="">
       <Section id="foundation" title="">
-        <div className="max-w-4xl space-y-8">
-          <div className="-mt-2 mb-2">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.01em] leading-[1.4] text-turquoise-700">
-              {h.overviewLabel}
+        <div className="-mt-2 mb-6">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.01em] leading-[1.4] text-turquoise-700">
+            {h.overviewLabel}
+          </p>
+          <h2 className="font-display text-4xl font-extrabold text-foreground leading-tight tracking-tight">
+            {h.heroTitle}
+          </h2>
+        </div>
+
+        <div className="grid gap-10 md:grid-cols-[1fr_auto] items-start">
+          <div className="space-y-8">
+            <p className="text-2xl font-light text-foreground leading-[1.45]">
+              {renderBold(h.para1)}
             </p>
-            <h2 className="font-display text-4xl font-extrabold text-foreground leading-tight tracking-tight">
-              {h.heroTitle}
-            </h2>
+
+            <p className="text-xl font-light text-muted-foreground leading-[1.55]">
+              {renderBold(h.para2)}
+            </p>
+
+            <p className="border-l-2 border-turquoise pl-6 text-xl font-light text-muted-foreground leading-[1.55]">
+              {renderBold(h.para3)}
+            </p>
+
+            <p className="text-xl font-light text-muted-foreground leading-[1.55]">
+              {renderBold(h.para4)}
+            </p>
           </div>
 
-          <p className="text-xl font-light text-foreground leading-[1.5]">
-            {renderBold(h.para1)}
-          </p>
-
-          <p className="text-lg font-light text-muted-foreground leading-[1.6]">
-            {renderBold(h.para2)}
-          </p>
-
-          <p className="border-l-2 border-turquoise pl-6 text-lg font-light text-muted-foreground leading-[1.6]">
-            {renderBold(h.para3)}
-          </p>
-
-          <p className="text-lg font-light text-muted-foreground leading-[1.6]">
-            {renderBold(h.para4)}
-          </p>
-
-          <div className="mt-2 w-fit rounded-xl border border-border bg-white px-6 py-5">
-            <p className="mb-3 font-display text-xl font-light text-foreground">
+          <div className="sticky top-8 ml-auto w-fit rounded-xl bg-sage/10 px-6 py-5 shadow-md">
+            <p className="mb-3 font-display text-xl font-light text-sage-700">
               {h.felixUses}
             </p>
             <ul className="space-y-2 text-base text-muted-foreground">
               {[h.bullet1, h.bullet2, h.bullet3, h.bullet4, h.bullet5].map((bullet, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-turquoise-600" />
+                  <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-sage" />
                   <span className="leading-[1.6]">{renderBold(bullet)}</span>
                 </li>
               ))}
@@ -87,33 +89,6 @@ export default function HomePage() {
                 </div>
               </Link>
           ))}
-        </div>
-      </Section>
-
-      <Section
-        id="brand-overview"
-        title={h.brandOverview}
-        description={h.brandOverviewDesc}
-      >
-        <div className="grid gap-8 md:grid-cols-3">
-          <div className="rounded-xl bg-slate p-6">
-            <h4 className="mb-3 font-display text-lg font-bold text-turquoise">Primary Colors</h4>
-            <p className="text-sm text-concrete">
-              Turquoise and Slate form the core of our visual identity, creating a bold and trustworthy appearance.
-            </p>
-          </div>
-          <div className="rounded-xl bg-turquoise p-6">
-            <h4 className="mb-3 font-display text-lg font-bold text-slate">Typography</h4>
-            <p className="text-sm text-slate/80">
-              Clean, modern sans-serif typography ensures readability across all platforms and devices.
-            </p>
-          </div>
-          <div className="rounded-xl bg-stone p-6">
-            <h4 className="mb-3 font-display text-lg font-bold text-slate">Neutrals</h4>
-            <p className="text-sm text-slate/80">
-              Warm neutrals like Concrete, Stone, and Linen provide balance and sophisticated backgrounds.
-            </p>
-          </div>
         </div>
       </Section>
     </DesignSystemLayout>

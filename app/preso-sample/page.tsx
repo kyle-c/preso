@@ -74,27 +74,27 @@ interface Objective {
 
 const objectives: Objective[] = [
   {
-    label: 'Fortify & aggressively\ngrow remittances to top 3',
+    label: 'Reduce chaos caused\nby the geese',
     bg: 'turquoise',
     rows: [
-      { kr: '3.6 million transactions', krSuffix: ' in Q1', status: 'olive', pct: 56, rangeMin: '2M', rangeMax: '3.6M' },
-      { kr: '91% error-free transactions', status: 'red', pct: 97, rangeMin: '88.2%', rangeMax: '91.1%' },
-      { kr: '55.3% new users 30 day moving retention rate (4 weeks moving avg)', status: 'green', pct: 105, rangeMin: '58.2%', rangeMax: '55.3%' },
+      { kr: 'Zero goose-related HR incidents', krSuffix: ' (currently 14)', status: 'red', pct: 12, rangeMin: '14', rangeMax: '0' },
+      { kr: '85% of visitors not chased by a goose', status: 'olive', pct: 63, rangeMin: '54%', rangeMax: '85%' },
+      { kr: 'Successfully relocate Gerald the alpha goose', status: 'red', pct: 0, rangeMin: '', rangeMax: '' },
     ],
   },
   {
-    label: 'Scale SNPL to Sustainable\nProduct-Market Fit',
+    label: 'Convince the capybaras\nto do literally anything',
     bg: 'lime',
     rows: [
-      { kr: 'Originate 5.8k loans', status: 'green', pct: 52, rangeMin: '3k', rangeMax: '5.8k' },
+      { kr: 'At least 1 capybara visibly awake during zoo hours', status: 'green', pct: 47, rangeMin: '0', rangeMax: '1' },
     ],
   },
   {
-    label: 'Must-Win Battles (MWB)',
+    label: 'Urgent Animal Situations',
     bg: 'black',
     rows: [
-      { kr: 'Launch Ecuador and Peru', status: 'yellow', pct: 0, rangeMin: '', rangeMax: '' },
-      { kr: 'Produce a single, aligned roadmap for multi-product readiness', status: 'olive', pct: 0, rangeMin: '', rangeMax: '' },
+      { kr: 'Find out who taught the parrot to say "you\'re fired"', status: 'yellow', pct: 0, rangeMin: '', rangeMax: '' },
+      { kr: 'Stop the raccoons from unionizing', status: 'olive', pct: 0, rangeMin: '', rangeMax: '' },
     ],
   },
 ]
@@ -132,31 +132,31 @@ function SlideNorthStar() {
       {/* Decorative collage — scattered money illustrations */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {/* Flying dollar bill — top left */}
-        <div className="absolute top-[8%] left-[3%] w-[180px] lg:w-[240px] opacity-[0.18] -rotate-12">
+        <div className="absolute top-[8%] left-[3%] w-[180px] lg:w-[240px] opacity-[0.18] -rotate-12" style={{ animation: 'ds-float 7s ease-in-out infinite' }}>
           <object type="image/svg+xml" data="/illustrations/Flying%20Dollar%20Bills%20-%20Turquoise.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
         </div>
         {/* Cloud coin — top center-right */}
-        <div className="absolute top-[12%] right-[28%] w-[100px] lg:w-[140px] opacity-[0.15] rotate-6">
+        <div className="absolute top-[12%] right-[28%] w-[100px] lg:w-[140px] opacity-[0.15] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite 1s' }}>
           <object type="image/svg+xml" data="/illustrations/Cloud%20Coin%20-%20Turquoise.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
         </div>
         {/* Dollar bill — right edge */}
-        <div className="absolute top-[25%] right-[2%] w-[150px] lg:w-[200px] opacity-[0.16] rotate-[18deg]">
+        <div className="absolute top-[25%] right-[2%] w-[150px] lg:w-[200px] opacity-[0.16] rotate-[18deg]" style={{ animation: 'ds-float 8s ease-in-out infinite 2s' }}>
           <object type="image/svg+xml" data="/illustrations/Dollar%20bill.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
         </div>
         {/* Coin — small accent, top right */}
-        <div className="absolute top-[6%] right-[12%] w-[40px] lg:w-[55px] opacity-[0.2]">
+        <div className="absolute top-[6%] right-[12%] w-[40px] lg:w-[55px] opacity-[0.2]" style={{ animation: 'ds-drift 6s ease-in-out infinite 0.5s' }}>
           <object type="image/svg+xml" data="/illustrations/Coin%20-%20Lime.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
         </div>
         {/* Dollar bills + coins — bottom center */}
-        <div className="absolute bottom-[6%] left-[35%] w-[220px] lg:w-[300px] opacity-[0.18] rotate-3">
+        <div className="absolute bottom-[6%] left-[35%] w-[220px] lg:w-[300px] opacity-[0.18] rotate-3" style={{ animation: 'ds-float 10s ease-in-out infinite 1.5s' }}>
           <object type="image/svg+xml" data="/illustrations/Dollar%20bills%20%2B%20Coins%20A.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
         </div>
         {/* Cloud coin — bottom right */}
-        <div className="absolute bottom-[14%] right-[8%] w-[130px] lg:w-[170px] opacity-[0.14] -rotate-6">
+        <div className="absolute bottom-[14%] right-[8%] w-[130px] lg:w-[170px] opacity-[0.14] -rotate-6" style={{ animation: 'ds-drift 8s ease-in-out infinite 3s' }}>
           <object type="image/svg+xml" data="/illustrations/Cloud%20Coin%20-%20Turquoise.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
         </div>
         {/* Small coin — left mid */}
-        <div className="absolute top-[52%] left-[8%] w-[35px] lg:w-[45px] opacity-[0.22] rotate-12">
+        <div className="absolute top-[52%] left-[8%] w-[35px] lg:w-[45px] opacity-[0.22] rotate-12" style={{ animation: 'ds-float 6s ease-in-out infinite' }}>
           <object type="image/svg+xml" data="/illustrations/Coin%20-%20Lime.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
         </div>
       </div>
@@ -310,7 +310,7 @@ function SlideAgenda() {
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
       {/* Decorative background illustration */}
-      <div className="absolute -bottom-4 -right-4 w-[320px] h-[320px] lg:w-[420px] lg:h-[420px] opacity-[0.15] pointer-events-none">
+      <div className="absolute -bottom-4 -right-4 w-[320px] h-[320px] lg:w-[420px] lg:h-[420px] opacity-[0.15] pointer-events-none" style={{ animation: 'ds-float 9s ease-in-out infinite' }}>
         <object type="image/svg+xml" data="/illustrations/Paper%20Airplane%20%2B%20Coin%20-%20Turquoise.svg" className="h-full w-full" style={{ pointerEvents: 'none' }} aria-hidden="true" />
       </div>
 
@@ -386,13 +386,13 @@ const accentMap = {
 function SlideGoals() {
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
-      <div className="absolute -bottom-4 -right-4 w-[320px] h-[320px] lg:w-[400px] lg:h-[400px] opacity-[0.12] pointer-events-none -rotate-12">
+      <div className="absolute -bottom-4 -right-4 w-[320px] h-[320px] lg:w-[400px] lg:h-[400px] opacity-[0.12] pointer-events-none -rotate-12" style={{ animation: 'ds-drift 10s ease-in-out infinite' }}>
         <object type="image/svg+xml" data="/illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" className="h-full w-full" style={{ pointerEvents: 'none' }} aria-hidden="true" />
       </div>
 
       <div className="flex-1 flex flex-col justify-center px-16 sm:px-20 lg:px-24 pt-14 sm:pt-16 lg:pt-20 pb-6 sm:pb-8 lg:pb-10 overflow-auto relative z-10">
         <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-6 sm:mb-8 lg:mb-10">
-          Goals for Q1 2026
+          Zoo Goals for Q1 2025
         </h1>
 
         <div className="space-y-5 lg:space-y-6 flex-1">

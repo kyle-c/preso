@@ -135,7 +135,9 @@
   --lime: #DCFF00;
   --lychee: #FFCD9C;
   --fortuna: #FFB05A;
-  
+  --sage: #7BA882;
+  --sage-700: #4E7D56;
+
   /* Shadcn Token Mapping */
   --background: #FEFCF9;
   --foreground: #082422;
@@ -259,6 +261,17 @@
   --link: #2BF2F1;
 }
 
+/* Subtle background-illustration animations */
+@keyframes ds-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -12px; }
+}
+@keyframes ds-drift {
+  0%, 100% { translate: 0 0; }
+  33% { translate: 6px -8px; }
+  66% { translate: -4px 5px; }
+}
+
 @theme inline {
   --font-sans: 'Saans', system-ui, sans-serif;
   --font-display: 'Plain', system-ui, sans-serif;
@@ -342,6 +355,8 @@
   --color-lime: var(--lime);
   --color-lychee: var(--lychee);
   --color-fortuna: var(--fortuna);
+  --color-sage: var(--sage);
+  --color-sage-700: var(--sage-700);
 }
 
 @layer base {

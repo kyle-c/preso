@@ -1,4 +1,4 @@
-export type Language = 'en' | 'es-mx' | 'pt-br' | 'es-do' | 'es-cr' | 'es-pe' | 'es-ec'
+export type Language = 'en' | 'es-mx' | 'pt-br' | 'es-do' | 'es-co' | 'es-pe' | 'es-ec'
 
 export interface Country {
   code: Language
@@ -15,7 +15,7 @@ export const countries: Country[] = [
   { code: 'es-mx', label: 'Español (MX)',         shortLabel: 'MX', flag: '🇲🇽', country: 'Mexico',           countryCode: 'MX', role: 'static' },
   { code: 'pt-br', label: 'Português (BR)',       shortLabel: 'BR', flag: '🇧🇷', country: 'Brazil',           countryCode: 'BR', role: 'pinnable' },
   { code: 'es-do', label: 'Español (DO)',         shortLabel: 'DR', flag: '🇩🇴', country: 'Dominican Republic', countryCode: 'DO', role: 'pinnable' },
-  { code: 'es-cr', label: 'Español (CR)',         shortLabel: 'CR', flag: '🇨🇷', country: 'Costa Rica',       countryCode: 'CR', role: 'pinnable' },
+  { code: 'es-co', label: 'Español (CO)',         shortLabel: 'CO', flag: '🇨🇴', country: 'Colombia',         countryCode: 'CO', role: 'pinnable' },
   { code: 'es-pe', label: 'Español (PE)',         shortLabel: 'PE', flag: '🇵🇪', country: 'Peru',             countryCode: 'PE', role: 'pinnable' },
   { code: 'es-ec', label: 'Español (EC)',         shortLabel: 'EC', flag: '🇪🇨', country: 'Ecuador',          countryCode: 'EC', role: 'pinnable' },
 ]
@@ -41,7 +41,6 @@ export interface ContentTokens {
   }
   paymentMethod: {
     titleLine1: string
-    titleLine2: string
     subtitle: string
     orPayAnotherWay: string
     creditDebitName: string
@@ -171,8 +170,7 @@ const enContent: ContentTokens = {
     change: 'Change',
   },
   paymentMethod: {
-    titleLine1: 'Almost done.',
-    titleLine2: 'How do you want to pay?',
+    titleLine1: 'How do you want to pay?',
     subtitle: 'Express Pay',
     orPayAnotherWay: 'or pay another way',
     creditDebitName: 'Credit/debit card',
@@ -302,8 +300,7 @@ const esMxContent: ContentTokens = {
     change: 'Cambiar',
   },
   paymentMethod: {
-    titleLine1: 'Ya casi.',
-    titleLine2: '¿Cómo quieres pagar?',
+    titleLine1: '¿Cómo quieres pagar?',
     subtitle: 'Pago Express',
     orPayAnotherWay: 'o paga de otra forma',
     creditDebitName: 'Tarjeta crédito/débito',
@@ -433,8 +430,7 @@ const ptBrContent: ContentTokens = {
     change: 'Alterar',
   },
   paymentMethod: {
-    titleLine1: 'Quase lá.',
-    titleLine2: 'Como você quer pagar?',
+    titleLine1: 'Como você quer pagar?',
     subtitle: 'Pagamento Express',
     orPayAnotherWay: 'ou pague de outra forma',
     creditDebitName: 'Cartão de crédito/débito',
@@ -555,7 +551,7 @@ const ptBrContent: ContentTokens = {
 }
 
 // New LATAM locales — cloned from es-mx as initial defaults
-const newLatamCodes: Language[] = ['es-do', 'es-cr', 'es-pe', 'es-ec']
+const newLatamCodes: Language[] = ['es-do', 'es-co', 'es-pe', 'es-ec']
 
 export const content: Record<Language, ContentTokens> = {
   en: enContent,
@@ -563,5 +559,5 @@ export const content: Record<Language, ContentTokens> = {
   'pt-br': ptBrContent,
   ...Object.fromEntries(
     newLatamCodes.map(code => [code, JSON.parse(JSON.stringify(esMxContent)) as ContentTokens])
-  ) as Record<'es-do' | 'es-cr' | 'es-pe' | 'es-ec', ContentTokens>,
+  ) as Record<'es-do' | 'es-co' | 'es-pe' | 'es-ec', ContentTokens>,
 }

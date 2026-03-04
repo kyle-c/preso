@@ -103,10 +103,12 @@ const objectives: Objective[] = [
 
 function SlideFooter({ num }: { num: number }) {
   return (
-    <div className="absolute bottom-0 inset-x-0 flex items-center justify-between px-8 sm:px-12 pb-5 sm:pb-6 text-sm font-sans">
-      <span className="font-display font-extrabold text-foreground text-xs sm:text-sm">Team Weekly</span>
-      <span className="text-muted-foreground text-xs sm:text-sm">felixpago.com</span>
-      <span className="text-foreground text-xs sm:text-sm font-medium">{num}</span>
+    <div className="absolute bottom-0 inset-x-0 px-8 sm:px-12 pb-5 sm:pb-6 text-sm font-sans">
+      <div className="relative flex items-center justify-between">
+        <span className="font-display font-extrabold text-foreground text-xs sm:text-sm">Team Weekly</span>
+        <span className="absolute inset-x-0 text-center text-muted-foreground text-xs sm:text-sm pointer-events-none">felixpago.com</span>
+        <span className="text-foreground text-xs sm:text-sm font-medium">{num}</span>
+      </div>
     </div>
   )
 }
@@ -459,11 +461,225 @@ function SlideGoals() {
   )
 }
 
+/* ── Slide 5: Our Values (fanned deck) ────────────────────── */
+
+const values = [
+  {
+    num: '01',
+    title: 'User-Obsession',
+    lines: [
+      'We have to earn the right to serve our users every day and never take it for granted.',
+      'We always remember the hard work our users went through to send this money.',
+      'We are always here for them.',
+    ],
+    bg: 'bg-slate-950',
+    text: 'text-white',
+    mutedText: 'text-slate-300',
+    numColor: 'text-slate-800',
+    illustration: '/illustrations/Speech%20Bubbles%20%2B%20Hearts.svg',
+  },
+  {
+    num: '02',
+    title: 'Getting Sh*t Done\nWith Urgency',
+    lines: [
+      'We have a bias towards action.',
+      'Champions adjust!',
+      'We care less about what others are doing and focus on what we want to accomplish.',
+    ],
+    bg: 'bg-turquoise-300',
+    text: 'text-slate-950',
+    mutedText: 'text-slate-800',
+    numColor: 'text-turquoise-700/25',
+    illustration: '/illustrations/Fast.svg',
+  },
+  {
+    num: '03',
+    title: 'Extreme\nOwnership',
+    lines: [
+      'Each person in the company owns a mission-critical piece of the vision.',
+      'No weak links.',
+      'No passengers.',
+    ],
+    bg: 'bg-evergreen',
+    text: 'text-white',
+    mutedText: 'text-turquoise-200',
+    numColor: 'text-slate-800/30',
+    illustration: '/illustrations/Heart%20-F%C3%A9lix.svg',
+  },
+  {
+    num: '04',
+    title: 'No-Ego\nCollab',
+    lines: [
+      'We disagree clearly, and we commit once a decision is made.',
+      'We break silos, we move in lockstep.',
+      'We are a team, not a group of individuals.',
+    ],
+    bg: 'bg-stone',
+    text: 'text-slate-950',
+    mutedText: 'text-slate-600',
+    numColor: 'text-concrete/40',
+    illustration: '/illustrations/Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg',
+    illustrationSize: 'w-36 h-36',
+  },
+  {
+    num: '05',
+    title: 'Aim For\nInsanely Great',
+    lines: [
+      'We elevate the quality of our output by caring deeply.',
+      'We obsess about every customer moment.',
+    ],
+    bg: 'bg-turquoise-300',
+    text: 'text-slate-950',
+    mutedText: 'text-slate-800',
+    numColor: 'text-turquoise-700/25',
+    illustration: '/illustrations/ray.svg',
+  },
+  {
+    num: '06',
+    title: 'Insatiable\nCuriosity',
+    lines: [
+      'We listen closely to our users and base our assumptions in data.',
+      'We test assumptions and never take anything for granted.',
+      'We experiment relentlessly.',
+    ],
+    bg: 'bg-slate-950',
+    text: 'text-white',
+    mutedText: 'text-slate-300',
+    numColor: 'text-slate-800',
+    illustration: '/illustrations/Magnifying%20Glass.svg',
+  },
+]
+
+/* Card positions: fanned out with slight overlap */
+const cardPositions = [
+  { rot: -12, tx: -480, ty: 20 },
+  { rot: -7, tx: -288, ty: 8 },
+  { rot: -2, tx: -96, ty: 0 },
+  { rot: 2, tx: 96, ty: 0 },
+  { rot: 7, tx: 288, ty: 8 },
+  { rot: 12, tx: 480, ty: 20 },
+]
+
+function SlideValues() {
+  const [activeCard, setActiveCard] = useState<number | null>(null)
+
+  return (
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      {/* Decorative background illustrations */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {/* Paper airplane — top left */}
+        <div className="absolute top-[4%] left-[2%] w-[160px] lg:w-[220px] opacity-[0.14] -rotate-12" style={{ animation: 'ds-float 8s ease-in-out infinite' }}>
+          <object type="image/svg+xml" data="/illustrations/Paper%20Airplane%20%2B%20Coin%20-%20Turquoise.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        {/* Cloud coin — top right */}
+        <div className="absolute top-[6%] right-[3%] w-[100px] lg:w-[140px] opacity-[0.16] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite 1s' }}>
+          <object type="image/svg+xml" data="/illustrations/Cloud%20Coin%20-%20Turquoise.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        {/* Coin — small accent, left mid */}
+        <div className="absolute top-[48%] left-[3%] w-[40px] lg:w-[55px] opacity-[0.2] rotate-12" style={{ animation: 'ds-float 6s ease-in-out infinite 0.5s' }}>
+          <object type="image/svg+xml" data="/illustrations/Coin%20-%20Lime.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        {/* Dollar bills + coins — bottom left */}
+        <div className="absolute bottom-[4%] left-[4%] w-[180px] lg:w-[240px] opacity-[0.15] rotate-3" style={{ animation: 'ds-drift 10s ease-in-out infinite 2s' }}>
+          <object type="image/svg+xml" data="/illustrations/Dollar%20bills%20%2B%20Coins%20A.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        {/* Rocket — bottom right */}
+        <div className="absolute bottom-[2%] right-[2%] w-[200px] lg:w-[280px] opacity-[0.12] -rotate-6" style={{ animation: 'ds-float 9s ease-in-out infinite 1.5s' }}>
+          <object type="image/svg+xml" data="/illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        {/* Small coin — right mid */}
+        <div className="absolute top-[55%] right-[4%] w-[35px] lg:w-[45px] opacity-[0.18]" style={{ animation: 'ds-drift 7s ease-in-out infinite 3s' }}>
+          <object type="image/svg+xml" data="/illustrations/Coin%20-%20Lime.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+      </div>
+
+      <div className="flex-1 flex flex-col items-center px-8 sm:px-12 lg:px-16 pt-10 sm:pt-14 lg:pt-16 pb-10 relative z-10">
+        {/* Title */}
+        <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-6 sm:mb-8 lg:mb-10 text-center">
+          Our Values
+        </h1>
+
+        {/* Card deck container */}
+        <div
+          className="relative flex items-center justify-center"
+          style={{ width: '100%', height: 420 }}
+        >
+          {values.map((v, i) => {
+            const isActive = activeCard === i
+            const pos = cardPositions[i]
+
+            const baseTransform = `rotate(${pos.rot}deg) translateX(${pos.tx}px) translateY(${pos.ty}px)`
+            const activeTransform = `rotate(${pos.rot * 0.3}deg) translateX(${pos.tx}px) translateY(${pos.ty - 30}px) scale(1.05)`
+
+            return (
+              <div
+                key={v.num}
+                className="absolute cursor-pointer"
+                style={{
+                  width: 260,
+                  height: 390,
+                  transform: isActive ? activeTransform : baseTransform,
+                  transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, filter 0.3s ease',
+                  zIndex: isActive ? 50 : 10 + i,
+                  filter: !isActive && activeCard !== null ? 'brightness(0.92)' : 'none',
+                }}
+                onMouseEnter={() => setActiveCard(i)}
+                onMouseLeave={() => setActiveCard(null)}
+              >
+                <div
+                  className={`${v.bg} h-full w-full rounded-2xl p-6 flex flex-col shadow-lg overflow-hidden relative`}
+                  style={{
+                    boxShadow: isActive
+                      ? '0 20px 40px -8px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.05)'
+                      : '0 8px 24px -4px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05)',
+                  }}
+                >
+                  {/* Big background number + illustration overlay */}
+                  <div className="relative h-[140px] mb-2">
+                    <span
+                      className={`absolute inset-0 flex items-center justify-center font-display font-black text-[130px] leading-none select-none pointer-events-none ${v.numColor}`}
+                    >
+                      {v.num}
+                    </span>
+                    <div className="absolute inset-0 flex items-center justify-center z-10">
+                      <object type="image/svg+xml" data={v.illustration} className={v.illustrationSize ?? 'w-24 h-24'} style={{ pointerEvents: 'none' }} />
+                    </div>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className={`relative z-10 font-display font-black text-xl leading-tight mb-4 ${v.text}`}>
+                    {v.title.split('\n').map((line, li) => (
+                      <span key={li}>
+                        {li > 0 && <br />}
+                        {line}
+                      </span>
+                    ))}
+                  </h3>
+
+                  {/* Body text */}
+                  <div className="relative z-10 flex-1 flex flex-col gap-2.5">
+                    {v.lines.map((line) => (
+                      <p key={line} className={`text-sm leading-snug ${v.mutedText}`}>
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+      <SlideFooter num={6} />
+    </div>
+  )
+}
+
 /* ═══════════════════════════════════════════════════════════ */
 /*                    MAIN PRESENTATION                       */
 /* ═══════════════════════════════════════════════════════════ */
 
-const slides = [SlideNorthStar, SlideRules, SlideAgenda, SlideGoals]
+const slides = [SlideNorthStar, SlideValues, SlideRules, SlideAgenda, SlideGoals]
 
 export default function PresoSamplePage() {
   const [current, setCurrent] = useState(0)

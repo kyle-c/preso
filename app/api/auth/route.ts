@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const PASSWORD = process.env.SITE_PASSWORD || 'felix2026'
+const PASSWORD = process.env.SITE_PASSWORD || 'felix2026andbeyond!'
 const COOKIE_NAME = 'site-auth'
 
 export async function POST(req: NextRequest) {

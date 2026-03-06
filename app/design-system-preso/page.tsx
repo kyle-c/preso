@@ -851,10 +851,10 @@ function SlideDemo() {
             </div>
             <div className="bg-white rounded-2xl border border-border shadow-sm p-6 sm:p-8 text-left">
               <div className="w-12 h-12 mb-3">
-                <Illo src="Flags.svg" className="w-full h-full" />
+                <Illo src="Survey.svg" className="w-full h-full" />
               </div>
-              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Design With Real Data</h3>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Prototypes use real content tokens, real translations, and real market context. No lorem ipsum.</p>
+              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Design With Real{'\u00A0'}Data</h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Prototypes use real content tokens, real translations, and real market context. No lorem{'\u00A0'}ipsum.</p>
             </div>
             <div className="bg-white rounded-2xl border border-border shadow-sm p-6 sm:p-8 text-left">
               <div className="w-12 h-12 mb-3">

@@ -24,6 +24,7 @@ function isPublic(pathname: string) {
   if (pathname === '/auth') return true
   if (STATIC_EXT.test(pathname)) return true
   if (pathname.startsWith('/_next') || pathname.startsWith('/api')) return true
+  if (pathname.endsWith('/embed') || pathname.includes('/embed/')) return true
   return false
 }
 

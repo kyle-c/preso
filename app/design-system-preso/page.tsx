@@ -1,13 +1,15 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, createContext, useContext } from 'react'
+
+const CanvasContext = createContext(false)
 
 /* ─────────────────────── Shared Components ─────────────────────── */
 
 function SlideFooter({ num, total, dark }: { num: number; total: number; dark?: boolean }) {
   return (
     <div className="absolute bottom-0 inset-x-0 flex items-center justify-between px-8 sm:px-12 pb-5 sm:pb-6 text-sm font-sans">
-      <span className={`font-display font-extrabold text-xs sm:text-sm ${dark ? 'text-linen' : 'text-foreground'}`}>Felix Design System</span>
+      <span className={`font-display font-extrabold text-xs sm:text-sm ${dark ? 'text-linen' : 'text-foreground'}`}>Félix Design System</span>
       <span className={`text-xs sm:text-sm ${dark ? 'text-linen/50' : 'text-muted-foreground'}`}>felixpago.com</span>
       <span className={`text-xs sm:text-sm font-medium ${dark ? 'text-linen' : 'text-foreground'}`}>{num} / {total}</span>
     </div>
@@ -16,7 +18,7 @@ function SlideFooter({ num, total, dark }: { num: number; total: number; dark?: 
 
 function PillBadge({ children, dark }: { children: React.ReactNode; dark?: boolean }) {
   return (
-    <span className={`inline-block rounded-full px-5 py-1.5 font-display font-extrabold text-lg sm:text-xl lg:text-2xl ${dark ? 'bg-turquoise/20 text-turquoise' : 'bg-turquoise text-slate'}`}>
+    <span className={`inline-block rounded-full px-5 py-1.5 font-sans font-semibold text-sm sm:text-base uppercase tracking-[0.12em] ${dark ? 'bg-turquoise/20 text-turquoise' : 'bg-turquoise text-slate'}`}>
       {children}
     </span>
   )
@@ -90,7 +92,7 @@ function AbsentCallout({ items }: { items: string[] }) {
 /*                         SLIDE COMPONENTS                           */
 /* ═══════════════════════════════════════════════════════════════════ */
 
-const TOTAL = 16
+const TOTAL = 18
 
 /* ── Slide 1: Title ──────────────────────────────────────────────── */
 function SlideTitle() {
@@ -117,13 +119,13 @@ function SlideTitle() {
             <Illo src="Paper%20Airplane%20%2B%20Dollar%20Bills.svg" className="h-full w-full" label="Sending money" />
           </div>
           <div className="mb-5 lg:mb-6">
-            <PillBadge>Felix Design System</PillBadge>
+            <PillBadge>Félix Design System</PillBadge>
           </div>
           <h1 className="font-display font-black text-foreground text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight mb-5 lg:mb-7">
-            Preparing Felix for{'\u00A0'}Multi&#8209;Product
+            Preparing Félix for{'\u00A0'}Multi&#8209;Product
           </h1>
           <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
-            How cohesion — not rigid consistency — lets users feel at home with Felix wherever they are.
+            Designing the connective tissue between every product, surface, and market Félix touches.
           </p>
         </div>
       </div>
@@ -135,9 +137,9 @@ function SlideTitle() {
 /* ── Slide 2: What is a Design System? ───────────────────────────── */
 function SlideWhatIsDS() {
   const points = [
-    { icon: 'Survey.svg', title: 'It has Customers', body: 'Designers, engineers, partners, product teams and possibly agents rely on it to build faster and more consistently.' },
-    { icon: 'Map%20%2B%20F%20symbol.svg', title: 'It has a mission', body: 'Provide shared foundations so teams can move quickly without drifting apart.' },
-    { icon: 'Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg', title: 'It evolves', body: 'Like any product, it improves through feedback, iteration, and real use.' },
+    { icon: 'Survey.svg', title: 'Customer-Led', body: 'Designers, engineers, partners, product teams and possibly agents rely on it to build faster and more\u00A0consistently.' },
+    { icon: 'Map%20%2B%20F%20symbol.svg', title: 'Mission Oriented', body: 'Provide shared foundations so teams can move quickly without drifting apart.' },
+    { icon: 'Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg', title: 'Constantly Evolving', body: 'Like any product, it improves through feedback, iteration, and validation with customers.' },
   ]
 
   return (
@@ -175,9 +177,9 @@ function SlideWhatIsDS() {
 
 /* ── Slide 3: One Brand, Many Products ───────────────────────────── */
 const productCards = [
-  { title: 'Remittances', desc: 'Send money across borders — the core Felix experience.', accent: 'bg-turquoise', illo: 'Hand%20-%20Cell%20Phone%20OK.svg' },
-  { title: 'Credit Building', desc: 'Help users build credit history with tailored flows.', accent: 'bg-lime', illo: 'Credit%20Score%20%2B%20Calculator.svg' },
-  { title: 'Tops & Bill Pays', desc: 'New financial tools with their own interaction needs.', accent: 'bg-blueberry', illo: 'Calculator%20%2B%20Stack%20of%20coins.svg' },
+  { title: 'Remittances', desc: 'Send money across borders — the core Félix experience.', accent: 'bg-turquoise', illo: 'Hand%20-%20Cell%20Phone%20OK.svg' },
+  { title: 'Credit & Credit Building', desc: 'Help users build credit history with tailored flows.', accent: 'bg-lime', illo: 'Credit%20Score%20%2B%20Calculator.svg' },
+  { title: 'Top Ups & Bill Pays', desc: 'New financial tools with their own interaction needs.', accent: 'bg-blueberry', illo: 'Calculator%20%2B%20Stack%20of%20coins.svg' },
   { title: 'Accounts & Wallets', desc: 'Manage balances, transactions, and digital wallets.', accent: 'bg-cactus', illo: 'Stack%20of%20coins%20-%20Lime.svg' },
   { title: 'Future Products', desc: 'Insurance, investments, and services we haven\u0027t built yet.', accent: 'bg-mango', illo: 'Magic%20hat%20and%20magic%20wand%20%2B%20dollar%20bill.svg' },
 ]
@@ -192,10 +194,10 @@ function SlideOneBrandProducts() {
               <Illo src="ATM%20%2B%20cell%20phone.svg" className="w-full h-full" />
             </div>
             <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-6 lg:mb-8">
-              One Brand,<br />Many Products
+              Serves One Brand,<br />Many Products
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-lg">
-              Each product serves a different need — but the user should always know they&apos;re in Felix. The design system is what makes that possible.
+              Each product serves a different need, but the user should always know they&apos;re with Félix. The design system is what makes that possible.
             </p>
           </div>
 
@@ -226,54 +228,59 @@ function SlideOneBrandProducts() {
 function SlideOneBrandSurfaces() {
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
-      <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-4 relative z-10">
+      <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 pt-0 pb-4 relative z-10 -mt-8">
         {/* Badge + heading */}
-        <div className="text-center mb-3">
+        <div className="text-center mb-6 lg:mb-8">
           <div className="mb-2">
             <PillBadge>One Brand, Many Surfaces</PillBadge>
           </div>
-          <h1 className="font-display font-black text-foreground text-2xl sm:text-3xl lg:text-4xl leading-[0.95] tracking-tight">
-            Felix Meets Users Where They Already Are
+          <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight">
+            Félix Meets Users<br />Where They Already Are
           </h1>
         </div>
 
         {/* Two groups side by side — centered */}
-        <div className="flex gap-6 lg:gap-10 items-end justify-center">
+        <div className="flex gap-10 lg:gap-16 items-end justify-center">
           {/* Owned group */}
           <div className="flex flex-col items-center">
             {/* Owned phones — fanned */}
-            <div className="relative mb-3" style={{ width: '440px', height: '560px' }}>
+            <div className="relative mb-3" style={{ width: '640px', height: '560px' }}>
               {[
-                { label: 'Web Apps', src: '/fintechtestflow/embed', srcW: 390, srcH: 844, scale: 0.5128, bgBottom: 'bg-linen', left: 20, top: 30, rotate: -6, z: 1 },
-                { label: 'Mobile Apps', src: 'http://localhost:3001/embed?frame=false&screen=home', srcW: 375, srcH: 812, scale: 0.5333, bgBottom: 'bg-white', left: 220, top: 30, rotate: 6, z: 1 },
-              ].map((p) => (
+                { label: 'Web Apps', src: '/wallet/embed', srcW: 390, srcH: 844, scale: 0.482, left: 100, top: 20, rotate: 0, z: 0 },
+                { label: 'Web Apps', src: '/topups/embed/monto', srcW: 390, srcH: 844, scale: 0.482, left: -10, top: 50, rotate: -12, z: 1 },
+                { label: 'Web Apps', src: '/fintechtestflow/embed', srcW: 390, srcH: 844, scale: 0.482, left: 210, top: 50, rotate: 12, z: 1 },
+                { label: 'Mobile App', src: 'https://felix-app-lovat.vercel.app/embed/felix/home?theme=dark&frame=false', srcW: 375, srcH: 812, scale: 0.501, left: 410, top: 50, rotate: 0, z: 2 },
+              ].map((p, i) => (
                 <div
-                  key={p.label}
+                  key={i}
                   className="absolute"
                   style={{ left: p.left, top: p.top, transform: `rotate(${p.rotate}deg)`, zIndex: p.z }}
                 >
                   <div className="flex flex-col items-center gap-1.5">
-                    <span className="text-[10px] font-semibold uppercase tracking-wider text-turquoise-700">{p.label}</span>
+                    {p.label && <span className="text-[10px] font-semibold uppercase tracking-wider text-turquoise-700">{p.label}</span>}
                     <div className="w-[200px] h-[434px] rounded-[28px] border-[6px] border-slate bg-slate shadow-2xl overflow-hidden relative">
                       <div className="absolute top-1 left-1/2 -translate-x-1/2 z-50 w-[58px] h-[15px] bg-slate rounded-full" />
                       <div className="absolute inset-0 rounded-[22px] overflow-hidden">
                         <iframe
                           src={p.src}
                           className="border-0"
-                          style={{ width: `${p.srcW}px`, height: `${p.srcH}px`, transform: `scale(${p.scale})`, transformOrigin: 'top left' }}
+                          style={{
+                            width: `${p.srcW}px`,
+                            height: `${p.srcH}px`,
+                            transform: `scale(${p.scale})`,
+                            transformOrigin: 'top left',
+                          }}
                           tabIndex={-1}
                           title={p.label}
                         />
                       </div>
-                      <div className={`absolute bottom-0 inset-x-0 h-[20px] z-50 ${p.bgBottom} rounded-b-[22px]`} />
-                      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 z-50 w-[60px] h-[2.5px] rounded-full bg-slate/30" />
                     </div>
                   </div>
                 </div>
               ))}
             </div>
             {/* Owned card */}
-            <div className="bg-white rounded-xl border border-turquoise/30 shadow-sm flex items-center gap-4 px-5 py-3 w-[440px]">
+            <div className="bg-white rounded-xl border border-turquoise/30 shadow-sm flex items-center gap-4 px-5 py-3 w-[640px]">
               <div className="w-2 h-8 rounded-full bg-turquoise flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
@@ -281,7 +288,7 @@ function SlideOneBrandSurfaces() {
                   <span className="text-xs text-muted-foreground font-medium">App, Web</span>
                 </div>
                 <p className="text-[13px] text-muted-foreground leading-relaxed">
-                  Full control — layout, palette, interactions.
+                  Full control over layout, palette, interactions.
                 </p>
               </div>
             </div>
@@ -292,9 +299,9 @@ function SlideOneBrandSurfaces() {
             {/* Social phones — fanned */}
             <div className="relative mb-3" style={{ width: '540px', height: '560px' }}>
               {[
-                { app: 'whatsapp', screen: 'chats', label: 'WhatsApp', left: 10, top: 50, rotate: -10 },
-                { app: 'instagram', screen: 'home', label: 'Instagram', left: 175, top: 0, rotate: 0 },
-                { app: 'tiktok', screen: 'home', label: 'TikTok', left: 340, top: 50, rotate: 10 },
+                { app: 'whatsapp', screen: 'chats', label: 'WhatsApp', left: 10, top: 50, rotate: -10, url: 'https://felix-app-lovat.vercel.app/apps/whatsapp' },
+                { app: 'instagram', screen: 'chat-list', label: 'Instagram', left: 175, top: 0, rotate: 0, url: 'https://felix-app-lovat.vercel.app/apps/instagram#felix-chat' },
+                { app: 'tiktok', screen: 'felix-chat', label: 'TikTok', left: 340, top: 50, rotate: 10, url: 'https://felix-app-lovat.vercel.app/apps/tiktok#felix-chat' },
               ].map((s, i) => (
                 <div
                   key={s.app}
@@ -309,12 +316,12 @@ function SlideOneBrandSurfaces() {
                       <div className="absolute top-1 left-1/2 -translate-x-1/2 z-50 w-[58px] h-[15px] bg-white rounded-full" />
                       <div className="absolute inset-0 rounded-[22px] overflow-hidden">
                         <iframe
-                          src={`http://localhost:3001/embed/social/${s.app}/${s.screen}?frame=false`}
+                          src={s.url || `http://localhost:3001/embed/social/${s.app}/${s.screen}?frame=false`}
                           className="border-0"
                           style={{ width: '375px', height: '812px', transform: 'scale(0.5333)', transformOrigin: 'top left' }}
                           tabIndex={-1}
                           aria-hidden="true"
-                          title={`Felix on ${s.label}`}
+                          title={`Félix on ${s.label}`}
                         />
                       </div>
                       <div className="absolute bottom-0 inset-x-0 h-[20px] z-50 bg-white rounded-b-[22px]" />
@@ -333,7 +340,7 @@ function SlideOneBrandSurfaces() {
                   <span className="text-xs text-muted-foreground font-medium">WA, IG, TikTok, FB</span>
                 </div>
                 <p className="text-[13px] text-muted-foreground leading-relaxed">
-                  Someone else&apos;s chrome. Felix adapts to fit.
+                  Someone else&apos;s chrome. Félix adapts to fit.
                 </p>
               </div>
             </div>
@@ -350,13 +357,13 @@ function SlideSharedDNA() {
   const [revealed, setRevealed] = useState(0)
 
   const features = [
-    { title: 'Colors', desc: 'Primary and secondary color palettes with WCAG-compliant colorways.', img: '/navicons/colors.png' },
-    { title: 'Typography', desc: 'Font families, weights, and type scale for consistent text styling.', img: '/navicons/typography.png' },
-    { title: 'Iconography', desc: 'Curated duotone icons that pair with our illustration style.', img: '/illustrations/iconography.png' },
-    { title: 'Illustrations', desc: 'The full illustration library with SVG and PNG downloads for every asset.', img: '/navicons/illustrations.png' },
-    { title: 'Components', desc: 'Pre-built UI components following the Felix Pago design language.', img: '/navicons/components.png' },
-    { title: 'Tokens', desc: 'Design tokens mapped to shadcn/ui naming conventions.', img: '/navicons/tokens.png' },
-    { title: 'Design Principles', desc: 'Core design principles that guide how we build experiences at Felix Pago.', img: '/navicons/principles.png', full: true },
+    { title: 'Colors', desc: 'Primary and secondary color palettes with\nWCAG-compliant colorways.', img: '/navicons/colors.png' },
+    { title: 'Typography', desc: 'Font families, weights, and type scale\nfor consistent text styling.', img: '/navicons/typography.png' },
+    { title: 'Iconography', desc: 'Curated duotone icons that pair\nwith our illustration style.', img: '/illustrations/iconography.png' },
+    { title: 'Illustrations', desc: 'The full illustration library with SVG and\nPNG downloads for every asset.', img: '/navicons/illustrations.png' },
+    { title: 'Components', desc: 'Pre-built UI components following\nthe Félix Pago design language.', img: '/navicons/components.png' },
+    { title: 'Tokens', desc: 'Design tokens mapped to shadcn/ui\nnaming conventions.', img: '/navicons/tokens.png' },
+    { title: 'Design Principles', desc: 'Core design principles that guide how\nwe build experiences at Félix Pago.', img: '/navicons/principles.png', full: true },
   ]
 
   // 4 rows: [0,1], [2,3], [4,5], [6 full-width]
@@ -376,7 +383,7 @@ function SlideSharedDNA() {
             <PillBadge>The Shared DNA</PillBadge>
           </div>
           <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-[0.95] tracking-tight mb-6 sm:mb-8 text-center max-w-3xl mx-auto">
-            The threads that make every product unmistakably Felix
+            The threads that make every product unmistakably Félix
           </h1>
 
           <div className="space-y-3 lg:space-y-4">
@@ -398,7 +405,7 @@ function SlideSharedDNA() {
                       <img src={f.img} alt="" className="w-16 h-16 sm:w-20 sm:h-20 object-contain flex-shrink-0" />
                       <div className="min-w-0">
                         <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-1">{f.title}</h3>
-                        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{f.desc}</p>
+                        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed whitespace-pre-line">{f.desc}</p>
                       </div>
                     </div>
                   )
@@ -418,16 +425,13 @@ function SlideColors() {
   return (
     <div className="relative h-full w-full bg-white flex flex-col overflow-hidden">
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-8 relative z-10">
-        <div className="text-center mb-4">
-          <PillBadge>Colors</PillBadge>
-        </div>
         <div className="w-full max-w-[1100px] flex-1 min-h-0 bg-linen rounded-2xl border border-border/60 shadow-sm overflow-hidden">
           <div className="w-full h-full overflow-y-auto">
             <iframe
               src="/colors"
               className="border-0"
               style={{ width: 'calc(100% + 256px)', height: '100%', marginLeft: '-256px' }}
-              title="Felix colors"
+              title="Félix colors"
             />
           </div>
         </div>
@@ -442,16 +446,13 @@ function SlideTypography() {
   return (
     <div className="relative h-full w-full bg-white flex flex-col overflow-hidden">
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-8 relative z-10">
-        <div className="text-center mb-4">
-          <PillBadge>Typography</PillBadge>
-        </div>
         <div className="w-full max-w-[1100px] flex-1 min-h-0 bg-linen rounded-2xl border border-border/60 shadow-sm overflow-hidden">
           <div className="w-full h-full overflow-y-auto">
             <iframe
               src="/typography"
               className="border-0"
               style={{ width: 'calc(100% + 256px)', height: '100%', marginLeft: '-256px' }}
-              title="Felix typography"
+              title="Félix typography"
             />
           </div>
         </div>
@@ -466,16 +467,13 @@ function SlideIconography() {
   return (
     <div className="relative h-full w-full bg-white flex flex-col overflow-hidden">
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-8 relative z-10">
-        <div className="text-center mb-4">
-          <PillBadge>Iconography</PillBadge>
-        </div>
         <div className="w-full max-w-[1100px] flex-1 min-h-0 bg-linen rounded-2xl border border-border/60 shadow-sm overflow-hidden">
           <div className="w-full h-full overflow-y-auto">
             <iframe
               src="/iconography"
               className="border-0"
               style={{ width: 'calc(100% + 256px)', height: '100%', marginLeft: '-256px' }}
-              title="Felix iconography"
+              title="Félix iconography"
             />
           </div>
         </div>
@@ -490,16 +488,13 @@ function SlideIllustrations() {
   return (
     <div className="relative h-full w-full bg-white flex flex-col overflow-hidden">
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-8 relative z-10">
-        <div className="text-center mb-4">
-          <PillBadge>Illustrations</PillBadge>
-        </div>
         <div className="w-full max-w-[1100px] flex-1 min-h-0 bg-linen rounded-2xl border border-border/60 shadow-sm overflow-hidden">
           <div className="w-full h-full overflow-y-auto">
             <iframe
               src="/illustrations"
               className="border-0"
               style={{ width: 'calc(100% + 256px)', height: '100%', marginLeft: '-256px' }}
-              title="Felix illustrations"
+              title="Félix illustrations"
             />
           </div>
         </div>
@@ -514,16 +509,13 @@ function SlideComponents() {
   return (
     <div className="relative h-full w-full bg-white flex flex-col overflow-hidden">
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-8 relative z-10">
-        <div className="text-center mb-4">
-          <PillBadge>Components</PillBadge>
-        </div>
         <div className="w-full max-w-[1100px] flex-1 min-h-0 bg-linen rounded-2xl border border-border/60 shadow-sm overflow-hidden">
           <div className="w-full h-full overflow-y-auto">
             <iframe
               src="/components"
               className="border-0"
               style={{ width: 'calc(100% + 256px)', height: '100%', marginLeft: '-256px' }}
-              title="Felix components"
+              title="Félix components"
             />
           </div>
         </div>
@@ -538,16 +530,13 @@ function SlideTokens() {
   return (
     <div className="relative h-full w-full bg-white flex flex-col overflow-hidden">
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-8 relative z-10">
-        <div className="text-center mb-4">
-          <PillBadge>Tokens</PillBadge>
-        </div>
         <div className="w-full max-w-[1100px] flex-1 min-h-0 bg-linen rounded-2xl border border-border/60 shadow-sm overflow-hidden">
           <div className="w-full h-full overflow-y-auto">
             <iframe
               src="/tokens"
               className="border-0"
               style={{ width: 'calc(100% + 256px)', height: '100%', marginLeft: '-256px' }}
-              title="Felix tokens"
+              title="Félix tokens"
             />
           </div>
         </div>
@@ -558,7 +547,105 @@ function SlideTokens() {
 }
 
 
-/* ── Slide 11: Cohesion Scales ───────────────────────────────────── */
+/* ── Slide 12: Design Principles Bento ─────────────────────────── */
+function SlideDesignPrinciples() {
+  const [visible, setVisible] = useState<number[]>([])
+
+  useEffect(() => {
+    setVisible([])
+    const timers = [0, 1, 2, 3, 4].map((i) =>
+      setTimeout(() => setVisible((v) => [...v, i]), 300 + i * 300)
+    )
+    return () => timers.forEach(clearTimeout)
+  }, [])
+
+  const principles = [
+    {
+      number: '01',
+      title: 'Conversational Transactions,\nNot Transactional Experiences',
+      desc: 'Our voice should be warm, concise and always provide clarity.',
+      bg: 'bg-turquoise',
+      text: 'text-slate',
+      span: 'col-span-3',
+      illo: 'Speech%20Bubbles.svg',
+      illoSize: 'lg',
+      titleSize: 'text-[56px] sm:text-[72px] lg:text-[88px]',
+      titlePt: 'pt-24 sm:pt-28',
+    },
+    {
+      number: '02',
+      title: 'Guide Beginners.\nAccelerate Regulars.',
+      desc: 'Guide new users with simple explanation. As they grow familiar, get them there faster.',
+      bg: 'bg-blueberry',
+      text: 'text-slate',
+      span: 'col-span-2',
+      illo: 'Hand%20-%20Cell%20Phone%20OK.svg',
+      illoPos: 'bottom',
+      illoSize: 'lg',
+    },
+    {
+      number: '03',
+      title: 'Never Leave Users Guessing',
+      desc: 'Acknowledge what just happened, show what comes next, and set time expectations.',
+      bg: 'bg-mango',
+      text: 'text-slate',
+      span: 'col-span-1',
+      illo: 'Map%20%2B%20F%20symbol.svg',
+      titleSize: 'text-[48px] sm:text-[60px] lg:text-[72px]',
+      illoPos: 'bottom',
+    },
+    {
+      number: '04',
+      title: 'Protection Without Friction',
+      desc: 'Catch mistakes early through smart defaults and real-time validation.',
+      bg: 'bg-lime',
+      text: 'text-slate',
+      span: 'col-span-1',
+      illo: 'Lock.svg',
+      titleSize: 'text-[48px] sm:text-[60px] lg:text-[72px]',
+    },
+    {
+      number: '05',
+      title: 'Grow With\nYour Journey',
+      desc: 'Meet users where they are,\nthen gradually reveal new possibilities.',
+      bg: 'bg-cactus',
+      text: 'text-slate',
+      span: 'col-span-2',
+      titlePt: 'pt-12 sm:pt-14',
+      illo: 'Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg',
+      illoPos: 'bottom',
+      illoSize: 'lg',
+    },
+  ]
+
+  return (
+    <div className="relative h-full w-full bg-linen flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col px-4 sm:px-6 lg:px-8 pt-4 pb-12 relative z-10">
+        <div className="w-full flex-1 min-h-0 grid grid-cols-3 gap-3 grid-rows-[1fr_1fr_1fr]">
+          {principles.map((p, i) => (
+            <div
+              key={p.number}
+              className={`${p.bg} ${p.text} ${p.span} rounded-2xl p-6 sm:p-8 flex flex-col justify-end relative overflow-hidden transition-all duration-700 ease-out ${visible.includes(i) ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+            >
+              <span className={`absolute inset-0 flex items-start justify-start font-display font-black ${p.titleSize || 'text-[64px] sm:text-[80px] lg:text-[96px]'} leading-[0.9] text-left opacity-[0.2] select-none pointer-events-none px-6 sm:px-8 ${p.titlePt || 'pt-6 sm:pt-8'} whitespace-pre-line`} aria-hidden="true">
+                {p.title}
+              </span>
+              <div className={`absolute ${p.illoPos === 'bottom' ? '-bottom-2 right-3 sm:right-4' : 'top-3 right-3 sm:top-4 sm:right-4'} ${p.illoSize === 'lg' ? 'w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48' : 'w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24'} pointer-events-none`} aria-hidden="true">
+                <Illo src={p.illo} className="w-full h-full" />
+              </div>
+              <div className="relative z-10">
+                <p className="text-base sm:text-lg lg:text-xl leading-relaxed opacity-90 font-medium whitespace-pre-line">{p.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <SlideFooter num={12} total={TOTAL} />
+    </div>
+  )
+}
+
+/* ── Slide 13: Cohesion Scales ───────────────────────────────────── */
 function SlideCohesionScales() {
   return (
     <div className="relative h-full w-full bg-slate flex flex-col overflow-hidden">
@@ -578,21 +665,22 @@ function SlideCohesionScales() {
             <span className="text-linen/40">Rigid consistency<br />does not.</span>
           </h1>
           <p className="text-xl sm:text-2xl lg:text-3xl text-linen/60 leading-relaxed">
-            When the next product launches on the next surface — whether it&apos;s an owned app or an embedded experience inside a platform you don&apos;t control — it should inherit the DNA and bring its own innovations back.
+            When the next product launches on the next surface, whether it&apos;s an owned app or an embedded experience inside a platform we don&apos;t control, it should inherit the DNA and bring its own innovations back.
           </p>
         </div>
       </div>
-      <SlideFooter num={12} total={TOTAL} dark />
+      <SlideFooter num={13} total={TOTAL} dark />
     </div>
   )
 }
 
-/* ── Slide 12: Where We Are Today ────────────────────────────────── */
+/* ── Slide 14: Where We Are Today ────────────────────────────────── */
 function SlideWhereWeAre() {
   const foundations = [
-    { title: 'Design Principles', desc: 'Shared language for design critique and decision-making', illo: 'Speech%20Bubbles.svg', status: 'Live' },
-    { title: 'Foundations', desc: 'Color, typography, spacing, and elevation tokens defined', illo: 'Stack%20of%20coins%20-%20Lime.svg', status: 'Live' },
-    { title: 'Basic Components', desc: 'Core UI building blocks available to teams', illo: 'Hand%20-%20Tool.svg', status: 'Live' },
+    { title: 'Principles', desc: 'Shared language for critique and decision-making', illo: 'Speech%20Bubbles.svg', status: 'Live' },
+    { title: 'Foundations', desc: 'Color, typography, spacing, and elevation tokens', illo: 'Stack%20of%20coins%20-%20Lime.svg', status: 'Live' },
+    { title: 'Components', desc: 'Core UI building blocks available to teams', illo: 'Hand%20-%20Tool.svg', status: 'Live' },
+    { title: 'AI-Ready', desc: 'Machine-readable .md files for on-brand AI development', illo: 'Bot.svg', status: 'Live' },
   ]
 
   return (
@@ -613,7 +701,7 @@ function SlideWhereWeAre() {
             We have the foundation. What follows is the infrastructure.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 mb-8 lg:mb-10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 lg:gap-6 mb-8 lg:mb-10">
             {foundations.map((f) => (
               <div key={f.title} className="bg-white rounded-2xl p-6 sm:p-8 border border-border shadow-sm relative overflow-hidden">
                 <div className="absolute top-3 right-3">
@@ -642,34 +730,34 @@ function SlideWhereWeAre() {
           </div>
         </div>
       </div>
-      <SlideFooter num={13} total={TOTAL} />
+      <SlideFooter num={14} total={TOTAL} />
     </div>
   )
 }
 
-/* ── Slide 13: Where We're Headed ────────────────────────────────── */
+/* ── Slide 15: Where We're Headed ────────────────────────────────── */
 function SlideWhereHeaded() {
   const roadmap = [
     {
-      phase: 'Now',
+      phase: 'Soon',
       color: 'bg-turquoise',
-      textColor: 'text-turquoise-700',
+      textColor: 'text-foreground',
       borderColor: 'border-turquoise/30',
       title: 'Robust Component Library',
       desc: 'Teams stop rebuilding common UI from scratch',
     },
     {
       phase: 'Next',
-      color: 'bg-lime',
-      textColor: 'text-lime-700',
-      borderColor: 'border-lime/30',
-      title: 'UX Pattern Library',
+      color: 'bg-cactus',
+      textColor: 'text-foreground',
+      borderColor: 'border-cactus/30',
+      title: 'UX Pattern Library & Templates',
       desc: 'Documented flows for forms, onboarding, navigation, error states — solved once, used everywhere',
     },
     {
       phase: 'Later',
       color: 'bg-mango',
-      textColor: 'text-mango-700',
+      textColor: 'text-foreground',
       borderColor: 'border-mango/30',
       title: 'Content Guidelines & Tokens',
       desc: 'Consistent voice at scale, with tokenized strings for translation and localization across every surface',
@@ -707,14 +795,26 @@ function SlideWhereHeaded() {
               </div>
             ))}
           </div>
+
+          <div className="mt-4 lg:mt-6 bg-white rounded-2xl border border-blueberry/30 shadow-sm overflow-hidden">
+            <div className="bg-blueberry px-5 py-2.5">
+              <span className="font-display font-extrabold text-white text-sm sm:text-base uppercase tracking-wider">Play and Exploration</span>
+            </div>
+            <div className="p-5 sm:p-6 lg:p-8 flex items-center gap-6">
+              <div>
+                <h3 className="font-display font-extrabold text-blueberry-700 text-lg sm:text-xl lg:text-2xl leading-snug mb-1">Imagery, Texture, Motion & Audio</h3>
+                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">Explore how illustration, animation, and sound can deepen the Félix brand experience across every surface and interaction.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <SlideFooter num={14} total={TOTAL} />
+      <SlideFooter num={15} total={TOTAL} />
     </div>
   )
 }
 
-/* ── Slide 14: Demo — Translation Tool ───────────────────────────── */
+/* ── Slide 16: Demo — Translation Tool ───────────────────────────── */
 function SlideDemo() {
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
@@ -728,34 +828,73 @@ function SlideDemo() {
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-10 relative z-10">
-        <div className="max-w-3xl text-center">
+        <div className="max-w-4xl text-center">
           <div className="mb-5 lg:mb-6">
-            <PillBadge>Live Demo</PillBadge>
+            <PillBadge>Editorial &amp; Content Design</PillBadge>
           </div>
 
-          <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-5 lg:mb-7">
-            Translation Tool
+          <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-4 lg:mb-6">
+            Every String Is<br />a Design Decision
           </h1>
 
-          <div className="bg-white rounded-2xl lg:rounded-3xl border border-border shadow-sm p-7 sm:p-9 lg:p-12">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4">
-              <Illo src="Bot.svg" className="w-full h-full" />
+          <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-8 lg:mb-10">
+            Editorial guidelines define the voice. Content tokens make it portable. The result: cohesive editorial voice across all markets and every surface to maximize relevance to our customers.
+          </p>
+
+          <div className="grid grid-cols-3 gap-4 lg:gap-6">
+            <div className="bg-white rounded-2xl border border-border shadow-sm p-6 sm:p-8 text-left">
+              <div className="w-12 h-12 mb-3">
+                <Illo src="Speech%20Bubbles.svg" className="w-full h-full" />
+              </div>
+              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Editorial Guidelines</h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Tone, voice, and writing rules that keep Félix warm and clear in every language.</p>
             </div>
-            <p className="font-display font-extrabold text-foreground text-xl sm:text-2xl lg:text-3xl mb-3">
-              felix-design.vercel.app
-            </p>
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-              Live demo — let the tool do the talking
-            </p>
+            <div className="bg-white rounded-2xl border border-border shadow-sm p-6 sm:p-8 text-left">
+              <div className="w-12 h-12 mb-3">
+                <Illo src="Stack%20of%20coins%20-%20Lime.svg" className="w-full h-full" />
+              </div>
+              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Content Tokens</h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Every UI string is a named token, translated per market and editable in real time.</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-border shadow-sm p-6 sm:p-8 text-left">
+              <div className="w-12 h-12 mb-3">
+                <Illo src="Bot.svg" className="w-full h-full" />
+              </div>
+              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Live Prototype</h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Switch languages, edit tokens, and see flows update instantly.</p>
+            </div>
           </div>
         </div>
       </div>
-      <SlideFooter num={15} total={TOTAL} />
+      <SlideFooter num={16} total={TOTAL} />
     </div>
   )
 }
 
-/* ── Slide 15: Close ─────────────────────────────────────────────── */
+/* ── Slide 17: Fintech Flow Demo ──────────────────────────────────── */
+function SlideFintechDemo() {
+  const canvasOpen = useContext(CanvasContext)
+  return (
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col items-center justify-center relative z-10">
+        <div className="w-full h-full overflow-hidden relative">
+          <iframe
+            src="/fintechtestflow"
+            className="border-0 transition-all duration-300"
+            style={canvasOpen
+              ? { width: '100%', height: 'calc(100% + 40px)', marginTop: '-20px', marginLeft: '0' }
+              : { width: 'calc(100% + 600px)', height: 'calc(100% + 60px)', marginTop: '36px', marginLeft: '-160px' }
+            }
+            title="Fintech checkout flow with token viewer and translator"
+          />
+        </div>
+      </div>
+      <SlideFooter num={17} total={TOTAL} />
+    </div>
+  )
+}
+
+/* ── Slide 18: Close ─────────────────────────────────────────────── */
 function SlideClose() {
   return (
     <div className="relative h-full w-full bg-slate flex flex-col overflow-hidden">
@@ -773,13 +912,13 @@ function SlideClose() {
 
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-10 relative z-10">
         <div className="mb-8 lg:mb-10 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[200px] lg:h-[200px]">
-          <Illo src="F%C3%A9lix%20Illo%201.svg" className="h-full w-full" label="Felix mascot" />
+          <Illo src="F%C3%A9lix%20Illo%201.svg" className="h-full w-full" label="Félix mascot" />
         </div>
         <h1 className="font-display font-black text-linen text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight text-center max-w-4xl">
-          Every product, on every surface, should feel like coming home to Felix.
+          Every product, on every surface, should feel like coming home to Félix.
         </h1>
       </div>
-      <SlideFooter num={16} total={TOTAL} dark />
+      <SlideFooter num={18} total={TOTAL} dark />
     </div>
   )
 }
@@ -800,17 +939,23 @@ const slides = [
   SlideIllustrations,    // 9
   SlideComponents,       // 10
   SlideTokens,           // 11
-  SlideCohesionScales,   // 12
-  SlideWhereWeAre,       // 13
-  SlideWhereHeaded,      // 14
-  SlideDemo,             // 15
-  SlideClose,            // 16
+  SlideDesignPrinciples, // 12
+  SlideCohesionScales,   // 13
+  SlideWhereWeAre,       // 14
+  SlideWhereHeaded,      // 15
+  SlideDemo,             // 16
+  SlideFintechDemo,      // 17
+  SlideClose,            // 18
 ]
+
+const darkSlides = new Set([12, 17]) // 0-indexed: slide 13 & 18
 
 export default function DesignSystemPresoPage() {
   const [current, setCurrent] = useState(0)
   const [mounted, setMounted] = useState(false)
+  const [canvasOpen, setCanvasOpen] = useState(false)
   const total = slides.length
+  const isDark = darkSlides.has(current)
 
   useEffect(() => {
     setMounted(true)
@@ -820,6 +965,14 @@ export default function DesignSystemPresoPage() {
       if (!isNaN(n) && n >= 0 && n < total) setCurrent(n)
     }
   }, [total])
+
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      if (e.data?.type === 'canvas') setCanvasOpen(!!e.data.open)
+    }
+    window.addEventListener('message', handler)
+    return () => window.removeEventListener('message', handler)
+  }, [])
 
   useEffect(() => {
     if (mounted) window.history.replaceState(null, '', `#slide-${current}`)
@@ -855,13 +1008,14 @@ export default function DesignSystemPresoPage() {
   const Slide = slides[current]
 
   return (
+    <CanvasContext.Provider value={canvasOpen}>
     <div
       className="h-screen w-screen overflow-hidden relative select-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       {/* Progress bar */}
-      <div className="absolute top-0 inset-x-0 h-1 bg-concrete/30 z-50">
+      <div className={`absolute top-0 inset-x-0 h-1 z-50 transition-all duration-300 ${isDark ? 'bg-white/10' : 'bg-concrete/30'} ${canvasOpen ? 'opacity-0 pointer-events-none' : ''}`}>
         <div
           className="h-full bg-turquoise-600 transition-all duration-500 ease-out"
           style={{ width: `${((current + 1) / total) * 100}%` }}
@@ -869,18 +1023,18 @@ export default function DesignSystemPresoPage() {
       </div>
 
       {/* Slide counter */}
-      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50">
-        <div className="px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-border shadow-xs">
-          <span className="text-xs sm:text-sm font-medium text-foreground">
+      <div className={`absolute top-4 left-4 sm:top-6 sm:left-6 z-50 transition-opacity duration-300 ${canvasOpen ? 'opacity-0 pointer-events-none' : ''}`}>
+        <div className={`px-3 py-1.5 backdrop-blur-sm rounded-full border shadow-xs transition-colors duration-300 ${isDark ? 'bg-white/10 border-white/10' : 'bg-white/90 border-border'}`}>
+          <span className={`text-xs sm:text-sm font-medium transition-colors duration-300 ${isDark ? 'text-white/60' : 'text-foreground'}`}>
             {current + 1} / {total}
           </span>
         </div>
       </div>
 
       {/* Nav hint */}
-      <div className="hidden md:block absolute top-4 right-4 sm:top-6 sm:right-6 z-50">
-        <div className="px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-border shadow-xs">
-          <span className="text-xs text-muted-foreground">&larr; &rarr; to navigate</span>
+      <div className={`hidden md:block absolute top-4 right-4 sm:top-6 sm:right-6 z-50 transition-opacity duration-300 ${canvasOpen ? 'opacity-0 pointer-events-none' : ''}`}>
+        <div className={`px-3 py-1.5 backdrop-blur-sm rounded-full border shadow-xs transition-colors duration-300 ${isDark ? 'bg-white/10 border-white/10' : 'bg-white/90 border-border'}`}>
+          <span className={`text-xs transition-colors duration-300 ${isDark ? 'text-white/40' : 'text-muted-foreground'}`}>&larr; &rarr; to navigate</span>
         </div>
       </div>
 
@@ -892,15 +1046,15 @@ export default function DesignSystemPresoPage() {
       </div>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-10 sm:bottom-12 left-1/2 -translate-x-1/2 z-50 flex gap-1.5">
+      <div className={`absolute bottom-10 sm:bottom-12 left-1/2 -translate-x-1/2 z-50 flex gap-1.5 transition-opacity duration-300 ${canvasOpen ? 'opacity-0 pointer-events-none' : ''}`}>
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
             className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
               current === i
-                ? 'w-6 sm:w-10 bg-turquoise-600'
-                : 'w-1.5 sm:w-2 bg-concrete hover:bg-concrete/70'
+                ? `w-6 sm:w-10 ${isDark ? 'bg-turquoise/60' : 'bg-turquoise-600'}`
+                : `w-1.5 sm:w-2 ${isDark ? 'bg-white/20 hover:bg-white/30' : 'bg-concrete hover:bg-concrete/70'}`
             }`}
             aria-label={`Go to slide ${i + 1}`}
           />
@@ -911,26 +1065,26 @@ export default function DesignSystemPresoPage() {
       <button
         onClick={prev}
         disabled={current === 0}
-        className={`hidden md:flex absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-[100] p-3 rounded-full bg-white/90 backdrop-blur-sm border border-border hover:bg-white hover:shadow-md transition-all ${
-          current === 0 ? 'opacity-0 pointer-events-none' : ''
+        className={`hidden md:flex absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-[100] p-3 rounded-full backdrop-blur-sm border transition-all ${isDark ? 'bg-white/10 border-white/10 hover:bg-white/20' : 'bg-white/90 border-border hover:bg-white hover:shadow-md'} ${
+          current === 0 || canvasOpen ? 'opacity-0 pointer-events-none' : ''
         }`}
         aria-label="Previous slide"
         type="button"
       >
-        <svg className="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={`w-5 h-5 ${isDark ? 'text-white/60' : 'text-foreground'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
       </button>
       <button
         onClick={next}
         disabled={current === total - 1}
-        className={`hidden md:flex absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-[100] p-3 rounded-full bg-white/90 backdrop-blur-sm border border-border hover:bg-white hover:shadow-md transition-all ${
-          current === total - 1 ? 'opacity-0 pointer-events-none' : ''
+        className={`hidden md:flex absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-[100] p-3 rounded-full backdrop-blur-sm border transition-all ${isDark ? 'bg-white/10 border-white/10 hover:bg-white/20' : 'bg-white/90 border-border hover:bg-white hover:shadow-md'} ${
+          current === total - 1 || canvasOpen ? 'opacity-0 pointer-events-none' : ''
         }`}
         aria-label="Next slide"
         type="button"
       >
-        <svg className="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={`w-5 h-5 ${isDark ? 'text-white/60' : 'text-foreground'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </button>
@@ -942,5 +1096,6 @@ export default function DesignSystemPresoPage() {
         </div>
       </div>
     </div>
+    </CanvasContext.Provider>
   )
 }

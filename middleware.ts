@@ -17,10 +17,13 @@ const PUBLIC_ROUTES = new Set([
   '/buttonexplorations',
 ])
 
+const STATIC_EXT = /\.(png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|otf|eot|css|js|json|map|txt|xml|webmanifest)$/i
+
 function isPublic(pathname: string) {
   if (PUBLIC_ROUTES.has(pathname)) return true
   if (pathname === '/auth') return true
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon') || pathname.startsWith('/illustrations/') || pathname.startsWith('/team/')) return true
+  if (STATIC_EXT.test(pathname)) return true
+  if (pathname.startsWith('/_next') || pathname.startsWith('/api')) return true
   return false
 }
 
@@ -32,11 +35,6 @@ export function middleware(req: NextRequest) {
   // Check auth cookie
   if (req.cookies.get(COOKIE_NAME)?.value === PASSWORD) return NextResponse.next()
 
-  // Check if this is a password submission
-  if (pathname === '/auth' && req.method === 'POST') {
-    return NextResponse.next()
-  }
-
   // Redirect to login
   const loginUrl = req.nextUrl.clone()
   loginUrl.pathname = '/auth'
@@ -45,5 +43,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon\\.png|illustrations/.*|team/.*).*)'],
+  matcher: ['/((?!_next/static|_next/image).*)'],
 }

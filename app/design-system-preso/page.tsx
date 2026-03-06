@@ -814,31 +814,31 @@ function SlideWhereHeaded() {
   )
 }
 
-/* ── Slide 16: Demo — Translation Tool ───────────────────────────── */
+/* ── Slide 16: Content Design Is Product Design ──────────────────── */
 function SlideDemo() {
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-[5%] left-[3%] w-[80px] lg:w-[110px] opacity-[0.15] -rotate-6" style={{ animation: 'ds-float 8s ease-in-out infinite' }}>
-          <Illo src="Flags.svg" className="w-full h-full" />
+          <Illo src="Speech%20Bubbles.svg" className="w-full h-full" />
         </div>
         <div className="absolute bottom-[8%] right-[4%] w-[90px] lg:w-[120px] opacity-[0.12] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite 1s' }}>
-          <Illo src="Speech%20Bubbles.svg" className="w-full h-full" />
+          <Illo src="Bot.svg" className="w-full h-full" />
         </div>
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-10 relative z-10">
         <div className="max-w-4xl text-center">
           <div className="mb-5 lg:mb-6">
-            <PillBadge>Editorial &amp; Content Design</PillBadge>
+            <PillBadge>Content Design &amp; Tools</PillBadge>
           </div>
 
           <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-4 lg:mb-6">
-            Every String Is<br />a Design Decision
+            Content Design Is<br />Product Design
           </h1>
 
           <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-8 lg:mb-10">
-            Editorial guidelines define the voice. Content tokens make it portable. The result: cohesive editorial voice across all markets and every surface to maximize relevance to our customers.
+            Words shape every interaction. We design with real content, in code, so what we prototype is what customers experience.
           </p>
 
           <div className="grid grid-cols-3 gap-4 lg:gap-6">
@@ -846,22 +846,22 @@ function SlideDemo() {
               <div className="w-12 h-12 mb-3">
                 <Illo src="Speech%20Bubbles.svg" className="w-full h-full" />
               </div>
-              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Editorial Guidelines</h3>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Tone, voice, and writing rules that keep Félix warm and clear in every language.</p>
+              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Words Are UI</h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Every string shapes the experience. Editorial guidelines keep Félix warm, clear, and consistent across every market.</p>
             </div>
             <div className="bg-white rounded-2xl border border-border shadow-sm p-6 sm:p-8 text-left">
               <div className="w-12 h-12 mb-3">
-                <Illo src="Stack%20of%20coins%20-%20Lime.svg" className="w-full h-full" />
+                <Illo src="Flags.svg" className="w-full h-full" />
               </div>
-              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Content Tokens</h3>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Every UI string is a named token, translated per market and editable in real time.</p>
+              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Design With Real Data</h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Prototypes use real content tokens, real translations, and real market context. No lorem ipsum.</p>
             </div>
             <div className="bg-white rounded-2xl border border-border shadow-sm p-6 sm:p-8 text-left">
               <div className="w-12 h-12 mb-3">
                 <Illo src="Bot.svg" className="w-full h-full" />
               </div>
-              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Live Prototype</h3>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Switch languages, edit tokens, and see flows update instantly.</p>
+              <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug mb-2">Tools That Think in Content</h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">Our design tools understand language, locale, and context natively. Working in code means we see what customers see.</p>
             </div>
           </div>
         </div>

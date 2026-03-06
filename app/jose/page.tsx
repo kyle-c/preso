@@ -77,7 +77,7 @@ function SlideWelcome() {
             Bienvenido,{'\u00A0'}José!
           </h1>
           <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
-            UX Researcher · Design Team · Starting March 2026
+            Senior UX Researcher · Founding Research Hire · Starting March 2026
           </p>
         </div>
       </div>
@@ -104,7 +104,7 @@ function SlideWhoWeAre() {
               Who We{'\u00A0'}Are
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-lg">
-              Félix is the companion for Latinos in the US — helping them access financial services throughout their journey as immigrants.
+              Félix is the companion for Latinos in the US — helping them access financial services throughout their journey as{'\u00A0'}immigrants.
             </p>
           </div>
 
@@ -112,13 +112,13 @@ function SlideWhoWeAre() {
             <div className="mb-8 lg:mb-10">
               <PillBadge>Our Mission</PillBadge>
               <p className="mt-5 text-xl sm:text-2xl lg:text-[28px] text-foreground leading-relaxed">
-                To empower Latinos in the US to care for what matters most back home.
+                To empower Latinos in the US to care for what matters most back{'\u00A0'}home.
               </p>
             </div>
             <div>
               <PillBadge>What We Build</PillBadge>
               <ul className="mt-6 space-y-4">
-                {['Remittances to Latin America', 'Mobile top-ups & bill pay', 'Credit building products', 'Digital wallets & accounts'].map((p) => (
+                {['Remittances to Latin\u00A0America', 'Mobile top-ups & bill\u00A0pay', 'Credit building\u00A0products', 'Digital wallets &\u00A0accounts'].map((p) => (
                   <li key={p} className="flex items-start gap-3.5">
                     <CheckCircle2 className="h-6 w-6 flex-shrink-0 text-foreground/70 mt-0.5" strokeWidth={1.5} />
                     <span className="text-lg sm:text-xl lg:text-[22px] text-foreground leading-snug">{p}</span>
@@ -277,12 +277,12 @@ function SlideValues() {
 /* ── Slide 4: Your Role (Dark) ──────────────────────────────── */
 function SlideYourRole() {
   const responsibilities = [
-    'Lead discovery research for new product areas',
-    'Run usability testing across remittances, top-ups, and credit',
-    'Build and maintain our user persona library',
-    'Synthesize insights into actionable recommendations',
-    'Partner with PMs and designers to define research roadmaps',
-    'Champion the voice of the user in every decision',
+    'Define and build the UX Research function from the ground\u00A0up',
+    'Establish research frameworks, processes, and best\u00A0practices',
+    'Lead foundational and evaluative research across all product\u00A0lines',
+    'Create and own the company-wide insights\u00A0repository',
+    'Embed research into product development as a core\u00A0discipline',
+    'Make the case for growing the research team as the company\u00A0scales',
   ]
 
   return (
@@ -298,15 +298,15 @@ function SlideYourRole() {
               <PillBadge dark>Your Role</PillBadge>
             </div>
             <h1 className="font-display font-black text-linen text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight mb-6 lg:mb-8">
-              UX{'\u00A0'}Researcher
+              Our First{'\u00A0'}UX Researcher
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl text-linen/60 leading-relaxed max-w-lg">
-              You&apos;ll be the bridge between our users and the product team — making sure we build for real needs, not assumptions.
+              You&apos;re not joining a research team — you&apos;re building one. This is a founding role with the autonomy and responsibility to establish how Félix understands its{'\u00A0'}users.
             </p>
           </div>
 
           <div className="bg-white/5 rounded-2xl lg:rounded-3xl p-7 sm:p-9 lg:p-12 border border-white/10">
-            <h3 className="font-display font-extrabold text-linen text-xl sm:text-2xl mb-6">What you&apos;ll do</h3>
+            <h3 className="font-display font-extrabold text-linen text-xl sm:text-2xl mb-6">What you&apos;ll own</h3>
             <ul className="space-y-4">
               {responsibilities.map((r) => (
                 <li key={r} className="flex items-start gap-3.5">
@@ -326,11 +326,10 @@ function SlideYourRole() {
 /* ── Slide 5: Meet Your Team ─────────────────────────────────── */
 function SlideTeam() {
   const team = [
-    { name: 'Maria Chen', role: 'Head of Design', emoji: '👩‍🎨' },
-    { name: 'Carlos Ruiz', role: 'Senior Product Designer', emoji: '🎨' },
-    { name: 'Ana Torres', role: 'UX Writer', emoji: '✍️' },
-    { name: 'David Kim', role: 'Design Engineer', emoji: '🛠️' },
-    { name: 'You!', role: 'UX Researcher', emoji: '🔬' },
+    { name: 'Kyle Cooney', role: 'Head of Product\u00A0Design', initials: 'KC', photo: '/team/kyle.jpg' },
+    { name: 'Patricia Caballero', role: 'Product\u00A0Designer', initials: 'PC', photo: '/team/patricia-c.jpg' },
+    { name: 'Patricia Beltran', role: 'Product\u00A0Designer', initials: 'PB', photo: '/team/patricia-b.jpg' },
+    { name: 'You!', role: 'Sr. UX Researcher\u00A0(Founding)', initials: 'JO', photo: null },
   ]
 
   return (
@@ -340,7 +339,7 @@ function SlideTeam() {
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-10 relative z-10">
-        <div className="w-full max-w-[1000px]">
+        <div className="w-full max-w-[900px]">
           <div className="mb-5 lg:mb-6 text-center">
             <PillBadge>Your People</PillBadge>
           </div>
@@ -348,10 +347,21 @@ function SlideTeam() {
             Meet the Design Team
           </h1>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {team.map((t) => (
               <div key={t.name} className={`bg-white rounded-2xl p-6 border shadow-sm flex flex-col items-center text-center gap-2 ${t.name === 'You!' ? 'border-turquoise shadow-lg ring-2 ring-turquoise/20' : 'border-border'}`}>
-                <span className="text-4xl lg:text-5xl mb-2">{t.emoji}</span>
+                {t.photo ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={t.photo}
+                    alt={t.name}
+                    className="w-16 h-16 lg:w-20 lg:h-20 rounded-full object-cover mb-2 bg-stone"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden') }}
+                  />
+                ) : null}
+                <div className={`w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-2 ${t.name === 'You!' ? 'bg-turquoise/20' : 'bg-stone'} ${t.photo ? 'hidden' : ''}`}>
+                  <span className="font-display font-black text-xl lg:text-2xl text-foreground/60">{t.initials}</span>
+                </div>
                 <h3 className="font-display font-extrabold text-foreground text-base sm:text-lg leading-snug">{t.name}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{t.role}</p>
               </div>
@@ -367,9 +377,9 @@ function SlideTeam() {
 /* ── Slide 6: Your First 90 Days (Dark) ──────────────────────── */
 function SlideFirst90() {
   const phases = [
-    { phase: 'Days 1–30', title: 'Learn', color: C.turquoise, items: ['Shadow user interviews & usability sessions', 'Read all existing research documentation', 'Meet every PM and designer 1:1', 'Complete compliance & tool onboarding'] },
-    { phase: 'Days 31–60', title: 'Contribute', color: C.cactus, items: ['Run your first usability study', 'Present findings to the product team', 'Start building the persona library', 'Join sprint planning as research voice'] },
-    { phase: 'Days 61–90', title: 'Lead', color: C.mango, items: ['Own the Q3 research roadmap', 'Establish a regular research cadence', 'Mentor the team on research methods', 'Ship your first research playbook'] },
+    { phase: 'Days 1–30', title: 'Immerse', color: C.turquoise, items: ['Meet every PM, designer, and eng lead\u00A01:1', 'Audit existing user data, support tickets, and\u00A0analytics', 'Shadow customer calls and review past research (if\u00A0any)', 'Assess current research skills across PMs and\u00A0designers', 'Map knowledge gaps across product\u00A0lines'] },
+    { phase: 'Days 31–60', title: 'Build', color: C.cactus, items: ['Stand up the research ops stack (Dovetail, recruitment,\u00A0templates)', 'Run your first foundational\u00A0study', 'Publish the Félix persona\u00A0framework', 'Create lightweight research toolkits for PMs and\u00A0designers', 'Propose the research roadmap to\u00A0leadership'] },
+    { phase: 'Days 61–90', title: 'Scale', color: C.mango, items: ['Launch a regular research cadence with product\u00A0squads', 'Ship the company-wide insights\u00A0repository', 'Train PMs and designers on basic usability testing and\u00A0interviews', 'Present the case for growing the research\u00A0team', 'Deliver your first quarterly research\u00A0review'] },
   ]
 
   return (
@@ -409,14 +419,14 @@ function SlideFirst90() {
 /* ── Slide 7: Tools & Access ─────────────────────────────────── */
 function SlideTools() {
   const tools = [
-    { name: 'Figma', desc: 'Design files, prototypes, and the design system', category: 'Design' },
-    { name: 'Notion', desc: 'Research repos, meeting notes, and documentation', category: 'Knowledge' },
+    { name: 'Figma', desc: 'Design files, prototypes, and the design\u00A0system', category: 'Design' },
+    { name: 'Notion', desc: 'Research repos, meeting notes, and\u00A0documentation', category: 'Knowledge' },
     { name: 'Slack', desc: '#design, #ux-research, #product-feedback', category: 'Communication' },
-    { name: 'Maze / UserTesting', desc: 'Remote usability testing and surveys', category: 'Research' },
-    { name: 'Dovetail', desc: 'Research analysis, tagging, and synthesis', category: 'Research' },
-    { name: 'Linear', desc: 'Project tracking and sprint management', category: 'Project Management' },
-    { name: 'Loom', desc: 'Async video updates and research walkthroughs', category: 'Communication' },
-    { name: 'GitHub', desc: 'Design system code and component library', category: 'Engineering' },
+    { name: 'Maze / UserTesting', desc: 'Remote usability testing and\u00A0surveys', category: 'Research' },
+    { name: 'Dovetail', desc: 'Research analysis, tagging, and\u00A0synthesis', category: 'Research' },
+    { name: 'Linear', desc: 'Project tracking and sprint\u00A0management', category: 'Project Management' },
+    { name: 'Loom', desc: 'Async video updates and research\u00A0walkthroughs', category: 'Communication' },
+    { name: 'GitHub', desc: 'Design system code and component\u00A0library', category: 'Engineering' },
   ]
 
   return (
@@ -449,9 +459,9 @@ function SlideTools() {
 /* ── Slide 8: Our Users (Brand slide — turquoise bg) ─────────── */
 function SlideOurUsers() {
   const personas = [
-    { name: 'María, 34', location: 'Houston, TX → Guadalajara', need: 'Sends $200/month to her mom. Needs it fast and affordable.', emoji: '👩‍👧' },
-    { name: 'Roberto, 28', location: 'LA, CA → San Salvador', need: 'Just started sending money home. Confused by fees and exchange rates.', emoji: '👨‍💻' },
-    { name: 'Gloria, 52', location: 'Chicago, IL → Bogotá', need: 'Helps her whole family. Sends to 3 different people monthly.', emoji: '👵' },
+    { name: 'María, 34', location: 'Houston, TX → Guadalajara', need: 'Sends $200/month to her mom. Needs it fast and\u00A0affordable.', emoji: '👩‍👧' },
+    { name: 'Roberto, 28', location: 'LA, CA → San Salvador', need: 'Just started sending money home. Confused by fees and exchange\u00A0rates.', emoji: '👨‍💻' },
+    { name: 'Gloria, 52', location: 'Chicago, IL → Bogotá', need: 'Helps her whole family. Sends to 3 different people\u00A0monthly.', emoji: '👵' },
   ]
 
   return (
@@ -472,7 +482,7 @@ function SlideOurUsers() {
               Our{'\u00A0'}Users
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl text-slate/60 leading-relaxed max-w-lg">
-              Latinos in the US caring for loved ones across borders. Your research will help us truly understand their lives.
+              Latinos in the US caring for loved ones across borders. You&apos;ll define how we understand their lives — and build the practice that keeps us close to{'\u00A0'}them.
             </p>
           </div>
 
@@ -498,14 +508,34 @@ function SlideOurUsers() {
 }
 
 /* ── Slide 9: Week 1 Checklist ────────────────────────────────── */
+
+const WEEK1_STORAGE_KEY = 'jose-week1-checks'
+
+const week1Days = [
+  { day: 'Monday', items: ['HR orientation & benefits', 'Laptop setup & tool access', 'Lunch with Maria (Head of Design)'] },
+  { day: 'Tuesday', items: ['Design team all-hands', 'Product landscape deep-dive', 'Review existing user data & analytics'] },
+  { day: 'Wednesday', items: ['1:1 with each PM and squad lead', 'Audit support tickets & NPS data', 'Compliance training'] },
+  { day: 'Thursday', items: ['Meet CPO & leadership team', 'Evaluate research tooling options', 'Draft initial knowledge-gap assessment'] },
+  { day: 'Friday', items: ['Shadow a customer support call', 'Outline your 90-day plan draft', 'Week 1 retro with Maria'] },
+]
+
 function SlideWeekOne() {
-  const days = [
-    { day: 'Monday', items: ['HR orientation & benefits enrollment', 'Laptop setup & tool access', 'Lunch with Maria (manager)'] },
-    { day: 'Tuesday', items: ['Design team all-hands', 'Figma & Notion walkthrough', 'Shadow a usability session'] },
-    { day: 'Wednesday', items: ['1:1 with each PM', 'Read the research repository', 'Compliance training'] },
-    { day: 'Thursday', items: ['Product deep-dive with Carlos', 'Attend sprint planning', 'Set up Dovetail workspace'] },
-    { day: 'Friday', items: ['Coffee chat with engineering lead', 'Write your first research brief', 'Week 1 retro with Maria'] },
-  ]
+  const [checked, setChecked] = useState<Record<string, boolean>>({})
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(WEEK1_STORAGE_KEY)
+      if (stored) setChecked(JSON.parse(stored))
+    } catch {}
+  }, [])
+
+  const toggle = (key: string) => {
+    setChecked((prev) => {
+      const next = { ...prev, [key]: !prev[key] }
+      try { localStorage.setItem(WEEK1_STORAGE_KEY, JSON.stringify(next)) } catch {}
+      return next
+    })
+  }
 
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
@@ -519,16 +549,33 @@ function SlideWeekOne() {
           </h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
-            {days.map((d) => (
+            {week1Days.map((d, di) => (
               <div key={d.day} className="bg-white rounded-xl p-5 border border-border shadow-sm">
                 <h3 className="font-display font-extrabold text-foreground text-base mb-4">{d.day}</h3>
                 <ul className="space-y-3">
-                  {d.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <div className="w-4 h-4 rounded border-2 border-concrete flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-foreground/70 leading-snug">{item}</span>
-                    </li>
-                  ))}
+                  {d.items.map((item, ii) => {
+                    const key = `${di}-${ii}`
+                    const isChecked = !!checked[key]
+                    return (
+                      <li key={key} className="flex items-start gap-2.5">
+                        <button
+                          type="button"
+                          onClick={() => toggle(key)}
+                          className={`w-4 h-4 rounded border-2 flex-shrink-0 mt-0.5 flex items-center justify-center transition-colors ${
+                            isChecked ? 'bg-turquoise border-turquoise' : 'border-concrete hover:border-mocha'
+                          }`}
+                          aria-label={`Mark "${item}" as ${isChecked ? 'incomplete' : 'complete'}`}
+                        >
+                          {isChecked && (
+                            <svg className="w-2.5 h-2.5 text-slate" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </button>
+                        <span className={`text-sm leading-snug transition-colors ${isChecked ? 'text-foreground/40 line-through' : 'text-foreground/70'}`}>{item}</span>
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
             ))}
@@ -559,10 +606,10 @@ function SlideLetsGo() {
             <Illo src="Rocket%20Launch%20%2B%20Coin%20-%20Growth%20-%20Lime.svg" className="h-full w-full" label="Rocket launch" />
           </div>
           <h1 className="font-display font-black text-linen text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight mb-5 lg:mb-7">
-            Let&apos;s build{'\u00A0'}something great.
+            Build the foundation.
           </h1>
           <p className="text-lg sm:text-xl lg:text-2xl text-linen/50 leading-relaxed max-w-2xl mb-8">
-            We&apos;re so glad you&apos;re here, José. The team is excited to have you.
+            You&apos;re going to shape how this company understands its users, José. We can&apos;t wait to see what you{'\u00A0'}build.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <span className="inline-flex items-center gap-2 rounded-full bg-turquoise/10 border border-turquoise/20 px-4 py-2 text-sm font-medium text-turquoise">

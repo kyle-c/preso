@@ -14,6 +14,7 @@ interface GenerationCanvasProps {
   expectedCount?: number
   onSlideClick: (index: number) => void
   onCancel?: () => void
+  onRestart?: () => void
 }
 
 /* ─── Status messages ─── */
@@ -35,10 +36,12 @@ export function GenerationCanvas({
   expectedCount = 10,
   onSlideClick,
   onCancel,
+  onRestart,
 }: GenerationCanvasProps) {
   const [phase, setPhase] = useState<Phase>('placeholders')
   const [displayCount, setDisplayCount] = useState(0)
   const [canvasBounds, setCanvasBounds] = useState<DOMRect | null>(null)
+  const [zoomIndex, setZoomIndex] = useState<number | null>(null)
 
   const gridRef = useRef<HTMLDivElement>(null)
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
@@ -88,6 +91,17 @@ export function GenerationCanvas({
     return () => clearTimeout(t)
   }, [phase])
 
+  // Auto-zoom to slide 1 when generation is complete
+  useEffect(() => {
+    if (phase !== 'complete') return
+    const t = setTimeout(() => {
+      setZoomIndex(0)
+      setTimeout(() => onSlideClick(0), 700)
+    }, 1200) // Pause 1.2s on "complete" before zooming
+    timersRef.current.push(t)
+    return () => clearTimeout(t)
+  }, [phase, onSlideClick])
+
   // Cleanup timers on unmount
   useEffect(() => {
     return () => timersRef.current.forEach(clearTimeout)
@@ -96,11 +110,10 @@ export function GenerationCanvas({
   // Responsive grid columns based on count
   const cols = finalCount <= 4 ? 2 : finalCount <= 9 ? 3 : 4
 
-  // Track canvas grid bounds for agent cursors
+  // Track full viewport bounds for agent cursors (spread across entire screen)
   const updateBounds = useCallback(() => {
-    if (gridRef.current) {
-      setCanvasBounds(gridRef.current.getBoundingClientRect())
-    }
+    // Use the full viewport so cursors spread across all slides
+    setCanvasBounds(new DOMRect(0, 56, window.innerWidth, window.innerHeight - 56))
   }, [])
 
   useEffect(() => {
@@ -120,7 +133,17 @@ export function GenerationCanvas({
   const cursorCount = Math.min(Math.max(finalCount, 6), 12)
 
   return (
-    <div className="fixed inset-0 bg-[#050505] flex flex-col z-50">
+    <div
+      className="fixed inset-0 bg-[#050505] flex flex-col z-50"
+      style={{
+        transition: zoomIndex !== null ? 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.7s ease-out' : undefined,
+        transform: zoomIndex !== null ? 'scale(3)' : 'scale(1)',
+        opacity: zoomIndex !== null ? 0 : 1,
+        transformOrigin: zoomIndex !== null
+          ? `${((zoomIndex % cols) + 0.5) / cols * 100}% ${(Math.floor(zoomIndex / cols) + 0.5) / Math.ceil(finalCount / cols) * 100}%`
+          : 'center center',
+      }}
+    >
       {/* Status bar */}
       <div className="h-14 flex items-center justify-between px-6 shrink-0">
         <div className="flex items-center gap-3">
@@ -174,7 +197,10 @@ export function GenerationCanvas({
                   slide={slides[i] ?? null}
                   phase={phase}
                   entranceDelay={i * 120}
-                  onClick={phase === 'complete' ? () => onSlideClick(i) : undefined}
+                  onClick={phase === 'complete' ? () => {
+                    setZoomIndex(i)
+                    setTimeout(() => onSlideClick(i), 600)
+                  } : undefined}
                 />
               </div>
             </div>

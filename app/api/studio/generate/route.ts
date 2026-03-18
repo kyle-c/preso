@@ -182,6 +182,8 @@ Return ONLY valid JSON — no markdown fences, no commentary. Structure:
 }
 
 The "document" object is a FULL written companion document. Each section maps to a slide via slideIndex and should contain 3-5 paragraphs of detailed, stakeholder-ready prose. The document is independent from the slides — it reads as a complete written document.
+
+CRITICAL: You MUST output BOTH "slides" and "document" in EVERY response. The response must be a single JSON object with two top-level keys: "slides" (array) and "document" (object). Do NOT output just a bare array. Do NOT skip the document. The document is REQUIRED.
 `
 
 // ---------------------------------------------------------------------------
@@ -249,7 +251,7 @@ function buildAnthropicPayload(body: GenerateBody) {
 
   return {
     model: body.model,
-    max_tokens: 16384,
+    max_tokens: 32768,
     stream: true,
     system: systemPrompt,
     messages: [{ role: 'user', content }],
@@ -285,7 +287,7 @@ function buildOpenRouterPayload(body: GenerateBody) {
 
   return {
     model: body.model,
-    max_tokens: 16384,
+    max_tokens: 32768,
     stream: true,
     messages: [
       { role: 'system', content: systemPrompt },

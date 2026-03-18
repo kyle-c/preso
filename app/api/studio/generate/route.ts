@@ -203,6 +203,10 @@ interface GenerateBody {
   apiKey: string
   model: string
   edit?: boolean
+  /** When true, generate a document from existing slides (reverse-engineer) */
+  reverseEngineer?: boolean
+  /** Existing slides to reverse-engineer a document from */
+  slides?: any[]
 }
 
 // ---------------------------------------------------------------------------
@@ -314,6 +318,7 @@ function guessImageMediaType(filename: string): string {
 function createSSEStream(
   upstreamResponse: Response,
   provider: 'anthropic' | 'openrouter',
+  extractDocument?: boolean,
 ): ReadableStream<Uint8Array> {
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
@@ -328,6 +333,7 @@ function createSSEStream(
       }
 
       let buffer = ''
+      let accumulated = '' // Accumulate all text for document extraction
 
       try {
         while (true) {
@@ -343,6 +349,31 @@ function createSSEStream(
             const data = line.slice(6).trim()
 
             if (data === '[DONE]') {
+              // Before closing, try to extract document from accumulated text
+              if (extractDocument && accumulated) {
+                try {
+                  const docMatch = accumulated.match(/"document"\s*:\s*\{/)
+                  if (docMatch && docMatch.index !== undefined) {
+                    const start = accumulated.indexOf('{', docMatch.index)
+                    let depth = 0; let inStr = false; let esc = false
+                    for (let i = start; i < accumulated.length; i++) {
+                      const ch = accumulated[i]
+                      if (esc) { esc = false; continue }
+                      if (ch === '\\') { esc = true; continue }
+                      if (ch === '"') { inStr = !inStr; continue }
+                      if (inStr) continue
+                      if (ch === '{') depth++
+                      else if (ch === '}') { depth--; if (depth === 0) {
+                        const doc = JSON.parse(accumulated.slice(start, i + 1))
+                        if (doc.title && doc.sections) {
+                          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ document: doc })}\n\n`))
+                        }
+                        break
+                      }}
+                    }
+                  }
+                } catch (_e) { /* document extraction failed */ }
+              }
               controller.enqueue(encoder.encode('data: [DONE]\n\n'))
               controller.close()
               return
@@ -357,6 +388,31 @@ function createSSEStream(
                   text = parsed.delta.text
                 }
                 if (parsed.type === 'message_stop') {
+                  // Extract document before closing
+                  if (extractDocument && accumulated) {
+                    try {
+                      const docMatch = accumulated.match(/"document"\s*:\s*\{/)
+                      if (docMatch && docMatch.index !== undefined) {
+                        const start = accumulated.indexOf('{', docMatch.index)
+                        let depth = 0; let inStr = false; let esc = false
+                        for (let i = start; i < accumulated.length; i++) {
+                          const ch = accumulated[i]
+                          if (esc) { esc = false; continue }
+                          if (ch === '\\') { esc = true; continue }
+                          if (ch === '"') { inStr = !inStr; continue }
+                          if (inStr) continue
+                          if (ch === '{') depth++
+                          else if (ch === '}') { depth--; if (depth === 0) {
+                            const doc = JSON.parse(accumulated.slice(start, i + 1))
+                            if (doc.title && doc.sections) {
+                              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ document: doc })}\n\n`))
+                            }
+                            break
+                          }}
+                        }
+                      }
+                    } catch (_e) { /* extraction failed */ }
+                  }
                   controller.enqueue(encoder.encode('data: [DONE]\n\n'))
                   controller.close()
                   return
@@ -365,6 +421,32 @@ function createSSEStream(
                 const delta = parsed.choices?.[0]?.delta?.content
                 if (delta) text = delta
                 if (parsed.choices?.[0]?.finish_reason) {
+                  // Extract document before closing
+                  if (extractDocument && accumulated) {
+                    try {
+                      const clean = accumulated.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '')
+                      const docMatch = clean.match(/"document"\s*:\s*\{/)
+                      if (docMatch && docMatch.index !== undefined) {
+                        const start = clean.indexOf('{', docMatch.index)
+                        let depth = 0; let inStr = false; let esc = false
+                        for (let i = start; i < clean.length; i++) {
+                          const ch = clean[i]
+                          if (esc) { esc = false; continue }
+                          if (ch === '\\') { esc = true; continue }
+                          if (ch === '"') { inStr = !inStr; continue }
+                          if (inStr) continue
+                          if (ch === '{') depth++
+                          else if (ch === '}') { depth--; if (depth === 0) {
+                            const doc = JSON.parse(clean.slice(start, i + 1))
+                            if (doc.title && doc.sections) {
+                              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ document: doc })}\n\n`))
+                            }
+                            break
+                          }}
+                        }
+                      }
+                    } catch (_e) { /* extraction failed */ }
+                  }
                   controller.enqueue(encoder.encode('data: [DONE]\n\n'))
                   controller.close()
                   return
@@ -372,6 +454,7 @@ function createSSEStream(
               }
 
               if (text) {
+                accumulated += text
                 const chunk = JSON.stringify({ text })
                 controller.enqueue(encoder.encode(`data: ${chunk}\n\n`))
               }
@@ -421,6 +504,65 @@ export async function POST(req: NextRequest) {
       })
     }
 
+    // Handle reverse-engineer document generation
+    if (body.reverseEngineer && body.slides?.length) {
+      const docPrompt = `Here are the slides from an existing presentation. Generate ONLY a "document" object (no slides) — a full written companion document that expands on these slides into stakeholder-ready prose.
+
+${JSON.stringify(body.slides, null, 2)}
+
+Return a JSON object with this exact structure:
+{
+  "document": {
+    "title": "document title matching the presentation",
+    "type": "general",
+    "summary": "2-3 sentence summary",
+    "sections": [
+      { "title": "Section Name", "content": "3-5 paragraphs of detailed markdown content expanding on the slide", "slideIndex": 0 }
+    ]
+  }
+}
+
+Create one section per slide (or group related slides). Each section MUST have 3-5 paragraphs of detailed, stakeholder-ready prose — not just a repeat of the slide text. Expand with context, rationale, evidence, and implications.`
+
+      const docBody = { ...body, prompt: docPrompt, edit: true }
+
+      let upstreamResponse: Response
+      if (body.provider === 'anthropic') {
+        upstreamResponse = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': body.apiKey,
+            'anthropic-version': '2025-04-14',
+          },
+          body: JSON.stringify(buildAnthropicPayload(docBody)),
+        })
+      } else {
+        upstreamResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${body.apiKey}`,
+            'HTTP-Referer': 'https://felix.pago',
+          },
+          body: JSON.stringify(buildOpenRouterPayload(docBody)),
+        })
+      }
+
+      if (!upstreamResponse.ok) {
+        const errorText = await upstreamResponse.text()
+        return new Response(
+          JSON.stringify({ error: `Provider error (${upstreamResponse.status}): ${errorText}` }),
+          { status: upstreamResponse.status, headers: { 'Content-Type': 'application/json' } },
+        )
+      }
+
+      const stream = createSSEStream(upstreamResponse, body.provider, true)
+      return new Response(stream, {
+        headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' },
+      })
+    }
+
     let upstreamResponse: Response
 
     if (body.provider === 'anthropic') {
@@ -465,7 +607,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const stream = createSSEStream(upstreamResponse, body.provider)
+    const stream = createSSEStream(upstreamResponse, body.provider, true)
 
     return new Response(stream, {
       headers: {

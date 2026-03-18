@@ -64,6 +64,38 @@ const LS = {
   openrouterModel: 'studio-openrouter-model',
 } as const
 
+/**
+ * Fetch server-side settings and hydrate local state.
+ * Falls back silently if the user is not authenticated.
+ */
+export function useServerSettings(
+  setProvider: (v: string) => void,
+  setApiKey: (v: string) => void,
+  setModel: (v: string) => void,
+  setUserEmail: (v: string) => void,
+  setNotionConnected: (v: boolean) => void,
+  setAmplitudeConnected: (v: boolean) => void,
+  setGoogleWorkspaceConnected: (v: boolean) => void,
+  setClickupConnected: (v: boolean) => void,
+) {
+  useEffect(() => {
+    fetch('/api/studio/settings')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data) return
+        if (data.provider) setProvider(data.provider)
+        if (data.anthropicKey) setApiKey(data.anthropicKey)
+        if (data.anthropicModel) setModel(data.anthropicModel)
+        if (data.email) setUserEmail(data.email)
+        setNotionConnected(!!data.hasNotionKey)
+        setAmplitudeConnected(!!data.hasAmplitudeKeys)
+        setGoogleWorkspaceConnected(!!data.hasGoogleWorkspaceKey)
+        setClickupConnected(!!data.hasClickupKey)
+      })
+      .catch(() => {})
+  }, [])
+}
+
 export function loadModelDefaults() {
   if (typeof window === 'undefined') {
     return {

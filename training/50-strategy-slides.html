@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>50 Corporate Strategy Slide Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #111; --dark: #2a2a2a; --mid: #5a5a5a; --muted: #8a8a8a;
+  --border: #c8c8c8; --light: #e2e2e2; --bg: #f2f2f2; --white: #fff;
+  --serif: 'Instrument Serif', serif;
+  --sans: 'Hanken Grotesk', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#ddd;font-family:var(--sans);color:var(--dark);padding:clamp(16px,4vw,48px);}
+
+/* ─── TOC ─── */
+.toc{max-width:960px;margin:0 auto 48px;background:var(--black);color:var(--white);border-radius:8px;padding:clamp(24px,4vw,48px);}
+.toc h1{font-family:var(--serif);font-size:clamp(24px,4vw,36px);margin-bottom:8px;}
+.toc .sub{color:var(--muted);font-size:clamp(11px,1.4vw,14px);margin-bottom:24px;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px 24px;}
+.toc-item{font-size:11px;color:var(--muted);padding:3px 0;}
+.toc-item span{color:#555;margin-right:4px;font-variant-numeric:tabular-nums;}
+
+/* ─── SLIDE SYSTEM ─── */
+.slide{
+  max-width:960px;margin:0 auto 24px;border-radius:6px;overflow:hidden;
+  box-shadow:0 2px 16px rgba(0,0,0,0.07);
+  padding:clamp(20px,3vw,36px) clamp(16px,3vw,32px);
+  position:relative;
+}
+.slide.bg-w{background:var(--white);}
+.slide.bg-d{background:var(--black);color:var(--white);}
+.slide.bg-l{background:var(--bg);}
+.sn{position:absolute;bottom:10px;right:14px;font-size:9px;color:var(--muted);}
+.slide.bg-d .sn{color:#444;}
+
+/* ─── TYPOGRAPHY ─── */
+.sec{font-size:clamp(8px,1vw,9px);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.slide.bg-d .sec{color:#555;}
+h2.t{font-family:var(--serif);font-size:clamp(22px,3.5vw,32px);line-height:1.15;margin-bottom:clamp(12px,2vw,20px);}
+.slide.bg-d h2.t{color:var(--white);}
+.label{font-size:clamp(8px,1vw,9px);letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.serif{font-family:var(--serif);}
+.text-xs{font-size:clamp(9px,1.1vw,11px);} .text-sm{font-size:clamp(10px,1.3vw,12px);}
+.text-md{font-size:clamp(12px,1.5vw,14px);} .text-lg{font-size:clamp(14px,2vw,18px);}
+.text-xl{font-size:clamp(18px,2.5vw,24px);}
+.text-muted{color:var(--muted);} .text-mid{color:var(--mid);} .text-dark{color:var(--dark);}
+.bold{font-weight:700;} .italic{font-style:italic;} .center{text-align:center;}
+.lh{line-height:1.6;}
+
+/* ─── LAYOUT ─── */
+.flex{display:flex;flex-wrap:wrap;} .col{flex-direction:column;} .nowrap{flex-wrap:nowrap;}
+.gap-4{gap:4px;} .gap-6{gap:6px;} .gap-8{gap:8px;} .gap-12{gap:12px;} .gap-16{gap:16px;} .gap-20{gap:20px;} .gap-24{gap:24px;}
+.ac{align-items:center;} .as{align-items:flex-start;}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(8px,2vw,16px);}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,2vw,16px);}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1.5vw,12px);}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(6px,1vw,10px);}
+@media(max-width:640px){
+  .g2,.g3,.g4,.g5{grid-template-columns:1fr;}
+  .g2{grid-template-columns:1fr 1fr;}
+  .side{flex-direction:column!important;}
+  .side>*{width:100%!important;min-width:0!important;}
+}
+@media(max-width:480px){.g2{grid-template-columns:1fr;}}
+.side{display:flex;gap:clamp(12px,2vw,24px);}
+
+.mt-4{margin-top:4px;} .mt-8{margin-top:8px;} .mt-12{margin-top:12px;} .mt-16{margin-top:16px;}
+.mt-20{margin-top:clamp(12px,2vw,20px);} .mt-24{margin-top:clamp(16px,2.5vw,24px);}
+.mb-4{margin-bottom:4px;} .mb-8{margin-bottom:8px;} .mb-12{margin-bottom:12px;}
+
+/* ─── COMPONENTS ─── */
+.card{background:var(--white);border:1px solid var(--border);border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.04);padding:clamp(10px,1.5vw,16px);}
+.slide.bg-d .card{background:#1e1e1e;border-color:#333;}
+.pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:clamp(8px,1vw,10px);background:var(--light);color:var(--mid);}
+.pill-d{background:var(--dark);color:var(--white);}
+.divider{height:1px;background:var(--border);}
+.slide.bg-d .divider{background:#333;}
+
+.bar{height:clamp(8px,1vw,10px);background:var(--light);border-radius:2px;}
+.bar-fill{height:100%;background:var(--dark);border-radius:2px;}
+.bar-track{height:clamp(8px,1vw,10px);background:var(--light);border-radius:2px;overflow:hidden;}
+
+.num{width:clamp(18px,2vw,22px);height:clamp(18px,2vw,22px);border-radius:50%;background:var(--dark);color:var(--white);font-size:clamp(8px,1vw,10px);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.avatar{width:clamp(36px,5vw,48px);height:clamp(36px,5vw,48px);border-radius:50%;background:var(--light);border:1px solid var(--border);flex-shrink:0;}
+.icon-box{width:clamp(28px,3vw,36px);height:clamp(28px,3vw,36px);background:var(--bg);border:1px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:clamp(12px,1.5vw,16px);color:var(--muted);}
+
+.accent-top{border-top:3px solid var(--dark);}
+.accent-top-m{border-top:3px solid var(--muted);}
+.accent-top-l{border-top:3px solid var(--border);}
+.accent-left{border-left:3px solid var(--dark);}
+
+table.dt{width:100%;border-collapse:collapse;font-size:clamp(9px,1.1vw,11px);}
+table.dt th{background:var(--dark);color:var(--white);padding:clamp(5px,0.8vw,8px) clamp(6px,1vw,10px);font-weight:500;text-align:left;}
+table.dt td{padding:clamp(5px,0.8vw,8px) clamp(6px,1vw,10px);color:var(--mid);border-bottom:1px solid var(--bg);}
+table.dt tr:nth-child(even) td{background:var(--bg);}
+table.dt .r{text-align:right;} table.dt .c{text-align:center;}
+
+.placeholder{background:var(--light);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:clamp(9px,1vw,11px);border-radius:4px;min-height:80px;position:relative;}
+
+.check{width:14px;height:14px;border-radius:2px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--white);}
+.check.y{background:var(--dark);} .check.n{background:var(--border);}
+
+.quadrant{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;border:1px solid var(--border);background:var(--bg);position:relative;aspect-ratio:2/1;min-height:120px;}
+.quadrant::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border);}
+.quadrant::after{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);}
+.quadrant .ql{padding:clamp(6px,1vw,10px);font-size:clamp(8px,1vw,10px);letter-spacing:1px;font-weight:600;z-index:1;}
+
+.funnel{display:flex;flex-direction:column;gap:4px;align-items:center;}
+.funnel .fb{height:clamp(24px,3vw,32px);display:flex;align-items:center;justify-content:center;color:var(--white);font-size:clamp(9px,1.1vw,11px);}
+
+.stat{display:flex;flex-direction:column;}
+.stat .val{font-size:clamp(20px,3vw,32px);font-weight:700;line-height:1.1;}
+.stat .lbl{font-size:clamp(8px,1vw,10px);color:var(--muted);margin-top:4px;}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOC ═══ -->
+<div class="toc">
+  <h1>50 Corporate Strategy Slides</h1>
+  <p class="sub">Internal strategy team presentation templates &middot; Responsive wireframes &middot; Scroll to browse</p>
+  <div class="toc-grid">
+    <div class="toc-item"><span>01</span>Title / Cover</div><div class="toc-item"><span>26</span>Strategic Bets</div>
+    <div class="toc-item"><span>02</span>Confidential Cover</div><div class="toc-item"><span>27</span>Growth Flywheel</div>
+    <div class="toc-item"><span>03</span>Agenda</div><div class="toc-item"><span>28</span>KPI Dashboard</div>
+    <div class="toc-item"><span>04</span>Executive Summary</div><div class="toc-item"><span>29</span>Balanced Scorecard</div>
+    <div class="toc-item"><span>05</span>Table of Contents</div><div class="toc-item"><span>30</span>OKR Tracker</div>
+    <div class="toc-item"><span>06</span>Company Snapshot</div><div class="toc-item"><span>31</span>Benchmark Comparison</div>
+    <div class="toc-item"><span>07</span>Mission / Vision / Values</div><div class="toc-item"><span>32</span>Operating Model</div>
+    <div class="toc-item"><span>08</span>Org Structure</div><div class="toc-item"><span>33</span>Maturity Assessment</div>
+    <div class="toc-item"><span>09</span>Stakeholder Map</div><div class="toc-item"><span>34</span>Go-to-Market Strategy</div>
+    <div class="toc-item"><span>10</span>Company Timeline</div><div class="toc-item"><span>35</span>Partnership Ecosystem</div>
+    <div class="toc-item"><span>11</span>Industry Overview</div><div class="toc-item"><span>36</span>M&A Target Landscape</div>
+    <div class="toc-item"><span>12</span>Market Sizing</div><div class="toc-item"><span>37</span>Integration Roadmap</div>
+    <div class="toc-item"><span>13</span>Competitive Positioning</div><div class="toc-item"><span>38</span>Scenario Planning</div>
+    <div class="toc-item"><span>14</span>SWOT Analysis</div><div class="toc-item"><span>39</span>Org Chart</div>
+    <div class="toc-item"><span>15</span>Porter's Five Forces</div><div class="toc-item"><span>40</span>Headcount Plan</div>
+    <div class="toc-item"><span>16</span>Macro Trends</div><div class="toc-item"><span>41</span>Talent Strategy</div>
+    <div class="toc-item"><span>17</span>Regulatory Landscape</div><div class="toc-item"><span>42</span>Culture Framework</div>
+    <div class="toc-item"><span>18</span>P&L Summary</div><div class="toc-item"><span>43</span>Recommendation</div>
+    <div class="toc-item"><span>19</span>Revenue by Segment</div><div class="toc-item"><span>44</span>Decision Matrix</div>
+    <div class="toc-item"><span>20</span>Unit Economics</div><div class="toc-item"><span>45</span>Risk Assessment</div>
+    <div class="toc-item"><span>21</span>Financial Forecast</div><div class="toc-item"><span>46</span>Investment Thesis</div>
+    <div class="toc-item"><span>22</span>Budget Allocation</div><div class="toc-item"><span>47</span>Board Update Summary</div>
+    <div class="toc-item"><span>23</span>Strategic Pillars</div><div class="toc-item"><span>48</span>Quarterly Business Review</div>
+    <div class="toc-item"><span>24</span>Three Horizons</div><div class="toc-item"><span>49</span>Key Takeaways</div>
+    <div class="toc-item"><span>25</span>Ansoff Matrix</div><div class="toc-item"><span>50</span>Thank You / Q&A</div>
+  </div>
+</div>
+
+<!-- ═══ 1: Title / Cover ═══ -->
+<div class="slide bg-d" style="min-height:280px;display:flex;flex-direction:column;justify-content:center;">
+  <div class="placeholder" style="position:absolute;top:clamp(12px,2vw,24px);right:clamp(12px,2vw,24px);width:clamp(60px,8vw,80px);height:clamp(36px,5vw,48px);background:#222;border-color:#333;color:#555;">Logo</div>
+  <h1 style="font-family:var(--serif);font-size:clamp(32px,6vw,52px);color:#fff;">Strategy Title</h1>
+  <p class="text-md" style="color:var(--muted);margin-top:8px;max-width:500px;">Subtitle or framing statement — one sentence that anchors the strategic narrative</p>
+  <div class="divider" style="width:clamp(48px,8vw,80px);margin-top:clamp(20px,4vw,40px);"></div>
+  <p class="text-xs" style="color:var(--muted);margin-top:16px;">Strategy & Operations &middot; Q1 2026 &middot; Confidential</p>
+  <div class="sn">1 / 50</div>
+</div>
+
+<!-- ═══ 2: Confidential Cover ═══ -->
+<div class="slide bg-w" style="min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+  <div class="sec">Confidential</div>
+  <div style="width:clamp(48px,6vw,64px);height:clamp(48px,6vw,64px);border:2px solid var(--dark);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:clamp(18px,3vw,28px);color:var(--dark);">⬡</div>
+  <h2 style="font-family:var(--serif);font-size:clamp(24px,4vw,36px);">Company Name</h2>
+  <p class="text-sm text-muted mt-8">Strategic Planning Document &middot; FY2026</p>
+  <div class="divider mt-24" style="width:clamp(200px,40vw,400px);"></div>
+  <p class="text-xs text-muted mt-12 lh" style="max-width:400px;">This document contains proprietary and confidential information. Distribution is restricted to authorized personnel only.</p>
+  <div class="sn">2 / 50</div>
+</div>
+
+<!-- ═══ 3: Agenda ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Opening</div>
+  <h2 class="t">Agenda</h2>
+  <div style="display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">01</span><span class="text-md" style="flex:1;">Market Context & Industry Dynamics</span><span class="text-xs text-muted">10 min</span></div>
+    <div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">02</span><span class="text-md" style="flex:1;">Financial Performance</span><span class="text-xs text-muted">15 min</span></div>
+    <div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">03</span><span class="text-md" style="flex:1;">Strategic Framework & Priorities</span><span class="text-xs text-muted">20 min</span></div>
+    <div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">04</span><span class="text-md" style="flex:1;">Growth & M&A Opportunities</span><span class="text-xs text-muted">15 min</span></div>
+    <div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">05</span><span class="text-md" style="flex:1;">People & Organization</span><span class="text-xs text-muted">10 min</span></div>
+    <div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">06</span><span class="text-md" style="flex:1;">Decisions & Next Steps</span><span class="text-xs text-muted">10 min</span></div>
+  </div>
+  <div class="sn">3 / 50</div>
+</div>
+
+<!-- ═══ 4: Executive Summary ═══ -->
+<div class="slide bg-l">
+  <div class="sec">Opening</div>
+  <h2 class="t">Executive Summary</h2>
+  <div class="card accent-left" style="padding:clamp(12px,2vw,20px);margin-bottom:clamp(12px,2vw,16px);">
+    <p class="text-md serif italic text-dark lh">The market is shifting toward [trend]. We recommend [strategic move] to capture [opportunity], requiring [investment] over [timeframe] with projected [outcome].</p>
+  </div>
+  <div class="g3 mt-16">
+    <div><div class="label mb-4">Context</div><p class="text-xs text-mid lh">Brief summary of market conditions and competitive dynamics driving the need for strategic action.</p></div>
+    <div><div class="label mb-4">Recommendation</div><p class="text-xs text-mid lh">Core strategic recommendation with the primary rationale and expected business impact.</p></div>
+    <div><div class="label mb-4">Ask</div><p class="text-xs text-mid lh">What is needed from leadership: decisions, resources, approvals, and timeline to execute.</p></div>
+  </div>
+  <div class="sn">4 / 50</div>
+</div>
+
+<!-- ═══ 5: Table of Contents ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Opening</div>
+  <h2 class="t">Contents</h2>
+  <div class="g2 mt-16" style="font-size:clamp(9px,1.1vw,11px);color:var(--mid);line-height:2.2;">
+    <div>01&ensp;Title / Cover<br>02&ensp;Confidential Cover<br>03&ensp;Agenda<br>04&ensp;Executive Summary<br>05&ensp;Contents<br>06&ensp;Company Snapshot<br>07&ensp;Mission / Vision / Values<br>08&ensp;Org Structure<br>09&ensp;Stakeholder Map<br>10&ensp;Company Timeline<br>11&ensp;Industry Overview<br>12&ensp;Market Sizing<br>13&ensp;Competitive Positioning</div>
+    <div>14&ensp;SWOT Analysis<br>15&ensp;Porter's Five Forces<br>16&ensp;Macro Trends<br>17&ensp;Regulatory Landscape<br>18&ensp;P&L Summary<br>19&ensp;Revenue by Segment<br>20&ensp;Unit Economics<br>21&ensp;Financial Forecast<br>22&ensp;Budget Allocation<br>23&ensp;Strategic Pillars<br>24&ensp;Three Horizons<br>25&ensp;Ansoff Matrix</div>
+  </div>
+  <div class="sn">5 / 50</div>
+</div>
+
+<!-- ═══ 6: Company Snapshot ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Company Overview</div>
+  <h2 class="t">Company at a Glance</h2>
+  <div class="g4 mt-20">
+    <div class="card center"><div class="stat ac" style="align-items:center;"><div class="val">$X.XB</div><div class="lbl">Annual Revenue</div></div></div>
+    <div class="card center"><div class="stat ac" style="align-items:center;"><div class="val">X,XXX</div><div class="lbl">Employees</div></div></div>
+    <div class="card center"><div class="stat ac" style="align-items:center;"><div class="val">XX</div><div class="lbl">Markets</div></div></div>
+    <div class="card center"><div class="stat ac" style="align-items:center;"><div class="val">XXM</div><div class="lbl">Active Users</div></div></div>
+  </div>
+  <div class="side mt-20" style="gap:clamp(12px,2vw,24px);">
+    <div style="flex:1;"><div class="label mb-8">What We Do</div><p class="text-xs text-mid lh">Brief description of the company's core business, products, and value proposition to customers.</p></div>
+    <div style="flex:1;"><div class="label mb-8">Where We Operate</div><p class="text-xs text-mid lh">Geographic footprint, key markets, and expansion trajectory. Mention headquarters and regional offices.</p></div>
+    <div style="flex:1;"><div class="label mb-8">How We Win</div><p class="text-xs text-mid lh">Core competitive advantages: technology, network effects, regulatory moats, brand, or cost structure.</p></div>
+  </div>
+  <div class="sn">6 / 50</div>
+</div>
+
+<!-- ═══ 7: Mission / Vision / Values ═══ -->
+<div class="slide bg-d">
+  <div class="sec">Company Overview</div>
+  <h2 class="t">Mission, Vision & Values</h2>
+  <div class="side mt-20" style="gap:clamp(12px,3vw,32px);">
+    <div style="flex:1;">
+      <div class="label mb-8" style="color:#666;">Mission</div>
+      <p class="text-lg serif italic" style="color:#fff;line-height:1.5;">To [verb] [audience] by [method], making [outcome] accessible to everyone.</p>
+    </div>
+    <div style="flex:1;">
+      <div class="label mb-8" style="color:#666;">Vision</div>
+      <p class="text-lg serif italic" style="color:#fff;line-height:1.5;">A world where [aspirational future state] is the norm, not the exception.</p>
+    </div>
+  </div>
+  <div class="divider mt-24" style="background:#333;"></div>
+  <div class="label mt-16 mb-12" style="color:#666;">Values</div>
+  <div class="g4">
+    <div><span class="text-sm bold" style="color:#fff;">Integrity</span><br><span class="text-xs" style="color:var(--muted);">Do the right thing, even when no one is watching.</span></div>
+    <div><span class="text-sm bold" style="color:#fff;">Velocity</span><br><span class="text-xs" style="color:var(--muted);">Move fast, learn faster, iterate continuously.</span></div>
+    <div><span class="text-sm bold" style="color:#fff;">Ownership</span><br><span class="text-xs" style="color:var(--muted);">Act like a founder. Take responsibility end-to-end.</span></div>
+    <div><span class="text-sm bold" style="color:#fff;">Empathy</span><br><span class="text-xs" style="color:var(--muted);">Start with the customer. Build for real people.</span></div>
+  </div>
+  <div class="sn">7 / 50</div>
+</div>
+
+<!-- ═══ 8: Org Structure ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Company Overview</div>
+  <h2 class="t">Organizational Structure</h2>
+  <div class="center mt-20">
+    <div style="display:inline-block;background:var(--dark);color:#fff;padding:8px 20px;font-size:clamp(10px,1.2vw,12px);font-weight:500;">CEO</div>
+  </div>
+  <div class="g4 mt-12" style="gap:clamp(4px,1vw,8px);">
+    <div class="card center" style="padding:clamp(8px,1vw,12px);"><div class="text-sm bold">Product & Engineering</div><div class="text-xs text-muted mt-4">CTO / VP Eng</div><div class="text-xs text-muted">~XXX people</div></div>
+    <div class="card center" style="padding:clamp(8px,1vw,12px);"><div class="text-sm bold">Revenue</div><div class="text-xs text-muted mt-4">CRO / VP Sales</div><div class="text-xs text-muted">~XXX people</div></div>
+    <div class="card center" style="padding:clamp(8px,1vw,12px);"><div class="text-sm bold">Finance & Ops</div><div class="text-xs text-muted mt-4">CFO</div><div class="text-xs text-muted">~XX people</div></div>
+    <div class="card center" style="padding:clamp(8px,1vw,12px);"><div class="text-sm bold">People & Culture</div><div class="text-xs text-muted mt-4">CPO</div><div class="text-xs text-muted">~XX people</div></div>
+  </div>
+  <div class="g4 mt-8" style="gap:clamp(4px,1vw,8px);">
+    <div style="background:var(--bg);padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(9px,1vw,10px);color:var(--mid);border-radius:3px;">Platform<br>Mobile<br>Data</div>
+    <div style="background:var(--bg);padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(9px,1vw,10px);color:var(--mid);border-radius:3px;">Enterprise<br>Mid-Market<br>Partnerships</div>
+    <div style="background:var(--bg);padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(9px,1vw,10px);color:var(--mid);border-radius:3px;">FP&A<br>Legal<br>Compliance</div>
+    <div style="background:var(--bg);padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(9px,1vw,10px);color:var(--mid);border-radius:3px;">Recruiting<br>L&D<br>Total Rewards</div>
+  </div>
+  <div class="sn">8 / 50</div>
+</div>
+
+<!-- ═══ 9: Stakeholder Map ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Company Overview</div>
+  <h2 class="t">Key Stakeholders</h2>
+  <div class="g2 mt-20">
+    <div><div class="label mb-8">Internal</div>
+      <div class="flex gap-8 ac mb-8"><div class="avatar"></div><div><div class="text-sm bold">Name, Title</div><div class="text-xs text-muted">Decision-maker — budget authority</div></div></div>
+      <div class="flex gap-8 ac mb-8"><div class="avatar"></div><div><div class="text-sm bold">Name, Title</div><div class="text-xs text-muted">Sponsor — executive alignment</div></div></div>
+      <div class="flex gap-8 ac"><div class="avatar"></div><div><div class="text-sm bold">Name, Title</div><div class="text-xs text-muted">Influencer — domain expertise</div></div></div>
+    </div>
+    <div><div class="label mb-8">External</div>
+      <div class="flex gap-8 ac mb-8"><div class="avatar"></div><div><div class="text-sm bold">Board Member</div><div class="text-xs text-muted">Governance — quarterly reporting</div></div></div>
+      <div class="flex gap-8 ac mb-8"><div class="avatar"></div><div><div class="text-sm bold">Investor Lead</div><div class="text-xs text-muted">Capital partner — strategic counsel</div></div></div>
+      <div class="flex gap-8 ac"><div class="avatar"></div><div><div class="text-sm bold">Regulatory Contact</div><div class="text-xs text-muted">Compliance — market access</div></div></div>
+    </div>
+  </div>
+  <div class="sn">9 / 50</div>
+</div>
+
+<!-- ═══ 10: Company Timeline ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Company Overview</div>
+  <h2 class="t">Key Milestones</h2>
+  <div style="position:relative;margin-top:clamp(16px,3vw,28px);padding-left:clamp(20px,3vw,28px);border-left:2px solid var(--border);">
+    <div style="margin-bottom:clamp(16px,2vw,24px);"><div class="flex gap-8 ac"><div style="width:12px;height:12px;border-radius:50%;background:var(--dark);margin-left:calc(-1 * clamp(20px,3vw,28px) - 7px);"></div><span class="text-xs text-muted">2018</span><span class="text-sm bold" style="margin-left:8px;">Founded</span></div><div class="text-xs text-mid" style="margin-left:20px;">Company incorporated. Seed round of $X.XM.</div></div>
+    <div style="margin-bottom:clamp(16px,2vw,24px);"><div class="flex gap-8 ac"><div style="width:12px;height:12px;border-radius:50%;background:var(--dark);margin-left:calc(-1 * clamp(20px,3vw,28px) - 7px);"></div><span class="text-xs text-muted">2020</span><span class="text-sm bold" style="margin-left:8px;">Product-Market Fit</span></div><div class="text-xs text-mid" style="margin-left:20px;">Crossed 100K users. Series A at $XXM valuation.</div></div>
+    <div style="margin-bottom:clamp(16px,2vw,24px);"><div class="flex gap-8 ac"><div style="width:12px;height:12px;border-radius:50%;background:var(--dark);margin-left:calc(-1 * clamp(20px,3vw,28px) - 7px);"></div><span class="text-xs text-muted">2022</span><span class="text-sm bold" style="margin-left:8px;">Scale</span></div><div class="text-xs text-mid" style="margin-left:20px;">Series B. Expanded to 5 markets. Revenue crossed $XXM ARR.</div></div>
+    <div style="margin-bottom:clamp(16px,2vw,24px);"><div class="flex gap-8 ac"><div style="width:12px;height:12px;border-radius:50%;background:var(--dark);margin-left:calc(-1 * clamp(20px,3vw,28px) - 7px);"></div><span class="text-xs text-muted">2024</span><span class="text-sm bold" style="margin-left:8px;">Series C</span></div><div class="text-xs text-mid" style="margin-left:20px;">$XXXM raise. Acquisition of [company]. 1M+ users.</div></div>
+    <div><div class="flex gap-8 ac"><div style="width:12px;height:12px;border-radius:50%;background:var(--dark);margin-left:calc(-1 * clamp(20px,3vw,28px) - 7px);"></div><span class="text-xs text-muted">2026</span><span class="text-sm bold" style="margin-left:8px;">Now</span></div><div class="text-xs text-mid" style="margin-left:20px;">Path to profitability. Evaluating IPO readiness.</div></div>
+  </div>
+  <div class="sn">10 / 50</div>
+</div>
+
+<!-- ═══ 11: Industry Overview ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Market & Industry</div>
+  <h2 class="t">Industry Overview</h2>
+  <div class="side mt-20">
+    <div style="flex:2;">
+      <div class="placeholder" style="height:clamp(120px,20vw,200px);">Industry landscape chart / diagram</div>
+    </div>
+    <div style="flex:1;min-width:180px;">
+      <div class="label mb-8">Key Facts</div>
+      <div class="mb-12"><div class="text-xs text-muted">Market Size</div><div class="text-md bold">$XXX B</div></div>
+      <div class="mb-12"><div class="text-xs text-muted">CAGR (5yr)</div><div class="text-md bold">XX%</div></div>
+      <div class="mb-12"><div class="text-xs text-muted">Key Players</div><div class="text-md bold">X–X</div></div>
+      <div><div class="text-xs text-muted">Disruption Risk</div><div class="text-md bold">High</div></div>
+    </div>
+  </div>
+  <div class="sn">11 / 50</div>
+</div>
+
+<!-- ═══ 12: Market Sizing ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Market & Industry</div>
+  <h2 class="t">Market Opportunity</h2>
+  <div class="side mt-20">
+    <div style="position:relative;width:clamp(160px,25vw,240px);aspect-ratio:1;flex-shrink:0;">
+      <div style="position:absolute;inset:0;border-radius:50%;background:var(--light);border:1px solid var(--border);"></div>
+      <div style="position:absolute;inset:17%;border-radius:50%;background:var(--border);"></div>
+      <div style="position:absolute;inset:34%;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;color:#fff;font-size:clamp(9px,1.2vw,11px);font-weight:700;">SOM</div>
+    </div>
+    <div style="flex:1;">
+      <div class="mb-16"><div class="label mb-4">TAM</div><div class="stat"><div class="val">$XX B</div><div class="lbl">Total addressable market globally.</div></div></div>
+      <div class="mb-16"><div class="label mb-4">SAM</div><div class="stat"><div class="val">$X.X B</div><div class="lbl">Serviceable market with current model.</div></div></div>
+      <div><div class="label mb-4">SOM</div><div class="stat"><div class="val">$XXX M</div><div class="lbl">Realistic near-term capture (3 yr).</div></div></div>
+    </div>
+  </div>
+  <div class="sn">12 / 50</div>
+</div>
+
+<!-- ═══ 13: Competitive Positioning ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Market & Industry</div>
+  <h2 class="t">Competitive Positioning</h2>
+  <div class="side mt-20">
+    <div style="flex:1;">
+      <div class="label center mb-4">High Differentiation</div>
+      <div class="quadrant">
+        <div class="ql" style="color:var(--dark);">LEADER</div><div class="ql" style="color:var(--mid);">NICHE</div>
+        <div class="ql" style="color:var(--mid);">CHALLENGER</div><div class="ql" style="color:var(--border);">COMMODITY</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span class="label">Low Price</span><span class="label">High Price</span></div>
+    </div>
+    <div class="card" style="width:clamp(160px,22vw,200px);flex-shrink:0;align-self:flex-start;">
+      <div class="text-sm bold mb-8">Our Position</div>
+      <p class="text-xs text-mid lh">We occupy the Leader quadrant with high differentiation and competitive pricing. Nearest competitor is closing the gap on differentiation.</p>
+    </div>
+  </div>
+  <div class="sn">13 / 50</div>
+</div>
+
+<!-- ═══ 14: SWOT ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Market & Industry</div>
+  <h2 class="t">SWOT Analysis</h2>
+  <div class="g2 mt-20" style="gap:clamp(6px,1vw,10px);">
+    <div class="card accent-top"><div class="label mb-8">Strengths</div><div class="text-xs text-mid lh">Strong brand recognition in core market<br>Proprietary technology platform<br>High customer retention (>90%)<br>Experienced leadership team</div></div>
+    <div class="card accent-top-m"><div class="label mb-8">Weaknesses</div><div class="text-xs text-mid lh">Limited international presence<br>Dependency on single revenue stream<br>Technical debt in legacy systems<br>Thin management bench</div></div>
+    <div class="card accent-top"><div class="label mb-8">Opportunities</div><div class="text-xs text-mid lh">Adjacent market expansion ($XB TAM)<br>AI/ML integration for personalization<br>Strategic partnerships with incumbents<br>Regulatory tailwinds in key markets</div></div>
+    <div class="card accent-top-l"><div class="label mb-8">Threats</div><div class="text-xs text-mid lh">Well-funded new entrants<br>Regulatory uncertainty in expansion markets<br>Macroeconomic headwinds (rates, FX)<br>Talent competition from Big Tech</div></div>
+  </div>
+  <div class="sn">14 / 50</div>
+</div>
+
+<!-- ═══ 15: Porter's Five Forces ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Market & Industry</div>
+  <h2 class="t">Porter's Five Forces</h2>
+  <div style="margin-top:clamp(16px,3vw,24px);display:flex;flex-direction:column;align-items:center;gap:clamp(6px,1vw,10px);">
+    <div class="card center" style="width:clamp(180px,30vw,260px);"><div class="text-sm bold">Threat of New Entrants</div><div class="text-xs text-muted mt-4">Medium — capital requirements are moderate but regulatory barriers are high</div></div>
+    <div style="display:flex;gap:clamp(8px,2vw,16px);width:100%;justify-content:center;flex-wrap:wrap;">
+      <div class="card center" style="flex:1;min-width:140px;max-width:220px;"><div class="text-sm bold">Supplier Power</div><div class="text-xs text-muted mt-4">Low — fragmented supplier base</div></div>
+      <div style="background:var(--dark);color:#fff;padding:clamp(10px,1.5vw,16px);border-radius:4px;flex:1;min-width:140px;max-width:220px;text-align:center;"><div class="text-sm bold">Industry Rivalry</div><div class="text-xs mt-4" style="color:var(--muted);">High — 4 well-funded competitors</div></div>
+      <div class="card center" style="flex:1;min-width:140px;max-width:220px;"><div class="text-sm bold">Buyer Power</div><div class="text-xs text-muted mt-4">Medium — low switching costs</div></div>
+    </div>
+    <div class="card center" style="width:clamp(180px,30vw,260px);"><div class="text-sm bold">Threat of Substitutes</div><div class="text-xs text-muted mt-4">High — traditional methods still viable for many segments</div></div>
+  </div>
+  <div class="sn">15 / 50</div>
+</div>
+
+<!-- ═══ 16: Macro Trends ═══ -->
+<div class="slide bg-d">
+  <div class="sec">Market & Industry</div>
+  <h2 class="t">Macro Trends</h2>
+  <div class="g3 mt-20">
+    <div style="border-bottom:2px solid #444;padding-bottom:clamp(10px,1.5vw,16px);"><div style="font-size:clamp(24px,4vw,36px);font-weight:300;color:var(--muted);">01</div><div class="text-md bold mt-4" style="color:#fff;">AI-Native Everything</div><div class="text-xs mt-8" style="color:var(--muted);line-height:1.6;">Every product category is being rebuilt with AI at the core, not as a feature.</div></div>
+    <div style="border-bottom:2px solid #444;padding-bottom:clamp(10px,1.5vw,16px);"><div style="font-size:clamp(24px,4vw,36px);font-weight:300;color:var(--muted);">02</div><div class="text-md bold mt-4" style="color:#fff;">Embedded Finance</div><div class="text-xs mt-8" style="color:var(--muted);line-height:1.6;">Financial services are moving into non-financial platforms.</div></div>
+    <div style="border-bottom:2px solid #444;padding-bottom:clamp(10px,1.5vw,16px);"><div style="font-size:clamp(24px,4vw,36px);font-weight:300;color:var(--muted);">03</div><div class="text-md bold mt-4" style="color:#fff;">Regulatory Convergence</div><div class="text-xs mt-8" style="color:var(--muted);line-height:1.6;">Global regulatory frameworks are aligning, reducing compliance friction.</div></div>
+    <div style="border-bottom:2px solid #444;padding-bottom:clamp(10px,1.5vw,16px);"><div style="font-size:clamp(24px,4vw,36px);font-weight:300;color:var(--muted);">04</div><div class="text-md bold mt-4" style="color:#fff;">Demographic Shift</div><div class="text-xs mt-8" style="color:var(--muted);line-height:1.6;">Gen Z entering workforce with digital-first expectations.</div></div>
+    <div style="border-bottom:2px solid #444;padding-bottom:clamp(10px,1.5vw,16px);"><div style="font-size:clamp(24px,4vw,36px);font-weight:300;color:var(--muted);">05</div><div class="text-md bold mt-4" style="color:#fff;">Climate & ESG Pressure</div><div class="text-xs mt-8" style="color:var(--muted);line-height:1.6;">Stakeholders demanding measurable sustainability commitments.</div></div>
+    <div style="border-bottom:2px solid #444;padding-bottom:clamp(10px,1.5vw,16px);"><div style="font-size:clamp(24px,4vw,36px);font-weight:300;color:var(--muted);">06</div><div class="text-md bold mt-4" style="color:#fff;">Platform Consolidation</div><div class="text-xs mt-8" style="color:var(--muted);line-height:1.6;">Markets trending toward winner-take-most dynamics.</div></div>
+  </div>
+  <div class="sn">16 / 50</div>
+</div>
+
+<!-- ═══ 17: Regulatory Landscape ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Market & Industry</div>
+  <h2 class="t">Regulatory Landscape</h2>
+  <div style="overflow-x:auto;">
+    <table class="dt mt-20">
+      <tr><th>Jurisdiction</th><th>Regulation</th><th>Status</th><th>Impact</th><th>Action Required</th></tr>
+      <tr><td class="bold">United States</td><td>Data Privacy (state-level)</td><td><span class="pill">Active</span></td><td>High</td><td>Compliance review by Q2</td></tr>
+      <tr><td class="bold">EU</td><td>Digital Markets Act</td><td><span class="pill">Active</span></td><td>Medium</td><td>Platform changes by Q3</td></tr>
+      <tr><td class="bold">Brazil</td><td>PIX/Open Banking</td><td><span class="pill pill-d">Evolving</span></td><td>High</td><td>Integration roadmap needed</td></tr>
+      <tr><td class="bold">Mexico</td><td>Fintech Law Updates</td><td><span class="pill">Proposed</span></td><td>Medium</td><td>Monitor; legal brief by Q2</td></tr>
+      <tr><td class="bold">UK</td><td>Consumer Duty</td><td><span class="pill">Active</span></td><td>Low</td><td>Existing compliance sufficient</td></tr>
+    </table>
+  </div>
+  <div class="sn">17 / 50</div>
+</div>
+
+<!-- ═══ 18: P&L Summary ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Financial Performance</div>
+  <h2 class="t">P&L Summary</h2>
+  <div style="overflow-x:auto;">
+    <table class="dt mt-20">
+      <tr><th>Line Item</th><th class="r">FY2024</th><th class="r">FY2025</th><th class="r">FY2026E</th><th class="r">YoY</th></tr>
+      <tr><td class="bold">Revenue</td><td class="r">$XX.XM</td><td class="r">$XX.XM</td><td class="r bold">$XX.XM</td><td class="r bold">+XX%</td></tr>
+      <tr><td>COGS</td><td class="r">($X.XM)</td><td class="r">($X.XM)</td><td class="r">($X.XM)</td><td class="r">+XX%</td></tr>
+      <tr><td class="bold">Gross Profit</td><td class="r">$XX.XM</td><td class="r">$XX.XM</td><td class="r bold">$XX.XM</td><td class="r bold">+XX%</td></tr>
+      <tr><td>Gross Margin</td><td class="r">XX%</td><td class="r">XX%</td><td class="r">XX%</td><td class="r">+Xpp</td></tr>
+      <tr><td>OpEx</td><td class="r">($XX.XM)</td><td class="r">($XX.XM)</td><td class="r">($XX.XM)</td><td class="r">+XX%</td></tr>
+      <tr><td class="bold">EBITDA</td><td class="r">($X.XM)</td><td class="r">$X.XM</td><td class="r bold">$X.XM</td><td class="r bold">NM</td></tr>
+      <tr><td>EBITDA Margin</td><td class="r">-X%</td><td class="r">X%</td><td class="r bold">XX%</td><td class="r">+XXpp</td></tr>
+    </table>
+  </div>
+  <div class="sn">18 / 50</div>
+</div>
+
+<!-- ═══ 19: Revenue by Segment ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Financial Performance</div>
+  <h2 class="t">Revenue by Segment</h2>
+  <div class="side mt-20">
+    <div style="flex:1;">
+      <div class="placeholder" style="height:clamp(140px,22vw,220px);">Revenue chart — bar or area by segment</div>
+    </div>
+    <div style="width:clamp(160px,22vw,220px);flex-shrink:0;">
+      <div class="label mb-12">Segment Mix</div>
+      <div class="mb-8"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--dark);border-radius:2px;"></div><span class="text-xs bold">Core Product — 62%</span></div><div class="text-xs text-muted" style="margin-left:16px;">$XX.XM</div></div>
+      <div class="mb-8"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--muted);border-radius:2px;"></div><span class="text-xs bold">Enterprise — 24%</span></div><div class="text-xs text-muted" style="margin-left:16px;">$X.XM</div></div>
+      <div class="mb-8"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--border);border-radius:2px;"></div><span class="text-xs bold">Platform Fees — 10%</span></div><div class="text-xs text-muted" style="margin-left:16px;">$X.XM</div></div>
+      <div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--light);border-radius:2px;"></div><span class="text-xs bold">Other — 4%</span></div><div class="text-xs text-muted" style="margin-left:16px;">$X.XM</div></div>
+    </div>
+  </div>
+  <div class="sn">19 / 50</div>
+</div>
+
+<!-- ═══ 20: Unit Economics ═══ -->
+<div class="slide bg-l">
+  <div class="sec">Financial Performance</div>
+  <h2 class="t">Unit Economics</h2>
+  <div class="g3 mt-20">
+    <div class="card center"><div class="stat" style="align-items:center;"><div class="val">$XXX</div><div class="lbl">Customer Acquisition Cost</div></div></div>
+    <div class="card center"><div class="stat" style="align-items:center;"><div class="val">$X,XXX</div><div class="lbl">Lifetime Value</div></div></div>
+    <div class="card center"><div class="stat" style="align-items:center;"><div class="val">X.Xx</div><div class="lbl">LTV : CAC Ratio</div></div></div>
+  </div>
+  <div class="g2 mt-16">
+    <div class="card"><div class="label mb-8">Revenue per User</div><div class="flex col gap-4"><div class="flex ac gap-4"><span class="text-xs text-muted" style="width:60px;">Month 1</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:15%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">$X</span></div><div class="flex ac gap-4"><span class="text-xs text-muted" style="width:60px;">Month 6</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:45%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">$XX</span></div><div class="flex ac gap-4"><span class="text-xs text-muted" style="width:60px;">Month 12</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:75%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">$XXX</span></div></div></div>
+    <div class="card"><div class="label mb-8">Payback Period</div><div class="stat"><div class="val">XX mo</div><div class="lbl">Average months to recover CAC</div></div><div class="text-xs text-mid mt-12 lh">Target: &lt;12 months. Currently tracking above target due to extended onboarding in enterprise segment.</div></div>
+  </div>
+  <div class="sn">20 / 50</div>
+</div>
+
+<!-- ═══ 21: Financial Forecast ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Financial Performance</div>
+  <h2 class="t">Financial Projections</h2>
+  <div class="placeholder mt-20" style="height:clamp(120px,18vw,180px);">Revenue & EBITDA projection chart (FY2026–FY2028)</div>
+  <div class="g3 mt-16">
+    <div class="card center"><div class="label mb-4">FY2026E</div><div class="text-xl bold">$XX.XM</div><div class="text-xs text-muted">Revenue (+XX% YoY)</div></div>
+    <div class="card center"><div class="label mb-4">FY2027E</div><div class="text-xl bold">$XX.XM</div><div class="text-xs text-muted">Revenue (+XX% YoY)</div></div>
+    <div class="card center"><div class="label mb-4">FY2028E</div><div class="text-xl bold">$XXX.XM</div><div class="text-xs text-muted">Revenue (+XX% YoY)</div></div>
+  </div>
+  <div class="sn">21 / 50</div>
+</div>
+
+<!-- ═══ 22: Budget Allocation ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Financial Performance</div>
+  <h2 class="t">Budget Allocation</h2>
+  <div class="side mt-20">
+    <div style="flex:1;">
+      <div class="label mb-8">FY2026 Operating Budget — $XX.XM</div>
+      <div class="mb-4"><div class="flex ac gap-4 mb-4"><span class="text-xs" style="width:clamp(80px,12vw,120px);">Engineering</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:35%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">35%</span></div></div>
+      <div class="mb-4"><div class="flex ac gap-4 mb-4"><span class="text-xs" style="width:clamp(80px,12vw,120px);">Sales & Marketing</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:28%;background:var(--muted);"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">28%</span></div></div>
+      <div class="mb-4"><div class="flex ac gap-4 mb-4"><span class="text-xs" style="width:clamp(80px,12vw,120px);">G&A</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:18%;background:var(--border);"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">18%</span></div></div>
+      <div class="mb-4"><div class="flex ac gap-4 mb-4"><span class="text-xs" style="width:clamp(80px,12vw,120px);">People Ops</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:12%;background:var(--border);"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">12%</span></div></div>
+      <div><div class="flex ac gap-4"><span class="text-xs" style="width:clamp(80px,12vw,120px);">Strategic Initiatives</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:7%;background:var(--light);"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">7%</span></div></div>
+    </div>
+    <div class="card" style="width:clamp(160px,22vw,200px);flex-shrink:0;align-self:flex-start;">
+      <div class="label mb-8">YoY Change</div>
+      <div class="text-xs text-mid lh">Total budget up +XX% YoY. Primary increase in Engineering (+XX%) to support platform rebuild. Sales held flat as efficiency gains offset growth targets.</div>
+    </div>
+  </div>
+  <div class="sn">22 / 50</div>
+</div>
+
+<!-- ═══ 23: Strategic Pillars ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Strategic Framework</div>
+  <h2 class="t">Strategic Pillars</h2>
+  <div class="g4 mt-20">
+    <div class="card accent-top"><div style="font-size:clamp(18px,2.5vw,24px);font-weight:700;color:var(--border);">01</div><div class="text-md bold mt-4">Core Growth</div><div class="text-xs text-mid mt-8 lh">Accelerate penetration in existing markets through product-led growth and retention.</div></div>
+    <div class="card accent-top"><div style="font-size:clamp(18px,2.5vw,24px);font-weight:700;color:var(--border);">02</div><div class="text-md bold mt-4">New Markets</div><div class="text-xs text-mid mt-8 lh">Expand to 3 new geographies with localized product and go-to-market strategy.</div></div>
+    <div class="card accent-top"><div style="font-size:clamp(18px,2.5vw,24px);font-weight:700;color:var(--border);">03</div><div class="text-md bold mt-4">Platform Play</div><div class="text-xs text-mid mt-8 lh">Build API ecosystem and third-party integrations to create network effects.</div></div>
+    <div class="card accent-top"><div style="font-size:clamp(18px,2.5vw,24px);font-weight:700;color:var(--border);">04</div><div class="text-md bold mt-4">Operational Excellence</div><div class="text-xs text-mid mt-8 lh">Automate operations to reach contribution margin targets and path to profitability.</div></div>
+  </div>
+  <div class="sn">23 / 50</div>
+</div>
+
+<!-- ═══ 24: Three Horizons ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Strategic Framework</div>
+  <h2 class="t">Three Horizons</h2>
+  <div class="g3 mt-20" style="gap:0;">
+    <div style="background:var(--dark);color:#fff;padding:clamp(12px,2vw,20px);border-radius:4px 0 0 4px;"><div class="text-lg bold">H1</div><div class="text-xs mt-4" style="color:var(--muted);">Defend & Extend</div><div class="divider mt-8 mb-8" style="background:#444;"></div><div class="text-xs lh" style="color:var(--muted);">Optimize core business. Increase ARPU, reduce churn, improve margins. 70% of resources.</div></div>
+    <div style="background:var(--mid);color:#fff;padding:clamp(12px,2vw,20px);"><div class="text-lg bold">H2</div><div class="text-xs mt-4" style="color:var(--border);">Build & Scale</div><div class="divider mt-8 mb-8" style="background:#777;"></div><div class="text-xs lh" style="color:var(--border);">Adjacent opportunities. New segments, new products, strategic partnerships. 20% of resources.</div></div>
+    <div style="background:var(--muted);color:#fff;padding:clamp(12px,2vw,20px);border-radius:0 4px 4px 0;"><div class="text-lg bold">H3</div><div class="text-xs mt-4" style="color:var(--light);">Explore & Bet</div><div class="divider mt-8 mb-8" style="background:#aaa;"></div><div class="text-xs lh" style="color:var(--light);">Moonshot initiatives. New business models, deep tech, emerging markets. 10% of resources.</div></div>
+  </div>
+  <div class="sn">24 / 50</div>
+</div>
+
+<!-- ═══ 25: Ansoff Matrix ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Strategic Framework</div>
+  <h2 class="t">Growth Strategy Matrix</h2>
+  <div style="margin-top:clamp(16px,3vw,24px);">
+    <div class="label center mb-4">Existing Products → New Products</div>
+    <div class="g2" style="gap:clamp(4px,1vw,8px);">
+      <div class="card" style="min-height:clamp(80px,12vw,120px);"><div class="label mb-4">Market Penetration</div><div class="text-xs text-mid lh">Increase share in existing markets with existing products. Loyalty programs, pricing optimization, referral loops.</div><div class="pill mt-8">Low Risk</div></div>
+      <div class="card" style="min-height:clamp(80px,12vw,120px);"><div class="label mb-4">Product Development</div><div class="text-xs text-mid lh">New products for existing customers. Credit products, insurance, savings tools.</div><div class="pill mt-8">Medium Risk</div></div>
+      <div class="card" style="min-height:clamp(80px,12vw,120px);"><div class="label mb-4">Market Development</div><div class="text-xs text-mid lh">Existing products in new markets. Geographic expansion, new customer segments.</div><div class="pill mt-8">Medium Risk</div></div>
+      <div class="card" style="min-height:clamp(80px,12vw,120px);"><div class="label mb-4">Diversification</div><div class="text-xs text-mid lh">New products in new markets. Platform-as-a-service, white-label, B2B2C models.</div><div class="pill pill-d mt-8">High Risk</div></div>
+    </div>
+    <div class="label center mt-8">Existing Markets ↑ New Markets</div>
+  </div>
+  <div class="sn">25 / 50</div>
+</div>
+
+<!-- ═══ 26: Strategic Bets ═══ -->
+<div class="slide bg-l">
+  <div class="sec">Strategic Framework</div>
+  <h2 class="t">Strategic Bets</h2>
+  <div style="display:flex;flex-direction:column;gap:clamp(8px,1.5vw,12px);margin-top:clamp(12px,2vw,20px);">
+    <div class="card side" style="padding:clamp(10px,1.5vw,16px);gap:clamp(8px,2vw,16px);">
+      <div style="width:clamp(40px,5vw,56px);flex-shrink:0;"><div class="pill pill-d center" style="width:100%;">Bet 1</div></div>
+      <div style="flex:1;"><div class="text-md bold">AI-Powered Underwriting</div><div class="text-xs text-mid mt-4 lh">Hypothesis: ML-driven risk assessment reduces default rates by 40% and enables instant approvals.</div></div>
+      <div style="width:clamp(80px,12vw,120px);flex-shrink:0;text-align:right;"><div class="text-xs text-muted">Investment</div><div class="text-sm bold">$X.XM</div><div class="text-xs text-muted mt-4">Horizon</div><div class="text-sm bold">18 mo</div></div>
+    </div>
+    <div class="card side" style="padding:clamp(10px,1.5vw,16px);gap:clamp(8px,2vw,16px);">
+      <div style="width:clamp(40px,5vw,56px);flex-shrink:0;"><div class="pill pill-d center" style="width:100%;">Bet 2</div></div>
+      <div style="flex:1;"><div class="text-md bold">Brazil Market Entry</div><div class="text-xs text-mid mt-4 lh">Hypothesis: PIX integration and local partnerships unlock $X.XB remittance corridor.</div></div>
+      <div style="width:clamp(80px,12vw,120px);flex-shrink:0;text-align:right;"><div class="text-xs text-muted">Investment</div><div class="text-sm bold">$X.XM</div><div class="text-xs text-muted mt-4">Horizon</div><div class="text-sm bold">12 mo</div></div>
+    </div>
+    <div class="card side" style="padding:clamp(10px,1.5vw,16px);gap:clamp(8px,2vw,16px);">
+      <div style="width:clamp(40px,5vw,56px);flex-shrink:0;"><div class="pill pill-d center" style="width:100%;">Bet 3</div></div>
+      <div style="flex:1;"><div class="text-md bold">Platform API for B2B</div><div class="text-xs text-mid mt-4 lh">Hypothesis: White-label API creates new revenue stream at 80%+ gross margin.</div></div>
+      <div style="width:clamp(80px,12vw,120px);flex-shrink:0;text-align:right;"><div class="text-xs text-muted">Investment</div><div class="text-sm bold">$X.XM</div><div class="text-xs text-muted mt-4">Horizon</div><div class="text-sm bold">24 mo</div></div>
+    </div>
+  </div>
+  <div class="sn">26 / 50</div>
+</div>
+
+<!-- ═══ 27: Growth Flywheel ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Strategic Framework</div>
+  <h2 class="t">Growth Flywheel</h2>
+  <div class="center mt-24">
+    <div style="display:inline-grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(8px,1.5vw,12px);max-width:500px;">
+      <div></div>
+      <div class="card center" style="padding:clamp(8px,1vw,12px);"><div class="text-sm bold">More Users</div><div class="text-xs text-muted mt-4">Network grows</div></div>
+      <div></div>
+      <div class="card center" style="padding:clamp(8px,1vw,12px);"><div class="text-sm bold">Lower Cost</div><div class="text-xs text-muted mt-4">Scale economics</div></div>
+      <div style="display:flex;align-items:center;justify-content:center;font-size:clamp(20px,3vw,32px);color:var(--border);">⟳</div>
+      <div class="card center" style="padding:clamp(8px,1vw,12px);"><div class="text-sm bold">Better Product</div><div class="text-xs text-muted mt-4">More data, ML</div></div>
+      <div></div>
+      <div class="card center" style="padding:clamp(8px,1vw,12px);"><div class="text-sm bold">Higher Retention</div><div class="text-xs text-muted mt-4">Switching costs</div></div>
+      <div></div>
+    </div>
+  </div>
+  <p class="text-xs text-mid center mt-16 lh" style="max-width:500px;margin-left:auto;margin-right:auto;">Each revolution strengthens the next. Users generate data → data improves product → better product attracts users → volume reduces unit cost → lower cost enables reinvestment.</p>
+  <div class="sn">27 / 50</div>
+</div>
+
+<!-- ═══ 28: KPI Dashboard ═══ -->
+<div class="slide bg-w">
+  <div class="sec">Performance & Operations</div>
+  <h2 class="t">KPI Dashboard</h2>
+  <div class="g4 mt-20">
+    <div class="card center"><div class="stat" style="align-items:center;"><div class="val" style="color:var(--dark);">$X.XM</div><div class="lbl">MRR</div></div><div class="text-xs text-mid mt-4">↑ XX% MoM</div></div>
+    <div class="card center"><div class="stat" style="align-items:center;"><div class="val" style="color:var(--dark);">XX%</div><div class="lbl">Gross Margin</div></div><div class="text-xs text-mid mt-4">↑ Xpp QoQ</div></div>
+    <div class="card center"><div class="stat" style="align-items:center;"><div class="val" style="color:var(--dark);">X.X%</div><div class="lbl">Churn Rate</div></div><div class="text-xs text-mid mt-4">↓ 0.Xpp QoQ</div></div>
+    <div class="card center"><div class="stat" style="align-items:center;"><div class="val" style="color:var(--dark);">XXX</div><div class="lbl">NPS</div></div><div class="text-xs text-mid mt-4">↑ X pts QoQ</div></div>
+  </div>
+  <div class="placeholder mt-16" style="height:clamp(80px,12vw,120px);">Trend lines — MRR, users, retention over 12 months</div>
+  <div class="sn">28 / 50</div>
+</div>
+
+<!-- ═══ 29-50: Remaining slides ═══ -->
+<div class="slide bg-w"><div class="sec">Performance & Operations</div><h2 class="t">Balanced Scorecard</h2><div class="g2 mt-20"><div class="card accent-top"><div class="label mb-8">Financial</div><div class="text-xs text-mid lh">Revenue growth: XX% vs XX% target<br>EBITDA margin: XX% vs XX% target<br>Cash burn rate: $X.XM/mo vs $X.XM target</div></div><div class="card accent-top-m"><div class="label mb-8">Customer</div><div class="text-xs text-mid lh">NPS: XX vs XX target<br>Retention: XX% vs XX% target<br>CAC payback: XX mo vs XX mo target</div></div><div class="card accent-top"><div class="label mb-8">Internal Process</div><div class="text-xs text-mid lh">Deployment frequency: Xx/week<br>Incident response: &lt;XX min<br>Compliance audit: Zero findings</div></div><div class="card accent-top-l"><div class="label mb-8">Learning & Growth</div><div class="text-xs text-mid lh">Employee engagement: XX%<br>Internal mobility: XX%<br>Training hours/employee: XX</div></div></div><div class="sn">29 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Performance & Operations</div><h2 class="t">OKR Tracker</h2><div style="margin-top:clamp(12px,2vw,20px);"><div class="text-md bold mb-8">Objective 1: Accelerate revenue growth</div><div class="flex ac gap-8 mb-4"><span class="text-xs text-mid" style="width:clamp(140px,20vw,200px);">KR1: ARR → $XXM</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:65%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">65%</span></div><div class="flex ac gap-8 mb-4"><span class="text-xs text-mid" style="width:clamp(140px,20vw,200px);">KR2: Net revenue retention → 120%</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:80%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">80%</span></div><div class="flex ac gap-8 mb-16"><span class="text-xs text-mid" style="width:clamp(140px,20vw,200px);">KR3: Enterprise deals → 15</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:40%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">40%</span></div><div class="text-md bold mb-8">Objective 2: Build operational leverage</div><div class="flex ac gap-8 mb-4"><span class="text-xs text-mid" style="width:clamp(140px,20vw,200px);">KR1: Automate 80% of ops</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:55%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">55%</span></div><div class="flex ac gap-8"><span class="text-xs text-mid" style="width:clamp(140px,20vw,200px);">KR2: Cost per transaction ↓ 30%</span><div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:70%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">70%</span></div></div><div class="sn">30 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Performance & Operations</div><h2 class="t">Benchmark Comparison</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Metric</th><th class="c">Us</th><th class="c">Peer Avg</th><th class="c">Best-in-Class</th><th class="c">Gap</th></tr><tr><td>Revenue Growth</td><td class="c bold">+XX%</td><td class="c">+XX%</td><td class="c">+XX%</td><td class="c">+Xpp</td></tr><tr><td>Gross Margin</td><td class="c bold">XX%</td><td class="c">XX%</td><td class="c">XX%</td><td class="c">-Xpp</td></tr><tr><td>CAC Payback</td><td class="c bold">XX mo</td><td class="c">XX mo</td><td class="c">X mo</td><td class="c">+X mo</td></tr><tr><td>NPS</td><td class="c bold">XX</td><td class="c">XX</td><td class="c">XX</td><td class="c">+XX</td></tr><tr><td>Rule of 40</td><td class="c bold">XX</td><td class="c">XX</td><td class="c">XX</td><td class="c">+X</td></tr></table></div><div class="sn">31 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Performance & Operations</div><h2 class="t">Operating Model</h2><div style="margin-top:clamp(12px,2vw,20px);display:flex;flex-direction:column;gap:clamp(4px,0.8vw,6px);"><div style="background:var(--bg);border:1px solid var(--border);padding:clamp(8px,1.2vw,12px);font-size:clamp(9px,1.1vw,11px);color:var(--mid);border-radius:3px;">CUSTOMER LAYER — Acquisition &middot; Onboarding &middot; Engagement &middot; Retention &middot; Expansion</div><div style="background:var(--dark);color:#fff;padding:clamp(8px,1vw,10px);text-align:center;font-size:clamp(9px,1.1vw,11px);border-radius:3px;">ORCHESTRATION — Decision Engine &middot; Rules &middot; ML Models &middot; Workflow Automation</div><div class="g4" style="gap:clamp(4px,0.8vw,6px);"><div class="card center text-xs text-mid">Product<br>& Tech</div><div class="card center text-xs text-mid">Revenue<br>& Growth</div><div class="card center text-xs text-mid">Risk &<br>Compliance</div><div class="card center text-xs text-mid">Customer<br>Operations</div></div><div style="background:var(--light);border:1px solid var(--border);padding:clamp(8px,1.2vw,12px);font-size:clamp(9px,1.1vw,11px);color:var(--mid);border-radius:3px;">INFRASTRUCTURE — Cloud &middot; Data Pipeline &middot; Security &middot; Observability</div><div style="border:1px dashed var(--border);padding:clamp(8px,1.2vw,12px);font-size:clamp(9px,1.1vw,11px);color:var(--muted);border-radius:3px;">EXTERNAL PARTNERS — Banking Rails &middot; KYC/AML &middot; Payment Networks &middot; Regulators</div></div><div class="sn">32 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Performance & Operations</div><h2 class="t">Capability Maturity</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Capability</th><th class="c">Level 1<br><span style="font-weight:400;font-size:8px;">Ad Hoc</span></th><th class="c">Level 2<br><span style="font-weight:400;font-size:8px;">Managed</span></th><th class="c">Level 3<br><span style="font-weight:400;font-size:8px;">Defined</span></th><th class="c">Level 4<br><span style="font-weight:400;font-size:8px;">Optimized</span></th></tr><tr><td>Data Analytics</td><td class="c"></td><td class="c"></td><td class="c" style="background:var(--dark);color:#fff;">●</td><td class="c"></td></tr><tr><td>Product Development</td><td class="c"></td><td class="c"></td><td class="c" style="background:var(--dark);color:#fff;">●</td><td class="c"></td></tr><tr><td>Customer Support</td><td class="c"></td><td class="c" style="background:var(--muted);color:#fff;">●</td><td class="c"></td><td class="c"></td></tr><tr><td>Compliance</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c" style="background:var(--dark);color:#fff;">●</td></tr><tr><td>ML/AI Ops</td><td class="c" style="background:var(--border);">●</td><td class="c"></td><td class="c"></td><td class="c"></td></tr></table></div><div class="sn">33 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Growth & M&A</div><h2 class="t">Go-to-Market Strategy</h2><div class="g3 mt-20"><div class="card accent-top"><div class="label mb-8">Acquire</div><div class="text-xs text-mid lh">Paid: Performance marketing, SEM<br>Organic: SEO, referral, partnerships<br>Target CAC: &lt;$XXX</div></div><div class="card accent-top-m"><div class="label mb-8">Activate</div><div class="text-xs text-mid lh">Onboarding flow: &lt;3 min<br>First value: First transaction<br>Target: D1 activation &gt;60%</div></div><div class="card accent-top-l"><div class="label mb-8">Retain</div><div class="text-xs text-mid lh">Engagement loops: Rate alerts, scheduling<br>Expansion: Cross-sell, upsell<br>Target: D90 retention &gt;40%</div></div></div><div class="card mt-16"><div class="label mb-4">Channel Mix</div><div class="flex ac gap-4 nowrap" style="overflow-x:auto;"><div class="pill">Direct — 45%</div><div class="pill">Referral — 25%</div><div class="pill">Partnerships — 20%</div><div class="pill">Paid — 10%</div></div></div><div class="sn">34 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Growth & M&A</div><h2 class="t">Partnership Ecosystem</h2><div class="g3 mt-20"><div class="card center"><div class="icon-box" style="margin:0 auto clamp(6px,1vw,10px);">🏦</div><div class="text-sm bold">Banking Partners</div><div class="text-xs text-muted mt-4">Settlement rails, treasury, compliance</div></div><div class="card center"><div class="icon-box" style="margin:0 auto clamp(6px,1vw,10px);">📱</div><div class="text-sm bold">Platform Partners</div><div class="text-xs text-muted mt-4">WhatsApp, app stores, messaging</div></div><div class="card center"><div class="icon-box" style="margin:0 auto clamp(6px,1vw,10px);">🔐</div><div class="text-sm bold">Compliance Partners</div><div class="text-xs text-muted mt-4">KYC/AML, fraud detection, ID verification</div></div><div class="card center"><div class="icon-box" style="margin:0 auto clamp(6px,1vw,10px);">📊</div><div class="text-sm bold">Data Partners</div><div class="text-xs text-muted mt-4">Analytics, ML infra, market data</div></div><div class="card center"><div class="icon-box" style="margin:0 auto clamp(6px,1vw,10px);">🤝</div><div class="text-sm bold">Distribution Partners</div><div class="text-xs text-muted mt-4">Retailers, agents, community orgs</div></div><div class="card center"><div class="icon-box" style="margin:0 auto clamp(6px,1vw,10px);">⚙️</div><div class="text-sm bold">Tech Partners</div><div class="text-xs text-muted mt-4">Cloud, DevOps, security, observability</div></div></div><div class="sn">35 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Growth & M&A</div><h2 class="t">M&A Target Landscape</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Target</th><th>Category</th><th>Rationale</th><th class="c">Est. Size</th><th class="c">Priority</th></tr><tr><td class="bold">Company A</td><td>Technology</td><td>ML/AI capabilities gap</td><td class="c">$XX-XXM</td><td class="c"><span class="pill pill-d">High</span></td></tr><tr><td class="bold">Company B</td><td>Market Access</td><td>Brazil distribution network</td><td class="c">$XX-XXM</td><td class="c"><span class="pill pill-d">High</span></td></tr><tr><td class="bold">Company C</td><td>Talent</td><td>Compliance expertise team</td><td class="c">$X-XXM</td><td class="c"><span class="pill">Medium</span></td></tr><tr><td class="bold">Company D</td><td>Product</td><td>Bill pay / credit product</td><td class="c">$XX-XXM</td><td class="c"><span class="pill">Medium</span></td></tr></table></div><div class="sn">36 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Growth & M&A</div><h2 class="t">Integration Roadmap</h2><div class="g4 mt-20" style="gap:0;"><div style="background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(9px,1vw,10px);border-radius:3px 0 0 0;">Month 1–2</div><div style="background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(9px,1vw,10px);">Month 3–4</div><div style="background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(9px,1vw,10px);">Month 5–6</div><div style="background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(9px,1vw,10px);border-radius:0 3px 0 0;">Month 7+</div></div><div class="g4 mt-4" style="gap:clamp(4px,0.8vw,6px);"><div><div class="card text-xs text-mid mb-4">Legal close & Day 1</div><div class="card text-xs text-mid">Comms & retention</div></div><div><div class="card text-xs text-mid mb-4">Systems integration</div><div class="card text-xs text-mid">Team alignment</div></div><div><div class="card text-xs text-mid mb-4">Product merge</div><div class="card text-xs text-mid">Customer migration</div></div><div><div class="card text-xs text-mid mb-4">Full integration</div><div class="card text-xs text-mid">Synergy capture</div></div></div><div class="sn">37 / 50</div></div>
+
+<div class="slide bg-l"><div class="sec">Growth & M&A</div><h2 class="t">Scenario Planning</h2><div class="g3 mt-20"><div class="card accent-top"><div class="text-md bold">Bull Case</div><div class="text-xs text-muted mb-8">Probability: 25%</div><div class="text-xs text-mid lh">Market tailwinds accelerate. Revenue hits $XXXM by FY28. Regulatory clarity enables faster expansion. IPO-ready by Q4 2027.</div><div class="stat mt-12"><div class="val">$XXXM</div><div class="lbl">FY28 Revenue</div></div></div><div class="card accent-top-m"><div class="text-md bold">Base Case</div><div class="text-xs text-muted mb-8">Probability: 55%</div><div class="text-xs text-mid lh">Steady execution. Revenue reaches $XX.XM by FY28. Two market entries successful. Path to profitability achieved Q2 2027.</div><div class="stat mt-12"><div class="val">$XX.XM</div><div class="lbl">FY28 Revenue</div></div></div><div class="card accent-top-l"><div class="text-md bold">Bear Case</div><div class="text-xs text-muted mb-8">Probability: 20%</div><div class="text-xs text-mid lh">Macro headwinds, regulatory setbacks. Revenue flat at $XX.XM. Focus narrows to core market. Bridge round may be needed.</div><div class="stat mt-12"><div class="val">$XX.XM</div><div class="lbl">FY28 Revenue</div></div></div></div><div class="sn">38 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">People & Organization</div><h2 class="t">Org Chart</h2><div class="center mt-20"><div style="display:inline-block;background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px) clamp(12px,2vw,20px);font-size:clamp(10px,1.2vw,12px);">CEO</div></div><div class="g3 mt-12"><div class="card center"><div class="avatar" style="margin:0 auto 8px;"></div><div class="text-sm bold">Name</div><div class="text-xs text-muted">CTO</div><div class="text-xs text-muted mt-4">XX reports</div></div><div class="card center"><div class="avatar" style="margin:0 auto 8px;"></div><div class="text-sm bold">Name</div><div class="text-xs text-muted">CRO</div><div class="text-xs text-muted mt-4">XX reports</div></div><div class="card center"><div class="avatar" style="margin:0 auto 8px;"></div><div class="text-sm bold">Name</div><div class="text-xs text-muted">CFO</div><div class="text-xs text-muted mt-4">XX reports</div></div></div><div class="sn">39 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">People & Organization</div><h2 class="t">Headcount Plan</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Function</th><th class="c">Current</th><th class="c">Q2 Target</th><th class="c">EOY Target</th><th class="c">Net Add</th></tr><tr><td>Engineering</td><td class="c">XX</td><td class="c">XX</td><td class="c bold">XX</td><td class="c bold">+XX</td></tr><tr><td>Product & Design</td><td class="c">XX</td><td class="c">XX</td><td class="c bold">XX</td><td class="c bold">+X</td></tr><tr><td>Sales & Marketing</td><td class="c">XX</td><td class="c">XX</td><td class="c bold">XX</td><td class="c bold">+XX</td></tr><tr><td>Operations</td><td class="c">XX</td><td class="c">XX</td><td class="c bold">XX</td><td class="c bold">+X</td></tr><tr><td>G&A</td><td class="c">XX</td><td class="c">XX</td><td class="c bold">XX</td><td class="c bold">+X</td></tr><tr><td class="bold">Total</td><td class="c bold">XXX</td><td class="c bold">XXX</td><td class="c bold">XXX</td><td class="c bold">+XX</td></tr></table></div><div class="sn">40 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">People & Organization</div><h2 class="t">Talent Strategy</h2><div class="g3 mt-20"><div class="card accent-top"><div class="label mb-8">Attract</div><div class="text-xs text-mid lh">Employer brand refresh<br>Referral bonus increase to $Xk<br>University pipeline program<br>AI/ML hiring sprint (Q2)</div></div><div class="card accent-top-m"><div class="label mb-8">Develop</div><div class="text-xs text-mid lh">Manager training program<br>IC → leadership track<br>Cross-functional rotations<br>$Xk annual L&D budget per head</div></div><div class="card accent-top-l"><div class="label mb-8">Retain</div><div class="text-xs text-mid lh">Equity refresh grants<br>Flexible work policy<br>Quarterly engagement surveys<br>Target: &lt;XX% voluntary attrition</div></div></div><div class="sn">41 / 50</div></div>
+
+<div class="slide bg-d"><div class="sec">People & Organization</div><h2 class="t">Culture Framework</h2><div class="g2 mt-20" style="gap:clamp(8px,1.5vw,12px);"><div class="card"><div class="text-md bold">Ownership Mindset</div><div class="text-xs text-mid mt-4 lh">Every team member acts like a founder. Decision rights are pushed to the edges.</div></div><div class="card"><div class="text-md bold">Bias for Action</div><div class="text-xs text-mid mt-4 lh">Speed over perfection. Ship, measure, iterate. Reversible decisions made in hours, not days.</div></div><div class="card"><div class="text-md bold">Radical Transparency</div><div class="text-xs text-mid mt-4 lh">Default to open. Share context widely. Bad news travels fast.</div></div><div class="card"><div class="text-md bold">Customer Obsession</div><div class="text-xs text-mid mt-4 lh">Start with the customer problem. Every OKR ties back to user impact.</div></div></div><div class="sn">42 / 50</div></div>
+
+<div class="slide bg-l"><div class="sec">Decisions & Closing</div><h2 class="t">Recommendation</h2><div class="card accent-left mt-20" style="padding:clamp(12px,2vw,20px);"><p class="text-lg serif italic text-dark lh">We recommend [strategic action] with an investment of $X.XM over [timeframe], projected to deliver [outcome] by [date].</p></div><div class="g3 mt-16"><div><div class="label mb-4">Why Now</div><div class="text-xs text-mid lh">Market window is closing. Competitor X announced entry. Regulatory clarity creates 12-month advantage.</div></div><div><div class="label mb-4">What We Need</div><div class="text-xs text-mid lh">Board approval for $X.XM allocation. Headcount authorization for X roles. Partnership mandate with [partner].</div></div><div><div class="label mb-4">What Success Looks Like</div><div class="text-xs text-mid lh">$X.XM incremental revenue by Q4. XX% market share in new corridor. Contribution margin positive by month 18.</div></div></div><div class="sn">43 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Decisions & Closing</div><h2 class="t">Decision Matrix</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Option</th><th class="c">Strategic Fit</th><th class="c">Feasibility</th><th class="c">ROI</th><th class="c">Risk</th><th class="c">Score</th></tr><tr><td class="bold">Option A: Organic Growth</td><td class="c">★★★</td><td class="c">★★★★</td><td class="c">★★★</td><td class="c">★</td><td class="c bold">11</td></tr><tr><td class="bold">Option B: Acquisition</td><td class="c">★★★★</td><td class="c">★★</td><td class="c">★★★★</td><td class="c">★★★</td><td class="c bold">13</td></tr><tr><td class="bold">Option C: Partnership</td><td class="c">★★★</td><td class="c">★★★</td><td class="c">★★</td><td class="c">★★</td><td class="c bold">10</td></tr></table></div><div class="card mt-12" style="border-left:3px solid var(--dark);"><div class="text-sm bold">Recommendation: Option B</div><div class="text-xs text-mid mt-4 lh">Highest strategic fit and ROI despite execution complexity. Mitigate risk with phased integration approach.</div></div><div class="sn">44 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Decisions & Closing</div><h2 class="t">Risk Assessment</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Risk</th><th class="c">Probability</th><th class="c">Impact</th><th>Mitigation</th><th class="c">Owner</th></tr><tr><td>Regulatory delay in Brazil</td><td class="c">High</td><td class="c">High</td><td>Parallel-path with alternative market</td><td class="c">CFO</td></tr><tr><td>Key talent departure</td><td class="c">Medium</td><td class="c">High</td><td>Retention packages; succession planning</td><td class="c">CPO</td></tr><tr><td>Competitor price war</td><td class="c">Medium</td><td class="c">Medium</td><td>Differentiate on experience, not price</td><td class="c">CRO</td></tr><tr><td>Integration failure (M&A)</td><td class="c">Low</td><td class="c">High</td><td>Dedicated integration PMO; 100-day plan</td><td class="c">COO</td></tr><tr><td>Macro downturn</td><td class="c">Low</td><td class="c">Medium</td><td>Scenario plan; flexible cost structure</td><td class="c">CFO</td></tr></table></div><div class="sn">45 / 50</div></div>
+
+<div class="slide bg-d"><div class="sec">Decisions & Closing</div><h2 class="t">Investment Thesis</h2><div class="side mt-20"><div style="flex:1;"><p class="text-lg serif italic lh" style="color:#fff;">We are building the [category-defining position] for [audience], powered by [unfair advantage], in a $XXB market growing at XX% CAGR.</p><div class="divider mt-16 mb-16" style="background:#333;width:80px;"></div><div class="g2"><div><div class="stat"><div class="val" style="color:#fff;">X.Xx</div><div class="lbl">LTV:CAC</div></div></div><div><div class="stat"><div class="val" style="color:#fff;">XX%</div><div class="lbl">Gross Margin</div></div></div><div><div class="stat"><div class="val" style="color:#fff;">&lt;XX mo</div><div class="lbl">Payback</div></div></div><div><div class="stat"><div class="val" style="color:#fff;">$XXM</div><div class="lbl">ARR Target</div></div></div></div></div></div><div class="sn">46 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Decisions & Closing</div><h2 class="t">Board Update Summary</h2><div class="g2 mt-20"><div class="card accent-top"><div class="label mb-4">Highlights</div><div class="text-xs text-mid lh">Revenue ahead of plan (+XX%)<br>New market launch on track<br>Key hire: VP Engineering joined<br>Product NPS at all-time high</div></div><div class="card accent-top-l"><div class="label mb-4">Lowlights</div><div class="text-xs text-mid lh">Enterprise pipeline softer than forecast<br>Compliance review delayed 4 weeks<br>Burn rate above budget by X%<br>One exec departure (backfill in progress)</div></div></div><div class="g3 mt-12"><div class="card center"><div class="stat" style="align-items:center;"><div class="val">$X.XM</div><div class="lbl">Cash on Hand</div></div></div><div class="card center"><div class="stat" style="align-items:center;"><div class="val">XX mo</div><div class="lbl">Runway</div></div></div><div class="card center"><div class="stat" style="align-items:center;"><div class="val">XX%</div><div class="lbl">Plan Attainment</div></div></div></div><div class="sn">47 / 50</div></div>
+
+<div class="slide bg-w"><div class="sec">Decisions & Closing</div><h2 class="t">Quarterly Business Review</h2><div class="g4 mt-20"><div class="card center"><div class="stat" style="align-items:center;"><div class="val">$X.XM</div><div class="lbl">Q Revenue</div></div><div class="text-xs text-mid mt-4">XX% vs plan</div></div><div class="card center"><div class="stat" style="align-items:center;"><div class="val">XXk</div><div class="lbl">New Users</div></div><div class="text-xs text-mid mt-4">XX% vs plan</div></div><div class="card center"><div class="stat" style="align-items:center;"><div class="val">XX%</div><div class="lbl">Retention</div></div><div class="text-xs text-mid mt-4">XX% vs plan</div></div><div class="card center"><div class="stat" style="align-items:center;"><div class="val">XX</div><div class="lbl">NPS</div></div><div class="text-xs text-mid mt-4">XX% vs plan</div></div></div><div class="g2 mt-16"><div class="card"><div class="label mb-4">What Worked</div><div class="text-xs text-mid lh">Referral program exceeded targets by 2x. New onboarding flow reduced time-to-value by 40%.</div></div><div class="card"><div class="label mb-4">What Didn't</div><div class="text-xs text-mid lh">Enterprise outbound conversion below benchmark. Brazil pilot delayed by regulatory uncertainty.</div></div></div><div class="sn">48 / 50</div></div>
+
+<div class="slide bg-l"><div class="sec">Decisions & Closing</div><h2 class="t">Key Takeaways</h2><div style="margin-top:clamp(12px,2vw,20px);display:flex;flex-direction:column;gap:clamp(8px,1.5vw,14px);"><div class="card accent-left" style="padding:clamp(10px,1.5vw,16px);"><div class="flex gap-12 ac"><div class="num">1</div><div class="text-md text-dark lh">The market opportunity is large and growing — we have a 12-month window to establish a defensible position.</div></div></div><div class="card accent-left" style="padding:clamp(10px,1.5vw,16px);"><div class="flex gap-12 ac"><div class="num">2</div><div class="text-md text-dark lh">Our unit economics are strong. LTV:CAC of X.Xx with clear path to improving payback period.</div></div></div><div class="card accent-left" style="padding:clamp(10px,1.5vw,16px);"><div class="flex gap-12 ac"><div class="num">3</div><div class="text-md text-dark lh">The recommended investment of $X.XM unlocks [growth driver] and positions us for [next milestone].</div></div></div><div class="card accent-left" style="padding:clamp(10px,1.5vw,16px);"><div class="flex gap-12 ac"><div class="num">4</div><div class="text-md text-dark lh">We need [specific decision/approval] by [date] to maintain competitive advantage.</div></div></div></div><div class="sn">49 / 50</div></div>
+
+<!-- ═══ 50: Thank You ═══ -->
+<div class="slide bg-d" style="min-height:280px;display:flex;flex-direction:column;justify-content:center;">
+  <h1 style="font-family:var(--serif);font-size:clamp(32px,6vw,52px);color:#fff;">Thank You</h1>
+  <p class="text-md" style="color:var(--muted);margin-top:8px;">Questions, feedback, or alignment needed — let's discuss.</p>
+  <div class="divider" style="width:clamp(48px,8vw,80px);margin-top:clamp(20px,4vw,32px);background:#333;"></div>
+  <p class="text-xs" style="color:var(--muted);margin-top:16px;">name@company.com &middot; #strategy-channel &middot; Office hours: Wed 3–4pm</p>
+  <div class="sn">50 / 50</div>
+</div>
+
+</body>
+</html>

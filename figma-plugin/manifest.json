@@ -1,0 +1,7 @@
+{
+  "name": "Felix Fintech Flow Generator",
+  "id": "felix-fintech-flow-generator",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma", "dev"]
+}

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>50 Data Visualization Slide Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --k:#0d0d0d;--d:#222;--m:#555;--mu:#888;--b:#bbb;--l:#ddd;--bg:#efefef;--w:#fff;
+  --sans:'IBM Plex Sans',sans-serif;--serif:'IBM Plex Serif',serif;--mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#ccc;font-family:var(--sans);color:var(--d);padding:clamp(16px,4vw,48px);}
+
+/* ── TOC ── */
+.toc{max-width:980px;margin:0 auto 48px;background:var(--k);color:var(--w);border-radius:8px;padding:clamp(24px,4vw,48px);}
+.toc h1{font-family:var(--serif);font-size:clamp(24px,4vw,36px);margin-bottom:6px;}
+.toc .sub{color:var(--mu);font-size:clamp(11px,1.4vw,14px);margin-bottom:24px;}
+.toc-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:2px 24px;}
+.toc-i{font-size:11px;color:var(--mu);padding:3px 0;}.toc-i span{color:#444;margin-right:4px;font-variant-numeric:tabular-nums;}
+
+/* ── SLIDES ── */
+.S{max-width:980px;margin:0 auto 24px;border-radius:6px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.07);padding:clamp(20px,3vw,36px) clamp(16px,3vw,32px);position:relative;}
+.S.w{background:var(--w);}.S.d{background:var(--k);color:var(--w);}.S.g{background:var(--bg);}
+.sn{position:absolute;bottom:10px;right:14px;font-size:9px;color:var(--mu);}.S.d .sn{color:#333;}
+.sc{font-size:clamp(8px,1vw,9px);letter-spacing:3px;text-transform:uppercase;color:var(--mu);margin-bottom:4px;}.S.d .sc{color:#444;}
+h2.t{font-family:var(--serif);font-size:clamp(20px,3vw,28px);line-height:1.2;margin-bottom:clamp(8px,1.5vw,16px);}
+.S.d h2.t{color:#fff;}
+.lb{font-size:clamp(8px,1vw,9px);letter-spacing:2px;text-transform:uppercase;color:var(--mu);}
+.mono{font-family:var(--mono);}
+.xs{font-size:clamp(9px,1.1vw,11px);}.sm{font-size:clamp(10px,1.3vw,12px);}.md{font-size:clamp(12px,1.5vw,14px);}.lg{font-size:clamp(14px,2vw,18px);}
+.mu{color:var(--mu);}.mi{color:var(--m);}.dk{color:var(--d);}.wh{color:#fff;}
+.b{font-weight:700;}.it{font-style:italic;}.ct{text-align:center;}.rt{text-align:right;}.lh{line-height:1.6;}
+
+/* ── LAYOUT ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,2vw,16px);}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,2vw,16px);}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1.5vw,12px);}
+.g6{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(6px,1vw,10px);}
+@media(max-width:640px){.g2,.g3,.g4,.g6{grid-template-columns:1fr;}.g2{grid-template-columns:1fr 1fr;}.sd{flex-direction:column!important;}.sd>*{width:100%!important;min-width:0!important;}}
+@media(max-width:480px){.g2{grid-template-columns:1fr;}}
+.sd{display:flex;gap:clamp(12px,2vw,24px);}
+.flex{display:flex;flex-wrap:wrap;}.col{flex-direction:column;}.nw{flex-wrap:nowrap;}.ac{align-items:center;}.jb{justify-content:space-between;}
+.gap-4{gap:4px;}.gap-6{gap:6px;}.gap-8{gap:8px;}.gap-12{gap:12px;}.gap-16{gap:16px;}
+.mt-4{margin-top:4px;}.mt-8{margin-top:8px;}.mt-12{margin-top:12px;}.mt-16{margin-top:16px;}.mt-20{margin-top:clamp(12px,2vw,20px);}
+.mb-4{margin-bottom:4px;}.mb-8{margin-bottom:8px;}.mb-12{margin-bottom:12px;}
+
+/* ── COMPONENTS ── */
+.card{background:var(--w);border:1px solid var(--b);border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.04);padding:clamp(10px,1.5vw,16px);}
+.S.d .card{background:#161616;border-color:#2a2a2a;}
+.pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:clamp(8px,1vw,10px);background:var(--l);color:var(--m);}
+.pill-d{background:var(--d);color:var(--w);}
+.divider{height:1px;background:var(--b);}.S.d .divider{background:#2a2a2a;}
+.at{border-top:3px solid var(--d);}.atm{border-top:3px solid var(--mu);}.atl{border-top:3px solid var(--b);}
+.al{border-left:3px solid var(--d);}
+
+.bar-t{height:clamp(8px,1vw,10px);background:var(--l);border-radius:2px;overflow:hidden;}
+.bar-f{height:100%;border-radius:2px;}
+.stat .v{font-size:clamp(24px,4vw,40px);font-weight:700;line-height:1;font-family:var(--mono);}.stat .l{font-size:clamp(8px,1vw,10px);color:var(--mu);margin-top:4px;}
+.stat-sm .v{font-size:clamp(18px,2.5vw,28px);font-weight:700;line-height:1;font-family:var(--mono);}.stat-sm .l{font-size:clamp(8px,1vw,10px);color:var(--mu);margin-top:2px;}
+.ph{background:var(--l);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;color:var(--mu);font-size:clamp(9px,1vw,11px);border-radius:4px;min-height:60px;}
+
+table.dt{width:100%;border-collapse:collapse;font-size:clamp(9px,1.1vw,11px);}
+table.dt th{background:var(--d);color:#fff;padding:clamp(4px,0.7vw,7px) clamp(6px,1vw,10px);font-weight:500;text-align:left;}
+table.dt td{padding:clamp(4px,0.7vw,7px) clamp(6px,1vw,10px);color:var(--m);border-bottom:1px solid var(--bg);}
+table.dt tr:nth-child(even) td{background:var(--bg);}
+table.dt .c{text-align:center;}.dt .r{text-align:right;}.dt .b{font-weight:700;}
+
+/* ── CHART HELPERS ── */
+.chart-area{background:var(--bg);border:1px solid var(--b);border-radius:4px;padding:clamp(8px,1.2vw,14px);position:relative;overflow:hidden;}
+.S.d .chart-area{background:#141414;border-color:#2a2a2a;}
+svg{display:block;width:100%;overflow:visible;}
+.ax-label{font-size:clamp(7px,0.9vw,9px);fill:var(--mu);}
+.ax-line{stroke:var(--l);stroke-width:0.5;}
+.S.d .ax-line{stroke:#2a2a2a;}
+.S.d .ax-label{fill:#555;}
+
+/* Bars */
+.vbar{display:flex;align-items:flex-end;gap:clamp(3px,0.6vw,6px);height:100%;padding-top:8px;}
+.vbar .col-w{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.vbar .col-w .b-fill{width:100%;border-radius:2px 2px 0 0;min-height:2px;transition:height 0.3s;}
+.vbar .col-w .b-label{font-size:clamp(7px,0.8vw,9px);color:var(--mu);white-space:nowrap;}
+.vbar .col-w .b-val{font-size:clamp(7px,0.8vw,9px);color:var(--m);font-weight:600;font-family:var(--mono);}
+
+.hbar{display:flex;flex-direction:column;gap:clamp(4px,0.7vw,8px);}
+.hbar .row-w{display:flex;align-items:center;gap:clamp(4px,0.8vw,8px);}
+.hbar .row-w .h-label{width:clamp(60px,12vw,100px);font-size:clamp(8px,1vw,10px);text-align:right;color:var(--m);flex-shrink:0;}
+.hbar .row-w .h-track{flex:1;height:clamp(14px,1.8vw,20px);background:var(--l);border-radius:2px;overflow:hidden;position:relative;}
+.hbar .row-w .h-fill{height:100%;border-radius:2px;position:absolute;left:0;top:0;}
+.hbar .row-w .h-val{width:clamp(28px,4vw,40px);font-size:clamp(8px,1vw,10px);color:var(--m);font-family:var(--mono);font-weight:600;}
+
+/* Donut */
+.donut-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+.donut-center{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+
+/* Heatmap cells */
+.hm-cell{aspect-ratio:1;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:clamp(7px,0.8vw,9px);font-family:var(--mono);color:var(--w);}
+
+/* Funnel */
+.fnl{display:flex;flex-direction:column;gap:3px;align-items:center;}
+.fnl .fb{display:flex;align-items:center;justify-content:center;color:var(--w);font-size:clamp(9px,1.1vw,11px);height:clamp(24px,3vw,32px);}
+
+/* Gauge */
+.gauge-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+</style>
+</head>
+<body>
+
+<div class="toc">
+<h1>50 Data Visualization Layouts</h1>
+<p class="sub">Product development & data team presentation templates &middot; Greyscale &middot; Responsive</p>
+<div class="toc-g">
+<div class="toc-i"><span>01</span>Hero Metric</div><div class="toc-i"><span>26</span>Progress Toward Goal</div>
+<div class="toc-i"><span>02</span>Hero Metric + Sparkline</div><div class="toc-i"><span>27</span>Before / After Comparison</div>
+<div class="toc-i"><span>03</span>KPI Grid (4-up)</div><div class="toc-i"><span>28</span>Annotated Time Series</div>
+<div class="toc-i"><span>04</span>KPI Grid + Trend Arrows</div><div class="toc-i"><span>29</span>Small Multiples</div>
+<div class="toc-i"><span>05</span>Vertical Bar Chart</div><div class="toc-i"><span>30</span>Slope Chart</div>
+<div class="toc-i"><span>06</span>Horizontal Bar Chart</div><div class="toc-i"><span>31</span>Lollipop Chart</div>
+<div class="toc-i"><span>07</span>Grouped Bar Chart</div><div class="toc-i"><span>32</span>Diverging Bar Chart</div>
+<div class="toc-i"><span>08</span>Stacked Bar Chart</div><div class="toc-i"><span>33</span>Gauge / Speedometer</div>
+<div class="toc-i"><span>09</span>100% Stacked Bar</div><div class="toc-i"><span>34</span>Sankey / Flow Diagram</div>
+<div class="toc-i"><span>10</span>Waterfall Chart</div><div class="toc-i"><span>35</span>Activity Calendar Heatmap</div>
+<div class="toc-i"><span>11</span>Single Line Chart</div><div class="toc-i"><span>36</span>Correlation Matrix</div>
+<div class="toc-i"><span>12</span>Multi-Line Chart</div><div class="toc-i"><span>37</span>Geographic / Map View</div>
+<div class="toc-i"><span>13</span>Area Chart</div><div class="toc-i"><span>38</span>Dashboard — 4 Panel</div>
+<div class="toc-i"><span>14</span>Sparkline Grid</div><div class="toc-i"><span>39</span>Dashboard — 6 Panel</div>
+<div class="toc-i"><span>15</span>Donut Chart</div><div class="toc-i"><span>40</span>Metric + Chart + Table Combo</div>
+<div class="toc-i"><span>16</span>Treemap</div><div class="toc-i"><span>41</span>Segment Comparison Table</div>
+<div class="toc-i"><span>17</span>Funnel Chart</div><div class="toc-i"><span>42</span>Variance Analysis</div>
+<div class="toc-i"><span>18</span>Cohort Retention Heatmap</div><div class="toc-i"><span>43</span>YoY Comparison</div>
+<div class="toc-i"><span>19</span>Scatter Plot</div><div class="toc-i"><span>44</span>Cumulative Growth</div>
+<div class="toc-i"><span>20</span>Bubble Chart</div><div class="toc-i"><span>45</span>Pareto Chart (80/20)</div>
+<div class="toc-i"><span>21</span>Histogram</div><div class="toc-i"><span>46</span>Rate / Ratio Comparison</div>
+<div class="toc-i"><span>22</span>Distribution / Box Plot</div><div class="toc-i"><span>47</span>Data Quality Scorecard</div>
+<div class="toc-i"><span>23</span>Data Table + Formatting</div><div class="toc-i"><span>48</span>A/B Test Results</div>
+<div class="toc-i"><span>24</span>Ranked List with Bars</div><div class="toc-i"><span>49</span>Forecast vs. Actual</div>
+<div class="toc-i"><span>25</span>Bullet Chart / Benchmark</div><div class="toc-i"><span>50</span>Executive Data Summary</div>
+</div>
+</div>
+
+<!-- ═══ 1: Hero Metric ═══ -->
+<div class="S w">
+<div class="sc">Metrics</div>
+<h2 class="t">Monthly Active Users</h2>
+<div class="ct" style="padding:clamp(16px,4vw,40px) 0;">
+<div class="stat"><div class="v" style="font-size:clamp(48px,10vw,80px);">2.4M</div><div class="l" style="font-size:clamp(10px,1.4vw,14px);">as of March 2026</div></div>
+<div class="flex gap-8 ac mt-12" style="justify-content:center;"><span class="pill pill-d">+18.2% MoM</span><span class="pill">+142% YoY</span></div>
+</div>
+<div class="sn">1 / 50</div>
+</div>
+
+<!-- ═══ 2: Hero Metric + Sparkline ═══ -->
+<div class="S w">
+<div class="sc">Metrics</div>
+<h2 class="t">Revenue Run Rate</h2>
+<div class="sd mt-20">
+<div style="flex-shrink:0;"><div class="stat"><div class="v">$18.4M</div><div class="l">ARR</div></div><div class="pill pill-d mt-8">+24% YoY</div></div>
+<div class="chart-area" style="flex:1;height:clamp(80px,12vw,120px);"><svg viewBox="0 0 400 80" preserveAspectRatio="none"><polyline points="0,70 40,65 80,60 120,55 160,48 200,50 240,42 280,35 320,28 360,20 400,12" fill="none" stroke="var(--d)" stroke-width="2"/><polyline points="0,70 40,65 80,60 120,55 160,48 200,50 240,42 280,35 320,28 360,20 400,12 400,80 0,80" fill="var(--l)" opacity="0.5" stroke="none"/></svg></div>
+</div>
+<div class="sn">2 / 50</div>
+</div>
+
+<!-- ═══ 3: KPI Grid 4-up ═══ -->
+<div class="S w">
+<div class="sc">Metrics</div>
+<h2 class="t">Key Performance Indicators</h2>
+<div class="g4 mt-20">
+<div class="card ct"><div class="stat-sm"><div class="v">2.4M</div><div class="l">MAU</div></div></div>
+<div class="card ct"><div class="stat-sm"><div class="v">$18.4M</div><div class="l">ARR</div></div></div>
+<div class="card ct"><div class="stat-sm"><div class="v">4.2%</div><div class="l">Churn</div></div></div>
+<div class="card ct"><div class="stat-sm"><div class="v">68</div><div class="l">NPS</div></div></div>
+</div>
+<div class="sn">3 / 50</div>
+</div>
+
+<!-- ═══ 4: KPI Grid + Trends ═══ -->
+<div class="S w">
+<div class="sc">Metrics</div>
+<h2 class="t">Weekly Snapshot</h2>
+<div class="g4 mt-20">
+<div class="card"><div class="stat-sm"><div class="v dk">584K</div><div class="l">WAU</div></div><div class="flex ac gap-4 mt-8"><span class="xs b" style="color:var(--d);">↑ 12%</span><span class="xs mu">vs prior week</span></div><div class="chart-area mt-8" style="height:32px;padding:4px;"><svg viewBox="0 0 100 24" preserveAspectRatio="none"><polyline points="0,20 14,18 28,15 42,16 56,12 70,10 84,8 100,4" fill="none" stroke="var(--d)" stroke-width="1.5"/></svg></div></div>
+<div class="card"><div class="stat-sm"><div class="v dk">$342K</div><div class="l">Revenue</div></div><div class="flex ac gap-4 mt-8"><span class="xs b" style="color:var(--d);">↑ 8%</span><span class="xs mu">vs prior week</span></div><div class="chart-area mt-8" style="height:32px;padding:4px;"><svg viewBox="0 0 100 24" preserveAspectRatio="none"><polyline points="0,18 14,20 28,16 42,14 56,15 70,10 84,8 100,6" fill="none" stroke="var(--d)" stroke-width="1.5"/></svg></div></div>
+<div class="card"><div class="stat-sm"><div class="v dk">2.1%</div><div class="l">Churn</div></div><div class="flex ac gap-4 mt-8"><span class="xs b" style="color:var(--mu);">↓ 0.3pp</span><span class="xs mu">vs prior week</span></div><div class="chart-area mt-8" style="height:32px;padding:4px;"><svg viewBox="0 0 100 24" preserveAspectRatio="none"><polyline points="0,8 14,10 28,12 42,10 56,14 70,16 84,18 100,20" fill="none" stroke="var(--mu)" stroke-width="1.5"/></svg></div></div>
+<div class="card"><div class="stat-sm"><div class="v dk">47s</div><div class="l">Avg Session</div></div><div class="flex ac gap-4 mt-8"><span class="xs b" style="color:var(--d);">↑ 5s</span><span class="xs mu">vs prior week</span></div><div class="chart-area mt-8" style="height:32px;padding:4px;"><svg viewBox="0 0 100 24" preserveAspectRatio="none"><polyline points="0,20 14,16 28,18 42,14 56,12 70,10 84,8 100,6" fill="none" stroke="var(--d)" stroke-width="1.5"/></svg></div></div>
+</div>
+<div class="sn">4 / 50</div>
+</div>
+
+<!-- ═══ 5: Vertical Bar Chart ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Monthly Revenue</h2>
+<div class="chart-area mt-20" style="height:clamp(160px,24vw,240px);">
+<div class="vbar" style="height:100%;">
+<div class="col-w"><div class="b-val">$1.2M</div><div class="b-fill" style="height:48%;background:var(--l);"></div><div class="b-label">Jan</div></div>
+<div class="col-w"><div class="b-val">$1.4M</div><div class="b-fill" style="height:56%;background:var(--l);"></div><div class="b-label">Feb</div></div>
+<div class="col-w"><div class="b-val">$1.3M</div><div class="b-fill" style="height:52%;background:var(--l);"></div><div class="b-label">Mar</div></div>
+<div class="col-w"><div class="b-val">$1.6M</div><div class="b-fill" style="height:64%;background:var(--b);"></div><div class="b-label">Apr</div></div>
+<div class="col-w"><div class="b-val">$1.5M</div><div class="b-fill" style="height:60%;background:var(--b);"></div><div class="b-label">May</div></div>
+<div class="col-w"><div class="b-val">$1.8M</div><div class="b-fill" style="height:72%;background:var(--mu);"></div><div class="b-label">Jun</div></div>
+<div class="col-w"><div class="b-val">$1.7M</div><div class="b-fill" style="height:68%;background:var(--mu);"></div><div class="b-label">Jul</div></div>
+<div class="col-w"><div class="b-val">$2.0M</div><div class="b-fill" style="height:80%;background:var(--m);"></div><div class="b-label">Aug</div></div>
+<div class="col-w"><div class="b-val">$1.9M</div><div class="b-fill" style="height:76%;background:var(--m);"></div><div class="b-label">Sep</div></div>
+<div class="col-w"><div class="b-val">$2.2M</div><div class="b-fill" style="height:88%;background:var(--d);"></div><div class="b-label">Oct</div></div>
+<div class="col-w"><div class="b-val">$2.1M</div><div class="b-fill" style="height:84%;background:var(--d);"></div><div class="b-label">Nov</div></div>
+<div class="col-w"><div class="b-val">$2.5M</div><div class="b-fill" style="height:100%;background:var(--k);"></div><div class="b-label">Dec</div></div>
+</div>
+</div>
+<div class="sn">5 / 50</div>
+</div>
+
+<!-- ═══ 6: Horizontal Bar Chart ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Users by Acquisition Channel</h2>
+<div class="hbar mt-20">
+<div class="row-w"><div class="h-label">Organic Search</div><div class="h-track"><div class="h-fill" style="width:78%;background:var(--d);"></div></div><div class="h-val">78K</div></div>
+<div class="row-w"><div class="h-label">Referral</div><div class="h-track"><div class="h-fill" style="width:62%;background:var(--m);"></div></div><div class="h-val">62K</div></div>
+<div class="row-w"><div class="h-label">Paid Social</div><div class="h-track"><div class="h-fill" style="width:45%;background:var(--mu);"></div></div><div class="h-val">45K</div></div>
+<div class="row-w"><div class="h-label">Direct</div><div class="h-track"><div class="h-fill" style="width:38%;background:var(--b);"></div></div><div class="h-val">38K</div></div>
+<div class="row-w"><div class="h-label">Email</div><div class="h-track"><div class="h-fill" style="width:24%;background:var(--l);"></div></div><div class="h-val">24K</div></div>
+<div class="row-w"><div class="h-label">Partnerships</div><div class="h-track"><div class="h-fill" style="width:15%;background:var(--l);"></div></div><div class="h-val">15K</div></div>
+</div>
+<div class="sn">6 / 50</div>
+</div>
+
+<!-- ═══ 7: Grouped Bar Chart ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Revenue by Product — Q3 vs Q4</h2>
+<div class="chart-area mt-20" style="height:clamp(140px,20vw,200px);">
+<div class="vbar" style="height:100%;">
+<div class="col-w" style="gap:1px;"><div class="b-val">$4.2M</div><div style="display:flex;gap:2px;width:100%;height:70%;align-items:flex-end;"><div style="flex:1;height:75%;background:var(--mu);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:100%;background:var(--d);border-radius:2px 2px 0 0;"></div></div><div class="b-label">Core</div></div>
+<div class="col-w" style="gap:1px;"><div class="b-val">$2.8M</div><div style="display:flex;gap:2px;width:100%;height:50%;align-items:flex-end;"><div style="flex:1;height:80%;background:var(--mu);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:100%;background:var(--d);border-radius:2px 2px 0 0;"></div></div><div class="b-label">Enterprise</div></div>
+<div class="col-w" style="gap:1px;"><div class="b-val">$1.1M</div><div style="display:flex;gap:2px;width:100%;height:28%;align-items:flex-end;"><div style="flex:1;height:70%;background:var(--mu);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:100%;background:var(--d);border-radius:2px 2px 0 0;"></div></div><div class="b-label">Platform</div></div>
+<div class="col-w" style="gap:1px;"><div class="b-val">$0.6M</div><div style="display:flex;gap:2px;width:100%;height:16%;align-items:flex-end;"><div style="flex:1;height:60%;background:var(--mu);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:100%;background:var(--d);border-radius:2px 2px 0 0;"></div></div><div class="b-label">Other</div></div>
+</div>
+</div>
+<div class="flex gap-16 mt-8 ac" style="justify-content:center;"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--mu);border-radius:2px;"></div><span class="xs">Q3</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--d);border-radius:2px;"></div><span class="xs">Q4</span></div></div>
+<div class="sn">7 / 50</div>
+</div>
+
+<!-- ═══ 8: Stacked Bar Chart ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Support Tickets by Category</h2>
+<div class="chart-area mt-20" style="height:clamp(140px,20vw,200px);">
+<div class="vbar" style="height:100%;">
+<div class="col-w"><div style="width:100%;display:flex;flex-direction:column;height:80%;"><div style="flex:3;background:var(--d);border-radius:2px 2px 0 0;"></div><div style="flex:2;background:var(--mu);"></div><div style="flex:1;background:var(--b);"></div><div style="flex:1;background:var(--l);border-radius:0 0 2px 2px;"></div></div><div class="b-label">Jan</div></div>
+<div class="col-w"><div style="width:100%;display:flex;flex-direction:column;height:72%;"><div style="flex:3;background:var(--d);border-radius:2px 2px 0 0;"></div><div style="flex:2;background:var(--mu);"></div><div style="flex:2;background:var(--b);"></div><div style="flex:1;background:var(--l);border-radius:0 0 2px 2px;"></div></div><div class="b-label">Feb</div></div>
+<div class="col-w"><div style="width:100%;display:flex;flex-direction:column;height:90%;"><div style="flex:4;background:var(--d);border-radius:2px 2px 0 0;"></div><div style="flex:2;background:var(--mu);"></div><div style="flex:1;background:var(--b);"></div><div style="flex:1;background:var(--l);border-radius:0 0 2px 2px;"></div></div><div class="b-label">Mar</div></div>
+<div class="col-w"><div style="width:100%;display:flex;flex-direction:column;height:68%;"><div style="flex:2;background:var(--d);border-radius:2px 2px 0 0;"></div><div style="flex:2;background:var(--mu);"></div><div style="flex:2;background:var(--b);"></div><div style="flex:1;background:var(--l);border-radius:0 0 2px 2px;"></div></div><div class="b-label">Apr</div></div>
+<div class="col-w"><div style="width:100%;display:flex;flex-direction:column;height:60%;"><div style="flex:2;background:var(--d);border-radius:2px 2px 0 0;"></div><div style="flex:1;background:var(--mu);"></div><div style="flex:2;background:var(--b);"></div><div style="flex:1;background:var(--l);border-radius:0 0 2px 2px;"></div></div><div class="b-label">May</div></div>
+<div class="col-w"><div style="width:100%;display:flex;flex-direction:column;height:55%;"><div style="flex:1;background:var(--d);border-radius:2px 2px 0 0;"></div><div style="flex:1;background:var(--mu);"></div><div style="flex:2;background:var(--b);"></div><div style="flex:1;background:var(--l);border-radius:0 0 2px 2px;"></div></div><div class="b-label">Jun</div></div>
+</div>
+</div>
+<div class="flex gap-12 mt-8 ac" style="justify-content:center;flex-wrap:wrap;"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--d);border-radius:2px;"></div><span class="xs">Billing</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--mu);border-radius:2px;"></div><span class="xs">Technical</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--b);border-radius:2px;"></div><span class="xs">Account</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--l);border-radius:2px;"></div><span class="xs">Other</span></div></div>
+<div class="sn">8 / 50</div>
+</div>
+
+<!-- ═══ 9: 100% Stacked Bar ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Traffic Source Mix Over Time</h2>
+<div class="hbar mt-20" style="gap:clamp(6px,1vw,10px);">
+<div class="row-w"><div class="h-label">Q1</div><div style="flex:1;height:clamp(20px,2.5vw,28px);display:flex;border-radius:2px;overflow:hidden;"><div style="width:40%;background:var(--d);"></div><div style="width:25%;background:var(--mu);"></div><div style="width:20%;background:var(--b);"></div><div style="width:15%;background:var(--l);"></div></div></div>
+<div class="row-w"><div class="h-label">Q2</div><div style="flex:1;height:clamp(20px,2.5vw,28px);display:flex;border-radius:2px;overflow:hidden;"><div style="width:38%;background:var(--d);"></div><div style="width:28%;background:var(--mu);"></div><div style="width:22%;background:var(--b);"></div><div style="width:12%;background:var(--l);"></div></div></div>
+<div class="row-w"><div class="h-label">Q3</div><div style="flex:1;height:clamp(20px,2.5vw,28px);display:flex;border-radius:2px;overflow:hidden;"><div style="width:35%;background:var(--d);"></div><div style="width:30%;background:var(--mu);"></div><div style="width:23%;background:var(--b);"></div><div style="width:12%;background:var(--l);"></div></div></div>
+<div class="row-w"><div class="h-label">Q4</div><div style="flex:1;height:clamp(20px,2.5vw,28px);display:flex;border-radius:2px;overflow:hidden;"><div style="width:32%;background:var(--d);"></div><div style="width:32%;background:var(--mu);"></div><div style="width:24%;background:var(--b);"></div><div style="width:12%;background:var(--l);"></div></div></div>
+</div>
+<div class="flex gap-12 mt-8 ac" style="justify-content:center;flex-wrap:wrap;"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--d);border-radius:2px;"></div><span class="xs">Organic</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--mu);border-radius:2px;"></div><span class="xs">Referral</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--b);border-radius:2px;"></div><span class="xs">Paid</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--l);border-radius:2px;"></div><span class="xs">Direct</span></div></div>
+<div class="sn">9 / 50</div>
+</div>
+
+<!-- ═══ 10: Waterfall Chart ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Revenue Bridge — Q3 to Q4</h2>
+<div class="chart-area mt-20" style="height:clamp(140px,20vw,200px);">
+<div class="vbar" style="height:100%;align-items:stretch;">
+<div class="col-w" style="justify-content:flex-end;"><div class="b-val">$8.2M</div><div class="b-fill" style="height:82%;background:var(--d);border-radius:2px;"></div><div class="b-label">Q3 Rev</div></div>
+<div class="col-w" style="justify-content:flex-end;padding-bottom:82%;"><div class="b-val" style="color:var(--d);">+$1.4M</div><div style="height:14%;background:var(--mu);border-radius:2px;margin-bottom:-82%;"></div><div class="b-label" style="margin-top:auto;">New Cust</div></div>
+<div class="col-w" style="justify-content:flex-end;padding-bottom:82%;"><div class="b-val" style="color:var(--d);">+$0.8M</div><div style="height:8%;background:var(--mu);border-radius:2px;margin-bottom:-82%;"></div><div class="b-label" style="margin-top:auto;">Expansion</div></div>
+<div class="col-w" style="justify-content:flex-end;padding-bottom:78%;"><div class="b-val" style="color:var(--b);">-$0.6M</div><div style="height:6%;background:var(--b);border-radius:2px;margin-bottom:-78%;"></div><div class="b-label" style="margin-top:auto;">Churn</div></div>
+<div class="col-w" style="justify-content:flex-end;padding-bottom:74%;"><div class="b-val" style="color:var(--b);">-$0.3M</div><div style="height:3%;background:var(--b);border-radius:2px;margin-bottom:-74%;"></div><div class="b-label" style="margin-top:auto;">Downgrade</div></div>
+<div class="col-w" style="justify-content:flex-end;"><div class="b-val">$9.5M</div><div class="b-fill" style="height:95%;background:var(--k);border-radius:2px;"></div><div class="b-label">Q4 Rev</div></div>
+</div>
+</div>
+<div class="sn">10 / 50</div>
+</div>
+
+<!-- ═══ 11: Single Line Chart ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Daily Active Users — 30 Day Trend</h2>
+<div class="chart-area mt-20" style="height:clamp(120px,18vw,180px);padding:clamp(12px,2vw,20px);">
+<svg viewBox="0 0 500 120" preserveAspectRatio="none" style="height:100%;">
+<line x1="0" y1="0" x2="0" y2="120" class="ax-line"/><line x1="0" y1="120" x2="500" y2="120" class="ax-line"/>
+<text x="-4" y="10" class="ax-label" text-anchor="end" style="font-size:8px;">600K</text><text x="-4" y="60" class="ax-label" text-anchor="end" style="font-size:8px;">400K</text><text x="-4" y="115" class="ax-label" text-anchor="end" style="font-size:8px;">200K</text>
+<polyline points="0,100 17,95 34,90 51,88 68,82 85,85 102,78 119,75 136,70 153,72 170,65 187,60 204,58 221,55 238,50 255,52 272,48 289,42 306,40 323,38 340,35 357,30 374,28 391,25 408,22 425,18 442,15 459,12 476,10 500,5" fill="none" stroke="var(--d)" stroke-width="2"/>
+<polyline points="0,100 17,95 34,90 51,88 68,82 85,85 102,78 119,75 136,70 153,72 170,65 187,60 204,58 221,55 238,50 255,52 272,48 289,42 306,40 323,38 340,35 357,30 374,28 391,25 408,22 425,18 442,15 459,12 476,10 500,5 500,120 0,120" fill="var(--l)" opacity="0.4" stroke="none"/>
+</svg>
+</div>
+<div class="sn">11 / 50</div>
+</div>
+
+<!-- ═══ 12: Multi-Line Chart ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Retention by Cohort</h2>
+<div class="chart-area mt-20" style="height:clamp(120px,18vw,180px);padding:clamp(12px,2vw,20px);">
+<svg viewBox="0 0 400 100" preserveAspectRatio="none" style="height:100%;">
+<line x1="0" y1="100" x2="400" y2="100" class="ax-line"/><line x1="0" y1="50" x2="400" y2="50" class="ax-line" stroke-dasharray="4"/>
+<polyline points="0,10 57,25 114,35 171,42 228,48 285,52 342,55 400,58" fill="none" stroke="var(--d)" stroke-width="2"/>
+<polyline points="0,10 57,30 114,42 171,52 228,58 285,64 342,68 400,72" fill="none" stroke="var(--mu)" stroke-width="2"/>
+<polyline points="0,10 57,35 114,50 171,60 228,68 285,75 342,80 400,85" fill="none" stroke="var(--b)" stroke-width="2" stroke-dasharray="4"/>
+</svg>
+</div>
+<div class="flex gap-16 mt-8 ac" style="justify-content:center;"><div class="flex ac gap-4"><div style="width:16px;height:2px;background:var(--d);"></div><span class="xs">Jan Cohort</span></div><div class="flex ac gap-4"><div style="width:16px;height:2px;background:var(--mu);"></div><span class="xs">Feb Cohort</span></div><div class="flex ac gap-4"><div style="width:16px;height:2px;background:var(--b);border-top:1px dashed var(--b);"></div><span class="xs">Mar Cohort</span></div></div>
+<div class="sn">12 / 50</div>
+</div>
+
+<!-- ═══ 13: Area Chart ═══ -->
+<div class="S d">
+<div class="sc">Charts</div>
+<h2 class="t">Cumulative Revenue</h2>
+<div class="chart-area mt-20" style="height:clamp(120px,18vw,180px);padding:clamp(12px,2vw,20px);">
+<svg viewBox="0 0 400 100" preserveAspectRatio="none" style="height:100%;">
+<polygon points="0,95 50,88 100,80 150,70 200,58 250,45 300,30 350,18 400,5 400,100 0,100" fill="var(--m)" opacity="0.3"/>
+<polyline points="0,95 50,88 100,80 150,70 200,58 250,45 300,30 350,18 400,5" fill="none" stroke="var(--mu)" stroke-width="2"/>
+</svg>
+</div>
+<div class="flex jb mt-4"><span class="xs" style="color:#555;">Jan</span><span class="xs" style="color:#555;">Mar</span><span class="xs" style="color:#555;">Jun</span><span class="xs" style="color:#555;">Sep</span><span class="xs" style="color:#555;">Dec</span></div>
+<div class="sn">13 / 50</div>
+</div>
+
+<!-- ═══ 14: Sparkline Grid ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Metric Trends — Last 12 Weeks</h2>
+<div class="g2 mt-20">
+<div class="card flex ac gap-12"><div style="flex-shrink:0;"><div class="sm b">MAU</div><div class="xs mu">2.4M</div><div class="pill pill-d mt-4" style="font-size:8px;">+18%</div></div><div class="chart-area" style="flex:1;height:40px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,28 10,25 20,22 30,24 40,20 50,18 60,16 70,15 80,12 90,10 100,8 110,5 120,2" fill="none" stroke="var(--d)" stroke-width="1.5"/></svg></div></div>
+<div class="card flex ac gap-12"><div style="flex-shrink:0;"><div class="sm b">Revenue</div><div class="xs mu">$1.8M</div><div class="pill pill-d mt-4" style="font-size:8px;">+24%</div></div><div class="chart-area" style="flex:1;height:40px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,26 10,28 20,24 30,20 40,22 50,18 60,15 70,14 80,10 90,8 100,6 110,4 120,2" fill="none" stroke="var(--d)" stroke-width="1.5"/></svg></div></div>
+<div class="card flex ac gap-12"><div style="flex-shrink:0;"><div class="sm b">NPS</div><div class="xs mu">68</div><div class="pill mt-4" style="font-size:8px;">+4pts</div></div><div class="chart-area" style="flex:1;height:40px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,20 10,18 20,22 30,16 40,14 50,15 60,12 70,10 80,11 90,8 100,6 110,5 120,4" fill="none" stroke="var(--mu)" stroke-width="1.5"/></svg></div></div>
+<div class="card flex ac gap-12"><div style="flex-shrink:0;"><div class="sm b">Churn</div><div class="xs mu">4.2%</div><div class="pill mt-4" style="font-size:8px;">-0.8pp</div></div><div class="chart-area" style="flex:1;height:40px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,5 10,8 20,6 30,10 40,12 50,14 60,16 70,18 80,20 90,22 100,24 110,25 120,28" fill="none" stroke="var(--b)" stroke-width="1.5"/></svg></div></div>
+</div>
+<div class="sn">14 / 50</div>
+</div>
+
+<!-- ═══ 15: Donut Chart ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Revenue by Region</h2>
+<div class="sd mt-20">
+<div class="donut-wrap" style="width:clamp(140px,20vw,200px);height:clamp(140px,20vw,200px);flex-shrink:0;">
+<svg viewBox="0 0 100 100" style="transform:rotate(-90deg);">
+<circle cx="50" cy="50" r="38" fill="none" stroke="var(--l)" stroke-width="14"/>
+<circle cx="50" cy="50" r="38" fill="none" stroke="var(--d)" stroke-width="14" stroke-dasharray="105 239" stroke-dashoffset="0"/>
+<circle cx="50" cy="50" r="38" fill="none" stroke="var(--mu)" stroke-width="14" stroke-dasharray="62 239" stroke-dashoffset="-105"/>
+<circle cx="50" cy="50" r="38" fill="none" stroke="var(--b)" stroke-width="14" stroke-dasharray="48 239" stroke-dashoffset="-167"/>
+</svg>
+<div class="donut-center"><div class="mono b md">$18.4M</div><div class="xs mu">Total</div></div>
+</div>
+<div style="flex:1;">
+<div class="lb mb-12">Breakdown</div>
+<div class="flex ac gap-8 mb-8"><div style="width:12px;height:12px;background:var(--d);border-radius:2px;flex-shrink:0;"></div><div style="flex:1;"><span class="sm b">North America — 44%</span><br><span class="xs mu">$8.1M</span></div></div>
+<div class="flex ac gap-8 mb-8"><div style="width:12px;height:12px;background:var(--mu);border-radius:2px;flex-shrink:0;"></div><div style="flex:1;"><span class="sm b">Latin America — 26%</span><br><span class="xs mu">$4.8M</span></div></div>
+<div class="flex ac gap-8 mb-8"><div style="width:12px;height:12px;background:var(--b);border-radius:2px;flex-shrink:0;"></div><div style="flex:1;"><span class="sm b">Europe — 20%</span><br><span class="xs mu">$3.7M</span></div></div>
+<div class="flex ac gap-8"><div style="width:12px;height:12px;background:var(--l);border-radius:2px;flex-shrink:0;"></div><div style="flex:1;"><span class="sm b">Other — 10%</span><br><span class="xs mu">$1.8M</span></div></div>
+</div>
+</div>
+<div class="sn">15 / 50</div>
+</div>
+
+<!-- ═══ 16: Treemap ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Feature Usage Distribution</h2>
+<div class="mt-20" style="display:grid;grid-template-columns:3fr 2fr 1fr;grid-template-rows:2fr 1fr;gap:3px;height:clamp(160px,24vw,240px);">
+<div style="background:var(--d);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;grid-row:span 2;"><span class="sm b">Send Money</span><span class="xs" style="color:var(--mu);">42%</span></div>
+<div style="background:var(--m);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;"><span class="sm b">Check Balance</span><span class="xs" style="color:var(--b);">24%</span></div>
+<div style="background:var(--mu);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;"><span class="xs b">History</span><span class="xs" style="color:var(--l);">12%</span></div>
+<div style="background:var(--b);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-direction:column;"><span class="xs b">Settings</span><span class="xs mu">8%</span></div>
+<div style="background:var(--l);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-direction:column;"><span class="xs b">Other</span><span class="xs mu">14%</span></div>
+</div>
+<div class="sn">16 / 50</div>
+</div>
+
+<!-- ═══ 17: Funnel ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Conversion Funnel</h2>
+<div class="fnl mt-20">
+<div class="fb" style="width:100%;background:var(--d);">Visit — 100K <span class="xs mu" style="margin-left:8px;">(100%)</span></div>
+<div class="fb" style="width:82%;background:var(--m);">Sign Up — 62K <span class="xs" style="margin-left:8px;color:var(--b);">(62%)</span></div>
+<div class="fb" style="width:58%;background:var(--mu);">Activate — 41K <span class="xs" style="margin-left:8px;color:var(--l);">(41%)</span></div>
+<div class="fb" style="width:36%;background:var(--b);color:var(--d);">Convert — 22K <span class="xs mu" style="margin-left:8px;">(22%)</span></div>
+<div class="fb" style="width:20%;background:var(--l);color:var(--d);">Retain (D30) — 14K <span class="xs mu" style="margin-left:8px;">(14%)</span></div>
+</div>
+<div class="card al mt-16"><p class="xs mi">Largest drop: Sign Up → Activate (34% loss). Root cause: KYC friction for non-US-document holders.</p></div>
+<div class="sn">17 / 50</div>
+</div>
+
+<!-- ═══ 18: Cohort Retention Heatmap ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Cohort Retention Heatmap</h2>
+<div style="overflow-x:auto;margin-top:clamp(12px,2vw,20px);">
+<table class="dt" style="min-width:500px;">
+<tr><th>Cohort</th><th class="c">M0</th><th class="c">M1</th><th class="c">M2</th><th class="c">M3</th><th class="c">M4</th><th class="c">M5</th><th class="c">M6</th></tr>
+<tr><td class="b">Jan</td><td class="c" style="background:var(--d);color:#fff;">100%</td><td class="c" style="background:var(--m);color:#fff;">68%</td><td class="c" style="background:var(--mu);color:#fff;">52%</td><td class="c" style="background:var(--b);">44%</td><td class="c" style="background:var(--b);">38%</td><td class="c" style="background:var(--l);">34%</td><td class="c" style="background:var(--l);">31%</td></tr>
+<tr><td class="b">Feb</td><td class="c" style="background:var(--d);color:#fff;">100%</td><td class="c" style="background:var(--m);color:#fff;">72%</td><td class="c" style="background:var(--mu);color:#fff;">56%</td><td class="c" style="background:var(--b);">48%</td><td class="c" style="background:var(--b);">42%</td><td class="c" style="background:var(--l);">38%</td><td class="c"></td></tr>
+<tr><td class="b">Mar</td><td class="c" style="background:var(--d);color:#fff;">100%</td><td class="c" style="background:var(--m);color:#fff;">75%</td><td class="c" style="background:var(--mu);color:#fff;">60%</td><td class="c" style="background:var(--mu);color:#fff;">52%</td><td class="c" style="background:var(--b);">46%</td><td class="c"></td><td class="c"></td></tr>
+<tr><td class="b">Apr</td><td class="c" style="background:var(--d);color:#fff;">100%</td><td class="c" style="background:var(--m);color:#fff;">78%</td><td class="c" style="background:var(--mu);color:#fff;">64%</td><td class="c" style="background:var(--mu);color:#fff;">55%</td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+<tr><td class="b">May</td><td class="c" style="background:var(--d);color:#fff;">100%</td><td class="c" style="background:var(--m);color:#fff;">80%</td><td class="c" style="background:var(--mu);color:#fff;">66%</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+</table>
+</div>
+<div class="xs mu mt-8 ct">Improving trend: M1 retention up from 68% (Jan) to 80% (May). New onboarding flow deployed in March.</div>
+<div class="sn">18 / 50</div>
+</div>
+
+<!-- ═══ 19: Scatter Plot ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Feature Engagement vs. Retention Impact</h2>
+<div class="chart-area mt-20" style="height:clamp(160px,24vw,240px);padding:clamp(12px,2vw,20px);">
+<svg viewBox="0 0 400 200" style="height:100%;">
+<line x1="0" y1="200" x2="400" y2="200" class="ax-line"/><line x1="0" y1="0" x2="0" y2="200" class="ax-line"/>
+<line x1="0" y1="100" x2="400" y2="100" class="ax-line" stroke-dasharray="4"/><line x1="200" y1="0" x2="200" y2="200" class="ax-line" stroke-dasharray="4"/>
+<text x="200" y="215" class="ax-label" text-anchor="middle">Feature Engagement →</text>
+<text x="-10" y="100" class="ax-label" text-anchor="middle" transform="rotate(-90,-10,100)">Retention Impact →</text>
+<circle cx="320" cy="40" r="8" fill="var(--d)" opacity="0.8"/><circle cx="280" cy="60" r="6" fill="var(--d)" opacity="0.7"/>
+<circle cx="180" cy="80" r="7" fill="var(--mu)" opacity="0.7"/><circle cx="220" cy="120" r="5" fill="var(--mu)" opacity="0.6"/>
+<circle cx="100" cy="140" r="6" fill="var(--b)" opacity="0.7"/><circle cx="60" cy="160" r="5" fill="var(--b)" opacity="0.6"/>
+<circle cx="350" cy="90" r="9" fill="var(--d)" opacity="0.8"/><circle cx="140" cy="170" r="4" fill="var(--l)"/>
+</svg>
+</div>
+<div class="xs mu ct">Each dot = one feature. Size = user volume. Top-right = high engagement + high retention impact.</div>
+<div class="sn">19 / 50</div>
+</div>
+
+<!-- ═══ 20: Bubble Chart ═══ -->
+<div class="S g">
+<div class="sc">Charts</div>
+<h2 class="t">Market Opportunity Map</h2>
+<div class="chart-area mt-20" style="height:clamp(160px,24vw,240px);padding:clamp(12px,2vw,20px);background:var(--w);">
+<svg viewBox="0 0 400 200" style="height:100%;">
+<line x1="0" y1="200" x2="400" y2="200" class="ax-line"/><line x1="0" y1="0" x2="0" y2="200" class="ax-line"/>
+<text x="200" y="218" class="ax-label" text-anchor="middle">Market Size →</text>
+<text x="-14" y="100" class="ax-label" text-anchor="middle" transform="rotate(-90,-14,100)">Growth Rate →</text>
+<circle cx="300" cy="50" r="28" fill="var(--d)" opacity="0.15" stroke="var(--d)" stroke-width="1.5"/><text x="300" y="53" class="ax-label" text-anchor="middle" style="font-size:9px;fill:var(--d);font-weight:600;">US</text>
+<circle cx="180" cy="70" r="20" fill="var(--mu)" opacity="0.15" stroke="var(--mu)" stroke-width="1.5"/><text x="180" y="73" class="ax-label" text-anchor="middle" style="font-size:9px;fill:var(--m);font-weight:600;">MX</text>
+<circle cx="120" cy="40" r="16" fill="var(--d)" opacity="0.15" stroke="var(--d)" stroke-width="1.5"/><text x="120" y="43" class="ax-label" text-anchor="middle" style="font-size:9px;fill:var(--d);font-weight:600;">BR</text>
+<circle cx="260" cy="130" r="14" fill="var(--b)" opacity="0.2" stroke="var(--b)" stroke-width="1.5"/><text x="260" y="133" class="ax-label" text-anchor="middle" style="font-size:8px;fill:var(--m);">UK</text>
+<circle cx="80" cy="160" r="10" fill="var(--b)" opacity="0.2" stroke="var(--b)" stroke-width="1.5"/><text x="80" y="163" class="ax-label" text-anchor="middle" style="font-size:8px;fill:var(--m);">CO</text>
+</svg>
+</div>
+<div class="xs mu ct mt-4">Bubble size = addressable market. Y-axis = growth rate. X-axis = current market size.</div>
+<div class="sn">20 / 50</div>
+</div>
+
+<!-- ═══ 21: Histogram ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Transaction Value Distribution</h2>
+<div class="chart-area mt-20" style="height:clamp(120px,18vw,180px);">
+<div class="vbar" style="height:100%;gap:1px;">
+<div class="col-w"><div class="b-fill" style="height:15%;background:var(--l);"></div><div class="b-label">$0-50</div></div>
+<div class="col-w"><div class="b-fill" style="height:35%;background:var(--b);"></div><div class="b-label">$50-100</div></div>
+<div class="col-w"><div class="b-fill" style="height:65%;background:var(--mu);"></div><div class="b-label">$100-200</div></div>
+<div class="col-w"><div class="b-fill" style="height:100%;background:var(--d);"></div><div class="b-label">$200-300</div></div>
+<div class="col-w"><div class="b-fill" style="height:80%;background:var(--m);"></div><div class="b-label">$300-500</div></div>
+<div class="col-w"><div class="b-fill" style="height:40%;background:var(--mu);"></div><div class="b-label">$500-1K</div></div>
+<div class="col-w"><div class="b-fill" style="height:18%;background:var(--b);"></div><div class="b-label">$1K-2K</div></div>
+<div class="col-w"><div class="b-fill" style="height:8%;background:var(--l);"></div><div class="b-label">$2K+</div></div>
+</div>
+</div>
+<div class="flex jb mt-4"><span class="xs mu">Median: $248</span><span class="xs mu">Mean: $312</span><span class="xs mu">n = 142,847</span></div>
+<div class="sn">21 / 50</div>
+</div>
+
+<!-- ═══ 22: Distribution / Box Plot ═══ -->
+<div class="S w">
+<div class="sc">Charts</div>
+<h2 class="t">Response Time Distribution by Tier</h2>
+<div class="mt-20" style="display:flex;flex-direction:column;gap:clamp(12px,2vw,20px);">
+<div class="flex ac gap-8"><span class="xs rt" style="width:clamp(50px,8vw,80px);">Free</span><div style="flex:1;position:relative;height:20px;"><div style="position:absolute;left:10%;right:20%;top:8px;height:2px;background:var(--b);"></div><div style="position:absolute;left:25%;width:40%;top:0;height:20px;background:var(--l);border:1px solid var(--b);border-radius:2px;"></div><div style="position:absolute;left:42%;top:0;height:20px;width:2px;background:var(--d);"></div></div><span class="xs mono mu" style="width:50px;">4.2s</span></div>
+<div class="flex ac gap-8"><span class="xs rt" style="width:clamp(50px,8vw,80px);">Pro</span><div style="flex:1;position:relative;height:20px;"><div style="position:absolute;left:5%;right:35%;top:8px;height:2px;background:var(--b);"></div><div style="position:absolute;left:15%;width:30%;top:0;height:20px;background:var(--mu);border:1px solid var(--m);border-radius:2px;"></div><div style="position:absolute;left:28%;top:0;height:20px;width:2px;background:var(--d);"></div></div><span class="xs mono mu" style="width:50px;">1.8s</span></div>
+<div class="flex ac gap-8"><span class="xs rt" style="width:clamp(50px,8vw,80px);">Enterprise</span><div style="flex:1;position:relative;height:20px;"><div style="position:absolute;left:2%;right:55%;top:8px;height:2px;background:var(--b);"></div><div style="position:absolute;left:8%;width:20%;top:0;height:20px;background:var(--d);border:1px solid var(--k);border-radius:2px;"></div><div style="position:absolute;left:16%;top:0;height:20px;width:2px;background:var(--w);"></div></div><span class="xs mono mu" style="width:50px;">0.6s</span></div>
+</div>
+<div class="xs mu ct mt-8">Box = IQR (25th–75th percentile). Line = median. Whiskers = 5th–95th percentile.</div>
+<div class="sn">22 / 50</div>
+</div>
+
+<!-- ═══ 23: Data Table + Conditional Formatting ═══ -->
+<div class="S w">
+<div class="sc">Tables</div>
+<h2 class="t">Feature Performance Scorecard</h2>
+<div style="overflow-x:auto;"><table class="dt mt-20">
+<tr><th>Feature</th><th class="c">DAU</th><th class="c">Retention</th><th class="c">Revenue</th><th class="c">Satisfaction</th><th class="c">Score</th></tr>
+<tr><td class="b">Quick Send</td><td class="c" style="background:var(--d);color:#fff;">142K</td><td class="c" style="background:var(--d);color:#fff;">82%</td><td class="c" style="background:var(--d);color:#fff;">$4.2M</td><td class="c" style="background:var(--m);color:#fff;">4.2</td><td class="c b">A+</td></tr>
+<tr><td class="b">Balance Check</td><td class="c" style="background:var(--m);color:#fff;">98K</td><td class="c" style="background:var(--mu);color:#fff;">68%</td><td class="c" style="background:var(--l);">$0.8M</td><td class="c" style="background:var(--d);color:#fff;">4.5</td><td class="c b">B+</td></tr>
+<tr><td class="b">History</td><td class="c" style="background:var(--mu);color:#fff;">64K</td><td class="c" style="background:var(--b);">55%</td><td class="c" style="background:var(--l);">$0.2M</td><td class="c" style="background:var(--mu);color:#fff;">3.8</td><td class="c b">B</td></tr>
+<tr><td class="b">Rate Alerts</td><td class="c" style="background:var(--b);">22K</td><td class="c" style="background:var(--d);color:#fff;">78%</td><td class="c" style="background:var(--mu);color:#fff;">$1.1M</td><td class="c" style="background:var(--d);color:#fff;">4.4</td><td class="c b">A</td></tr>
+<tr><td class="b">Scheduling</td><td class="c" style="background:var(--l);">8K</td><td class="c" style="background:var(--l);">42%</td><td class="c" style="background:var(--l);">$0.1M</td><td class="c" style="background:var(--b);">3.2</td><td class="c b">C</td></tr>
+</table></div>
+<div class="xs mu mt-4">Cell shading = relative performance within column. Darker = higher.</div>
+<div class="sn">23 / 50</div>
+</div>
+
+<!-- ═══ 24: Ranked List with Bars ═══ -->
+<div class="S w">
+<div class="sc">Tables</div>
+<h2 class="t">Top 10 Error Codes by Frequency</h2>
+<div class="hbar mt-20">
+<div class="row-w"><div class="h-label mono">ERR_4001</div><div class="h-track"><div class="h-fill" style="width:100%;background:var(--d);"></div></div><div class="h-val">12,847</div></div>
+<div class="row-w"><div class="h-label mono">ERR_3022</div><div class="h-track"><div class="h-fill" style="width:72%;background:var(--d);"></div></div><div class="h-val">9,250</div></div>
+<div class="row-w"><div class="h-label mono">ERR_5001</div><div class="h-track"><div class="h-fill" style="width:54%;background:var(--m);"></div></div><div class="h-val">6,938</div></div>
+<div class="row-w"><div class="h-label mono">ERR_4003</div><div class="h-track"><div class="h-fill" style="width:38%;background:var(--mu);"></div></div><div class="h-val">4,882</div></div>
+<div class="row-w"><div class="h-label mono">ERR_4010</div><div class="h-track"><div class="h-fill" style="width:28%;background:var(--mu);"></div></div><div class="h-val">3,597</div></div>
+<div class="row-w"><div class="h-label mono">ERR_3001</div><div class="h-track"><div class="h-fill" style="width:18%;background:var(--b);"></div></div><div class="h-val">2,314</div></div>
+<div class="row-w"><div class="h-label mono">ERR_5005</div><div class="h-track"><div class="h-fill" style="width:12%;background:var(--b);"></div></div><div class="h-val">1,542</div></div>
+<div class="row-w"><div class="h-label mono">ERR_4022</div><div class="h-track"><div class="h-fill" style="width:8%;background:var(--l);"></div></div><div class="h-val">1,028</div></div>
+</div>
+<div class="sn">24 / 50</div>
+</div>
+
+<!-- ═══ 25: Bullet Chart / Benchmark ═══ -->
+<div class="S w">
+<div class="sc">Comparisons</div>
+<h2 class="t">KPI Performance vs. Target</h2>
+<div class="mt-20" style="display:flex;flex-direction:column;gap:clamp(10px,1.5vw,16px);">
+<div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,10vw,100px);">Revenue</span><div style="flex:1;height:clamp(20px,2.5vw,28px);background:var(--l);border-radius:2px;position:relative;"><div style="position:absolute;left:0;top:0;height:100%;width:75%;background:var(--bg);border-radius:2px;"></div><div style="position:absolute;left:0;top:0;height:100%;width:85%;background:var(--d);border-radius:2px;"></div><div style="position:absolute;left:90%;top:-2px;bottom:-2px;width:2px;background:var(--k);"></div></div><span class="xs mono" style="width:40px;">85%</span></div>
+<div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,10vw,100px);">Users</span><div style="flex:1;height:clamp(20px,2.5vw,28px);background:var(--l);border-radius:2px;position:relative;"><div style="position:absolute;left:0;top:0;height:100%;width:75%;background:var(--bg);border-radius:2px;"></div><div style="position:absolute;left:0;top:0;height:100%;width:92%;background:var(--d);border-radius:2px;"></div><div style="position:absolute;left:80%;top:-2px;bottom:-2px;width:2px;background:var(--k);"></div></div><span class="xs mono" style="width:40px;">92%</span></div>
+<div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,10vw,100px);">NPS</span><div style="flex:1;height:clamp(20px,2.5vw,28px);background:var(--l);border-radius:2px;position:relative;"><div style="position:absolute;left:0;top:0;height:100%;width:75%;background:var(--bg);border-radius:2px;"></div><div style="position:absolute;left:0;top:0;height:100%;width:68%;background:var(--mu);border-radius:2px;"></div><div style="position:absolute;left:85%;top:-2px;bottom:-2px;width:2px;background:var(--k);"></div></div><span class="xs mono" style="width:40px;">68%</span></div>
+<div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,10vw,100px);">Churn</span><div style="flex:1;height:clamp(20px,2.5vw,28px);background:var(--l);border-radius:2px;position:relative;"><div style="position:absolute;left:0;top:0;height:100%;width:75%;background:var(--bg);border-radius:2px;"></div><div style="position:absolute;left:0;top:0;height:100%;width:55%;background:var(--d);border-radius:2px;"></div><div style="position:absolute;left:70%;top:-2px;bottom:-2px;width:2px;background:var(--k);"></div></div><span class="xs mono" style="width:40px;">55%</span></div>
+</div>
+<div class="flex gap-16 mt-8 ac" style="justify-content:center;"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--d);border-radius:2px;"></div><span class="xs">Actual</span></div><div class="flex ac gap-4"><div style="width:2px;height:16px;background:var(--k);"></div><span class="xs">Target</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--bg);border-radius:2px;"></div><span class="xs">Acceptable</span></div></div>
+<div class="sn">25 / 50</div>
+</div>
+
+<!-- ═══ 26–50: Remaining slides ═══ -->
+
+<div class="S w"><div class="sc">Comparisons</div><h2 class="t">Progress Toward Annual Goals</h2><div class="g3 mt-20"><div class="card"><div class="sm b">Revenue</div><div class="xs mu mb-8">$15.2M / $18M</div><div class="bar-t" style="height:clamp(12px,1.5vw,16px);"><div class="bar-f" style="width:84%;background:var(--d);"></div></div><div class="flex jb mt-4"><span class="xs mu">84% complete</span><span class="xs mono mu">$2.8M remaining</span></div></div><div class="card"><div class="sm b">Users</div><div class="xs mu mb-8">2.1M / 3M</div><div class="bar-t" style="height:clamp(12px,1.5vw,16px);"><div class="bar-f" style="width:70%;background:var(--mu);"></div></div><div class="flex jb mt-4"><span class="xs mu">70% complete</span><span class="xs mono mu">900K remaining</span></div></div><div class="card"><div class="sm b">Markets</div><div class="xs mu mb-8">4 / 6</div><div class="bar-t" style="height:clamp(12px,1.5vw,16px);"><div class="bar-f" style="width:67%;background:var(--mu);"></div></div><div class="flex jb mt-4"><span class="xs mu">67% complete</span><span class="xs mono mu">2 remaining</span></div></div></div><div class="sn">26 / 50</div></div>
+
+<div class="S w"><div class="sc">Comparisons</div><h2 class="t">Before / After — Key Metrics</h2><div class="g4 mt-20"><div class="card ct"><div class="lb mb-8">Onboarding Time</div><div class="stat-sm"><div class="v" style="color:var(--b);text-decoration:line-through;font-size:clamp(14px,2vw,20px);">8.2 min</div></div><div class="stat-sm mt-4"><div class="v dk">2.4 min</div></div><div class="pill pill-d mt-8" style="font-size:8px;">-71%</div></div><div class="card ct"><div class="lb mb-8">Activation Rate</div><div class="stat-sm"><div class="v" style="color:var(--b);text-decoration:line-through;font-size:clamp(14px,2vw,20px);">34%</div></div><div class="stat-sm mt-4"><div class="v dk">62%</div></div><div class="pill pill-d mt-8" style="font-size:8px;">+82%</div></div><div class="card ct"><div class="lb mb-8">Support Tickets</div><div class="stat-sm"><div class="v" style="color:var(--b);text-decoration:line-through;font-size:clamp(14px,2vw,20px);">1,240</div></div><div class="stat-sm mt-4"><div class="v dk">480</div></div><div class="pill pill-d mt-8" style="font-size:8px;">-61%</div></div><div class="card ct"><div class="lb mb-8">CSAT</div><div class="stat-sm"><div class="v" style="color:var(--b);text-decoration:line-through;font-size:clamp(14px,2vw,20px);">3.2</div></div><div class="stat-sm mt-4"><div class="v dk">4.6</div></div><div class="pill pill-d mt-8" style="font-size:8px;">+44%</div></div></div><div class="sn">27 / 50</div></div>
+
+<div class="S w"><div class="sc">Time Series</div><h2 class="t">Revenue with Event Annotations</h2><div class="chart-area mt-20" style="height:clamp(140px,20vw,200px);padding:clamp(12px,2vw,20px);"><svg viewBox="0 0 500 120" preserveAspectRatio="none" style="height:100%;"><line x1="0" y1="120" x2="500" y2="120" class="ax-line"/><polyline points="0,100 42,95 84,90 126,85 168,80 210,72 252,60 294,55 336,48 378,40 420,35 462,28 500,20" fill="none" stroke="var(--d)" stroke-width="2.5"/><line x1="210" y1="0" x2="210" y2="120" stroke="var(--mu)" stroke-width="1" stroke-dasharray="3"/><text x="212" y="10" style="font-size:7px;fill:var(--m);">Launch v2.0</text><line x1="378" y1="0" x2="378" y2="120" stroke="var(--mu)" stroke-width="1" stroke-dasharray="3"/><text x="380" y="10" style="font-size:7px;fill:var(--m);">Price Change</text></svg></div><div class="sn">28 / 50</div></div>
+
+<div class="S w"><div class="sc">Time Series</div><h2 class="t">Engagement by Feature — Small Multiples</h2><div class="g3 mt-20"><div class="card"><div class="sm b mb-4">Send Money</div><div class="chart-area" style="height:48px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,28 20,24 40,20 60,18 80,14 100,10 120,6" fill="none" stroke="var(--d)" stroke-width="1.5"/></svg></div><div class="xs mono mu mt-4">+32% ↑</div></div><div class="card"><div class="sm b mb-4">Balance</div><div class="chart-area" style="height:48px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,15 20,14 40,16 60,12 80,14 100,10 120,8" fill="none" stroke="var(--mu)" stroke-width="1.5"/></svg></div><div class="xs mono mu mt-4">+12% ↑</div></div><div class="card"><div class="sm b mb-4">History</div><div class="chart-area" style="height:48px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,10 20,12 40,14 60,15 80,18 100,20 120,22" fill="none" stroke="var(--b)" stroke-width="1.5"/></svg></div><div class="xs mono mu mt-4">-8% ↓</div></div><div class="card"><div class="sm b mb-4">Alerts</div><div class="chart-area" style="height:48px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,25 20,20 40,16 60,12 80,8 100,6 120,4" fill="none" stroke="var(--d)" stroke-width="1.5"/></svg></div><div class="xs mono mu mt-4">+48% ↑</div></div><div class="card"><div class="sm b mb-4">Settings</div><div class="chart-area" style="height:48px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,14 20,15 40,14 60,16 80,15 100,14 120,15" fill="none" stroke="var(--b)" stroke-width="1.5"/></svg></div><div class="xs mono mu mt-4">+1% →</div></div><div class="card"><div class="sm b mb-4">Support</div><div class="chart-area" style="height:48px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,8 20,10 40,14 60,16 80,20 100,22 120,26" fill="none" stroke="var(--b)" stroke-width="1.5"/></svg></div><div class="xs mono mu mt-4">-18% ↓</div></div></div><div class="sn">29 / 50</div></div>
+
+<div class="S w"><div class="sc">Time Series</div><h2 class="t">Slope Chart — Metric Shift Q3 → Q4</h2><div class="chart-area mt-20" style="height:clamp(160px,22vw,220px);padding:clamp(16px,2vw,24px);"><svg viewBox="0 0 400 160" style="height:100%;"><text x="50" y="10" class="ax-label" text-anchor="middle" style="font-size:10px;font-weight:600;">Q3</text><text x="350" y="10" class="ax-label" text-anchor="middle" style="font-size:10px;font-weight:600;">Q4</text><line x1="50" y1="20" x2="50" y2="150" class="ax-line"/><line x1="350" y1="20" x2="350" y2="150" class="ax-line"/><line x1="50" y1="40" x2="350" y2="25" stroke="var(--d)" stroke-width="2"/><text x="44" y="43" class="ax-label" text-anchor="end" style="font-size:8px;">Revenue $8.2M</text><text x="356" y="28" class="ax-label" style="font-size:8px;">$9.5M</text><line x1="50" y1="70" x2="350" y2="55" stroke="var(--mu)" stroke-width="2"/><text x="44" y="73" class="ax-label" text-anchor="end" style="font-size:8px;">Users 1.8M</text><text x="356" y="58" class="ax-label" style="font-size:8px;">2.1M</text><line x1="50" y1="100" x2="350" y2="110" stroke="var(--b)" stroke-width="2"/><text x="44" y="103" class="ax-label" text-anchor="end" style="font-size:8px;">Churn 3.8%</text><text x="356" y="113" class="ax-label" style="font-size:8px;">4.2%</text><line x1="50" y1="130" x2="350" y2="120" stroke="var(--d)" stroke-width="2"/><text x="44" y="133" class="ax-label" text-anchor="end" style="font-size:8px;">NPS 62</text><text x="356" y="123" class="ax-label" style="font-size:8px;">68</text></svg></div><div class="sn">30 / 50</div></div>
+
+<div class="S w"><div class="sc">Comparisons</div><h2 class="t">Feature Adoption Rate</h2><div class="mt-20" style="display:flex;flex-direction:column;gap:clamp(8px,1.2vw,12px);"><div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,12vw,100px);">Quick Send</span><div style="flex:1;display:flex;align-items:center;"><div style="width:2px;height:clamp(12px,1.5vw,16px);background:var(--d);margin-right:-1px;z-index:1;"></div><div style="flex:0 0 78%;height:2px;background:var(--d);"></div><div style="width:8px;height:8px;border-radius:50%;background:var(--d);margin-left:-4px;"></div></div><span class="xs mono" style="width:30px;">78%</span></div><div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,12vw,100px);">Balance</span><div style="flex:1;display:flex;align-items:center;"><div style="width:2px;height:clamp(12px,1.5vw,16px);background:var(--m);margin-right:-1px;z-index:1;"></div><div style="flex:0 0 65%;height:2px;background:var(--m);"></div><div style="width:8px;height:8px;border-radius:50%;background:var(--m);margin-left:-4px;"></div></div><span class="xs mono" style="width:30px;">65%</span></div><div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,12vw,100px);">Alerts</span><div style="flex:1;display:flex;align-items:center;"><div style="width:2px;height:clamp(12px,1.5vw,16px);background:var(--mu);margin-right:-1px;z-index:1;"></div><div style="flex:0 0 42%;height:2px;background:var(--mu);"></div><div style="width:8px;height:8px;border-radius:50%;background:var(--mu);margin-left:-4px;"></div></div><span class="xs mono" style="width:30px;">42%</span></div><div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,12vw,100px);">Scheduling</span><div style="flex:1;display:flex;align-items:center;"><div style="width:2px;height:clamp(12px,1.5vw,16px);background:var(--b);margin-right:-1px;z-index:1;"></div><div style="flex:0 0 18%;height:2px;background:var(--b);"></div><div style="width:8px;height:8px;border-radius:50%;background:var(--b);margin-left:-4px;"></div></div><span class="xs mono" style="width:30px;">18%</span></div></div><div class="sn">31 / 50</div></div>
+
+<div class="S w"><div class="sc">Comparisons</div><h2 class="t">Sentiment by Feature</h2><div class="mt-20" style="display:flex;flex-direction:column;gap:clamp(6px,1vw,10px);"><div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,12vw,100px);">Quick Send</span><div style="flex:1;height:clamp(16px,2vw,22px);display:flex;border-radius:2px;overflow:hidden;"><div style="width:72%;background:var(--d);"></div><div style="width:12%;background:var(--mu);"></div><div style="width:16%;background:var(--l);"></div></div></div><div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,12vw,100px);">Balance</span><div style="flex:1;height:clamp(16px,2vw,22px);display:flex;border-radius:2px;overflow:hidden;"><div style="width:58%;background:var(--d);"></div><div style="width:22%;background:var(--mu);"></div><div style="width:20%;background:var(--l);"></div></div></div><div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,12vw,100px);">Alerts</span><div style="flex:1;height:clamp(16px,2vw,22px);display:flex;border-radius:2px;overflow:hidden;"><div style="width:45%;background:var(--d);"></div><div style="width:30%;background:var(--mu);"></div><div style="width:25%;background:var(--l);"></div></div></div><div class="flex ac gap-8"><span class="xs rt" style="width:clamp(60px,12vw,100px);">Scheduling</span><div style="flex:1;height:clamp(16px,2vw,22px);display:flex;border-radius:2px;overflow:hidden;"><div style="width:30%;background:var(--d);"></div><div style="width:25%;background:var(--mu);"></div><div style="width:45%;background:var(--l);"></div></div></div></div><div class="flex gap-12 mt-8 ac" style="justify-content:center;"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--d);border-radius:2px;"></div><span class="xs">Positive</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--mu);border-radius:2px;"></div><span class="xs">Neutral</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--l);border-radius:2px;"></div><span class="xs">Negative</span></div></div><div class="sn">32 / 50</div></div>
+
+<div class="S w"><div class="sc">Comparisons</div><h2 class="t">SLA Compliance</h2><div class="g3 mt-20"><div class="card ct"><div class="gauge-wrap" style="height:clamp(80px,12vw,120px);"><svg viewBox="0 0 100 60" style="width:clamp(80px,12vw,120px);"><path d="M10,55 A40,40 0 0,1 90,55" fill="none" stroke="var(--l)" stroke-width="8" stroke-linecap="round"/><path d="M10,55 A40,40 0 0,1 82,30" fill="none" stroke="var(--d)" stroke-width="8" stroke-linecap="round"/></svg><div style="position:absolute;bottom:0;"><div class="mono b md">92%</div></div></div><div class="xs mu mt-4">API Uptime</div><div class="xs mu">Target: 99.9%</div></div><div class="card ct"><div class="gauge-wrap" style="height:clamp(80px,12vw,120px);"><svg viewBox="0 0 100 60" style="width:clamp(80px,12vw,120px);"><path d="M10,55 A40,40 0 0,1 90,55" fill="none" stroke="var(--l)" stroke-width="8" stroke-linecap="round"/><path d="M10,55 A40,40 0 0,1 75,22" fill="none" stroke="var(--d)" stroke-width="8" stroke-linecap="round"/></svg><div style="position:absolute;bottom:0;"><div class="mono b md">87%</div></div></div><div class="xs mu mt-4">P95 Latency</div><div class="xs mu">Target: <200ms</div></div><div class="card ct"><div class="gauge-wrap" style="height:clamp(80px,12vw,120px);"><svg viewBox="0 0 100 60" style="width:clamp(80px,12vw,120px);"><path d="M10,55 A40,40 0 0,1 90,55" fill="none" stroke="var(--l)" stroke-width="8" stroke-linecap="round"/><path d="M10,55 A40,40 0 0,1 88,48" fill="none" stroke="var(--d)" stroke-width="8" stroke-linecap="round"/></svg><div style="position:absolute;bottom:0;"><div class="mono b md">98%</div></div></div><div class="xs mu mt-4">Error Rate</div><div class="xs mu">Target: <0.1%</div></div></div><div class="sn">33 / 50</div></div>
+
+<div class="S w"><div class="sc">Flow</div><h2 class="t">User Flow — Sankey Style</h2><div class="chart-area mt-20" style="height:clamp(140px,20vw,200px);padding:clamp(12px,2vw,20px);"><svg viewBox="0 0 500 140" style="height:100%;"><text x="20" y="15" class="ax-label" style="font-size:9px;font-weight:600;">Entry</text><text x="200" y="15" class="ax-label" style="font-size:9px;font-weight:600;">Decision</text><text x="420" y="15" class="ax-label" style="font-size:9px;font-weight:600;">Outcome</text><rect x="0" y="25" width="60" height="100" fill="var(--d)" rx="3"/><text x="30" y="78" text-anchor="middle" style="font-size:8px;fill:#fff;">100K</text><path d="M60,40 C130,40 130,30 200,30" fill="none" stroke="var(--d)" stroke-width="30" opacity="0.15"/><path d="M60,90 C130,90 130,100 200,100" fill="none" stroke="var(--mu)" stroke-width="20" opacity="0.15"/><rect x="200" y="20" width="50" height="40" fill="var(--d)" rx="3"/><text x="225" y="44" text-anchor="middle" style="font-size:7px;fill:#fff;">Convert</text><rect x="200" y="80" width="50" height="40" fill="var(--mu)" rx="3"/><text x="225" y="104" text-anchor="middle" style="font-size:7px;fill:#fff;">Drop</text><path d="M250,40 C320,40 320,35 400,35" fill="none" stroke="var(--d)" stroke-width="20" opacity="0.15"/><path d="M250,100 C320,100 320,110 400,110" fill="none" stroke="var(--b)" stroke-width="15" opacity="0.15"/><rect x="400" y="25" width="60" height="30" fill="var(--d)" rx="3"/><text x="430" y="43" text-anchor="middle" style="font-size:7px;fill:#fff;">Retain</text><rect x="400" y="95" width="60" height="30" fill="var(--b)" rx="3"/><text x="430" y="113" text-anchor="middle" style="font-size:7px;fill:var(--m);">Churn</text></svg></div><div class="sn">34 / 50</div></div>
+
+<div class="S w"><div class="sc">Heatmaps</div><h2 class="t">Activity Calendar</h2><div class="mt-20" style="display:grid;grid-template-columns:repeat(12,1fr);gap:2px;"><div style="grid-column:span 12;display:flex;justify-content:space-between;margin-bottom:4px;"><span class="xs mu">Jan</span><span class="xs mu">Feb</span><span class="xs mu">Mar</span><span class="xs mu">Apr</span><span class="xs mu">May</span><span class="xs mu">Jun</span><span class="xs mu">Jul</span><span class="xs mu">Aug</span><span class="xs mu">Sep</span><span class="xs mu">Oct</span><span class="xs mu">Nov</span><span class="xs mu">Dec</span></div></div><div style="display:grid;grid-template-columns:repeat(52,1fr);grid-template-rows:repeat(7,1fr);gap:2px;margin-top:4px;"><style>.hc{aspect-ratio:1;border-radius:2px;min-width:0;}</style><script>document.currentScript.parentElement.innerHTML+=Array.from({length:364},(_,i)=>{const v=Math.random();const c=v>0.8?'var(--d)':v>0.6?'var(--m)':v>0.4?'var(--mu)':v>0.2?'var(--b)':'var(--l)';return`<div class="hc" style="background:${c};"></div>`}).join('');</script></div><div class="flex gap-8 ac mt-8" style="justify-content:flex-end;"><span class="xs mu">Less</span><div style="width:10px;height:10px;background:var(--l);border-radius:2px;"></div><div style="width:10px;height:10px;background:var(--b);border-radius:2px;"></div><div style="width:10px;height:10px;background:var(--mu);border-radius:2px;"></div><div style="width:10px;height:10px;background:var(--m);border-radius:2px;"></div><div style="width:10px;height:10px;background:var(--d);border-radius:2px;"></div><span class="xs mu">More</span></div><div class="sn">35 / 50</div></div>
+
+<div class="S w"><div class="sc">Heatmaps</div><h2 class="t">Feature Correlation Matrix</h2><div style="overflow-x:auto;margin-top:clamp(12px,2vw,20px);"><table class="dt" style="min-width:400px;"><tr><th></th><th class="c">Send</th><th class="c">Balance</th><th class="c">History</th><th class="c">Alerts</th><th class="c">Settings</th></tr><tr><td class="b">Send</td><td class="c" style="background:var(--d);color:#fff;">1.00</td><td class="c" style="background:var(--m);color:#fff;">0.72</td><td class="c" style="background:var(--mu);color:#fff;">0.58</td><td class="c" style="background:var(--m);color:#fff;">0.65</td><td class="c" style="background:var(--b);">0.22</td></tr><tr><td class="b">Balance</td><td class="c" style="background:var(--m);color:#fff;">0.72</td><td class="c" style="background:var(--d);color:#fff;">1.00</td><td class="c" style="background:var(--m);color:#fff;">0.68</td><td class="c" style="background:var(--mu);color:#fff;">0.45</td><td class="c" style="background:var(--b);">0.30</td></tr><tr><td class="b">History</td><td class="c" style="background:var(--mu);color:#fff;">0.58</td><td class="c" style="background:var(--m);color:#fff;">0.68</td><td class="c" style="background:var(--d);color:#fff;">1.00</td><td class="c" style="background:var(--b);">0.35</td><td class="c" style="background:var(--b);">0.28</td></tr><tr><td class="b">Alerts</td><td class="c" style="background:var(--m);color:#fff;">0.65</td><td class="c" style="background:var(--mu);color:#fff;">0.45</td><td class="c" style="background:var(--b);">0.35</td><td class="c" style="background:var(--d);color:#fff;">1.00</td><td class="c" style="background:var(--l);">0.18</td></tr><tr><td class="b">Settings</td><td class="c" style="background:var(--b);">0.22</td><td class="c" style="background:var(--b);">0.30</td><td class="c" style="background:var(--b);">0.28</td><td class="c" style="background:var(--l);">0.18</td><td class="c" style="background:var(--d);color:#fff;">1.00</td></tr></table></div><div class="xs mu ct mt-4">Pearson correlation coefficient. Darker = stronger positive correlation.</div><div class="sn">36 / 50</div></div>
+
+<div class="S g"><div class="sc">Geographic</div><h2 class="t">Users by Region</h2><div class="sd mt-20"><div class="ph" style="flex:2;height:clamp(160px,24vw,240px);background:var(--w);">Map visualization placeholder</div><div style="flex:1;min-width:160px;"><div class="lb mb-12">Top Markets</div><div class="mb-8"><div class="sm b">United States</div><div class="xs mu">1.2M users &middot; 48%</div><div class="bar-t mt-4"><div class="bar-f" style="width:100%;background:var(--d);"></div></div></div><div class="mb-8"><div class="sm b">Mexico</div><div class="xs mu">420K users &middot; 17%</div><div class="bar-t mt-4"><div class="bar-f" style="width:35%;background:var(--m);"></div></div></div><div class="mb-8"><div class="sm b">Brazil</div><div class="xs mu">280K users &middot; 11%</div><div class="bar-t mt-4"><div class="bar-f" style="width:23%;background:var(--mu);"></div></div></div><div><div class="sm b">Other</div><div class="xs mu">600K users &middot; 24%</div><div class="bar-t mt-4"><div class="bar-f" style="width:50%;background:var(--b);"></div></div></div></div></div><div class="sn">37 / 50</div></div>
+
+<!-- ═══ 38: Dashboard 4-panel ═══ -->
+<div class="S w"><div class="sc">Dashboards</div><h2 class="t">Product Health Dashboard</h2><div class="g2 mt-20"><div class="card"><div class="lb mb-4">Daily Active Users</div><div class="stat-sm"><div class="v dk">584K</div></div><div class="chart-area mt-8" style="height:48px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,28 10,25 20,20 30,22 40,18 50,15 60,12 70,14 80,10 90,8 100,6 110,4 120,2" fill="none" stroke="var(--d)" stroke-width="1.5"/></svg></div></div><div class="card"><div class="lb mb-4">Revenue</div><div class="stat-sm"><div class="v dk">$1.8M</div></div><div class="chart-area mt-8" style="height:48px;padding:4px;display:flex;align-items:flex-end;gap:3px;"><div style="flex:1;height:50%;background:var(--l);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:65%;background:var(--l);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:55%;background:var(--b);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:80%;background:var(--mu);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:70%;background:var(--mu);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:90%;background:var(--d);border-radius:2px 2px 0 0;"></div></div></div><div class="card"><div class="lb mb-4">Conversion Funnel</div><div class="fnl" style="gap:2px;"><div class="fb" style="width:100%;background:var(--d);height:18px;font-size:8px;">Visit 100%</div><div class="fb" style="width:70%;background:var(--m);height:18px;font-size:8px;">Signup 62%</div><div class="fb" style="width:40%;background:var(--mu);height:18px;font-size:8px;">Convert 28%</div></div></div><div class="card"><div class="lb mb-4">Error Rate (24h)</div><div class="stat-sm"><div class="v dk">0.04%</div></div><div class="chart-area mt-8" style="height:48px;padding:4px;"><svg viewBox="0 0 120 30" preserveAspectRatio="none"><polyline points="0,15 10,12 20,14 30,8 40,10 50,6 60,8 70,4 80,6 90,4 100,3 110,5 120,2" fill="none" stroke="var(--mu)" stroke-width="1.5"/></svg></div></div></div><div class="sn">38 / 50</div></div>
+
+<!-- ═══ 39: Dashboard 6-panel ═══ -->
+<div class="S d"><div class="sc">Dashboards</div><h2 class="t">Executive Dashboard</h2><div class="g3 mt-20"><div class="card ct"><div class="lb mb-4">MRR</div><div class="stat-sm"><div class="v wh">$1.54M</div><div class="l">+12% MoM</div></div></div><div class="card ct"><div class="lb mb-4">Customers</div><div class="stat-sm"><div class="v wh">4,218</div><div class="l">+8% MoM</div></div></div><div class="card ct"><div class="lb mb-4">ARPU</div><div class="stat-sm"><div class="v wh">$365</div><div class="l">+3% MoM</div></div></div><div class="card ct"><div class="lb mb-4">Churn</div><div class="stat-sm"><div class="v wh">2.1%</div><div class="l">-0.4pp MoM</div></div></div><div class="card ct"><div class="lb mb-4">NPS</div><div class="stat-sm"><div class="v wh">72</div><div class="l">+6 pts QoQ</div></div></div><div class="card ct"><div class="lb mb-4">CAC Payback</div><div class="stat-sm"><div class="v wh">8.2 mo</div><div class="l">-1.1 mo QoQ</div></div></div></div><div class="sn">39 / 50</div></div>
+
+<!-- ═══ 40: Metric + Chart + Table Combo ═══ -->
+<div class="S w"><div class="sc">Dashboards</div><h2 class="t">Weekly Product Review</h2><div class="g4 mt-16"><div class="card ct"><div class="stat-sm"><div class="v">584K</div><div class="l">WAU</div></div></div><div class="card ct"><div class="stat-sm"><div class="v">$342K</div><div class="l">Revenue</div></div></div><div class="card ct"><div class="stat-sm"><div class="v">4.2%</div><div class="l">Conv Rate</div></div></div><div class="card ct"><div class="stat-sm"><div class="v">12ms</div><div class="l">P50 Latency</div></div></div></div><div class="chart-area mt-12" style="height:clamp(80px,12vw,120px);padding:clamp(8px,1.2vw,14px);"><svg viewBox="0 0 400 60" preserveAspectRatio="none" style="height:100%;"><polyline points="0,50 33,45 66,42 99,38 132,40 165,35 198,30 231,28 264,25 297,22 330,18 363,15 400,10" fill="none" stroke="var(--d)" stroke-width="2"/></svg></div><div style="overflow-x:auto;margin-top:12px;"><table class="dt"><tr><th>Feature</th><th class="c">DAU</th><th class="c">Sessions</th><th class="c">Conv %</th><th class="c">Rev</th></tr><tr><td class="b">Send Money</td><td class="c">142K</td><td class="c">284K</td><td class="c b">6.2%</td><td class="c">$180K</td></tr><tr><td class="b">Balance</td><td class="c">98K</td><td class="c">156K</td><td class="c">—</td><td class="c">—</td></tr><tr><td class="b">Alerts</td><td class="c">22K</td><td class="c">28K</td><td class="c b">12.4%</td><td class="c">$42K</td></tr></table></div><div class="sn">40 / 50</div></div>
+
+<!-- ═══ 41–50: Final batch ═══ -->
+<div class="S w"><div class="sc">Tables</div><h2 class="t">Segment Performance Comparison</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Metric</th><th class="c">New Users</th><th class="c">Power Users</th><th class="c">Dormant</th><th class="c">Reactivated</th></tr><tr><td class="b">MAU</td><td class="c">480K</td><td class="c b">1.2M</td><td class="c">320K</td><td class="c">180K</td></tr><tr><td class="b">ARPU</td><td class="c">$2.40</td><td class="c b">$14.80</td><td class="c">$0.60</td><td class="c">$4.20</td></tr><tr><td class="b">D30 Retention</td><td class="c">38%</td><td class="c b">82%</td><td class="c">12%</td><td class="c">45%</td></tr><tr><td class="b">Sessions/Week</td><td class="c">1.8</td><td class="c b">8.4</td><td class="c">0.3</td><td class="c">2.1</td></tr><tr><td class="b">Support Rate</td><td class="c">8.2%</td><td class="c">2.1%</td><td class="c b">1.4%</td><td class="c">5.8%</td></tr></table></div><div class="sn">41 / 50</div></div>
+
+<div class="S w"><div class="sc">Analysis</div><h2 class="t">Variance Analysis — Budget vs. Actual</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Line Item</th><th class="r">Budget</th><th class="r">Actual</th><th class="r">Variance</th><th class="r">Var %</th></tr><tr><td class="b">Revenue</td><td class="r">$1.80M</td><td class="r">$1.92M</td><td class="r b" style="color:var(--d);">+$120K</td><td class="r b" style="color:var(--d);">+6.7%</td></tr><tr><td class="b">COGS</td><td class="r">$540K</td><td class="r">$580K</td><td class="r" style="color:var(--mu);">+$40K</td><td class="r" style="color:var(--mu);">+7.4%</td></tr><tr><td class="b">Gross Profit</td><td class="r">$1.26M</td><td class="r b">$1.34M</td><td class="r b" style="color:var(--d);">+$80K</td><td class="r b" style="color:var(--d);">+6.3%</td></tr><tr><td class="b">OpEx</td><td class="r">$980K</td><td class="r">$1.02M</td><td class="r" style="color:var(--mu);">+$40K</td><td class="r" style="color:var(--mu);">+4.1%</td></tr><tr><td class="b">EBITDA</td><td class="r">$280K</td><td class="r b">$320K</td><td class="r b" style="color:var(--d);">+$40K</td><td class="r b" style="color:var(--d);">+14.3%</td></tr></table></div><div class="sn">42 / 50</div></div>
+
+<div class="S w"><div class="sc">Analysis</div><h2 class="t">Year-over-Year Comparison</h2><div class="chart-area mt-20" style="height:clamp(140px,20vw,200px);">
+<div class="vbar" style="height:100%;">
+<div class="col-w" style="gap:1px;"><div style="display:flex;gap:2px;width:100%;height:55%;align-items:flex-end;"><div style="flex:1;height:70%;background:var(--b);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:100%;background:var(--d);border-radius:2px 2px 0 0;"></div></div><div class="b-label">Q1</div></div>
+<div class="col-w" style="gap:1px;"><div style="display:flex;gap:2px;width:100%;height:65%;align-items:flex-end;"><div style="flex:1;height:72%;background:var(--b);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:100%;background:var(--d);border-radius:2px 2px 0 0;"></div></div><div class="b-label">Q2</div></div>
+<div class="col-w" style="gap:1px;"><div style="display:flex;gap:2px;width:100%;height:78%;align-items:flex-end;"><div style="flex:1;height:65%;background:var(--b);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:100%;background:var(--d);border-radius:2px 2px 0 0;"></div></div><div class="b-label">Q3</div></div>
+<div class="col-w" style="gap:1px;"><div style="display:flex;gap:2px;width:100%;height:95%;align-items:flex-end;"><div style="flex:1;height:68%;background:var(--b);border-radius:2px 2px 0 0;"></div><div style="flex:1;height:100%;background:var(--d);border-radius:2px 2px 0 0;"></div></div><div class="b-label">Q4</div></div>
+</div></div>
+<div class="flex gap-16 mt-8 ac" style="justify-content:center;"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--b);border-radius:2px;"></div><span class="xs">FY2025</span></div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--d);border-radius:2px;"></div><span class="xs">FY2026</span></div></div>
+<div class="sn">43 / 50</div></div>
+
+<div class="S w"><div class="sc">Analysis</div><h2 class="t">Cumulative User Growth</h2><div class="chart-area mt-20" style="height:clamp(120px,18vw,180px);padding:clamp(12px,2vw,20px);"><svg viewBox="0 0 400 100" preserveAspectRatio="none" style="height:100%;"><line x1="0" y1="100" x2="400" y2="100" class="ax-line"/><polygon points="0,98 40,95 80,90 120,82 160,72 200,60 240,48 280,35 320,24 360,14 400,5 400,100 0,100" fill="var(--l)" opacity="0.6"/><polyline points="0,98 40,95 80,90 120,82 160,72 200,60 240,48 280,35 320,24 360,14 400,5" fill="none" stroke="var(--d)" stroke-width="2"/><line x1="280" y1="0" x2="280" y2="100" stroke="var(--mu)" stroke-width="1" stroke-dasharray="3"/><text x="282" y="8" style="font-size:7px;fill:var(--m);">1M milestone</text></svg></div><div class="flex jb mt-4"><span class="xs mu">Jan 2024</span><span class="xs mu">Jul 2024</span><span class="xs mu">Jan 2025</span><span class="xs mu">Jul 2025</span><span class="xs mu">Jan 2026</span></div><div class="sn">44 / 50</div></div>
+
+<div class="S w"><div class="sc">Analysis</div><h2 class="t">Pareto — Top Issues (80/20)</h2><div class="chart-area mt-20" style="height:clamp(140px,20vw,200px);"><div class="vbar" style="height:100%;"><div class="col-w"><div class="b-fill" style="height:100%;background:var(--d);"></div><div class="b-label">KYC Fail</div></div><div class="col-w"><div class="b-fill" style="height:65%;background:var(--d);"></div><div class="b-label">Timeout</div></div><div class="col-w"><div class="b-fill" style="height:40%;background:var(--m);"></div><div class="b-label">Bad Input</div></div><div class="col-w"><div class="b-fill" style="height:22%;background:var(--mu);"></div><div class="b-label">Rate Lock</div></div><div class="col-w"><div class="b-fill" style="height:12%;background:var(--b);"></div><div class="b-label">Auth</div></div><div class="col-w"><div class="b-fill" style="height:8%;background:var(--b);"></div><div class="b-label">Limit</div></div><div class="col-w"><div class="b-fill" style="height:5%;background:var(--l);"></div><div class="b-label">Other</div></div></div></div><div class="card al mt-12"><p class="xs mi">Top 3 issues account for 82% of all error volume. KYC failure alone drives 40% of support contacts.</p></div><div class="sn">45 / 50</div></div>
+
+<div class="S w"><div class="sc">Analysis</div><h2 class="t">Conversion Rate by Platform</h2><div class="g3 mt-20"><div class="card ct"><div class="lb mb-8">iOS</div><div class="stat"><div class="v">5.8%</div><div class="l">Conv Rate</div></div><div class="bar-t mt-12"><div class="bar-f" style="width:58%;background:var(--d);"></div></div></div><div class="card ct"><div class="lb mb-8">Android</div><div class="stat"><div class="v">4.2%</div><div class="l">Conv Rate</div></div><div class="bar-t mt-12"><div class="bar-f" style="width:42%;background:var(--mu);"></div></div></div><div class="card ct"><div class="lb mb-8">Web</div><div class="stat"><div class="v">3.1%</div><div class="l">Conv Rate</div></div><div class="bar-t mt-12"><div class="bar-f" style="width:31%;background:var(--b);"></div></div></div></div><div class="xs mu ct mt-8">iOS outperforms Android by +38% and Web by +87%. Recommend investing in Android onboarding optimization.</div><div class="sn">46 / 50</div></div>
+
+<div class="S w"><div class="sc">Quality</div><h2 class="t">Data Quality Scorecard</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Data Source</th><th class="c">Completeness</th><th class="c">Freshness</th><th class="c">Accuracy</th><th class="c">Overall</th></tr><tr><td class="b">User Events</td><td class="c" style="background:var(--d);color:#fff;">98%</td><td class="c" style="background:var(--d);color:#fff;">Real-time</td><td class="c" style="background:var(--d);color:#fff;">99.2%</td><td class="c b">A</td></tr><tr><td class="b">Transactions</td><td class="c" style="background:var(--d);color:#fff;">99%</td><td class="c" style="background:var(--m);color:#fff;">&lt;1 min</td><td class="c" style="background:var(--d);color:#fff;">99.9%</td><td class="c b">A+</td></tr><tr><td class="b">Support Tickets</td><td class="c" style="background:var(--mu);color:#fff;">82%</td><td class="c" style="background:var(--b);">4-hr lag</td><td class="c" style="background:var(--mu);color:#fff;">91%</td><td class="c b">B</td></tr><tr><td class="b">Marketing Attribution</td><td class="c" style="background:var(--b);">68%</td><td class="c" style="background:var(--b);">24-hr lag</td><td class="c" style="background:var(--b);">72%</td><td class="c b">C</td></tr></table></div><div class="card al mt-12"><p class="xs mi">Marketing attribution data quality is below threshold. Recommend implementing server-side tracking and UTM governance.</p></div><div class="sn">47 / 50</div></div>
+
+<div class="S w"><div class="sc">Experiments</div><h2 class="t">A/B Test Results</h2><div class="g2 mt-20"><div class="card ct at"><div class="lb mb-4">Control (A)</div><div class="stat"><div class="v">3.2%</div><div class="l">Conversion Rate</div></div><div class="xs mu mt-8">n = 42,186</div></div><div class="card ct at" style="border-top-color:var(--d);"><div class="lb mb-4">Variant (B)</div><div class="stat"><div class="v dk">5.1%</div><div class="l">Conversion Rate</div></div><div class="xs mu mt-8">n = 41,994</div><div class="pill pill-d mt-8">+59% lift</div></div></div><div class="card mt-12"><div class="g3"><div><div class="lb mb-4">Statistical Significance</div><div class="md b dk">p < 0.01</div></div><div><div class="lb mb-4">Confidence</div><div class="md b dk">99.4%</div></div><div><div class="lb mb-4">Projected Impact</div><div class="md b dk">+$1.2M ARR</div></div></div></div><div class="card al mt-8"><p class="xs mi">Recommendation: Ship Variant B to 100%. Monitor for 14 days before removing feature flag.</p></div><div class="sn">48 / 50</div></div>
+
+<div class="S w"><div class="sc">Analysis</div><h2 class="t">Forecast vs. Actual</h2><div class="chart-area mt-20" style="height:clamp(120px,18vw,180px);padding:clamp(12px,2vw,20px);"><svg viewBox="0 0 400 100" preserveAspectRatio="none" style="height:100%;"><line x1="0" y1="100" x2="400" y2="100" class="ax-line"/><polyline points="0,85 50,78 100,68 150,58 200,50 250,42 300,35 350,28 400,20" fill="none" stroke="var(--d)" stroke-width="2"/><polyline points="0,82 50,75 100,65 150,55 200,48" fill="none" stroke="var(--mu)" stroke-width="2"/><polyline points="200,48 250,38 300,28 350,18 400,8" fill="none" stroke="var(--mu)" stroke-width="2" stroke-dasharray="6"/><line x1="200" y1="0" x2="200" y2="100" stroke="var(--b)" stroke-width="1" stroke-dasharray="3"/><text x="202" y="8" style="font-size:7px;fill:var(--m);">Today</text></svg></div><div class="flex gap-16 mt-8 ac" style="justify-content:center;"><div class="flex ac gap-4"><div style="width:16px;height:2px;background:var(--d);"></div><span class="xs">Plan</span></div><div class="flex ac gap-4"><div style="width:16px;height:2px;background:var(--mu);"></div><span class="xs">Actual</span></div><div class="flex ac gap-4"><div style="width:16px;height:0;border-top:2px dashed var(--mu);"></div><span class="xs">Projected</span></div></div><div class="card al mt-12"><p class="xs mi">Tracking 4% ahead of plan through Q2. Forecast assumes current growth trajectory holds with no seasonal adjustment.</p></div><div class="sn">49 / 50</div></div>
+
+<!-- ═══ 50: Executive Data Summary ═══ -->
+<div class="S d" style="min-height:280px;">
+<div class="sc">Summary</div>
+<h2 class="t">Executive Data Summary</h2>
+<div class="g4 mt-20">
+<div class="card ct"><div class="stat-sm"><div class="v wh">$18.4M</div><div class="l">ARR (+24%)</div></div></div>
+<div class="card ct"><div class="stat-sm"><div class="v wh">2.4M</div><div class="l">MAU (+18%)</div></div></div>
+<div class="card ct"><div class="stat-sm"><div class="v wh">4.2%</div><div class="l">Churn (-0.8pp)</div></div></div>
+<div class="card ct"><div class="stat-sm"><div class="v wh">68</div><div class="l">NPS (+6)</div></div></div>
+</div>
+<div class="divider mt-20" style="background:#2a2a2a;"></div>
+<div class="g3 mt-16">
+<div><div class="lb mb-4" style="color:#444;">Key Insight</div><p class="xs lh" style="color:var(--mu);">Onboarding redesign drove +82% activation lift. Expanding to remaining segments in Q2.</p></div>
+<div><div class="lb mb-4" style="color:#444;">Risk</div><p class="xs lh" style="color:var(--mu);">Marketing attribution data quality at C-grade. Decisions on paid spend allocation are unreliable.</p></div>
+<div><div class="lb mb-4" style="color:#444;">Recommendation</div><p class="xs lh" style="color:var(--mu);">Ship A/B test winner (+59% conversion). Invest in server-side tracking. Prioritize Android optimization.</p></div>
+</div>
+<div class="sn">50 / 50</div>
+</div>
+
+</body>
+</html>

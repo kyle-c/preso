@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>50 HR & Recruiting Slide Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0f0f0f;--dark:#262626;--mid:#555;--muted:#888;
+  --border:#c4c4c4;--light:#e0e0e0;--bg:#f0f0f0;--white:#fff;
+  --accent:#262626;
+  --serif:'Fraunces',serif;--sans:'Outfit',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#d8d8d8;font-family:var(--sans);color:var(--dark);padding:clamp(16px,4vw,48px);}
+
+.toc{max-width:960px;margin:0 auto 48px;background:var(--black);color:var(--white);border-radius:8px;padding:clamp(24px,4vw,48px);}
+.toc h1{font-family:var(--serif);font-size:clamp(24px,4vw,36px);margin-bottom:6px;}
+.toc .sub{color:var(--muted);font-size:clamp(11px,1.4vw,14px);margin-bottom:24px;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px 24px;}
+.toc-item{font-size:11px;color:var(--muted);padding:3px 0;}
+.toc-item span{color:#444;margin-right:4px;font-variant-numeric:tabular-nums;}
+
+.slide{max-width:960px;margin:0 auto 24px;border-radius:6px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.07);padding:clamp(20px,3vw,36px) clamp(16px,3vw,32px);position:relative;}
+.slide.w{background:var(--white);}.slide.d{background:var(--black);color:var(--white);}.slide.l{background:var(--bg);}
+.sn{position:absolute;bottom:10px;right:14px;font-size:9px;color:var(--muted);}
+.slide.d .sn{color:#444;}
+.sec{font-size:clamp(8px,1vw,9px);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.slide.d .sec{color:#555;}
+h2.t{font-family:var(--serif);font-size:clamp(22px,3.5vw,32px);line-height:1.15;margin-bottom:clamp(12px,2vw,20px);}
+.slide.d h2.t{color:#fff;}
+.label{font-size:clamp(8px,1vw,9px);letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.sf{font-family:var(--serif);}
+.xs{font-size:clamp(9px,1.1vw,11px);}.sm{font-size:clamp(10px,1.3vw,12px);}.md{font-size:clamp(12px,1.5vw,14px);}.lg{font-size:clamp(14px,2vw,18px);}.xl{font-size:clamp(18px,2.5vw,24px);}
+.mut{color:var(--muted);}.mi{color:var(--mid);}.dk{color:var(--dark);}.wh{color:#fff;}
+.b{font-weight:700;}.it{font-style:italic;}.ct{text-align:center;}.lh{line-height:1.6;}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,2vw,16px);}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,2vw,16px);}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1.5vw,12px);}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(6px,1vw,10px);}
+@media(max-width:640px){.g2,.g3,.g4,.g5{grid-template-columns:1fr;}.g2{grid-template-columns:1fr 1fr;}.side{flex-direction:column!important;}.side>*{width:100%!important;min-width:0!important;}}
+@media(max-width:480px){.g2{grid-template-columns:1fr;}}
+.side{display:flex;gap:clamp(12px,2vw,24px);}
+.flex{display:flex;flex-wrap:wrap;}.col{flex-direction:column;}.nw{flex-wrap:nowrap;}
+.gap-4{gap:4px;}.gap-8{gap:8px;}.gap-12{gap:12px;}.gap-16{gap:16px;}.gap-20{gap:20px;}.gap-24{gap:24px;}
+.ac{align-items:center;}.as{align-items:flex-start;}
+.mt-4{margin-top:4px;}.mt-8{margin-top:8px;}.mt-12{margin-top:12px;}.mt-16{margin-top:16px;}.mt-20{margin-top:clamp(12px,2vw,20px);}.mt-24{margin-top:clamp(16px,2.5vw,24px);}
+.mb-4{margin-bottom:4px;}.mb-8{margin-bottom:8px;}.mb-12{margin-bottom:12px;}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.04);padding:clamp(10px,1.5vw,16px);}
+.slide.d .card{background:#1a1a1a;border-color:#333;}
+.pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:clamp(8px,1vw,10px);background:var(--light);color:var(--mid);}
+.pill-d{background:var(--dark);color:var(--white);}
+.pill-o{background:transparent;border:1px solid var(--border);color:var(--mid);}
+.divider{height:1px;background:var(--border);}.slide.d .divider{background:#333;}
+.at{border-top:3px solid var(--dark);}.atm{border-top:3px solid var(--muted);}.atl{border-top:3px solid var(--border);}
+.al{border-left:3px solid var(--dark);}
+
+.bar-t{height:clamp(8px,1vw,10px);background:var(--light);border-radius:2px;overflow:hidden;}
+.bar-f{height:100%;background:var(--dark);border-radius:2px;}
+.avatar{width:clamp(36px,5vw,48px);height:clamp(36px,5vw,48px);border-radius:50%;background:var(--light);border:1px solid var(--border);flex-shrink:0;}
+.av-sm{width:clamp(28px,3.5vw,36px);height:clamp(28px,3.5vw,36px);}
+.num{width:clamp(18px,2vw,22px);height:clamp(18px,2vw,22px);border-radius:50%;background:var(--dark);color:#fff;font-size:clamp(8px,1vw,10px);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.icon-box{width:clamp(28px,3vw,36px);height:clamp(28px,3vw,36px);background:var(--bg);border:1px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,1.8vw,18px);}
+.check{width:14px;height:14px;border-radius:2px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:#fff;}.check.y{background:var(--dark);}.check.n{background:var(--border);}
+.placeholder{background:var(--light);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:clamp(9px,1vw,11px);border-radius:4px;min-height:80px;}
+.stat .val{font-size:clamp(20px,3vw,32px);font-weight:700;line-height:1.1;}.stat .lbl{font-size:clamp(8px,1vw,10px);color:var(--muted);margin-top:4px;}
+
+table.dt{width:100%;border-collapse:collapse;font-size:clamp(9px,1.1vw,11px);}
+table.dt th{background:var(--dark);color:#fff;padding:clamp(5px,0.8vw,8px) clamp(6px,1vw,10px);font-weight:500;text-align:left;}
+table.dt td{padding:clamp(5px,0.8vw,8px) clamp(6px,1vw,10px);color:var(--mid);border-bottom:1px solid var(--bg);}
+table.dt tr:nth-child(even) td{background:var(--bg);}
+table.dt .c{text-align:center;}.dt .r{text-align:right;}.dt .b{font-weight:700;}
+
+.timeline{position:relative;padding-left:clamp(20px,3vw,28px);border-left:2px solid var(--border);}
+.timeline .dot{width:12px;height:12px;border-radius:50%;background:var(--dark);margin-left:calc(-1 * clamp(20px,3vw,28px) - 7px);flex-shrink:0;}
+.timeline .step{margin-bottom:clamp(12px,2vw,20px);}
+</style>
+</head>
+<body>
+
+<div class="toc">
+<h1>50 HR & Recruiting Slides</h1>
+<p class="sub">Internal people operations presentation templates &middot; Responsive wireframes</p>
+<div class="toc-grid">
+<div class="toc-item"><span>01</span>Title / Cover</div><div class="toc-item"><span>26</span>Onboarding Checklist</div>
+<div class="toc-item"><span>02</span>People Team Intro</div><div class="toc-item"><span>27</span>30-60-90 Day Plan</div>
+<div class="toc-item"><span>03</span>Agenda</div><div class="toc-item"><span>28</span>Welcome Kit Contents</div>
+<div class="toc-item"><span>04</span>Executive Summary</div><div class="toc-item"><span>29</span>Buddy Program</div>
+<div class="toc-item"><span>05</span>Company Culture Intro</div><div class="toc-item"><span>30</span>New Hire Milestones</div>
+<div class="toc-item"><span>06</span>Mission / Vision / Values</div><div class="toc-item"><span>31</span>Performance Review Cycle</div>
+<div class="toc-item"><span>07</span>Org Chart</div><div class="toc-item"><span>32</span>Goal Setting Framework</div>
+<div class="toc-item"><span>08</span>Team Directory</div><div class="toc-item"><span>33</span>Feedback Model</div>
+<div class="toc-item"><span>09</span>Headcount Dashboard</div><div class="toc-item"><span>34</span>Career Ladder</div>
+<div class="toc-item"><span>10</span>Hiring Plan</div><div class="toc-item"><span>35</span>Promotion Criteria</div>
+<div class="toc-item"><span>11</span>Requisition Tracker</div><div class="toc-item"><span>36</span>Learning & Development</div>
+<div class="toc-item"><span>12</span>Recruiting Pipeline</div><div class="toc-item"><span>37</span>Total Rewards Overview</div>
+<div class="toc-item"><span>13</span>Sourcing Strategy</div><div class="toc-item"><span>38</span>Compensation Philosophy</div>
+<div class="toc-item"><span>14</span>Employer Brand</div><div class="toc-item"><span>39</span>Benefits Summary</div>
+<div class="toc-item"><span>15</span>Interview Process</div><div class="toc-item"><span>40</span>Equity Overview</div>
+<div class="toc-item"><span>16</span>Scorecard Template</div><div class="toc-item"><span>41</span>Engagement Survey Results</div>
+<div class="toc-item"><span>17</span>Candidate Experience</div><div class="toc-item"><span>42</span>eNPS Scorecard</div>
+<div class="toc-item"><span>18</span>Offer Approval Matrix</div><div class="toc-item"><span>43</span>Attrition Analysis</div>
+<div class="toc-item"><span>19</span>Recruiting Metrics</div><div class="toc-item"><span>44</span>DEI Dashboard</div>
+<div class="toc-item"><span>20</span>Time-to-Fill Analysis</div><div class="toc-item"><span>45</span>DEI Goals</div>
+<div class="toc-item"><span>21</span>Cost-per-Hire</div><div class="toc-item"><span>46</span>Workforce Planning</div>
+<div class="toc-item"><span>22</span>Quality of Hire</div><div class="toc-item"><span>47</span>Succession Planning</div>
+<div class="toc-item"><span>23</span>Referral Program</div><div class="toc-item"><span>48</span>Policy Summary</div>
+<div class="toc-item"><span>24</span>University Recruiting</div><div class="toc-item"><span>49</span>Key Takeaways</div>
+<div class="toc-item"><span>25</span>Welcome / Day One</div><div class="toc-item"><span>50</span>Thank You / Q&A</div>
+</div>
+</div>
+
+<!-- 1 -->
+<div class="slide d" style="min-height:280px;display:flex;flex-direction:column;justify-content:center;">
+<div class="placeholder" style="position:absolute;top:clamp(12px,2vw,24px);right:clamp(12px,2vw,24px);width:clamp(60px,8vw,80px);height:clamp(36px,5vw,48px);background:#1a1a1a;border-color:#333;color:#555;">Logo</div>
+<h1 style="font-family:var(--serif);font-size:clamp(32px,6vw,52px);color:#fff;">People & Talent</h1>
+<p class="md" style="color:var(--muted);margin-top:8px;max-width:480px;">Subtitle — strategic people update, quarterly hiring review, or onboarding deck title</p>
+<div class="divider" style="width:clamp(48px,8vw,80px);margin-top:clamp(20px,4vw,40px);background:#333;"></div>
+<p class="xs" style="color:var(--muted);margin-top:16px;">People Operations &middot; Q1 2026 &middot; Internal</p>
+<div class="sn">1 / 50</div>
+</div>
+
+<!-- 2 -->
+<div class="slide w">
+<div class="sec">Opening</div>
+<h2 class="t">Meet the People Team</h2>
+<div class="g3 mt-20" style="row-gap:clamp(16px,2.5vw,24px);">
+<div class="flex gap-12 ac"><div class="avatar"></div><div><div class="sm b">First Last</div><div class="xs mut">VP People</div></div></div>
+<div class="flex gap-12 ac"><div class="avatar"></div><div><div class="sm b">First Last</div><div class="xs mut">Head of Recruiting</div></div></div>
+<div class="flex gap-12 ac"><div class="avatar"></div><div><div class="sm b">First Last</div><div class="xs mut">People Partner</div></div></div>
+<div class="flex gap-12 ac"><div class="avatar"></div><div><div class="sm b">First Last</div><div class="xs mut">Recruiter, Eng</div></div></div>
+<div class="flex gap-12 ac"><div class="avatar"></div><div><div class="sm b">First Last</div><div class="xs mut">Recruiter, GTM</div></div></div>
+<div class="flex gap-12 ac"><div class="avatar"></div><div><div class="sm b">First Last</div><div class="xs mut">People Ops Lead</div></div></div>
+</div>
+<div class="sn">2 / 50</div>
+</div>
+
+<!-- 3 -->
+<div class="slide w">
+<div class="sec">Opening</div>
+<h2 class="t">Agenda</h2>
+<div style="display:flex;flex-direction:column;">
+<div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">01</span><span class="md" style="flex:1;">Headcount & Hiring Plan</span><span class="xs mut">10 min</span></div>
+<div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">02</span><span class="md" style="flex:1;">Recruiting Pipeline & Metrics</span><span class="xs mut">15 min</span></div>
+<div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">03</span><span class="md" style="flex:1;">Onboarding & New Hire Experience</span><span class="xs mut">10 min</span></div>
+<div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">04</span><span class="md" style="flex:1;">Performance & Development</span><span class="xs mut">10 min</span></div>
+<div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;border-bottom:1px solid var(--light);"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">05</span><span class="md" style="flex:1;">Total Rewards & Comp</span><span class="xs mut">10 min</span></div>
+<div style="display:flex;align-items:baseline;padding:clamp(8px,1.5vw,14px) 0;"><span style="font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--border);width:clamp(28px,4vw,40px);">06</span><span class="md" style="flex:1;">Engagement, DEI & Policy</span><span class="xs mut">10 min</span></div>
+</div>
+<div class="sn">3 / 50</div>
+</div>
+
+<!-- 4 -->
+<div class="slide l">
+<div class="sec">Opening</div>
+<h2 class="t">Executive Summary</h2>
+<div class="card al mt-20" style="padding:clamp(12px,2vw,20px);"><p class="md sf it dk lh">We're [ahead/behind] on hiring plan at XX% attainment. Key gaps remain in [function]. Attrition is [trending]. Employee engagement sits at [score], [up/down] from last quarter.</p></div>
+<div class="g3 mt-16">
+<div><div class="label mb-4">Wins</div><p class="xs mi lh">Filled VP Eng in 28 days. Referral rate at all-time high. eNPS up X pts.</p></div>
+<div><div class="label mb-4">Risks</div><p class="xs mi lh">Senior IC pipeline thin. Offer acceptance below target. Regretted attrition in [team].</p></div>
+<div><div class="label mb-4">Ask</div><p class="xs mi lh">Approve X additional headcount in [function]. Budget for employer brand campaign.</p></div>
+</div>
+<div class="sn">4 / 50</div>
+</div>
+
+<!-- 5 -->
+<div class="slide d">
+<div class="sec">Culture</div>
+<h2 class="t">Who We Are</h2>
+<div class="side mt-20" style="gap:clamp(16px,3vw,32px);">
+<div style="flex:1;"><div class="placeholder" style="height:clamp(120px,18vw,200px);background:#1a1a1a;border-color:#333;color:#555;">Team photo / culture image</div></div>
+<div style="flex:1;"><p class="lg sf it lh" style="color:#fff;">We're building [mission statement] — and every person we hire shapes the company we become.</p>
+<div class="divider mt-16 mb-16" style="background:#333;width:60px;"></div>
+<div class="g2"><div><div class="stat"><div class="val wh">XXX</div><div class="lbl">Team members</div></div></div><div><div class="stat"><div class="val wh">XX</div><div class="lbl">Countries</div></div></div></div></div>
+</div>
+<div class="sn">5 / 50</div>
+</div>
+
+<!-- 6 -->
+<div class="slide d">
+<div class="sec">Culture</div>
+<h2 class="t">Mission, Vision & Values</h2>
+<div class="g2 mt-20" style="gap:clamp(12px,3vw,32px);">
+<div><div class="label mb-8" style="color:#555;">Mission</div><p class="lg sf it lh" style="color:#fff;">To [verb] [audience] by [method], making [outcome] possible for everyone.</p></div>
+<div><div class="label mb-8" style="color:#555;">Vision</div><p class="lg sf it lh" style="color:#fff;">A world where [aspirational future state] is the standard, not the exception.</p></div>
+</div>
+<div class="divider mt-24" style="background:#333;"></div>
+<div class="label mt-16 mb-12" style="color:#555;">Our Values</div>
+<div class="g5">
+<div><span class="sm b wh">Integrity</span></div>
+<div><span class="sm b wh">Ownership</span></div>
+<div><span class="sm b wh">Empathy</span></div>
+<div><span class="sm b wh">Velocity</span></div>
+<div><span class="sm b wh">Growth</span></div>
+</div>
+<div class="sn">6 / 50</div>
+</div>
+
+<!-- 7 -->
+<div class="slide w">
+<div class="sec">Organization</div>
+<h2 class="t">Org Chart</h2>
+<div class="ct mt-20"><div style="display:inline-block;background:var(--dark);color:#fff;padding:8px 20px;font-size:clamp(10px,1.2vw,12px);font-weight:500;">CEO</div></div>
+<div class="g4 mt-12" style="gap:clamp(4px,1vw,8px);">
+<div class="card ct" style="padding:clamp(8px,1vw,12px);"><div class="sm b">Engineering</div><div class="xs mut mt-4">VP / CTO</div></div>
+<div class="card ct" style="padding:clamp(8px,1vw,12px);"><div class="sm b">Product</div><div class="xs mut mt-4">VP Product</div></div>
+<div class="card ct" style="padding:clamp(8px,1vw,12px);"><div class="sm b">Revenue</div><div class="xs mut mt-4">CRO</div></div>
+<div class="card ct" style="padding:clamp(8px,1vw,12px);"><div class="sm b">People</div><div class="xs mut mt-4">VP People</div></div>
+</div>
+<div class="sn">7 / 50</div>
+</div>
+
+<!-- 8 -->
+<div class="slide w">
+<div class="sec">Organization</div>
+<h2 class="t">Team Directory</h2>
+<div class="g4 mt-20" style="row-gap:clamp(12px,2vw,20px);">
+<div class="ct"><div class="avatar" style="margin:0 auto 6px;"></div><div class="sm b">Name</div><div class="xs mut">Engineering</div></div>
+<div class="ct"><div class="avatar" style="margin:0 auto 6px;"></div><div class="sm b">Name</div><div class="xs mut">Product</div></div>
+<div class="ct"><div class="avatar" style="margin:0 auto 6px;"></div><div class="sm b">Name</div><div class="xs mut">Design</div></div>
+<div class="ct"><div class="avatar" style="margin:0 auto 6px;"></div><div class="sm b">Name</div><div class="xs mut">Sales</div></div>
+<div class="ct"><div class="avatar" style="margin:0 auto 6px;"></div><div class="sm b">Name</div><div class="xs mut">Marketing</div></div>
+<div class="ct"><div class="avatar" style="margin:0 auto 6px;"></div><div class="sm b">Name</div><div class="xs mut">Finance</div></div>
+<div class="ct"><div class="avatar" style="margin:0 auto 6px;"></div><div class="sm b">Name</div><div class="xs mut">People Ops</div></div>
+<div class="ct"><div class="avatar" style="margin:0 auto 6px;"></div><div class="sm b">Name</div><div class="xs mut">Customer Ops</div></div>
+</div>
+<div class="sn">8 / 50</div>
+</div>
+
+<!-- 9 -->
+<div class="slide w">
+<div class="sec">Headcount & Hiring</div>
+<h2 class="t">Headcount Dashboard</h2>
+<div class="g4 mt-20">
+<div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XXX</div><div class="lbl">Total HC</div></div></div>
+<div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XX</div><div class="lbl">Open Roles</div></div></div>
+<div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XX</div><div class="lbl">Hires YTD</div></div></div>
+<div class="card ct"><div class="stat" style="align-items:center;"><div class="val">X.X%</div><div class="lbl">Attrition Rate</div></div></div>
+</div>
+<div class="side mt-16">
+<div style="flex:1;"><div class="label mb-8">HC by Function</div>
+<div class="flex ac gap-4 mb-4"><span class="xs" style="width:clamp(80px,12vw,120px);">Engineering</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:40%;"></div></div><span class="xs mut" style="width:28px;text-align:right;">40%</span></div>
+<div class="flex ac gap-4 mb-4"><span class="xs" style="width:clamp(80px,12vw,120px);">Revenue</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:25%;background:var(--muted);"></div></div><span class="xs mut" style="width:28px;text-align:right;">25%</span></div>
+<div class="flex ac gap-4 mb-4"><span class="xs" style="width:clamp(80px,12vw,120px);">Product & Design</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:15%;background:var(--border);"></div></div><span class="xs mut" style="width:28px;text-align:right;">15%</span></div>
+<div class="flex ac gap-4"><span class="xs" style="width:clamp(80px,12vw,120px);">G&A / Ops</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:20%;background:var(--border);"></div></div><span class="xs mut" style="width:28px;text-align:right;">20%</span></div>
+</div>
+<div class="card" style="width:clamp(140px,20vw,200px);flex-shrink:0;align-self:flex-start;"><div class="label mb-4">Plan Attainment</div><div class="stat"><div class="val">XX%</div><div class="lbl">of FY hiring plan</div></div></div>
+</div>
+<div class="sn">9 / 50</div>
+</div>
+
+<!-- 10 -->
+<div class="slide w"><div class="sec">Headcount & Hiring</div><h2 class="t">Hiring Plan</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Function</th><th class="c">Q1</th><th class="c">Q2</th><th class="c">Q3</th><th class="c">Q4</th><th class="c">Total</th></tr><tr><td class="b">Engineering</td><td class="c">X</td><td class="c">X</td><td class="c">X</td><td class="c">X</td><td class="c b">XX</td></tr><tr><td class="b">Product & Design</td><td class="c">X</td><td class="c">X</td><td class="c">X</td><td class="c">X</td><td class="c b">X</td></tr><tr><td class="b">Sales</td><td class="c">X</td><td class="c">X</td><td class="c">X</td><td class="c">X</td><td class="c b">XX</td></tr><tr><td class="b">Marketing</td><td class="c">X</td><td class="c">X</td><td class="c">—</td><td class="c">X</td><td class="c b">X</td></tr><tr><td class="b">G&A</td><td class="c">X</td><td class="c">X</td><td class="c">—</td><td class="c">—</td><td class="c b">X</td></tr><tr><td class="b" style="background:var(--bg);">Total</td><td class="c b" style="background:var(--bg);">XX</td><td class="c b" style="background:var(--bg);">XX</td><td class="c b" style="background:var(--bg);">XX</td><td class="c b" style="background:var(--bg);">XX</td><td class="c b" style="background:var(--dark);color:#fff;">XX</td></tr></table></div><div class="sn">10 / 50</div></div>
+
+<!-- 11 -->
+<div class="slide w"><div class="sec">Headcount & Hiring</div><h2 class="t">Requisition Tracker</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Role</th><th>Team</th><th>Recruiter</th><th class="c">Days Open</th><th class="c">Pipeline</th><th class="c">Status</th></tr><tr><td class="b">Sr. Backend Engineer</td><td>Platform</td><td>Name</td><td class="c">22</td><td class="c">14</td><td class="c"><span class="pill pill-d">On Track</span></td></tr><tr><td class="b">Product Designer</td><td>Consumer</td><td>Name</td><td class="c">38</td><td class="c">6</td><td class="c"><span class="pill" style="background:#eee;">At Risk</span></td></tr><tr><td class="b">Account Executive</td><td>Sales</td><td>Name</td><td class="c">12</td><td class="c">21</td><td class="c"><span class="pill pill-d">On Track</span></td></tr><tr><td class="b">Data Scientist</td><td>ML</td><td>Name</td><td class="c">45</td><td class="c">3</td><td class="c"><span class="pill" style="background:var(--dark);color:#fff;">Blocked</span></td></tr><tr><td class="b">People Partner</td><td>People</td><td>Name</td><td class="c">8</td><td class="c">9</td><td class="c"><span class="pill pill-d">On Track</span></td></tr></table></div><div class="sn">11 / 50</div></div>
+
+<!-- 12 -->
+<div class="slide w"><div class="sec">Recruiting</div><h2 class="t">Recruiting Pipeline</h2>
+<div style="margin-top:clamp(12px,2vw,20px);display:flex;flex-direction:column;gap:4px;align-items:center;">
+<div style="width:100%;height:clamp(28px,3.5vw,36px);background:var(--dark);display:flex;align-items:center;justify-content:center;color:#fff;font-size:clamp(9px,1.1vw,11px);">Applied — XXX</div>
+<div style="width:82%;height:clamp(28px,3.5vw,36px);background:var(--mid);display:flex;align-items:center;justify-content:center;color:#fff;font-size:clamp(9px,1.1vw,11px);">Screen — XX</div>
+<div style="width:60%;height:clamp(28px,3.5vw,36px);background:var(--muted);display:flex;align-items:center;justify-content:center;color:#fff;font-size:clamp(9px,1.1vw,11px);">Interview — XX</div>
+<div style="width:36%;height:clamp(28px,3.5vw,36px);background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--dark);font-size:clamp(9px,1.1vw,11px);">Onsite — XX</div>
+<div style="width:20%;height:clamp(28px,3.5vw,36px);background:var(--light);display:flex;align-items:center;justify-content:center;color:var(--dark);font-size:clamp(9px,1.1vw,11px);">Offer — X</div>
+</div>
+<div class="card mt-16"><p class="xs mi">Conversion: Applied → Offer = X.X%. Biggest drop: Screen → Interview (XX%). Action: Improve screening rubric alignment with hiring managers.</p></div>
+<div class="sn">12 / 50</div></div>
+
+<!-- 13 -->
+<div class="slide w"><div class="sec">Recruiting</div><h2 class="t">Sourcing Strategy</h2><div class="g3 mt-20"><div class="card at"><div class="label mb-8">Inbound</div><div class="xs mi lh">Job boards (LinkedIn, Wellfound)<br>Career site SEO<br>Social media campaigns<br>Target: XX% of pipeline</div></div><div class="card atm"><div class="label mb-8">Outbound</div><div class="xs mi lh">Direct sourcing on LI Recruiter<br>GitHub / portfolio mining<br>Conference networking<br>Target: XX% of pipeline</div></div><div class="card atl"><div class="label mb-8">Referral</div><div class="xs mi lh">Employee referral program ($Xk bonus)<br>Alumni network<br>Advisor referrals<br>Target: XX% of pipeline</div></div></div><div class="card mt-16"><div class="label mb-4">Channel Mix</div><div class="flex ac gap-4 nw" style="overflow-x:auto;"><div class="pill">Inbound 40%</div><div class="pill">Outbound 35%</div><div class="pill">Referral 20%</div><div class="pill">Agency 5%</div></div></div><div class="sn">13 / 50</div></div>
+
+<!-- 14 -->
+<div class="slide d"><div class="sec">Recruiting</div><h2 class="t">Employer Brand</h2>
+<div class="side mt-20"><div style="flex:1;"><p class="lg sf it lh wh">Why people join us — and why they stay.</p><div class="divider mt-16 mb-16" style="background:#333;width:60px;"></div><div class="g2"><div><div class="stat"><div class="val wh">X.X★</div><div class="lbl">Glassdoor</div></div></div><div><div class="stat"><div class="val wh">XX%</div><div class="lbl">Would Recommend</div></div></div></div></div>
+<div style="flex:1;"><div class="label mb-12" style="color:#555;">Employee Value Proposition</div><div class="card mb-8"><div class="sm b">Mission-Driven Work</div><div class="xs mi mt-4">Real impact on real people's lives.</div></div><div class="card mb-8"><div class="sm b">Career Growth</div><div class="xs mi mt-4">Fast-moving company = fast-moving careers.</div></div><div class="card mb-8"><div class="sm b">Ownership Culture</div><div class="xs mi mt-4">Equity, autonomy, and decision-making power.</div></div><div class="card"><div class="sm b">Flexibility</div><div class="xs mi mt-4">Remote-first. Async-friendly. Results over hours.</div></div></div>
+</div><div class="sn">14 / 50</div></div>
+
+<!-- 15 -->
+<div class="slide w"><div class="sec">Recruiting</div><h2 class="t">Interview Process</h2>
+<div style="margin-top:clamp(12px,2vw,20px);display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(4px,0.8vw,8px);">
+<div class="card ct" style="padding:clamp(6px,1vw,10px);"><div class="num" style="margin:0 auto 6px;">1</div><div class="sm b">Recruiter<br>Screen</div><div class="xs mut mt-4">30 min</div></div>
+<div class="card ct" style="padding:clamp(6px,1vw,10px);"><div class="num" style="margin:0 auto 6px;">2</div><div class="sm b">Hiring<br>Manager</div><div class="xs mut mt-4">45 min</div></div>
+<div class="card ct" style="padding:clamp(6px,1vw,10px);"><div class="num" style="margin:0 auto 6px;">3</div><div class="sm b">Take-Home<br>or Live</div><div class="xs mut mt-4">2-4 hrs</div></div>
+<div class="card ct" style="padding:clamp(6px,1vw,10px);"><div class="num" style="margin:0 auto 6px;">4</div><div class="sm b">Team<br>Panel</div><div class="xs mut mt-4">2 hrs</div></div>
+<div class="card ct" style="padding:clamp(6px,1vw,10px);"><div class="num" style="margin:0 auto 6px;">5</div><div class="sm b">Exec<br>Close</div><div class="xs mut mt-4">30 min</div></div>
+</div>
+<div class="card mt-16"><div class="label mb-4">Target Timeline</div><p class="xs mi">Recruiter screen → Offer: XX business days. Candidate receives status update within 48 hours of each stage.</p></div>
+<div class="sn">15 / 50</div></div>
+
+<!-- 16 -->
+<div class="slide w"><div class="sec">Recruiting</div><h2 class="t">Interview Scorecard</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Competency</th><th class="c">1 – Below</th><th class="c">2 – Mixed</th><th class="c">3 – Meets</th><th class="c">4 – Exceeds</th></tr><tr><td class="b">Technical Skills</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">○</td></tr><tr><td class="b">Problem Solving</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">○</td></tr><tr><td class="b">Communication</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">○</td></tr><tr><td class="b">Culture Add</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">○</td></tr><tr><td class="b">Leadership / Impact</td><td class="c">○</td><td class="c">○</td><td class="c">○</td><td class="c">○</td></tr></table></div><div class="card mt-12 al"><div class="sm b">Overall Recommendation</div><div class="flex gap-8 mt-8"><div class="pill pill-d">Strong Hire</div><div class="pill">Hire</div><div class="pill">No Hire</div><div class="pill">Strong No Hire</div></div></div><div class="sn">16 / 50</div></div>
+
+<!-- 17 -->
+<div class="slide l"><div class="sec">Recruiting</div><h2 class="t">Candidate Experience</h2><div class="g5 mt-20" style="gap:clamp(4px,0.8vw,8px);"><div style="background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(8px,1vw,10px);border-radius:3px;">Apply</div><div style="background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(8px,1vw,10px);border-radius:3px;">Screen</div><div style="background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(8px,1vw,10px);border-radius:3px;">Interview</div><div style="background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(8px,1vw,10px);border-radius:3px;">Offer</div><div style="background:var(--dark);color:#fff;padding:clamp(6px,1vw,10px);text-align:center;font-size:clamp(8px,1vw,10px);border-radius:3px;">Onboard</div></div><div class="g5 mt-4" style="gap:clamp(4px,0.8vw,8px);"><div class="card xs mi">Auto-confirm receipt within 1 hr</div><div class="card xs mi">48 hr response SLA</div><div class="card xs mi">Prep guide + interviewer bios</div><div class="card xs mi">Verbal → written within 24 hrs</div><div class="card xs mi">Pre-boarding email Day -7</div></div><div class="card mt-16 ct"><div class="stat" style="align-items:center;"><div class="val">X.X / 5</div><div class="lbl">Average candidate NPS (last quarter)</div></div></div><div class="sn">17 / 50</div></div>
+
+<!-- 18 -->
+<div class="slide w"><div class="sec">Recruiting</div><h2 class="t">Offer Approval Matrix</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Level</th><th>Comp Range</th><th>Approver 1</th><th>Approver 2</th><th>Equity Auth</th></tr><tr><td class="b">IC (L3–L4)</td><td>$XXXk – $XXXk</td><td>Hiring Manager</td><td>—</td><td>Standard grant</td></tr><tr><td class="b">Senior IC (L5)</td><td>$XXXk – $XXXk</td><td>Hiring Manager</td><td>VP</td><td>Standard grant</td></tr><tr><td class="b">Staff+ (L6+)</td><td>$XXXk – $XXXk+</td><td>VP</td><td>CEO</td><td>Custom approval</td></tr><tr><td class="b">Manager / Director</td><td>$XXXk – $XXXk</td><td>VP</td><td>CEO</td><td>Custom approval</td></tr><tr><td class="b">VP+</td><td>Board-level</td><td>CEO</td><td>Board</td><td>Board approval</td></tr></table></div><div class="sn">18 / 50</div></div>
+
+<!-- 19 -->
+<div class="slide w"><div class="sec">Recruiting Metrics</div><h2 class="t">Recruiting Metrics</h2><div class="g4 mt-20"><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XX</div><div class="lbl">Days to Fill</div></div><div class="xs mi mt-4">Target: XX</div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XX%</div><div class="lbl">Offer Accept Rate</div></div><div class="xs mi mt-4">Target: XX%</div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">$X.Xk</div><div class="lbl">Cost per Hire</div></div><div class="xs mi mt-4">Target: $X.Xk</div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XX%</div><div class="lbl">Referral Hires</div></div><div class="xs mi mt-4">Target: XX%</div></div></div><div class="placeholder mt-16" style="height:clamp(80px,12vw,120px);">Recruiting metrics trend chart (12 months)</div><div class="sn">19 / 50</div></div>
+
+<!-- 20 -->
+<div class="slide w"><div class="sec">Recruiting Metrics</div><h2 class="t">Time-to-Fill Analysis</h2><div class="label mt-20 mb-8">Average Days to Fill by Function</div><div class="flex col gap-4"><div class="flex ac gap-4"><span class="xs" style="width:clamp(80px,14vw,140px);">Engineering</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:70%;"></div></div><span class="xs mut" style="width:40px;text-align:right;">42 days</span></div><div class="flex ac gap-4"><span class="xs" style="width:clamp(80px,14vw,140px);">Product</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:55%;background:var(--muted);"></div></div><span class="xs mut" style="width:40px;text-align:right;">33 days</span></div><div class="flex ac gap-4"><span class="xs" style="width:clamp(80px,14vw,140px);">Design</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:63%;background:var(--muted);"></div></div><span class="xs mut" style="width:40px;text-align:right;">38 days</span></div><div class="flex ac gap-4"><span class="xs" style="width:clamp(80px,14vw,140px);">Sales</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:40%;background:var(--border);"></div></div><span class="xs mut" style="width:40px;text-align:right;">24 days</span></div><div class="flex ac gap-4"><span class="xs" style="width:clamp(80px,14vw,140px);">G&A</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:35%;background:var(--border);"></div></div><span class="xs mut" style="width:40px;text-align:right;">21 days</span></div></div><div class="card mt-16"><p class="xs mi">Engineering remains longest at 42 days (target: 35). Senior IC roles (L5+) averaging 55 days — recommend dedicated sourcer.</p></div><div class="sn">20 / 50</div></div>
+
+<!-- 21 -->
+<div class="slide w"><div class="sec">Recruiting Metrics</div><h2 class="t">Cost-per-Hire Breakdown</h2><div class="side mt-20"><div style="flex:1;"><div class="placeholder" style="height:clamp(120px,18vw,180px);">Cost breakdown chart — stacked bar or pie</div></div><div style="flex:1;min-width:180px;"><div class="label mb-12">Cost Components</div><div class="mb-8"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--dark);border-radius:2px;"></div><span class="xs b">Recruiter Cost — 45%</span></div></div><div class="mb-8"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--muted);border-radius:2px;"></div><span class="xs b">Job Boards — 20%</span></div></div><div class="mb-8"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--border);border-radius:2px;"></div><span class="xs b">Agency Fees — 15%</span></div></div><div class="mb-8"><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--light);border-radius:2px;"></div><span class="xs b">Interviewer Time — 12%</span></div></div><div><div class="flex ac gap-4"><div style="width:12px;height:12px;background:var(--bg);border-radius:2px;border:1px solid var(--border);"></div><span class="xs b">Other — 8%</span></div></div></div></div><div class="sn">21 / 50</div></div>
+
+<!-- 22 -->
+<div class="slide w"><div class="sec">Recruiting Metrics</div><h2 class="t">Quality of Hire</h2><div class="g3 mt-20"><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XX%</div><div class="lbl">90-Day Retention</div></div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">X.X</div><div class="lbl">Avg Perf Rating (Yr 1)</div></div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XX%</div><div class="lbl">Manager Satisfaction</div></div></div></div><div class="card mt-16"><div class="label mb-4">Methodology</div><p class="xs mi lh">Quality of hire measured by composite of: 90-day retention, first performance review score, hiring manager survey (30-day check-in), and time-to-productivity.</p></div><div class="sn">22 / 50</div></div>
+
+<!-- 23 -->
+<div class="slide l"><div class="sec">Recruiting</div><h2 class="t">Referral Program</h2><div class="g2 mt-20"><div class="card"><div class="lg b">$X,000</div><div class="xs mi mt-4">Standard referral bonus</div><div class="divider mt-12 mb-12"></div><div class="lg b">$X,000</div><div class="xs mi mt-4">Hard-to-fill / senior roles</div></div><div><div class="label mb-8">Program Stats</div><div class="mb-8"><div class="xs mut">Referrals This Quarter</div><div class="md b">XX</div></div><div class="mb-8"><div class="xs mut">Referral Hire Rate</div><div class="md b">XX%</div></div><div class="mb-8"><div class="xs mut">Avg Days to Fill (Referral)</div><div class="md b">XX days</div></div><div><div class="xs mut">Referral 1-Year Retention</div><div class="md b">XX%</div></div></div></div><div class="sn">23 / 50</div></div>
+
+<!-- 24 -->
+<div class="slide w"><div class="sec">Recruiting</div><h2 class="t">University Recruiting</h2><div class="g3 mt-20"><div class="card at"><div class="label mb-8">Target Schools</div><div class="xs mi lh">University A<br>University B<br>University C<br>University D<br>Bootcamp partners (X)</div></div><div class="card atm"><div class="label mb-8">Programs</div><div class="xs mi lh">Summer internship (XX spots)<br>New grad rotation (X spots)<br>Campus ambassador program<br>Hackathon sponsorships</div></div><div class="card atl"><div class="label mb-8">Metrics</div><div class="xs mi lh">Intern → FT conversion: XX%<br>Offer accept rate: XX%<br>Cost per intern hire: $X.Xk<br>Program NPS: XX</div></div></div><div class="sn">24 / 50</div></div>
+
+<!-- 25 -->
+<div class="slide d" style="min-height:260px;display:flex;flex-direction:column;justify-content:center;">
+<h2 style="font-family:var(--serif);font-size:clamp(28px,5vw,44px);color:#fff;">Welcome to<br>the Team</h2>
+<p class="md" style="color:var(--muted);margin-top:8px;">Your Day One starts here. Everything you need to hit the ground running.</p>
+<div class="divider" style="width:60px;margin-top:clamp(20px,3vw,32px);background:#333;"></div>
+<p class="xs" style="color:var(--muted);margin-top:12px;">New Hire Onboarding &middot; [Start Date] &middot; [Your Name]</p>
+<div class="sn">25 / 50</div>
+</div>
+
+<!-- 26 -->
+<div class="slide w"><div class="sec">Onboarding</div><h2 class="t">Onboarding Checklist</h2><div class="g2 mt-20"><div><div class="label mb-8">Before Day 1</div><div class="flex gap-8 ac mb-4"><div class="check y">✓</div><span class="xs mi">Signed offer letter & NDA</span></div><div class="flex gap-8 ac mb-4"><div class="check y">✓</div><span class="xs mi">Background check complete</span></div><div class="flex gap-8 ac mb-4"><div class="check n">✗</div><span class="xs dk">Set up laptop & accounts</span></div><div class="flex gap-8 ac mb-4"><div class="check n">✗</div><span class="xs dk">Send welcome kit</span></div><div class="flex gap-8 ac"><div class="check n">✗</div><span class="xs dk">Assign onboarding buddy</span></div></div><div><div class="label mb-8">Week 1</div><div class="flex gap-8 ac mb-4"><div class="check n">○</div><span class="xs mi">Company orientation session</span></div><div class="flex gap-8 ac mb-4"><div class="check n">○</div><span class="xs mi">Meet your team & manager</span></div><div class="flex gap-8 ac mb-4"><div class="check n">○</div><span class="xs mi">IT setup & tool access</span></div><div class="flex gap-8 ac mb-4"><div class="check n">○</div><span class="xs mi">Benefits enrollment</span></div><div class="flex gap-8 ac"><div class="check n">○</div><span class="xs mi">First 1:1 with manager</span></div></div></div><div class="sn">26 / 50</div></div>
+
+<!-- 27 -->
+<div class="slide w"><div class="sec">Onboarding</div><h2 class="t">30-60-90 Day Plan</h2><div class="g3 mt-20" style="gap:0;"><div style="background:var(--dark);color:#fff;padding:clamp(12px,2vw,20px);border-radius:4px 0 0 4px;"><div class="lg b">Day 1–30</div><div class="xs mt-4" style="color:var(--muted);">Learn</div><div class="divider mt-8 mb-8" style="background:#444;"></div><div class="xs lh" style="color:var(--muted);">Understand the business, product, and team. Complete all onboarding modules. Shadow key workflows.</div></div><div style="background:var(--mid);color:#fff;padding:clamp(12px,2vw,20px);"><div class="lg b">Day 31–60</div><div class="xs mt-4" style="color:var(--border);">Contribute</div><div class="divider mt-8 mb-8" style="background:#777;"></div><div class="xs lh" style="color:var(--border);">Take ownership of first project. Build cross-functional relationships. Identify quick wins.</div></div><div style="background:var(--muted);color:#fff;padding:clamp(12px,2vw,20px);border-radius:0 4px 4px 0;"><div class="lg b">Day 61–90</div><div class="xs mt-4" style="color:var(--light);">Own</div><div class="divider mt-8 mb-8" style="background:#aaa;"></div><div class="xs lh" style="color:var(--light);">Drive outcomes independently. Present work to stakeholders. Set OKRs for next quarter.</div></div></div><div class="sn">27 / 50</div></div>
+
+<!-- 28 -->
+<div class="slide l"><div class="sec">Onboarding</div><h2 class="t">Welcome Kit</h2><div class="g4 mt-20"><div class="card ct"><div class="icon-box" style="margin:0 auto 8px;">💻</div><div class="sm b">Laptop</div><div class="xs mut mt-4">MacBook Pro, pre-configured</div></div><div class="card ct"><div class="icon-box" style="margin:0 auto 8px;">👕</div><div class="sm b">Swag Pack</div><div class="xs mut mt-4">Tee, hoodie, notebook, stickers</div></div><div class="card ct"><div class="icon-box" style="margin:0 auto 8px;">🎧</div><div class="sm b">Headphones</div><div class="xs mut mt-4">Noise-canceling for deep work</div></div><div class="card ct"><div class="icon-box" style="margin:0 auto 8px;">📚</div><div class="sm b">Reading List</div><div class="xs mut mt-4">Company docs, culture deck, product overview</div></div></div><div class="sn">28 / 50</div></div>
+
+<!-- 29 -->
+<div class="slide w"><div class="sec">Onboarding</div><h2 class="t">Buddy Program</h2><div class="side mt-20"><div class="card" style="flex:1;"><div class="label mb-8">Your Buddy</div><div class="flex gap-12 ac"><div class="avatar"></div><div><div class="md b">Buddy Name</div><div class="xs mut">Role &middot; Team &middot; Tenure</div></div></div><div class="divider mt-16 mb-16"></div><div class="xs mi lh">Your buddy is your go-to for questions that feel "too small to ask." They'll check in with you weekly for your first 90 days.</div></div><div style="flex:1;"><div class="label mb-8">Buddy's Role</div><div class="flex gap-8 ac mb-8"><div class="num">1</div><div class="xs mi">Answer day-to-day questions about tools, norms, and processes</div></div><div class="flex gap-8 ac mb-8"><div class="num">2</div><div class="xs mi">Introduce you to people across the company</div></div><div class="flex gap-8 ac mb-8"><div class="num">3</div><div class="xs mi">Share unwritten context about how things really work</div></div><div class="flex gap-8 ac"><div class="num">4</div><div class="xs mi">Weekly coffee chat (30 min) for your first month</div></div></div></div><div class="sn">29 / 50</div></div>
+
+<!-- 30 -->
+<div class="slide w"><div class="sec">Onboarding</div><h2 class="t">New Hire Milestones</h2><div class="timeline mt-20"><div class="step"><div class="flex gap-8 ac"><div class="dot"></div><span class="xs mut">Day 1</span><span class="sm b" style="margin-left:8px;">Welcome & Setup</span></div><div class="xs mi" style="margin-left:20px;">Orientation, laptop, accounts, meet your team.</div></div><div class="step"><div class="flex gap-8 ac"><div class="dot"></div><span class="xs mut">Week 1</span><span class="sm b" style="margin-left:8px;">Learn the Landscape</span></div><div class="xs mi" style="margin-left:20px;">Product deep dive, shadow customer calls, tool training.</div></div><div class="step"><div class="flex gap-8 ac"><div class="dot"></div><span class="xs mut">Day 30</span><span class="sm b" style="margin-left:8px;">First Check-in</span></div><div class="xs mi" style="margin-left:20px;">Manager 1:1 review. Adjust 30-60-90 plan as needed.</div></div><div class="step"><div class="flex gap-8 ac"><div class="dot"></div><span class="xs mut">Day 60</span><span class="sm b" style="margin-left:8px;">Mid-Point Review</span></div><div class="xs mi" style="margin-left:20px;">Present first project. Collect peer feedback.</div></div><div class="step" style="margin-bottom:0;"><div class="flex gap-8 ac"><div class="dot"></div><span class="xs mut">Day 90</span><span class="sm b" style="margin-left:8px;">Graduation</span></div><div class="xs mi" style="margin-left:20px;">Formal review. Set OKRs. Transition to regular cadence.</div></div></div><div class="sn">30 / 50</div></div>
+
+<!-- 31 -->
+<div class="slide w"><div class="sec">Performance & Development</div><h2 class="t">Performance Review Cycle</h2><div class="g4 mt-20" style="gap:0;"><div style="background:var(--dark);color:#fff;padding:clamp(8px,1.2vw,14px);text-align:center;border-radius:3px 0 0 3px;"><div class="sm b">Q1</div><div class="xs mt-4" style="color:var(--muted);">Goal Setting</div></div><div style="background:var(--mid);color:#fff;padding:clamp(8px,1.2vw,14px);text-align:center;"><div class="sm b">Q2</div><div class="xs mt-4" style="color:var(--border);">Mid-Year Check</div></div><div style="background:var(--muted);color:#fff;padding:clamp(8px,1.2vw,14px);text-align:center;"><div class="sm b">Q3</div><div class="xs mt-4" style="color:var(--light);">Development Focus</div></div><div style="background:var(--border);padding:clamp(8px,1.2vw,14px);text-align:center;border-radius:0 3px 3px 0;"><div class="sm b dk">Q4</div><div class="xs mt-4 mi">Annual Review</div></div></div><div class="g2 mt-16"><div class="card"><div class="label mb-4">Cycle Components</div><div class="xs mi lh">Self-assessment<br>Manager assessment<br>Peer feedback (360°)<br>Calibration sessions</div></div><div class="card"><div class="label mb-4">Rating Scale</div><div class="xs mi lh">Exceptional — Consistently exceeds<br>Strong — Meets and often exceeds<br>Developing — Meets most expectations<br>Below — Not meeting expectations</div></div></div><div class="sn">31 / 50</div></div>
+
+<!-- 32 -->
+<div class="slide w"><div class="sec">Performance & Development</div><h2 class="t">Goal Setting Framework</h2><div class="card al mt-20" style="padding:clamp(12px,2vw,20px);"><p class="md sf it dk lh">We use OKRs at the company level and individual level. Goals cascade from company → team → individual.</p></div><div class="g2 mt-16"><div class="card"><div class="label mb-8">Good Goal Example</div><div class="xs dk b">Objective: Improve onboarding experience</div><div class="xs mi mt-4 lh">KR1: Reduce time-to-first-value from 8 days to 3 days<br>KR2: Achieve 90% onboarding completion rate<br>KR3: New hire NPS > 70</div></div><div class="card"><div class="label mb-8">Weak Goal Example</div><div class="xs dk b" style="text-decoration:line-through;">Objective: Make onboarding better</div><div class="xs mi mt-4 lh" style="text-decoration:line-through;">KR1: Improve the onboarding deck<br>KR2: Get more feedback<br>KR3: Be more responsive</div><div class="xs mut mt-4 it">Not measurable, not time-bound, not outcome-oriented.</div></div></div><div class="sn">32 / 50</div></div>
+
+<!-- 33 -->
+<div class="slide w"><div class="sec">Performance & Development</div><h2 class="t">Feedback Model</h2><div class="g3 mt-20"><div class="card at ct"><div class="lg b">SBI</div><div class="xs mut mt-4">Situation → Behavior → Impact</div><div class="divider mt-12 mb-12"></div><div class="xs mi lh" style="text-align:left;">"In yesterday's standup (S), when you walked through the blockers with clear next steps (B), the team was able to unblock in 30 minutes instead of a day (I)."</div></div><div class="card atm ct"><div class="lg b">Continuous</div><div class="xs mut mt-4">Not just at review time</div><div class="divider mt-12 mb-12"></div><div class="xs mi lh" style="text-align:left;">Give feedback within 48 hours. Regular 1:1s are the primary feedback channel. Don't save it for the cycle.</div></div><div class="card atl ct"><div class="lg b">Two-Way</div><div class="xs mut mt-4">Managers receive feedback too</div><div class="divider mt-12 mb-12"></div><div class="xs mi lh" style="text-align:left;">Skip-level meetings quarterly. Anonymous upward feedback in engagement surveys. Manager effectiveness score.</div></div></div><div class="sn">33 / 50</div></div>
+
+<!-- 34 -->
+<div class="slide w"><div class="sec">Performance & Development</div><h2 class="t">Career Ladder</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Level</th><th>Title</th><th>Scope</th><th>Experience</th><th class="c">Comp Band</th></tr><tr><td class="b">L3</td><td>Engineer</td><td>Task-level ownership</td><td>0–2 years</td><td class="c">$XXX–$XXXk</td></tr><tr><td class="b">L4</td><td>Sr. Engineer</td><td>Feature-level ownership</td><td>2–5 years</td><td class="c">$XXX–$XXXk</td></tr><tr><td class="b">L5</td><td>Staff Engineer</td><td>System-level ownership</td><td>5–8 years</td><td class="c">$XXX–$XXXk</td></tr><tr><td class="b">L6</td><td>Sr. Staff Engineer</td><td>Org-level impact</td><td>8+ years</td><td class="c">$XXX–$XXXk</td></tr><tr><td class="b">L7</td><td>Principal Engineer</td><td>Company-level impact</td><td>10+ years</td><td class="c">$XXX–$XXXk+</td></tr></table></div><div class="card mt-12"><p class="xs mi">IC and management tracks diverge at L5. Both tracks have equivalent comp, scope, and career ceiling.</p></div><div class="sn">34 / 50</div></div>
+
+<!-- 35 -->
+<div class="slide w"><div class="sec">Performance & Development</div><h2 class="t">Promotion Criteria</h2><div class="g2 mt-20"><div class="card"><div class="label mb-8">What We Evaluate</div><div class="flex gap-8 ac mb-4"><div class="num">1</div><div class="xs mi">Sustained performance at next-level scope (6+ months)</div></div><div class="flex gap-8 ac mb-4"><div class="num">2</div><div class="xs mi">Demonstrated leadership behaviors and mentorship</div></div><div class="flex gap-8 ac mb-4"><div class="num">3</div><div class="xs mi">Business need and organizational fit for the role</div></div><div class="flex gap-8 ac"><div class="num">4</div><div class="xs mi">Calibration consensus across leadership team</div></div></div><div class="card"><div class="label mb-8">Process</div><div class="timeline" style="padding-left:16px;"><div class="step"><div class="flex gap-8 ac"><div class="dot" style="margin-left:-23px;"></div><span class="xs mi">Manager nominates</span></div></div><div class="step"><div class="flex gap-8 ac"><div class="dot" style="margin-left:-23px;"></div><span class="xs mi">Promo packet with evidence</span></div></div><div class="step"><div class="flex gap-8 ac"><div class="dot" style="margin-left:-23px;"></div><span class="xs mi">Calibration committee review</span></div></div><div class="step" style="margin-bottom:0;"><div class="flex gap-8 ac"><div class="dot" style="margin-left:-23px;"></div><span class="xs mi">Decision communicated</span></div></div></div></div></div><div class="sn">35 / 50</div></div>
+
+<!-- 36 -->
+<div class="slide w"><div class="sec">Performance & Development</div><h2 class="t">Learning & Development</h2><div class="g4 mt-20"><div class="card ct"><div class="icon-box" style="margin:0 auto 8px;">📖</div><div class="sm b">L&D Budget</div><div class="xs mut mt-4">$X,000 / person / year</div></div><div class="card ct"><div class="icon-box" style="margin:0 auto 8px;">🎓</div><div class="sm b">Conferences</div><div class="xs mut mt-4">1 conference / year</div></div><div class="card ct"><div class="icon-box" style="margin:0 auto 8px;">🧑‍🏫</div><div class="sm b">Coaching</div><div class="xs mut mt-4">Exec coaching for M+</div></div><div class="card ct"><div class="icon-box" style="margin:0 auto 8px;">🔄</div><div class="sm b">Rotations</div><div class="xs mut mt-4">Cross-team stretch assignments</div></div></div><div class="card mt-16"><div class="label mb-4">Internal Programs</div><div class="flex ac gap-4 nw" style="overflow-x:auto;"><div class="pill">New Manager Bootcamp</div><div class="pill">Technical Writing</div><div class="pill">Public Speaking</div><div class="pill">Leadership Forum</div></div></div><div class="sn">36 / 50</div></div>
+
+<!-- 37 -->
+<div class="slide l"><div class="sec">Total Rewards</div><h2 class="t">Total Rewards Overview</h2><div class="g4 mt-20"><div class="card at ct"><div class="lg b">Base</div><div class="xs mi mt-8 lh">Competitive salary benchmarked to 75th percentile</div></div><div class="card atm ct"><div class="lg b">Equity</div><div class="xs mi mt-8 lh">RSUs / options with 4-year vest, 1-year cliff</div></div><div class="card atl ct"><div class="lg b">Benefits</div><div class="xs mi mt-8 lh">Medical, dental, vision, life, 401k match</div></div><div class="card ct" style="border-top:3px solid var(--bg);"><div class="lg b">Perks</div><div class="xs mi mt-8 lh">Remote stipend, wellness, L&D, PTO</div></div></div><div class="sn">37 / 50</div></div>
+
+<!-- 38 -->
+<div class="slide w"><div class="sec">Total Rewards</div><h2 class="t">Comp Philosophy</h2><div class="card al mt-20" style="padding:clamp(12px,2vw,20px);"><p class="md sf it dk lh">We pay competitively to attract and retain top talent. Compensation reflects role level, market data, and individual performance — not negotiation skill.</p></div><div class="g3 mt-16"><div><div class="label mb-4">Benchmarking</div><p class="xs mi lh">Radford / Pave data. Updated annually. Target: 75th percentile for base, 65th for total comp.</p></div><div><div class="label mb-4">Pay Equity</div><p class="xs mi lh">Annual pay equity audit across gender, ethnicity, and tenure. Adjustments made proactively.</p></div><div><div class="label mb-4">Transparency</div><p class="xs mi lh">Comp bands published internally for every level. Managers trained on comp conversations.</p></div></div><div class="sn">38 / 50</div></div>
+
+<!-- 39 -->
+<div class="slide w"><div class="sec">Total Rewards</div><h2 class="t">Benefits Summary</h2><div class="g2 mt-20"><div class="card"><div class="label mb-8">Health & Wellness</div><div class="xs mi lh">Medical — 100% employee, 80% dependents<br>Dental & Vision — 100% employee<br>Mental health — Therapy stipend $Xk/yr<br>Wellness — $XXX/month stipend<br>Gym / fitness reimbursement</div></div><div class="card"><div class="label mb-8">Financial</div><div class="xs mi lh">401(k) — X% match, immediate vesting<br>Life insurance — 2x salary<br>Disability — STD + LTD<br>FSA / HSA — Pre-tax accounts<br>Financial advisor access</div></div><div class="card"><div class="label mb-8">Time Off</div><div class="xs mi lh">PTO — Flexible / unlimited<br>Company holidays — XX days<br>Parental leave — XX weeks (all parents)<br>Sabbatical — X weeks at X years<br>Volunteer days — X/year</div></div><div class="card"><div class="label mb-8">Work Environment</div><div class="xs mi lh">Remote-first policy<br>Home office stipend — $X,XXX<br>Co-working space access<br>Annual team offsites<br>Internet / phone stipend</div></div></div><div class="sn">39 / 50</div></div>
+
+<!-- 40 -->
+<div class="slide w"><div class="sec">Total Rewards</div><h2 class="t">Equity Overview</h2><div class="g2 mt-20"><div class="card"><div class="label mb-8">How Equity Works</div><div class="xs mi lh">You receive [RSUs / stock options] as part of your total compensation. Equity vests over 4 years with a 1-year cliff — 25% vests at your 1-year anniversary, then monthly thereafter.</div></div><div class="card"><div class="label mb-8">Key Terms</div><div class="mb-4"><div class="xs mut">Vesting Schedule</div><div class="sm b">4 years, 1-year cliff</div></div><div class="mb-4"><div class="xs mut">Refresh Grants</div><div class="sm b">Annual, performance-based</div></div><div><div class="xs mut">Exercise Window</div><div class="sm b">90 days post-departure</div></div></div></div><div class="sn">40 / 50</div></div>
+
+<!-- 41 -->
+<div class="slide w"><div class="sec">Engagement & Culture</div><h2 class="t">Engagement Survey Results</h2><div class="g4 mt-20"><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XX%</div><div class="lbl">Response Rate</div></div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">X.X</div><div class="lbl">Overall Score (/ 5)</div></div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">XX%</div><div class="lbl">Favorable</div></div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">+X%</div><div class="lbl">vs Last Quarter</div></div></div></div><div class="g2 mt-16"><div class="card"><div class="label mb-4">Highest Scoring</div><div class="xs mi lh">Mission alignment — X.X<br>Manager relationship — X.X<br>Team collaboration — X.X</div></div><div class="card"><div class="label mb-4">Lowest Scoring</div><div class="xs mi lh">Career development — X.X<br>Cross-team communication — X.X<br>Work-life balance — X.X</div></div></div><div class="sn">41 / 50</div></div>
+
+<!-- 42 -->
+<div class="slide w"><div class="sec">Engagement & Culture</div><h2 class="t">eNPS Scorecard</h2><div class="side mt-20"><div style="flex-shrink:0;"><div style="font-size:clamp(48px,8vw,72px);font-weight:700;">+XX</div><div class="sm mut">Current eNPS</div><div class="pill pill-d mt-8">+X QoQ</div></div><div style="flex:1;"><div class="placeholder" style="height:clamp(80px,12vw,120px);">eNPS trend over 6 quarters</div></div></div><div style="margin-top:16px;"><div class="label mb-8">Distribution</div><div class="flex" style="height:clamp(18px,2.5vw,24px);"><div style="width:60%;background:var(--dark);"></div><div style="width:20%;background:var(--border);"></div><div style="width:20%;background:var(--light);"></div></div><div class="flex mt-4" style="font-size:clamp(8px,1vw,10px);color:var(--mid);"><span style="width:60%;">Promoters 60%</span><span style="width:20%;">Passives 20%</span><span style="width:20%;">Detractors 20%</span></div></div><div class="sn">42 / 50</div></div>
+
+<!-- 43 -->
+<div class="slide w"><div class="sec">Engagement & Culture</div><h2 class="t">Attrition Analysis</h2><div class="g3 mt-20"><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">X.X%</div><div class="lbl">Total Attrition</div></div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">X.X%</div><div class="lbl">Regretted</div></div></div><div class="card ct"><div class="stat" style="align-items:center;"><div class="val">X.X%</div><div class="lbl">Voluntary</div></div></div></div><div class="side mt-16"><div style="flex:1;"><div class="label mb-8">Top Departure Reasons</div><div class="flex ac gap-4 mb-4"><span class="xs" style="width:clamp(80px,14vw,140px);">Compensation</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:35%;"></div></div></div><div class="flex ac gap-4 mb-4"><span class="xs" style="width:clamp(80px,14vw,140px);">Career growth</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:28%;background:var(--muted);"></div></div></div><div class="flex ac gap-4 mb-4"><span class="xs" style="width:clamp(80px,14vw,140px);">Manager</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:18%;background:var(--border);"></div></div></div><div class="flex ac gap-4"><span class="xs" style="width:clamp(80px,14vw,140px);">Work-life balance</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:12%;background:var(--light);"></div></div></div></div><div class="card" style="width:clamp(140px,20vw,200px);flex-shrink:0;align-self:flex-start;"><div class="label mb-4">Benchmark</div><div class="xs mi lh">Industry avg attrition: XX%. Our regretted attrition target: &lt;X%. Currently X.Xpp above target.</div></div></div><div class="sn">43 / 50</div></div>
+
+<!-- 44 -->
+<div class="slide w"><div class="sec">DEI</div><h2 class="t">Diversity Dashboard</h2><div class="g2 mt-20"><div class="card"><div class="label mb-8">Gender Representation</div><div class="flex ac gap-4 mb-4"><span class="xs" style="width:60px;">Women</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:38%;"></div></div><span class="xs mut" style="width:28px;text-align:right;">38%</span></div><div class="flex ac gap-4 mb-4"><span class="xs" style="width:60px;">Men</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:60%;background:var(--muted);"></div></div><span class="xs mut" style="width:28px;text-align:right;">60%</span></div><div class="flex ac gap-4"><span class="xs" style="width:60px;">NB/Other</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:2%;background:var(--border);"></div></div><span class="xs mut" style="width:28px;text-align:right;">2%</span></div></div><div class="card"><div class="label mb-8">Leadership Diversity</div><div class="flex ac gap-4 mb-4"><span class="xs" style="width:60px;">Women</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:30%;"></div></div><span class="xs mut" style="width:28px;text-align:right;">30%</span></div><div class="flex ac gap-4 mb-4"><span class="xs" style="width:60px;">URG</span><div class="bar-t" style="flex:1;"><div class="bar-f" style="width:22%;background:var(--muted);"></div></div><span class="xs mut" style="width:28px;text-align:right;">22%</span></div></div></div><div class="sn">44 / 50</div></div>
+
+<!-- 45 -->
+<div class="slide w"><div class="sec">DEI</div><h2 class="t">DEI Goals</h2><div class="g3 mt-20"><div class="card at"><div class="label mb-8">Representation</div><div class="xs mi lh">Women in engineering: XX% → XX%<br>URG in leadership: XX% → XX%<br>Women in senior IC+: XX% → XX%</div></div><div class="card atm"><div class="label mb-8">Belonging</div><div class="xs mi lh">Inclusion index score: X.X → X.X<br>ERG participation: XX% → XX%<br>Psychological safety score: X.X → X.X</div></div><div class="card atl"><div class="label mb-8">Equity</div><div class="xs mi lh">Pay gap: &lt;X%<br>Promotion rate parity: within Xpp<br>Attrition parity: within Xpp</div></div></div><div class="sn">45 / 50</div></div>
+
+<!-- 46 -->
+<div class="slide w"><div class="sec">Workforce Planning</div><h2 class="t">Workforce Plan</h2><div class="side mt-20"><div style="flex:1;"><div class="placeholder" style="height:clamp(140px,20vw,200px);">Headcount projection chart (FY26–FY28)</div></div><div class="card" style="width:clamp(180px,24vw,240px);flex-shrink:0;align-self:flex-start;"><div class="label mb-8">3-Year HC Targets</div><div class="mb-8"><div class="xs mut">FY2026</div><div class="md b">XXX</div></div><div class="mb-8"><div class="xs mut">FY2027</div><div class="md b">XXX</div></div><div><div class="xs mut">FY2028</div><div class="md b">XXX</div></div></div></div><div class="sn">46 / 50</div></div>
+
+<!-- 47 -->
+<div class="slide w"><div class="sec">Workforce Planning</div><h2 class="t">Succession Planning</h2><div style="overflow-x:auto;"><table class="dt mt-20"><tr><th>Critical Role</th><th>Current Holder</th><th>Ready Now</th><th>Ready 1–2 Yr</th><th class="c">Risk</th></tr><tr><td class="b">CTO</td><td>Name</td><td>Name A</td><td>Name B</td><td class="c"><span class="pill">Low</span></td></tr><tr><td class="b">VP Engineering</td><td>Name</td><td>—</td><td>Name C</td><td class="c"><span class="pill pill-d">High</span></td></tr><tr><td class="b">VP Sales</td><td>Name</td><td>Name D</td><td>Name E</td><td class="c"><span class="pill">Low</span></td></tr><tr><td class="b">Head of Product</td><td>Name</td><td>—</td><td>Name F</td><td class="c"><span class="pill" style="background:#ddd;">Medium</span></td></tr></table></div><div class="card mt-12"><p class="xs mi">Action needed: VP Engineering successor gap is high-risk. Recommend external search in parallel with internal development plan for Name C.</p></div><div class="sn">47 / 50</div></div>
+
+<!-- 48 -->
+<div class="slide w"><div class="sec">Policy</div><h2 class="t">Key Policies</h2><div class="g2 mt-20"><div class="card"><div class="label mb-8">Work Arrangement</div><div class="xs mi lh">Remote-first. Optional offices in [cities]. Core hours: 10am–3pm local time. In-person: quarterly offsites.</div></div><div class="card"><div class="label mb-8">Time Off</div><div class="xs mi lh">Flexible PTO (min 15 days/year). XX company holidays. Parental leave: XX weeks for all parents.</div></div><div class="card"><div class="label mb-8">Code of Conduct</div><div class="xs mi lh">Zero tolerance for harassment/discrimination. Reporting channels: manager, People team, anonymous hotline.</div></div><div class="card"><div class="label mb-8">Data & Confidentiality</div><div class="xs mi lh">All employees sign NDA and acceptable use policy. Customer data access is role-based and audited.</div></div></div><div class="sn">48 / 50</div></div>
+
+<!-- 49 -->
+<div class="slide l"><div class="sec">Closing</div><h2 class="t">Key Takeaways</h2><div style="margin-top:clamp(12px,2vw,20px);display:flex;flex-direction:column;gap:clamp(8px,1.5vw,14px);">
+<div class="card al" style="padding:clamp(10px,1.5vw,16px);"><div class="flex gap-12 ac"><div class="num">1</div><div class="md dk lh">Hiring plan is XX% on track. Key gaps remain in [function] — dedicated sourcer needed.</div></div></div>
+<div class="card al" style="padding:clamp(10px,1.5vw,16px);"><div class="flex gap-12 ac"><div class="num">2</div><div class="md dk lh">Employee engagement is [trending up/down]. Top action area: [specific initiative].</div></div></div>
+<div class="card al" style="padding:clamp(10px,1.5vw,16px);"><div class="flex gap-12 ac"><div class="num">3</div><div class="md dk lh">Regretted attrition in [team] requires immediate attention — retention packages recommended.</div></div></div>
+<div class="card al" style="padding:clamp(10px,1.5vw,16px);"><div class="flex gap-12 ac"><div class="num">4</div><div class="md dk lh">DEI targets on track for [goal]; behind on [goal]. Specific interventions proposed for Q2.</div></div></div>
+</div><div class="sn">49 / 50</div></div>
+
+<!-- 50 -->
+<div class="slide d" style="min-height:280px;display:flex;flex-direction:column;justify-content:center;">
+<h1 style="font-family:var(--serif);font-size:clamp(32px,6vw,52px);color:#fff;">Thank You</h1>
+<p class="md" style="color:var(--muted);margin-top:8px;">Questions, feedback, or follow-ups — we're here for it.</p>
+<div class="divider" style="width:clamp(48px,8vw,80px);margin-top:clamp(20px,4vw,32px);background:#333;"></div>
+<p class="xs" style="color:var(--muted);margin-top:16px;">people@company.com &middot; #people-team &middot; Open door: anytime</p>
+<div class="sn">50 / 50</div>
+</div>
+
+</body>
+</html>

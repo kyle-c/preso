@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>50 Product Development Slide Wireframes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap');
+
+  :root {
+    --black: #1a1a1a;
+    --dark: #333;
+    --mid: #666;
+    --muted: #999;
+    --border: #ccc;
+    --light: #e5e5e5;
+    --bg: #f5f5f5;
+    --white: #fff;
+    --sans: 'DM Sans', sans-serif;
+    --serif: 'DM Serif Display', serif;
+    --slide-w: 960px;
+    --slide-h: 540px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #eee;
+    font-family: var(--sans);
+    color: var(--dark);
+    padding: 40px 20px;
+  }
+
+  .toc {
+    max-width: var(--slide-w);
+    margin: 0 auto 60px;
+    padding: 40px;
+    background: var(--black);
+    color: var(--white);
+    border-radius: 8px;
+  }
+  .toc h1 { font-family: var(--sans); font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .toc p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; }
+  .toc-item { font-size: 11px; color: var(--muted); padding: 3px 0; }
+  .toc-item span { color: #555; margin-right: 6px; font-variant-numeric: tabular-nums; }
+
+  .slide {
+    width: var(--slide-w);
+    height: var(--slide-h);
+    margin: 0 auto 32px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  }
+  .slide.bg-white { background: var(--white); }
+  .slide.bg-dark { background: var(--black); color: var(--white); }
+  .slide.bg-light { background: var(--bg); }
+
+  .slide-num {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .slide.bg-dark .slide-num { color: #555; }
+
+  .section-label {
+    position: absolute;
+    top: 16px;
+    left: 28px;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .slide.bg-dark .section-label { color: #666; }
+
+  .slide-title {
+    font-family: var(--sans);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--black);
+    margin: 0;
+    line-height: 1.15;
+  }
+  .slide.bg-dark .slide-title { color: var(--white); }
+
+  .divider { height: 1px; background: var(--border); }
+  .slide.bg-dark .divider { background: #444; }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 10px;
+    background: var(--light);
+    color: var(--mid);
+  }
+  .pill.dark { background: var(--dark); color: var(--white); }
+
+  .placeholder {
+    background: var(--light);
+    border: 1px solid var(--border);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 11px;
+  }
+  .placeholder::before, .placeholder::after {
+    content: '';
+    position: absolute;
+    background: var(--border);
+  }
+  .placeholder::before {
+    width: 141.4%;
+    height: 1px;
+    transform: rotate(45deg);
+  }
+  .placeholder::after {
+    width: 141.4%;
+    height: 1px;
+    transform: rotate(-45deg);
+  }
+
+  .progress-bar {
+    height: 10px;
+    background: var(--light);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--dark);
+    border-radius: 2px;
+  }
+
+  .status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .status-dot.on-track { background: var(--mid); }
+  .status-dot.at-risk { background: var(--muted); }
+  .status-dot.blocked { background: var(--dark); }
+
+  /* Slide inner layout helpers */
+  .s-pad { padding: 36px 28px 28px; }
+  .s-pad-top { padding-top: 36px; }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  table.data-table th {
+    background: var(--dark);
+    color: var(--white);
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 11px;
+  }
+  table.data-table th:first-child { text-align: left; }
+  table.data-table td {
+    padding: 8px 10px;
+    text-align: center;
+    color: var(--mid);
+    font-size: 11px;
+  }
+  table.data-table td:first-child { text-align: left; color: var(--dark); }
+  table.data-table tr:nth-child(even) td { background: var(--bg); }
+  table.data-table td.bold { font-weight: 700; }
+
+  .avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--light);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .quadrant {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .quadrant::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .quadrant::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+  .quadrant .q-label {
+    padding: 8px 10px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+  .quadrant .q-label.muted { color: var(--muted); }
+  .quadrant .q-label.faint { color: var(--border); }
+
+  .dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--dark);
+    display: inline-block;
+  }
+  .dot.lg { width: 20px; height: 20px; }
+  .dot.muted { background: var(--muted); }
+
+  .num-circle {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--dark);
+    color: var(--white);
+    font-size: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .funnel-bar {
+    height: 32px;
+    background: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 11px;
+    margin: 0 auto;
+  }
+  .funnel-bar.mid { background: var(--muted); }
+  .funnel-bar.light { background: var(--border); }
+
+  .check-box {
+    width: 14px; height: 14px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: var(--white);
+    border-radius: 2px;
+  }
+  .check-box.pass { background: var(--dark); }
+  .check-box.fail { background: var(--border); }
+
+  /* For phone frames in the feedback wall */
+  .feedback-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .feedback-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .feedback-card .quote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 10px;
+    color: var(--mid);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .flex { display: flex; }
+  .flex-col { flex-direction: column; }
+  .gap-4 { gap: 4px; }
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .gap-16 { gap: 16px; }
+  .gap-24 { gap: 24px; }
+  .items-center { align-items: center; }
+
+  .label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .text-xs { font-size: 10px; }
+  .text-sm { font-size: 12px; }
+  .text-md { font-size: 14px; }
+  .text-lg { font-size: 18px; }
+  .text-xl { font-size: 24px; }
+  .text-muted { color: var(--muted); }
+  .text-mid { color: var(--mid); }
+  .text-dark { color: var(--dark); }
+  .text-white { color: var(--white); }
+  .text-border { color: var(--border); }
+  .font-bold { font-weight: 700; }
+  .font-serif { font-family: var(--serif); }
+  .italic { font-style: italic; }
+  .text-center { text-align: center; }
+  .text-right { text-align: right; }
+  .leading-snug { line-height: 1.3; }
+  .leading-relaxed { line-height: 1.6; }
+
+  .w-full { width: 100%; }
+  .mt-auto { margin-top: auto; }
+  .mt-4 { margin-top: 4px; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-24 { margin-top: 24px; }
+  .mb-4 { margin-bottom: 4px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-12 { margin-bottom: 12px; }
+  .mb-16 { margin-bottom: 16px; }
+  .p-12 { padding: 12px; }
+  .p-16 { padding: 16px; }
+
+  .abs { position: absolute; }
+  .rel { position: relative; }
+
+  .top-accent { border-top: 3px solid var(--dark); }
+  .top-accent-muted { border-top: 3px solid var(--muted); }
+  .top-accent-light { border-top: 3px solid var(--border); }
+</style>
+</head>
+<body>
+
+<!-- TOC -->
+<div class="toc">
+  <h1>50 Slide Wireframe Layouts</h1>
+  <p>Internal product development presentation templates &middot; Black & white &middot; Scroll to browse</p>
+  <div class="toc-grid">
+    <div class="toc-item"><span>01</span> Title / Cover</div>
+    <div class="toc-item"><span>26</span> Feature Prioritization Matrix</div>
+    <div class="toc-item"><span>02</span> Agenda</div>
+    <div class="toc-item"><span>27</span> Opportunity Solution Tree</div>
+    <div class="toc-item"><span>03</span> Table of Contents</div>
+    <div class="toc-item"><span>28</span> Initiative Brief</div>
+    <div class="toc-item"><span>04</span> Team Introduction</div>
+    <div class="toc-item"><span>29</span> Trade-off Analysis</div>
+    <div class="toc-item"><span>05</span> Meeting Norms</div>
+    <div class="toc-item"><span>30</span> Scope Definition</div>
+    <div class="toc-item"><span>06</span> Mission Statement</div>
+    <div class="toc-item"><span>31</span> Requirements Summary</div>
+    <div class="toc-item"><span>07</span> Strategic Pillars</div>
+    <div class="toc-item"><span>32</span> Success Metrics</div>
+    <div class="toc-item"><span>08</span> OKRs</div>
+    <div class="toc-item"><span>33</span> Design Principles</div>
+    <div class="toc-item"><span>09</span> Competitive Landscape</div>
+    <div class="toc-item"><span>34</span> User Flow Diagram</div>
+    <div class="toc-item"><span>10</span> Market Opportunity</div>
+    <div class="toc-item"><span>35</span> Wireframe Walkthrough</div>
+    <div class="toc-item"><span>11</span> User Persona</div>
+    <div class="toc-item"><span>36</span> High-Fidelity Mockup</div>
+    <div class="toc-item"><span>12</span> Customer Journey</div>
+    <div class="toc-item"><span>37</span> Before & After</div>
+    <div class="toc-item"><span>13</span> Jobs To Be Done</div>
+    <div class="toc-item"><span>38</span> Prototype Demo</div>
+    <div class="toc-item"><span>14</span> Problem Statement</div>
+    <div class="toc-item"><span>39</span> Accessibility Checklist</div>
+    <div class="toc-item"><span>15</span> Research Summary</div>
+    <div class="toc-item"><span>40</span> Technical Architecture</div>
+    <div class="toc-item"><span>16</span> Qualitative Findings</div>
+    <div class="toc-item"><span>41</span> Release Plan</div>
+    <div class="toc-item"><span>17</span> Quantitative Data</div>
+    <div class="toc-item"><span>42</span> Dependency Map</div>
+    <div class="toc-item"><span>18</span> NPS Scorecard</div>
+    <div class="toc-item"><span>43</span> Risk Register</div>
+    <div class="toc-item"><span>19</span> Feedback Wall</div>
+    <div class="toc-item"><span>44</span> Launch Checklist</div>
+    <div class="toc-item"><span>20</span> Heatmap</div>
+    <div class="toc-item"><span>45</span> Tech Debt &amp; Bugs</div>
+    <div class="toc-item"><span>21</span> Funnel Analysis</div>
+    <div class="toc-item"><span>46</span> Status Dashboard</div>
+    <div class="toc-item"><span>22</span> Segment Comparison</div>
+    <div class="toc-item"><span>47</span> Decisions Needed</div>
+    <div class="toc-item"><span>23</span> Product Vision</div>
+    <div class="toc-item"><span>48</span> Next Steps</div>
+    <div class="toc-item"><span>24</span> Roadmap Timeline</div>
+    <div class="toc-item"><span>49</span> Retrospective</div>
+    <div class="toc-item"><span>25</span> Now / Next / Later</div>
+    <div class="toc-item"><span>50</span> Thank You / Q&A</div>
+  </div>
+</div>
+
+<!-- SLIDE 1: Title / Cover -->
+<div class="slide bg-dark" style="padding: 48px;">
+  <div style="position:absolute;top:28px;right:28px;width:80px;height:48px;" class="placeholder" style="border-color:#555;">Logo</div>
+  <h1 style="font-size:48px;font-weight:700;color:#fff;margin-top:48px;">Project Name</h1>
+  <p style="font-size:16px;color:var(--muted);margin-top:12px;max-width:500px;">Subtitle or tagline goes here — a single sentence that frames the work</p>
+  <div class="divider" style="width:80px;margin-top:40px;background:#555;"></div>
+  <p style="font-size:12px;color:var(--muted);margin-top:20px;">Team Name &middot; Q1 2026 &middot; Internal</p>
+  <div class="slide-num">1 / 50</div>
+</div>
+
+<!-- SLIDE 2: Agenda -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Opening & Navigation</div>
+  <h2 class="slide-title" style="margin-top:12px;">Agenda</h2>
+  <div style="margin-top:28px;display:flex;flex-direction:column;gap:0;">
+    <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--light);">
+      <span style="font-size:20px;font-weight:700;color:var(--border);width:40px;">01</span>
+      <span style="font-size:15px;color:var(--dark);flex:1;">Context & Strategy</span>
+      <span style="font-size:12px;color:var(--muted);">10 min</span>
+    </div>
+    <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--light);">
+      <span style="font-size:20px;font-weight:700;color:var(--border);width:40px;">02</span>
+      <span style="font-size:15px;color:var(--dark);flex:1;">Research & Insights</span>
+      <span style="font-size:12px;color:var(--muted);">15 min</span>
+    </div>
+    <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--light);">
+      <span style="font-size:20px;font-weight:700;color:var(--border);width:40px;">03</span>
+      <span style="font-size:15px;color:var(--dark);flex:1;">Product Direction</span>
+      <span style="font-size:12px;color:var(--muted);">20 min</span>
+    </div>
+    <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--light);">
+      <span style="font-size:20px;font-weight:700;color:var(--border);width:40px;">04</span>
+      <span style="font-size:15px;color:var(--dark);flex:1;">Design & UX</span>
+      <span style="font-size:12px;color:var(--muted);">15 min</span>
+    </div>
+    <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--light);">
+      <span style="font-size:20px;font-weight:700;color:var(--border);width:40px;">05</span>
+      <span style="font-size:15px;color:var(--dark);flex:1;">Engineering & Delivery</span>
+      <span style="font-size:12px;color:var(--muted);">10 min</span>
+    </div>
+    <div style="display:flex;align-items:baseline;padding:12px 0;">
+      <span style="font-size:20px;font-weight:700;color:var(--border);width:40px;">06</span>
+      <span style="font-size:15px;color:var(--dark);flex:1;">Review & Next Steps</span>
+      <span style="font-size:12px;color:var(--muted);">10 min</span>
+    </div>
+  </div>
+  <div class="slide-num">2 / 50</div>
+</div>
+
+<!-- SLIDE 3: Table of Contents -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Opening & Navigation</div>
+  <h2 class="slide-title" style="margin-top:12px;">Contents</h2>
+  <div class="cols-2" style="margin-top:24px;font-size:11px;color:var(--mid);line-height:2;">
+    <div>01&ensp;Title / Cover<br>02&ensp;Agenda<br>03&ensp;Contents<br>04&ensp;Team Intro<br>05&ensp;Meeting Norms<br>06&ensp;Mission<br>07&ensp;Strategic Pillars<br>08&ensp;OKRs<br>09&ensp;Competitive Landscape<br>10&ensp;Market Opportunity<br>11&ensp;User Persona<br>12&ensp;Customer Journey<br>13&ensp;JTBD Framework</div>
+    <div>14&ensp;Problem Statement<br>15&ensp;Research Summary<br>16&ensp;Qualitative Findings<br>17&ensp;Quantitative Data<br>18&ensp;NPS Scorecard<br>19&ensp;Feedback Wall<br>20&ensp;Heatmap<br>21&ensp;Funnel Analysis<br>22&ensp;Cohort Comparison<br>23&ensp;Product Vision<br>24&ensp;Roadmap Timeline<br>25&ensp;Now / Next / Later</div>
+  </div>
+  <div class="slide-num">3 / 50</div>
+</div>
+
+<!-- SLIDE 4: Team Introduction -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Opening & Navigation</div>
+  <h2 class="slide-title" style="margin-top:12px;">The Team</h2>
+  <div class="cols-3" style="margin-top:28px;row-gap:28px;">
+    <div class="flex gap-12 items-center"><div class="avatar"></div><div><div class="text-sm font-bold">First Last</div><div class="text-xs text-muted">Product Manager</div></div></div>
+    <div class="flex gap-12 items-center"><div class="avatar"></div><div><div class="text-sm font-bold">First Last</div><div class="text-xs text-muted">Design Lead</div></div></div>
+    <div class="flex gap-12 items-center"><div class="avatar"></div><div><div class="text-sm font-bold">First Last</div><div class="text-xs text-muted">Eng Lead</div></div></div>
+    <div class="flex gap-12 items-center"><div class="avatar"></div><div><div class="text-sm font-bold">First Last</div><div class="text-xs text-muted">Data Science</div></div></div>
+    <div class="flex gap-12 items-center"><div class="avatar"></div><div><div class="text-sm font-bold">First Last</div><div class="text-xs text-muted">Research</div></div></div>
+    <div class="flex gap-12 items-center"><div class="avatar"></div><div><div class="text-sm font-bold">First Last</div><div class="text-xs text-muted">Content Design</div></div></div>
+  </div>
+  <div class="slide-num">4 / 50</div>
+</div>
+
+<!-- SLIDE 5: Meeting Norms -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Opening & Navigation</div>
+  <h2 class="slide-title" style="margin-top:12px;">How We'll Work Today</h2>
+  <div style="margin-top:28px;display:flex;flex-direction:column;gap:16px;">
+    <div class="flex gap-12"><div style="width:28px;height:28px;background:var(--bg);border:1px solid var(--border);border-radius:3px;flex-shrink:0;"></div><div><div class="text-md font-bold">Cameras on</div><div class="text-xs text-muted mt-4">Stay present and engaged throughout the session.</div></div></div>
+    <div class="flex gap-12"><div style="width:28px;height:28px;background:var(--bg);border:1px solid var(--border);border-radius:3px;flex-shrink:0;"></div><div><div class="text-md font-bold">Questions in chat</div><div class="text-xs text-muted mt-4">Drop questions in the chat — we'll address them at section breaks.</div></div></div>
+    <div class="flex gap-12"><div style="width:28px;height:28px;background:var(--bg);border:1px solid var(--border);border-radius:3px;flex-shrink:0;"></div><div><div class="text-md font-bold">Mute when not speaking</div><div class="text-xs text-muted mt-4">Helps keep background noise down for remote participants.</div></div></div>
+    <div class="flex gap-12"><div style="width:28px;height:28px;background:var(--bg);border:1px solid var(--border);border-radius:3px;flex-shrink:0;"></div><div><div class="text-md font-bold">Decisions by end</div><div class="text-xs text-muted mt-4">We'll aim to leave with clear owners and next steps.</div></div></div>
+  </div>
+  <div class="slide-num">5 / 50</div>
+</div>
+
+<!-- SLIDE 6: Mission Statement -->
+<div class="slide bg-dark" style="padding:48px;">
+  <div style="font-size:80px;font-family:var(--serif);color:var(--muted);line-height:1;margin-top:20px;">&ldquo;</div>
+  <p style="font-size:24px;font-family:var(--serif);font-style:italic;color:#fff;margin-top:-10px;max-width:650px;line-height:1.5;">Our mission is to [verb] [audience] by [method], creating [outcome].</p>
+  <p style="font-size:12px;color:var(--muted);margin-top:24px;">— Company / Product Mission Statement</p>
+  <div class="slide-num">6 / 50</div>
+</div>
+
+<!-- SLIDE 7: Strategic Pillars -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Context & Strategy</div>
+  <h2 class="slide-title" style="margin-top:12px;">Strategic Pillars</h2>
+  <div class="cols-4" style="margin-top:24px;">
+    <div class="card top-accent" style="padding:16px;">
+      <div style="font-size:22px;font-weight:700;color:var(--border);">01</div>
+      <div class="text-md font-bold mt-4">Growth</div>
+      <div class="text-xs text-mid mt-8 leading-relaxed">Expand user base through referral loops and new market entry.</div>
+    </div>
+    <div class="card top-accent" style="padding:16px;">
+      <div style="font-size:22px;font-weight:700;color:var(--border);">02</div>
+      <div class="text-md font-bold mt-4">Reliability</div>
+      <div class="text-xs text-mid mt-8 leading-relaxed">Invest in infrastructure to achieve 99.99% uptime.</div>
+    </div>
+    <div class="card top-accent" style="padding:16px;">
+      <div style="font-size:22px;font-weight:700;color:var(--border);">03</div>
+      <div class="text-md font-bold mt-4">Intelligence</div>
+      <div class="text-xs text-mid mt-8 leading-relaxed">Embed ML across the product to personalize every touchpoint.</div>
+    </div>
+    <div class="card top-accent" style="padding:16px;">
+      <div style="font-size:22px;font-weight:700;color:var(--border);">04</div>
+      <div class="text-md font-bold mt-4">Trust</div>
+      <div class="text-xs text-mid mt-8 leading-relaxed">Lead on compliance, transparency, and user data protection.</div>
+    </div>
+  </div>
+  <div class="slide-num">7 / 50</div>
+</div>
+
+<!-- SLIDE 8: OKRs -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Context & Strategy</div>
+  <h2 class="slide-title" style="margin-top:12px;">OKRs — Q1 2026</h2>
+  <div style="margin-top:24px;">
+    <div class="text-md font-bold mb-8">Objective 1: Increase activation rate</div>
+    <div class="flex items-center gap-8 mb-4"><span class="text-xs text-mid" style="width:200px;">KR1: Onboarding completion → 75%</span><div class="progress-bar" style="flex:1;"><div class="fill" style="width:60%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">60%</span></div>
+    <div class="flex items-center gap-8 mb-4"><span class="text-xs text-mid" style="width:200px;">KR2: Day-7 retention → 40%</span><div class="progress-bar" style="flex:1;"><div class="fill" style="width:45%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">45%</span></div>
+    <div class="flex items-center gap-8 mb-16"><span class="text-xs text-mid" style="width:200px;">KR3: First transaction < 3 min</span><div class="progress-bar" style="flex:1;"><div class="fill" style="width:80%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">80%</span></div>
+    <div class="text-md font-bold mb-8">Objective 2: Improve operational efficiency</div>
+    <div class="flex items-center gap-8 mb-4"><span class="text-xs text-mid" style="width:200px;">KR1: Support tickets ↓ 30%</span><div class="progress-bar" style="flex:1;"><div class="fill" style="width:35%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">35%</span></div>
+    <div class="flex items-center gap-8"><span class="text-xs text-mid" style="width:200px;">KR2: Avg resolution < 4 hrs</span><div class="progress-bar" style="flex:1;"><div class="fill" style="width:70%;"></div></div><span class="text-xs text-muted" style="width:32px;text-align:right;">70%</span></div>
+  </div>
+  <div class="slide-num">8 / 50</div>
+</div>
+
+<!-- SLIDE 9: Competitive Landscape -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Context & Strategy</div>
+  <h2 class="slide-title" style="margin-top:12px;">Competitive Landscape</h2>
+  <div class="flex gap-16" style="margin-top:20px;">
+    <div style="flex:1;">
+      <div class="label text-center mb-4">High Differentiation</div>
+      <div class="quadrant" style="height:260px;">
+        <div class="q-label">DO FIRST</div><div class="q-label muted">SCHEDULE</div>
+        <div class="q-label muted">QUICK WINS</div><div class="q-label faint">DEPRIORITIZE</div>
+      </div>
+      <div class="label text-center mt-4">Low Differentiation</div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span class="label">Niche</span><span class="label">Mass Market</span></div>
+    </div>
+    <div class="card p-16" style="width:200px;align-self:flex-start;">
+      <div class="text-sm font-bold mb-8">Key Takeaway</div>
+      <div class="text-xs text-mid leading-relaxed">We occupy a unique position — high differentiation, niche focus. Competitor D is encroaching.</div>
+    </div>
+  </div>
+  <div class="slide-num">9 / 50</div>
+</div>
+
+<!-- SLIDE 10: Market Opportunity -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Context & Strategy</div>
+  <h2 class="slide-title" style="margin-top:12px;">Market Opportunity</h2>
+  <div class="flex gap-24" style="margin-top:24px;">
+    <div style="position:relative;width:240px;height:240px;">
+      <div style="position:absolute;width:240px;height:240px;border-radius:50%;background:var(--light);border:1px solid var(--border);"></div>
+      <div style="position:absolute;left:40px;top:40px;width:160px;height:160px;border-radius:50%;background:var(--border);"></div>
+      <div style="position:absolute;left:80px;top:80px;width:80px;height:80px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">SOM</div>
+    </div>
+    <div style="flex:1;">
+      <div style="margin-bottom:24px;"><div class="label mb-4">TAM</div><div style="font-size:28px;font-weight:700;color:var(--dark);">$XX B</div><div class="text-xs text-muted mt-4">Total addressable market — all potential revenue globally.</div></div>
+      <div style="margin-bottom:24px;"><div class="label mb-4">SAM</div><div style="font-size:28px;font-weight:700;color:var(--dark);">$X.X B</div><div class="text-xs text-muted mt-4">Serviceable addressable market — reachable with current model.</div></div>
+      <div><div class="label mb-4">SOM</div><div style="font-size:28px;font-weight:700;color:var(--dark);">$XXX M</div><div class="text-xs text-muted mt-4">Serviceable obtainable market — realistic near-term capture.</div></div>
+    </div>
+  </div>
+  <div class="slide-num">10 / 50</div>
+</div>
+
+<!-- SLIDE 11: User Persona -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Context & Strategy</div>
+  <h2 class="slide-title" style="margin-top:12px;">Primary Persona</h2>
+  <div class="flex gap-16" style="margin-top:24px;">
+    <div style="width:80px;height:80px;border-radius:50%;background:var(--light);border:1px solid var(--border);flex-shrink:0;"></div>
+    <div>
+      <div class="text-lg font-bold">Persona Name</div>
+      <div class="text-xs text-muted mt-4">Age &middot; Location &middot; Occupation</div>
+      <div class="text-xs font-serif italic text-mid mt-8 leading-relaxed">"A brief quote that captures their perspective or frustration in their own words."</div>
+    </div>
+  </div>
+  <div class="cols-3" style="margin-top:24px;">
+    <div><div class="label mb-8">Needs</div><div class="divider mb-8"></div><div class="text-xs text-mid leading-relaxed">Need statement 1<br>Need statement 2<br>Need statement 3</div></div>
+    <div><div class="label mb-8">Pain Points</div><div class="divider mb-8"></div><div class="text-xs text-mid leading-relaxed">Pain point 1<br>Pain point 2<br>Pain point 3</div></div>
+    <div><div class="label mb-8">Goals</div><div class="divider mb-8"></div><div class="text-xs text-mid leading-relaxed">Goal statement 1<br>Goal statement 2<br>Goal statement 3</div></div>
+  </div>
+  <div class="slide-num">11 / 50</div>
+</div>
+
+<!-- SLIDE 12: Customer Journey -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Context & Strategy</div>
+  <h2 class="slide-title" style="margin-top:12px;">Customer Journey</h2>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:20px;">
+    <div style="background:var(--dark);color:#fff;padding:8px;text-align:center;font-size:10px;">Awareness</div>
+    <div style="background:var(--dark);color:#fff;padding:8px;text-align:center;font-size:10px;">Consideration</div>
+    <div style="background:var(--dark);color:#fff;padding:8px;text-align:center;font-size:10px;">Onboarding</div>
+    <div style="background:var(--dark);color:#fff;padding:8px;text-align:center;font-size:10px;">First Use</div>
+    <div style="background:var(--dark);color:#fff;padding:8px;text-align:center;font-size:10px;">Retention</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px;">
+    <div><div class="label" style="font-size:8px;">Touchpoint</div><div class="text-xs text-mid mt-4">Channel or interaction</div></div>
+    <div><div class="label" style="font-size:8px;">Touchpoint</div><div class="text-xs text-mid mt-4">Channel or interaction</div></div>
+    <div><div class="label" style="font-size:8px;">Touchpoint</div><div class="text-xs text-mid mt-4">Channel or interaction</div></div>
+    <div><div class="label" style="font-size:8px;">Touchpoint</div><div class="text-xs text-mid mt-4">Channel or interaction</div></div>
+    <div><div class="label" style="font-size:8px;">Touchpoint</div><div class="text-xs text-mid mt-4">Channel or interaction</div></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-around;margin:16px 0;height:40px;">
+    <svg width="100%" height="40" style="overflow:visible;"><polyline points="96,30 288,15 480,35 672,25 864,10" fill="none" stroke="var(--dark)" stroke-width="2"/><circle cx="96" cy="30" r="6" fill="var(--dark)"/><circle cx="288" cy="15" r="6" fill="var(--dark)"/><circle cx="480" cy="35" r="6" fill="var(--dark)"/><circle cx="672" cy="25" r="6" fill="var(--dark)"/><circle cx="864" cy="10" r="6" fill="var(--dark)"/></svg>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+    <div><div class="label" style="font-size:8px;">Opportunity</div><div class="text-xs text-mid mt-4">Pain point to address.</div></div>
+    <div><div class="label" style="font-size:8px;">Opportunity</div><div class="text-xs text-mid mt-4">Pain point to address.</div></div>
+    <div><div class="label" style="font-size:8px;">Opportunity</div><div class="text-xs text-mid mt-4">Pain point to address.</div></div>
+    <div><div class="label" style="font-size:8px;">Opportunity</div><div class="text-xs text-mid mt-4">Pain point to address.</div></div>
+    <div><div class="label" style="font-size:8px;">Opportunity</div><div class="text-xs text-mid mt-4">Pain point to address.</div></div>
+  </div>
+  <div class="slide-num">12 / 50</div>
+</div>
+
+<!-- SLIDE 13: JTBD -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Context & Strategy</div>
+  <h2 class="slide-title" style="margin-top:12px;">Jobs To Be Done</h2>
+  <div class="card p-16" style="margin-top:20px;"><p class="text-md font-serif italic text-dark">When [situation], I want to [motivation], so I can [expected outcome].</p></div>
+  <div class="cols-3" style="margin-top:16px;">
+    <div class="card p-16"><div class="label mb-8">Functional Jobs</div><div class="text-xs text-mid leading-relaxed">Complete the task quickly<div class="divider" style="margin:6px 0;"></div>Reduce errors and rework<div class="divider" style="margin:6px 0;"></div>Get confirmation it worked</div></div>
+    <div class="card p-16"><div class="label mb-8">Emotional Jobs</div><div class="text-xs text-mid leading-relaxed">Feel confident it's done right<div class="divider" style="margin:6px 0;"></div>Reduce anxiety about money<div class="divider" style="margin:6px 0;"></div>Feel in control of the process</div></div>
+    <div class="card p-16"><div class="label mb-8">Social Jobs</div><div class="text-xs text-mid leading-relaxed">Look responsible to family<div class="divider" style="margin:6px 0;"></div>Demonstrate reliability<div class="divider" style="margin:6px 0;"></div>Maintain trust with recipients</div></div>
+  </div>
+  <div class="slide-num">13 / 50</div>
+</div>
+
+<!-- SLIDE 14: Problem Statement -->
+<div class="slide bg-light" style="padding:48px;">
+  <div class="section-label">Context & Strategy</div>
+  <div class="label mt-16">Problem</div>
+  <p style="font-size:22px;font-family:var(--serif);color:var(--dark);margin-top:12px;max-width:650px;line-height:1.5;">[User segment] struggles to [action] because [root cause], which results in [negative outcome / business impact].</p>
+  <div class="divider" style="width:120px;margin-top:28px;"></div>
+  <div class="label mt-24">Supporting Evidence</div>
+  <div class="flex gap-24" style="margin-top:12px;">
+    <div><span style="font-size:28px;font-weight:700;color:var(--dark);">XX%</span><span class="text-xs text-mid" style="margin-left:8px;">of users drop off at step 3</span></div>
+    <div><span style="font-size:28px;font-weight:700;color:var(--dark);">X.X</span><span class="text-xs text-mid" style="margin-left:8px;">avg NPS for this flow</span></div>
+    <div><span style="font-size:28px;font-weight:700;color:var(--dark);">XXk</span><span class="text-xs text-mid" style="margin-left:8px;">support tickets / quarter</span></div>
+  </div>
+  <div class="slide-num">14 / 50</div>
+</div>
+
+<!-- SLIDE 15: Research Summary -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Research & Insights</div>
+  <h2 class="slide-title" style="margin-top:12px;">Research Summary</h2>
+  <div class="flex gap-16" style="margin-top:20px;">
+    <div class="card p-16" style="width:220px;flex-shrink:0;">
+      <div class="label mb-12">Methodology</div>
+      <div class="mb-12"><div class="text-xs text-muted">Method</div><div class="text-sm text-dark">Moderated usability tests</div></div>
+      <div class="mb-12"><div class="text-xs text-muted">Participants</div><div class="text-sm text-dark">n = 12</div></div>
+      <div class="mb-12"><div class="text-xs text-muted">Duration</div><div class="text-sm text-dark">45 min sessions</div></div>
+      <div class="mb-12"><div class="text-xs text-muted">Date Range</div><div class="text-sm text-dark">Jan 6–24, 2026</div></div>
+      <div><div class="text-xs text-muted">Segments</div><div class="text-sm text-dark">New (6), Returning (6)</div></div>
+    </div>
+    <div style="flex:1;">
+      <div class="label mb-12">Key Findings</div>
+      <div class="flex gap-8 mb-12"><div class="num-circle">1</div><div class="text-sm text-mid">Finding 1: Brief summary of the most important insight from the research.</div></div>
+      <div class="flex gap-8 mb-12"><div class="num-circle">2</div><div class="text-sm text-mid">Finding 2: Second most critical observation with supporting context.</div></div>
+      <div class="flex gap-8 mb-12"><div class="num-circle">3</div><div class="text-sm text-mid">Finding 3: Third finding that connects to a product opportunity.</div></div>
+      <div class="flex gap-8"><div class="num-circle">4</div><div class="text-sm text-mid">Finding 4: Additional insight that influenced the recommendation.</div></div>
+    </div>
+  </div>
+  <div class="slide-num">15 / 50</div>
+</div>
+
+<!-- SLIDE 16: Qualitative Findings -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Research & Insights</div>
+  <h2 class="slide-title" style="margin-top:12px;">What We Heard</h2>
+  <div style="margin-top:20px;">
+    <div class="text-md font-bold mb-8">Theme 1: Trust & Transparency</div>
+    <div class="card p-12 mb-8"><p class="text-sm font-serif italic text-mid">"I never know if it went through until I call my family."</p></div>
+    <div class="card p-12 mb-16"><p class="text-sm font-serif italic text-mid">"The fees feel hidden — I want to see everything upfront."</p></div>
+    <div class="text-md font-bold mb-8">Theme 2: Speed & Simplicity</div>
+    <div class="card p-12 mb-8"><p class="text-sm font-serif italic text-mid">"I just want to send money in three taps, max."</p></div>
+    <div class="card p-12"><p class="text-sm font-serif italic text-mid">"Every extra screen makes me nervous I'll make a mistake."</p></div>
+  </div>
+  <div class="slide-num">16 / 50</div>
+</div>
+
+<!-- SLIDE 17: Quantitative Data -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Research & Insights</div>
+  <h2 class="slide-title" style="margin-top:12px;">Key Metrics</h2>
+  <div class="flex gap-16" style="margin-top:20px;">
+    <div style="flex:1;background:var(--bg);border:1px solid var(--border);padding:16px;display:flex;align-items:flex-end;gap:8px;height:220px;">
+      <div style="width:14%;background:var(--border);height:48%;"></div>
+      <div style="width:14%;background:var(--border);height:60%;"></div>
+      <div style="width:14%;background:var(--border);height:40%;"></div>
+      <div style="width:14%;background:var(--dark);height:72%;"></div>
+      <div style="width:14%;background:var(--border);height:52%;"></div>
+      <div style="width:14%;background:var(--border);height:64%;"></div>
+    </div>
+    <div style="width:200px;display:flex;flex-direction:column;gap:12px;">
+      <div class="card p-12"><div class="label mb-4">Callout</div><div style="font-size:26px;font-weight:700;color:var(--dark);">XX%</div><div class="text-xs text-mid mt-4">increase in metric during Month 4.</div></div>
+      <div class="card p-12"><div class="label mb-4">Trend</div><div class="text-xs text-mid leading-relaxed">Brief interpretation of what the data trend means for product direction.</div></div>
+    </div>
+  </div>
+  <div class="slide-num">17 / 50</div>
+</div>
+
+<!-- SLIDE 18: NPS Scorecard -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Research & Insights</div>
+  <h2 class="slide-title" style="margin-top:12px;">NPS Scorecard</h2>
+  <div class="flex gap-24" style="margin-top:20px;">
+    <div><div style="font-size:64px;font-weight:700;color:var(--dark);">42</div><div class="text-sm text-muted">Current NPS</div><div class="pill dark mt-8" style="font-size:10px;">+5 QoQ</div></div>
+    <div style="flex:1;background:var(--bg);border:1px solid var(--border);padding:16px;height:120px;">
+      <svg width="100%" height="80" style="overflow:visible;"><polyline points="20,60 80,50 140,55 200,40 260,30 320,20 380,10" fill="none" stroke="var(--dark)" stroke-width="2"/><circle cx="20" cy="60" r="4" fill="var(--dark)"/><circle cx="80" cy="50" r="4" fill="var(--dark)"/><circle cx="140" cy="55" r="4" fill="var(--dark)"/><circle cx="200" cy="40" r="4" fill="var(--dark)"/><circle cx="260" cy="30" r="4" fill="var(--dark)"/><circle cx="320" cy="20" r="4" fill="var(--dark)"/><circle cx="380" cy="10" r="4" fill="var(--dark)"/></svg>
+    </div>
+  </div>
+  <div class="label mt-16 mb-8">Distribution</div>
+  <div class="flex" style="height:24px;"><div style="width:60%;background:var(--dark);"></div><div style="width:18%;background:var(--border);"></div><div style="width:22%;background:var(--light);"></div></div>
+  <div class="flex mt-4" style="font-size:10px;color:var(--mid);"><span style="width:60%;">Promoters 60%</span><span style="width:18%;">Passives 18%</span><span style="width:22%;">Detractors 22%</span></div>
+  <div class="slide-num">18 / 50</div>
+</div>
+
+<!-- SLIDE 19: Feedback Wall -->
+<div class="slide bg-light s-pad">
+  <div class="section-label">Research & Insights</div>
+  <h2 class="slide-title" style="margin-top:12px;">Voice of the Customer</h2>
+  <div class="feedback-grid" style="margin-top:20px;">
+    <div class="feedback-card"><div class="quote">"I wish I could see the exchange rate before I start."</div><div class="pill">Pricing</div></div>
+    <div class="feedback-card"><div class="quote">"My mom doesn't have a smartphone, so the link doesn't help."</div><div class="pill">Access</div></div>
+    <div class="feedback-card"><div class="quote">"I tried three times and kept getting errors."</div><div class="pill">Reliability</div></div>
+    <div class="feedback-card"><div class="quote">"The confirmation takes too long — I get worried."</div><div class="pill">Speed</div></div>
+    <div class="feedback-card"><div class="quote">"I love how simple it is compared to [competitor]."</div><div class="pill">Simplicity</div></div>
+    <div class="feedback-card"><div class="quote">"Can I schedule a recurring transfer?"</div><div class="pill">Feature Req</div></div>
+    <div class="feedback-card"><div class="quote">"I don't understand why my transfer is on hold."</div><div class="pill">Transparency</div></div>
+    <div class="feedback-card"><div class="quote">"My friend told me — best decision ever."</div><div class="pill">Referral</div></div>
+  </div>
+  <div class="slide-num">19 / 50</div>
+</div>
+
+<!-- SLIDE 20: Heatmap -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Research & Insights</div>
+  <h2 class="slide-title" style="margin-top:12px;">Click Heatmap</h2>
+  <div class="flex gap-24" style="margin-top:20px;">
+    <div style="width:160px;height:300px;border-radius:16px;border:2px solid var(--dark);background:var(--bg);position:relative;overflow:hidden;flex-shrink:0;">
+      <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:40%;height:8px;background:var(--dark);border-radius:4px;"></div>
+      <div style="padding:28px 8px 8px;display:flex;flex-direction:column;gap:6px;">
+        <div style="height:20px;background:var(--light);border-radius:2px;"></div><div style="height:20px;background:var(--light);border-radius:2px;"></div><div style="height:20px;background:var(--light);border-radius:2px;"></div><div style="height:20px;background:var(--light);border-radius:2px;"></div><div style="height:20px;background:var(--light);border-radius:2px;"></div><div style="height:20px;background:var(--light);border-radius:2px;"></div>
+      </div>
+      <div style="position:absolute;top:40px;left:30px;width:50px;height:50px;border-radius:50%;background:rgba(26,26,26,0.25);"></div>
+      <div style="position:absolute;top:110px;left:50px;width:60px;height:60px;border-radius:50%;background:rgba(26,26,26,0.3);"></div>
+      <div style="position:absolute;top:200px;left:25px;width:40px;height:40px;border-radius:50%;background:rgba(26,26,26,0.2);"></div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:24px;">
+      <div class="flex gap-8 items-center"><div class="num-circle">A</div><div><div class="text-sm font-bold">Primary CTA</div><div class="text-xs text-mid">72% of clicks — users go straight to send money.</div></div></div>
+      <div class="flex gap-8 items-center"><div class="num-circle">B</div><div><div class="text-sm font-bold">Balance Check</div><div class="text-xs text-mid">48% interact — suggests high engagement.</div></div></div>
+      <div class="flex gap-8 items-center"><div class="num-circle">C</div><div><div class="text-sm font-bold">Help / FAQ</div><div class="text-xs text-mid">31% tap for help — potential confusion signal.</div></div></div>
+    </div>
+  </div>
+  <div class="slide-num">20 / 50</div>
+</div>
+
+<!-- SLIDE 21: Funnel Analysis -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Research & Insights</div>
+  <h2 class="slide-title" style="margin-top:12px;">Conversion Funnel</h2>
+  <div style="margin-top:24px;display:flex;flex-direction:column;gap:6px;">
+    <div class="funnel-bar" style="width:100%;">Visit — 100%</div>
+    <div class="funnel-bar" style="width:80%;">Sign Up — 62%</div>
+    <div class="funnel-bar mid" style="width:56%;">KYC Complete — 41%</div>
+    <div class="funnel-bar mid" style="width:38%;">First Transaction — 28%</div>
+    <div class="funnel-bar light" style="width:22%;color:var(--mid);">Retained (D30) — 15%</div>
+  </div>
+  <div class="card p-12 mt-16"><p class="text-sm text-mid">Biggest drop-off: Sign Up → KYC Complete (21 pp). Root cause: ID verification friction for users without US-issued documents.</p></div>
+  <div class="slide-num">21 / 50</div>
+</div>
+
+<!-- SLIDE 22: Segment Comparison -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Research & Insights</div>
+  <h2 class="slide-title" style="margin-top:12px;">Segment Comparison</h2>
+  <table class="data-table" style="margin-top:20px;">
+    <tr><th>Metric</th><th>Segment A</th><th>Segment B</th><th>Segment C</th><th>Delta</th></tr>
+    <tr><td>Activation Rate</td><td>72%</td><td>58%</td><td>65%</td><td class="bold">+14pp</td></tr>
+    <tr><td>Avg Transactions / Mo</td><td>4.2</td><td>2.8</td><td>3.5</td><td class="bold">+1.4</td></tr>
+    <tr><td>Avg Transaction Value</td><td>$320</td><td>$180</td><td>$250</td><td class="bold">+$140</td></tr>
+    <tr><td>D30 Retention</td><td>48%</td><td>31%</td><td>40%</td><td class="bold">+17pp</td></tr>
+    <tr><td>NPS</td><td>52</td><td>28</td><td>41</td><td class="bold">+24</td></tr>
+    <tr><td>Support Tickets / User</td><td>0.3</td><td>1.2</td><td>0.7</td><td class="bold">-0.9</td></tr>
+    <tr><td>Revenue / User / Mo</td><td>$12.80</td><td>$5.40</td><td>$9.10</td><td class="bold">+$7.40</td></tr>
+  </table>
+  <div class="slide-num">22 / 50</div>
+</div>
+
+<!-- SLIDE 23: Product Vision -->
+<div class="slide bg-dark" style="padding:48px;">
+  <div class="label" style="color:#666;margin-top:16px;">Product Vision</div>
+  <p style="font-size:26px;font-family:var(--serif);color:#fff;margin-top:20px;max-width:650px;line-height:1.5;">In [timeframe], [product] will be the [aspirational position] for [audience], making [outcome] effortless.</p>
+  <div class="divider" style="width:80px;margin-top:32px;background:#555;"></div>
+  <p style="font-size:13px;color:var(--muted);margin-top:16px;">This vision guides every product decision we make.</p>
+  <div class="slide-num">23 / 50</div>
+</div>
+
+<!-- SLIDE 24: Roadmap Timeline -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Product Direction</div>
+  <h2 class="slide-title" style="margin-top:12px;">Roadmap</h2>
+  <div class="cols-4" style="margin-top:20px;">
+    <div style="background:var(--dark);color:#fff;padding:6px;text-align:center;font-size:10px;font-weight:500;">Q1 2026</div>
+    <div style="background:var(--dark);color:#fff;padding:6px;text-align:center;font-size:10px;font-weight:500;">Q2 2026</div>
+    <div style="background:var(--dark);color:#fff;padding:6px;text-align:center;font-size:10px;font-weight:500;">Q3 2026</div>
+    <div style="background:var(--dark);color:#fff;padding:6px;text-align:center;font-size:10px;font-weight:500;">Q4 2026</div>
+  </div>
+  <div style="margin-top:12px;">
+    <div class="label mb-4" style="font-size:8px;">Consumer App</div><div class="divider mb-4"></div>
+    <div class="flex gap-4 mb-12"><div style="background:var(--dark);height:28px;flex:3;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:9px;">Feature A</div><div style="background:var(--dark);height:28px;flex:2;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:9px;">Feature B</div><div style="background:var(--dark);height:28px;flex:2;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:9px;">Feature C</div></div>
+    <div class="label mb-4" style="font-size:8px;">Backend / Infra</div><div class="divider mb-4"></div>
+    <div class="flex gap-4 mb-12"><div style="background:var(--muted);height:28px;flex:2;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:9px;">Feature D</div><div style="background:var(--muted);height:28px;flex:3;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:9px;">Feature E</div><div style="background:var(--muted);height:28px;flex:2;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:9px;">Feature F</div></div>
+    <div class="label mb-4" style="font-size:8px;">Ops & Tooling</div><div class="divider mb-4"></div>
+    <div class="flex gap-4"><div style="background:var(--border);height:28px;flex:2;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:9px;">Feature G</div><div style="background:var(--border);height:28px;flex:2;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:9px;">Feature H</div><div style="background:var(--border);height:28px;flex:3;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:9px;">Feature I</div></div>
+  </div>
+  <div class="slide-num">24 / 50</div>
+</div>
+
+<!-- SLIDE 25: Now / Next / Later -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Product Direction</div>
+  <h2 class="slide-title" style="margin-top:12px;">Now / Next / Later</h2>
+  <div class="cols-3" style="margin-top:20px;">
+    <div><div class="top-accent" style="margin-bottom:8px;"></div><div class="text-lg font-bold">Now</div><div class="text-xs text-muted mb-12">In progress — committed</div>
+      <div class="card p-12 mb-8"><div class="text-sm font-bold">Initiative A</div><div class="text-xs text-mid mt-4">Brief description of the initiative.</div></div>
+      <div class="card p-12 mb-8"><div class="text-sm font-bold">Initiative B</div><div class="text-xs text-mid mt-4">Brief description of the initiative.</div></div>
+      <div class="card p-12"><div class="text-sm font-bold">Initiative C</div><div class="text-xs text-mid mt-4">Brief description of the initiative.</div></div>
+    </div>
+    <div><div class="top-accent-muted" style="margin-bottom:8px;"></div><div class="text-lg font-bold">Next</div><div class="text-xs text-muted mb-12">Up next — validated</div>
+      <div class="card p-12 mb-8"><div class="text-sm font-bold">Initiative D</div><div class="text-xs text-mid mt-4">Brief description of the initiative.</div></div>
+      <div class="card p-12"><div class="text-sm font-bold">Initiative E</div><div class="text-xs text-mid mt-4">Brief description of the initiative.</div></div>
+    </div>
+    <div><div class="top-accent-light" style="margin-bottom:8px;"></div><div class="text-lg font-bold">Later</div><div class="text-xs text-muted mb-12">Future — exploring</div>
+      <div class="card p-12 mb-8"><div class="text-sm font-bold">Initiative F</div><div class="text-xs text-mid mt-4">Brief description of the initiative.</div></div>
+      <div class="card p-12"><div class="text-sm font-bold">Initiative G</div><div class="text-xs text-mid mt-4">Brief description of the initiative.</div></div>
+    </div>
+  </div>
+  <div class="slide-num">25 / 50</div>
+</div>
+
+<!-- SLIDES 26-50: Remaining slides follow same pattern -->
+<!-- SLIDE 26: Feature Prioritization Matrix -->
+<div class="slide bg-white s-pad">
+  <div class="section-label">Product Direction</div>
+  <h2 class="slide-title" style="margin-top:12px;">Prioritization Matrix</h2>
+  <div style="margin-top:16px;">
+    <div class="flex" style="font-size:8px;color:var(--muted);margin-bottom:4px;"><span>HIGH IMPACT</span></div>
+    <div class="quadrant" style="height:280px;">
+      <div class="q-label" style="font-weight:700;color:var(--dark);">DO FIRST</div><div class="q-label muted">SCHEDULE</div>
+      <div class="q-label muted">QUICK WINS</div><div class="q-label faint">DEPRIORITIZE</div>
+    </div>
+    <div class="flex" style="font-size:8px;color:var(--muted);margin-top:4px;justify-content:space-between;"><span>LOW EFFORT →</span><span>→ HIGH EFFORT</span></div>
+  </div>
+  <div class="slide-num">26 / 50</div>
+</div>
+
+<!-- SLIDE 27-32: Abbreviated for file size -->
+<div class="slide bg-white s-pad"><div class="section-label">Product Direction</div><h2 class="slide-title" style="margin-top:12px;">Opportunity Solution Tree</h2><div style="margin-top:20px;text-align:center;"><div style="display:inline-block;background:var(--dark);color:#fff;padding:8px 24px;font-size:11px;">Desired Outcome</div><div style="margin-top:8px;display:flex;gap:16px;justify-content:center;"><div style="background:var(--muted);color:#fff;padding:8px 16px;font-size:10px;">Opportunity A</div><div style="background:var(--muted);color:#fff;padding:8px 16px;font-size:10px;">Opportunity B</div><div style="background:var(--muted);color:#fff;padding:8px 16px;font-size:10px;">Opportunity C</div></div><div style="margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;"><div class="card p-12 text-xs text-mid text-center" style="width:120px;">Solution 1</div><div class="card p-12 text-xs text-mid text-center" style="width:120px;">Solution 2</div><div class="card p-12 text-xs text-mid text-center" style="width:120px;">Solution 3</div><div class="card p-12 text-xs text-mid text-center" style="width:120px;">Solution 4</div><div class="card p-12 text-xs text-mid text-center" style="width:120px;">Solution 5</div><div class="card p-12 text-xs text-mid text-center" style="width:120px;">Solution 6</div></div><div class="label mt-16 mb-8">Experiments</div><div class="flex gap-8 justify-content:center;"><div class="pill">Experiment A</div><div class="pill">Experiment B</div><div class="pill">Experiment C</div><div class="pill">Experiment D</div></div></div><div class="slide-num">27 / 50</div></div>
+
+<div class="slide bg-light s-pad"><div class="section-label">Product Direction</div><h2 class="slide-title" style="margin-top:12px;">Initiative Brief</h2><div class="flex gap-16 mt-16"><div class="card p-16" style="flex:2;"><div class="text-lg font-bold">Initiative Name</div><div class="flex gap-4 mt-8"><div class="pill dark">In Progress</div><div class="pill">High</div></div><div class="mt-12"><div class="label mb-4">Hypothesis</div><div class="text-xs text-mid">If we [change], then [audience] will [behavior], resulting in [metric improvement].</div></div><div class="mt-12"><div class="label mb-4">Success Metric</div><div class="text-xs text-mid">Primary: [metric] from [baseline] to [target]</div></div><div class="mt-12"><div class="label mb-4">Timeline</div><div class="text-xs text-mid">8 weeks — Sprint 1-4</div></div><div class="mt-12"><div class="label mb-4">Owner</div><div class="text-xs text-mid">Name, Role</div></div></div><div class="card p-16" style="flex:1;"><div class="label mb-8">Risks & Dependencies</div><div class="text-xs text-mid leading-relaxed">1. Dependency on backend team for API changes<br><br>2. Regulatory review required before launch<br><br>3. Competing with Q2 initiative for eng resources</div></div></div><div class="slide-num">28 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Product Direction</div><h2 class="slide-title" style="margin-top:12px;">Trade-off Analysis</h2><div class="cols-2 mt-16"><div class="card p-16"><div class="text-lg font-bold">Option A</div><div class="text-xs text-muted mt-4">Description of approach A</div><div class="label mt-12 mb-4">Pros</div><div class="text-xs text-mid leading-relaxed">+ Pro statement 1<br>+ Pro statement 2<br>+ Pro statement 3</div><div class="label mt-12 mb-4">Cons</div><div class="text-xs text-mid leading-relaxed">– Con statement 1<br>– Con statement 2</div></div><div class="card p-16"><div class="text-lg font-bold">Option B</div><div class="text-xs text-muted mt-4">Description of approach B</div><div class="label mt-12 mb-4">Pros</div><div class="text-xs text-mid leading-relaxed">+ Pro statement 1<br>+ Pro statement 2</div><div class="label mt-12 mb-4">Cons</div><div class="text-xs text-mid leading-relaxed">– Con statement 1<br>– Con statement 2<br>– Con statement 3</div></div></div><div style="border-top:3px solid var(--dark);margin-top:16px;padding-top:8px;"><span class="text-sm font-bold">Recommendation: Option A</span><span class="text-xs text-mid"> — lower risk, faster time to market.</span></div><div class="slide-num">29 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Product Direction</div><h2 class="slide-title" style="margin-top:12px;">Scope</h2><div class="cols-3 mt-16"><div><div class="top-accent" style="margin-bottom:8px;"></div><div class="text-md font-bold mb-8">In Scope</div><div class="card p-12 mb-4 text-xs text-mid">Deliverable 1</div><div class="card p-12 mb-4 text-xs text-mid">Deliverable 2</div><div class="card p-12 mb-4 text-xs text-mid">Deliverable 3</div><div class="card p-12 text-xs text-mid">Deliverable 4</div></div><div><div class="top-accent-muted" style="margin-bottom:8px;"></div><div class="text-md font-bold mb-8">Out of Scope</div><div class="card p-12 mb-4 text-xs text-mid">Excluded item 1</div><div class="card p-12 mb-4 text-xs text-mid">Excluded item 2</div><div class="card p-12 text-xs text-mid">Excluded item 3</div></div><div><div class="top-accent-light" style="margin-bottom:8px;"></div><div class="text-md font-bold mb-8">Future</div><div class="card p-12 mb-4 text-xs text-mid">Deferred item 1</div><div class="card p-12 text-xs text-mid">Deferred item 2</div></div></div><div class="slide-num">30 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Product Direction</div><h2 class="slide-title" style="margin-top:12px;">Requirements</h2><table class="data-table mt-16"><tr><th style="width:60px;">ID</th><th style="text-align:left;">User Story</th><th style="width:60px;">Priority</th><th style="width:80px;">Status</th></tr><tr><td style="color:var(--muted);">US-001</td><td style="text-align:left;font-family:var(--serif);font-style:italic;">As a [user], I want to [action] so that [benefit].</td><td>P0</td><td>Accepted</td></tr><tr><td style="color:var(--muted);">US-002</td><td style="text-align:left;font-family:var(--serif);font-style:italic;">As a [user], I want to [action] so that [benefit].</td><td>P0</td><td>Accepted</td></tr><tr><td style="color:var(--muted);">US-003</td><td style="text-align:left;font-family:var(--serif);font-style:italic;">As a [user], I want to [action] so that [benefit].</td><td>P1</td><td>Draft</td></tr><tr><td style="color:var(--muted);">US-004</td><td style="text-align:left;font-family:var(--serif);font-style:italic;">As a [user], I want to [action] so that [benefit].</td><td>P1</td><td>Draft</td></tr><tr><td style="color:var(--muted);">US-005</td><td style="text-align:left;font-family:var(--serif);font-style:italic;">As a [user], I want to [action] so that [benefit].</td><td>P2</td><td>Proposed</td></tr></table><div class="slide-num">31 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Product Direction</div><h2 class="slide-title" style="margin-top:12px;">Success Metrics</h2><table class="data-table mt-16"><tr><th>KPI</th><th>Baseline</th><th>Target</th><th style="text-align:left;">Measurement Method</th></tr><tr><td>Activation Rate</td><td>52%</td><td class="bold">70%</td><td style="text-align:left;">Product analytics (Amplitude)</td></tr><tr><td>Time to First Txn</td><td>8.2 min</td><td class="bold">&lt; 3 min</td><td style="text-align:left;">Funnel timing events</td></tr><tr><td>D30 Retention</td><td>31%</td><td class="bold">45%</td><td style="text-align:left;">Cohort analysis</td></tr><tr><td>NPS</td><td>+28</td><td class="bold">+50</td><td style="text-align:left;">Quarterly survey</td></tr></table><div class="slide-num">32 / 50</div></div>
+
+<!-- SLIDE 33: Design Principles -->
+<div class="slide bg-dark" style="padding:36px 48px;">
+  <div class="label" style="color:#666;">Design & UX</div>
+  <h2 style="font-size:30px;font-weight:700;color:#fff;margin-top:8px;">Design Principles</h2>
+  <div style="margin-top:20px;display:flex;flex-direction:column;gap:0;">
+    <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid #444;"><span style="font-size:14px;color:var(--muted);width:32px;">01</span><span style="font-size:14px;font-weight:700;color:#fff;width:220px;">Clarity over cleverness</span><span style="font-size:11px;color:var(--muted);flex:1;">Every screen should be instantly understandable. If it needs explanation, simplify.</span></div>
+    <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid #444;"><span style="font-size:14px;color:var(--muted);width:32px;">02</span><span style="font-size:14px;font-weight:700;color:#fff;width:220px;">Speed is a feature</span><span style="font-size:11px;color:var(--muted);flex:1;">Reduce friction at every step. Fewer taps, faster feedback, zero dead ends.</span></div>
+    <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid #444;"><span style="font-size:14px;color:var(--muted);width:32px;">03</span><span style="font-size:14px;font-weight:700;color:#fff;width:220px;">Trust through transparency</span><span style="font-size:11px;color:var(--muted);flex:1;">Show the math, the timeline, and the status. Never leave users guessing.</span></div>
+    <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid #444;"><span style="font-size:14px;color:var(--muted);width:32px;">04</span><span style="font-size:14px;font-weight:700;color:#fff;width:220px;">Design for context</span><span style="font-size:11px;color:var(--muted);flex:1;">Our users are multitasking, on mobile, often in a hurry. Design for their reality.</span></div>
+    <div style="display:flex;align-items:baseline;padding:12px 0;"><span style="font-size:14px;color:var(--muted);width:32px;">05</span><span style="font-size:14px;font-weight:700;color:#fff;width:220px;">Accessible by default</span><span style="font-size:11px;color:var(--muted);flex:1;">Every interaction must work for every user, regardless of ability or device.</span></div>
+  </div>
+  <div class="slide-num">33 / 50</div>
+</div>
+
+<!-- SLIDES 34-39 -->
+<div class="slide bg-white s-pad"><div class="section-label">Design & UX</div><h2 class="slide-title" style="margin-top:12px;">User Flow</h2><div style="margin-top:40px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;"><div style="background:var(--dark);color:#fff;padding:10px 16px;font-size:10px;">Entry Point</div><span style="font-size:16px;color:var(--border);">→</span><div style="background:var(--bg);border:1px solid var(--dark);padding:10px 16px;font-size:10px;">Step 1</div><span style="font-size:16px;color:var(--border);">→</span><div style="background:var(--bg);border:1px solid var(--dark);padding:10px 16px;font-size:10px;transform:rotate(45deg);margin:16px;">Decision</div><div style="display:flex;flex-direction:column;gap:8px;margin-left:24px;"><div class="flex items-center gap-8"><span class="text-xs text-mid">Yes →</span><div style="background:var(--bg);border:1px solid var(--dark);padding:10px 16px;font-size:10px;">Step 2A</div></div><div class="flex items-center gap-8"><span class="text-xs text-mid">No →</span><div style="background:var(--bg);border:1px solid var(--dark);padding:10px 16px;font-size:10px;">Step 2B</div></div></div><span style="font-size:16px;color:var(--border);">→</span><div style="background:var(--dark);color:#fff;padding:10px 16px;font-size:10px;">Confirmation</div></div><div class="slide-num">34 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Design & UX</div><h2 class="slide-title" style="margin-top:12px;">Wireframe Walkthrough</h2><div class="cols-3" style="margin-top:20px;"><div style="text-align:center;"><div class="text-xs text-muted mb-4">Screen 1</div><div style="width:140px;height:250px;border-radius:14px;border:2px solid var(--border);margin:0 auto;background:var(--bg);padding:16px 6px 6px;display:flex;flex-direction:column;gap:4px;"><div style="height:12px;background:var(--light);"></div><div style="height:20px;background:var(--light);"></div><div style="height:60px;background:var(--light);"></div><div style="flex:1;"></div><div style="height:24px;background:var(--dark);border-radius:4px;"></div></div><div class="text-xs text-mid mt-8">Annotation for screen 1.</div></div><div style="text-align:center;"><div class="text-xs text-muted mb-4">Screen 2</div><div style="width:140px;height:250px;border-radius:14px;border:2px solid var(--border);margin:0 auto;background:var(--bg);padding:16px 6px 6px;display:flex;flex-direction:column;gap:4px;"><div style="height:12px;background:var(--light);"></div><div style="height:20px;background:var(--light);"></div><div style="height:60px;background:var(--light);"></div><div style="flex:1;"></div><div style="height:24px;background:var(--dark);border-radius:4px;"></div></div><div class="text-xs text-mid mt-8">Annotation for screen 2.</div></div><div style="text-align:center;"><div class="text-xs text-muted mb-4">Screen 3</div><div style="width:140px;height:250px;border-radius:14px;border:2px solid var(--border);margin:0 auto;background:var(--bg);padding:16px 6px 6px;display:flex;flex-direction:column;gap:4px;"><div style="height:12px;background:var(--light);"></div><div style="height:20px;background:var(--light);"></div><div style="height:60px;background:var(--light);"></div><div style="flex:1;"></div><div style="height:24px;background:var(--dark);border-radius:4px;"></div></div><div class="text-xs text-mid mt-8">Annotation for screen 3.</div></div></div><div class="slide-num">35 / 50</div></div>
+
+<div class="slide bg-light s-pad"><div class="section-label">Design & UX</div><h2 class="slide-title" style="margin-top:12px;">Final Design</h2><div class="flex gap-16 mt-16"><div style="display:flex;flex-direction:column;gap:16px;width:140px;"><div class="flex gap-4 items-center"><div class="num-circle">1</div><div class="text-xs text-mid">Primary CTA</div></div><div class="flex gap-4 items-center"><div class="num-circle">2</div><div class="text-xs text-mid">Progressive disclosure</div></div><div class="flex gap-4 items-center"><div class="num-circle">3</div><div class="text-xs text-mid">Help tooltip</div></div></div><div class="placeholder" style="flex:1;height:300px;border-radius:4px;">High-Fidelity Mockup</div></div><div class="slide-num">36 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Design & UX</div><h2 class="slide-title" style="margin-top:12px;">Before & After</h2><div class="cols-2 mt-16" style="gap:32px;"><div><div class="label mb-8">Before</div><div class="placeholder" style="height:200px;border-radius:4px;">Previous Design</div><div class="text-xs text-mid mt-8">Pain point: What was wrong with the old experience.</div></div><div><div class="label mb-8" style="color:var(--dark);">After</div><div class="placeholder" style="height:200px;border-radius:4px;">New Design</div><div class="text-xs text-mid mt-8">Improvement: What changed and the expected impact.</div></div></div><div class="slide-num">37 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Design & UX</div><h2 class="slide-title" style="margin-top:12px;">Interactive Prototype</h2><div class="placeholder mt-16" style="height:240px;border-radius:4px;">Prototype Screenshot or GIF</div><div class="card p-12 mt-12"><span class="text-sm text-mid">figma.com/proto/xxxx — Click to interact with the full prototype</span></div><div class="slide-num">38 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Design & UX</div><h2 class="slide-title" style="margin-top:12px;">Accessibility Checklist</h2><div style="margin-top:16px;columns:2;column-gap:24px;"><div class="label mb-8">Visual</div><div class="flex gap-8 items-center mb-4"><div class="check-box pass">✓</div><span class="text-xs text-mid">Color contrast meets WCAG AA (4.5:1)</span></div><div class="flex gap-8 items-center mb-4"><div class="check-box pass">✓</div><span class="text-xs text-mid">Text scales to 200% without loss</span></div><div class="flex gap-8 items-center mb-12"><div class="check-box fail">✗</div><span class="text-xs text-dark">No info conveyed by color alone</span></div><div class="label mb-8">Interaction</div><div class="flex gap-8 items-center mb-4"><div class="check-box pass">✓</div><span class="text-xs text-mid">All elements keyboard accessible</span></div><div class="flex gap-8 items-center mb-4"><div class="check-box pass">✓</div><span class="text-xs text-mid">Focus order is logical and visible</span></div><div class="flex gap-8 items-center mb-12"><div class="check-box fail">✗</div><span class="text-xs text-dark">Touch targets ≥ 44×44px</span></div><div class="label mb-8">Content</div><div class="flex gap-8 items-center mb-4"><div class="check-box pass">✓</div><span class="text-xs text-mid">Alt text for all images</span></div><div class="flex gap-8 items-center mb-4"><div class="check-box pass">✓</div><span class="text-xs text-mid">Headings follow hierarchy</span></div><div class="flex gap-8 items-center mb-4"><div class="check-box pass">✓</div><span class="text-xs text-mid">Error messages are descriptive</span></div></div><div class="text-sm font-bold mt-12">7 of 9 criteria met — 2 items require remediation before launch.</div><div class="slide-num">39 / 50</div></div>
+
+<!-- SLIDES 40-45: Engineering -->
+<div class="slide bg-white s-pad"><div class="section-label">Engineering & Delivery</div><h2 class="slide-title" style="margin-top:12px;">Technical Architecture</h2><div style="margin-top:20px;display:flex;flex-direction:column;gap:6px;"><div style="background:var(--bg);border:1px solid var(--border);padding:10px 16px;font-size:10px;color:var(--mid);">CLIENT LAYER — Mobile App &middot; Web App &middot; WhatsApp</div><div style="background:var(--dark);color:#fff;padding:8px;text-align:center;font-size:10px;width:240px;margin:0 auto;">API Gateway</div><div class="cols-4" style="gap:6px;"><div class="card p-12 text-xs text-mid text-center">Auth Service</div><div class="card p-12 text-xs text-mid text-center">Payment Service</div><div class="card p-12 text-xs text-mid text-center">Notification Service</div><div class="card p-12 text-xs text-mid text-center">Analytics</div></div><div style="background:var(--light);border:1px solid var(--border);padding:10px 16px;font-size:10px;color:var(--mid);">DATA LAYER — PostgreSQL &middot; Redis &middot; S3 &middot; Kafka</div><div style="background:var(--white);border:1px dashed var(--border);padding:10px 16px;font-size:10px;color:var(--muted);">EXTERNAL — Banking Partner API &middot; KYC Provider &middot; SMS Gateway</div></div><div class="slide-num">40 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Engineering & Delivery</div><h2 class="slide-title" style="margin-top:12px;">Release Plan</h2><div class="cols-4 mt-16"><div><div style="background:var(--dark);color:#fff;padding:6px;text-align:center;font-size:10px;">Sprint 1</div><div class="text-xs text-muted text-center mt-4">Wk 1–2</div><div style="margin-top:8px;display:flex;flex-direction:column;gap:4px;"><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task A</div><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task B</div><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task C</div></div></div><div><div style="background:var(--dark);color:#fff;padding:6px;text-align:center;font-size:10px;">Sprint 2</div><div class="text-xs text-muted text-center mt-4">Wk 3–4</div><div style="margin-top:8px;display:flex;flex-direction:column;gap:4px;"><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task D</div><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task E</div><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task F</div></div></div><div><div style="background:var(--dark);color:#fff;padding:6px;text-align:center;font-size:10px;">Sprint 3</div><div class="text-xs text-muted text-center mt-4">Wk 5–6</div><div style="margin-top:8px;display:flex;flex-direction:column;gap:4px;"><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task G</div><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task H</div><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task I</div></div></div><div><div style="background:var(--dark);color:#fff;padding:6px;text-align:center;font-size:10px;">Sprint 4</div><div class="text-xs text-muted text-center mt-4">Wk 7–8</div><div style="margin-top:8px;display:flex;flex-direction:column;gap:4px;"><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task J</div><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task K</div><div style="background:var(--bg);border:1px solid var(--border);padding:6px 8px;font-size:9px;color:var(--mid);">Task L</div></div></div></div><div class="slide-num">41 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Engineering & Delivery</div><h2 class="slide-title" style="margin-top:12px;">Dependency Map</h2><div style="margin-top:20px;display:flex;align-items:center;justify-content:center;height:320px;position:relative;"><div style="width:160px;height:80px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:500;">Our Team</div><div style="position:absolute;top:20px;left:60px;" class="card p-12 text-xs text-mid text-center" >Platform Team<br><span class="text-xs text-muted">upstream</span></div><div style="position:absolute;bottom:20px;left:60px;" class="card p-12 text-xs text-mid text-center">Compliance<br><span class="text-xs text-muted">upstream</span></div><div style="position:absolute;top:20px;right:60px;" class="card p-12 text-xs text-mid text-center">Data Eng<br><span class="text-xs text-muted">downstream</span></div><div style="position:absolute;bottom:20px;right:60px;" class="card p-12 text-xs text-mid text-center">Customer Ops<br><span class="text-xs text-muted">downstream</span></div><div style="position:absolute;top:0;left:50%;transform:translateX(-50%);" class="card p-12 text-xs text-mid text-center">Design System<br><span class="text-xs text-muted">shared</span></div><div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);" class="card p-12 text-xs text-mid text-center">QA<br><span class="text-xs text-muted">shared</span></div></div><div class="slide-num">42 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Engineering & Delivery</div><h2 class="slide-title" style="margin-top:12px;">Risk Register</h2><table class="data-table mt-16"><tr><th style="text-align:left;">Risk</th><th>Likelihood</th><th>Impact</th><th style="text-align:left;">Mitigation</th><th>Owner</th></tr><tr><td>API partner delays</td><td>High</td><td>High</td><td style="text-align:left;">Backup vendor; weekly syncs</td><td>Name</td></tr><tr><td>Regulatory change</td><td>Medium</td><td>High</td><td style="text-align:left;">Legal review Sprint 2; modular design</td><td>Name</td></tr><tr><td>Eng capacity reduced</td><td>Medium</td><td>Medium</td><td style="text-align:left;">Cross-train; document</td><td>Name</td></tr><tr><td>Low adoption</td><td>Low</td><td>High</td><td style="text-align:left;">A/B test onboarding; iterate</td><td>Name</td></tr></table><div class="slide-num">43 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Engineering & Delivery</div><h2 class="slide-title" style="margin-top:12px;">Launch Checklist</h2><div style="margin-top:16px;"><div class="label mb-8">Pre-Launch</div><div class="flex gap-8 items-center mb-4"><div style="width:14px;height:14px;border:1px solid var(--border);border-radius:2px;flex-shrink:0;"></div><span class="text-sm text-mid">Feature freeze completed</span></div><div class="flex gap-8 items-center mb-4"><div style="width:14px;height:14px;border:1px solid var(--border);border-radius:2px;flex-shrink:0;"></div><span class="text-sm text-mid">QA sign-off received</span></div><div class="flex gap-8 items-center mb-4"><div style="width:14px;height:14px;border:1px solid var(--border);border-radius:2px;flex-shrink:0;"></div><span class="text-sm text-mid">Load testing passed</span></div><div class="flex gap-8 items-center mb-12"><div style="width:14px;height:14px;border:1px solid var(--border);border-radius:2px;flex-shrink:0;"></div><span class="text-sm text-mid">Docs and runbook updated</span></div><div class="label mb-8">Launch Day</div><div class="flex gap-8 items-center mb-4"><div style="width:14px;height:14px;border:1px solid var(--border);border-radius:2px;flex-shrink:0;"></div><span class="text-sm text-mid">Feature flag enabled (10% → 50% → 100%)</span></div><div class="flex gap-8 items-center mb-4"><div style="width:14px;height:14px;border:1px solid var(--border);border-radius:2px;flex-shrink:0;"></div><span class="text-sm text-mid">Monitoring dashboards live</span></div><div class="flex gap-8 items-center mb-12"><div style="width:14px;height:14px;border:1px solid var(--border);border-radius:2px;flex-shrink:0;"></div><span class="text-sm text-mid">On-call rotation confirmed</span></div><div class="card p-12"><strong class="text-xs">GO / NO-GO DECISION</strong><span class="text-xs text-mid" style="margin-left:12px;">Owner: [Name] &middot; Deadline: [Date] &middot; All pre-launch items green</span></div></div><div class="slide-num">44 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Engineering & Delivery</div><h2 class="slide-title" style="margin-top:12px;">Tech Debt & Bugs</h2><div class="label mt-16 mb-8">Severity Distribution</div><div style="display:flex;flex-direction:column;gap:6px;"><div class="flex items-center gap-8"><span class="text-xs text-mid" style="width:60px;">Critical</span><div style="background:var(--dark);height:14px;width:40px;"></div><span class="text-xs text-muted">3</span></div><div class="flex items-center gap-8"><span class="text-xs text-mid" style="width:60px;">High</span><div style="background:var(--muted);height:14px;width:160px;"></div><span class="text-xs text-muted">12</span></div><div class="flex items-center gap-8"><span class="text-xs text-mid" style="width:60px;">Medium</span><div style="background:var(--border);height:14px;width:380px;"></div><span class="text-xs text-muted">28</span></div><div class="flex items-center gap-8"><span class="text-xs text-mid" style="width:60px;">Low</span><div style="background:var(--light);height:14px;width:200px;"></div><span class="text-xs text-muted">15</span></div></div><div class="label mt-16 mb-8">Burndown Trend</div><div style="background:var(--bg);border:1px solid var(--border);height:80px;padding:12px;"><svg width="100%" height="56"><polyline points="20,10 120,15 220,22 320,30 420,40 520,48" fill="none" stroke="var(--dark)" stroke-width="2"/><circle cx="20" cy="10" r="3" fill="var(--dark)"/><circle cx="120" cy="15" r="3" fill="var(--dark)"/><circle cx="220" cy="22" r="3" fill="var(--dark)"/><circle cx="320" cy="30" r="3" fill="var(--dark)"/><circle cx="420" cy="40" r="3" fill="var(--dark)"/><circle cx="520" cy="48" r="3" fill="var(--dark)"/></svg></div><div class="slide-num">45 / 50</div></div>
+
+<!-- SLIDES 46-49 -->
+<div class="slide bg-white s-pad"><div class="section-label">Review & Closing</div><h2 class="slide-title" style="margin-top:12px;">Status Dashboard</h2><table class="data-table mt-16"><tr><th style="text-align:left;">Workstream</th><th>Status</th><th>Owner</th><th style="text-align:left;">Notes</th></tr><tr><td>Consumer App</td><td><span class="status-dot on-track"></span></td><td>Name</td><td style="text-align:left;">On schedule</td></tr><tr><td>Backend / Infra</td><td><span class="status-dot at-risk"></span></td><td>Name</td><td style="text-align:left;">API partner delayed</td></tr><tr><td>Design</td><td><span class="status-dot on-track"></span></td><td>Name</td><td style="text-align:left;">Hi-fi complete</td></tr><tr><td>QA</td><td><span class="status-dot on-track"></span></td><td>Name</td><td style="text-align:left;">Tests written</td></tr><tr><td>Compliance</td><td><span class="status-dot blocked"></span></td><td>Name</td><td style="text-align:left;">Awaiting legal review</td></tr><tr><td>Ops & Tooling</td><td><span class="status-dot on-track"></span></td><td>Name</td><td style="text-align:left;">Dashboard updates in progress</td></tr></table><div class="flex gap-16 mt-8"><div class="flex gap-4 items-center"><span class="status-dot on-track"></span><span class="text-xs text-muted">On Track</span></div><div class="flex gap-4 items-center"><span class="status-dot at-risk"></span><span class="text-xs text-muted">At Risk</span></div><div class="flex gap-4 items-center"><span class="status-dot blocked"></span><span class="text-xs text-muted">Blocked</span></div></div><div class="slide-num">46 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Review & Closing</div><h2 class="slide-title" style="margin-top:12px;">Decisions Needed</h2><div class="card p-16 mt-16 mb-12"><div class="label mb-4">Decision 1</div><div class="text-md font-bold">Should we launch with partial KYC or wait for full integration?</div><div class="text-xs text-mid mt-4">Options: A) Partial launch  B) Wait for full</div><div class="text-sm font-bold mt-8">Recommend Option A — faster learning</div><div class="text-xs text-muted mt-4">Owner: VP Product &middot; Decide by: Mar 21</div></div><div class="card p-16"><div class="label mb-4">Decision 2</div><div class="text-md font-bold">Do we invest in native app or stay WhatsApp-first for Brazil?</div><div class="text-xs text-mid mt-4">Options: A) Native app  B) WhatsApp-first</div><div class="text-sm font-bold mt-8">Recommend Option B — lower CAC</div><div class="text-xs text-muted mt-4">Owner: CEO &middot; Decide by: Mar 28</div></div><div class="slide-num">47 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Review & Closing</div><h2 class="slide-title" style="margin-top:12px;">Next Steps</h2><table class="data-table mt-16"><tr><th style="text-align:left;">Action Item</th><th>Owner</th><th>Due</th><th>Status</th></tr><tr><td>Finalize KYC integration spec</td><td>Name</td><td>Mar 18</td><td>Not Started</td></tr><tr><td>Complete hi-fi designs for onboarding v2</td><td>Name</td><td>Mar 20</td><td>In Progress</td></tr><tr><td>Set up monitoring dashboard</td><td>Name</td><td>Mar 22</td><td>Not Started</td></tr><tr><td>Schedule legal review</td><td>Name</td><td>Mar 19</td><td>Blocked</td></tr><tr><td>Draft support training materials</td><td>Name</td><td>Mar 25</td><td>Not Started</td></tr><tr><td>Run load test on payment service</td><td>Name</td><td>Mar 21</td><td>In Progress</td></tr></table><div class="slide-num">48 / 50</div></div>
+
+<div class="slide bg-white s-pad"><div class="section-label">Review & Closing</div><h2 class="slide-title" style="margin-top:12px;">Retrospective</h2><div class="cols-3 mt-16"><div><div class="top-accent" style="margin-bottom:8px;"></div><div class="text-md font-bold mb-8">Went Well</div><div class="card p-12 mb-4 text-xs text-mid">Strong cross-functional alignment</div><div class="card p-12 mb-4 text-xs text-mid">Research-led decisions</div><div class="card p-12 text-xs text-mid">On-time delivery of core features</div></div><div><div class="top-accent-muted" style="margin-bottom:8px;"></div><div class="text-md font-bold mb-8">Didn't Go Well</div><div class="card p-12 mb-4 text-xs text-mid">Scope creep in Sprint 2</div><div class="card p-12 mb-4 text-xs text-mid">Late compliance feedback</div><div class="card p-12 text-xs text-mid">Insufficient load testing time</div></div><div><div class="top-accent-light" style="margin-bottom:8px;"></div><div class="text-md font-bold mb-8">Change Next Time</div><div class="card p-12 mb-4 text-xs text-mid">Involve legal from Sprint 1</div><div class="card p-12 mb-4 text-xs text-mid">Stricter scope governance</div><div class="card p-12 text-xs text-mid">Dedicated QA from kickoff</div></div></div><div class="slide-num">49 / 50</div></div>
+
+<!-- SLIDE 50: Thank You -->
+<div class="slide bg-dark" style="padding:48px;display:flex;flex-direction:column;justify-content:center;">
+  <h1 style="font-size:48px;font-weight:700;color:#fff;">Thank You</h1>
+  <p style="font-size:16px;color:var(--muted);margin-top:12px;">Questions, feedback, or ideas — let's discuss.</p>
+  <div class="divider" style="width:80px;margin-top:32px;background:#555;"></div>
+  <p style="font-size:12px;color:var(--muted);margin-top:20px;">name@company.com &middot; #slack-channel &middot; Office hours: Tues 2–3pm</p>
+  <div class="slide-num">50 / 50</div>
+</div>
+
+</body>
+</html>

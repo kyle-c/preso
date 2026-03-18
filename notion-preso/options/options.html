@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Doc Preso - Settings</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #082422;
+      font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      color: #FEFCF9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .container {
+      width: 100%;
+      max-width: 460px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .logo {
+      font-weight: 900;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+    .tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(254,252,249,0.4);
+      font-family: monospace;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: rgba(254,252,249,0.4);
+      margin-bottom: 2rem;
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(254,252,249,0.5);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 1.25rem;
+    }
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 40px 12px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #FEFCF9;
+      font-size: 14px;
+      font-family: monospace;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus { border-color: rgba(43,242,241,0.5); }
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #FEFCF9;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+    select option { background: #082422; color: #FEFCF9; }
+    select optgroup { color: rgba(254,252,249,0.5); font-style: normal; font-weight: 600; }
+    .hint {
+      font-size: 11px;
+      color: rgba(254,252,249,0.3);
+      margin: -0.75rem 0 1.25rem;
+      line-height: 1.5;
+    }
+    .toggle-vis {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(254,252,249,0.3);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+    }
+    .toggle-vis:hover { color: rgba(254,252,249,0.6); }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      background: #2BF2F1;
+      color: #082422;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #5DF7F5; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .status {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 12px;
+      min-height: 1.5em;
+      transition: color 0.3s;
+    }
+    .status.success { color: #60D06F; }
+    .status.error { color: #F26629; }
+    .help {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      color: rgba(254,252,249,0.35);
+      line-height: 1.6;
+    }
+    .help a {
+      color: #2BF2F1;
+      text-decoration: none;
+    }
+    .help a:hover { text-decoration: underline; }
+
+    /* Model info card */
+    .model-info {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: -0.5rem 0 1.25rem;
+      display: none;
+    }
+    .model-info.visible { display: block; }
+    .model-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: rgba(254,252,249,0.5);
+    }
+    .model-info-row + .model-info-row { margin-top: 6px; }
+    .model-info-label { color: rgba(254,252,249,0.35); }
+    .model-info-value { font-family: monospace; color: rgba(254,252,249,0.7); }
+    .model-info-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.08);
+      flex: 1;
+      margin: 0 8px;
+      overflow: hidden;
+    }
+    .model-info-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+
+    /* Provider toggle */
+    .provider-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .provider-tab {
+      flex: 1;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.04);
+      border: none;
+      color: rgba(254,252,249,0.4);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .provider-tab:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.08); }
+    .provider-tab.active {
+      background: rgba(43,242,241,0.12);
+      color: #2BF2F1;
+    }
+    .provider-tab:hover:not(.active) { background: rgba(255,255,255,0.08); }
+    .provider-section { display: none; }
+    .provider-section.active { display: block; }
+
+    /* Custom model input */
+    .custom-model-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .custom-model-row input {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #FEFCF9;
+      font-size: 12px;
+      font-family: monospace;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .custom-model-row input:focus { border-color: rgba(43,242,241,0.5); }
+    .custom-model-row input::placeholder { color: rgba(254,252,249,0.25); }
+    .custom-model-row input.hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <span class="logo">Doc Preso</span>
+      <span class="tag">Settings</span>
+    </div>
+    <p class="subtitle">Configure your API provider and model for AI-generated presentations.</p>
+
+    <!-- Provider toggle -->
+    <div class="provider-tabs">
+      <button class="provider-tab active" data-provider="anthropic">Anthropic</button>
+      <button class="provider-tab" data-provider="openrouter">OpenRouter</button>
+    </div>
+
+    <!-- Anthropic settings -->
+    <div class="provider-section active" id="section-anthropic">
+      <label for="anthropic-key">API Key</label>
+      <div class="input-group">
+        <input type="password" id="anthropic-key" placeholder="sk-ant-api03-..." autocomplete="off">
+        <button class="toggle-vis" data-target="anthropic-key" type="button">👁</button>
+      </div>
+
+      <label for="anthropic-model">Model</label>
+      <div class="input-group">
+        <select id="anthropic-model">
+          <optgroup label="Budget">
+            <option value="claude-haiku-4-5-20251001">Haiku 4.5 · ~$0.01/preso · Fast, great for most docs</option>
+          </optgroup>
+          <optgroup label="Balanced">
+            <option value="claude-sonnet-4-20250514" selected>Sonnet 4 · ~$0.03/preso · Strong quality + speed</option>
+            <option value="claude-sonnet-4-5-20250514">Sonnet 4.5 · ~$0.03/preso · Extended thinking</option>
+          </optgroup>
+          <optgroup label="Best Quality">
+            <option value="claude-sonnet-4-6-20250514">Sonnet 4.6 · ~$0.03/preso · Latest, best structured output</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="model-info" id="anthropic-model-info"></div>
+    </div>
+
+    <!-- OpenRouter settings -->
+    <div class="provider-section" id="section-openrouter">
+      <label for="openrouter-key">API Key</label>
+      <div class="input-group">
+        <input type="password" id="openrouter-key" placeholder="sk-or-v1-..." autocomplete="off">
+        <button class="toggle-vis" data-target="openrouter-key" type="button">👁</button>
+      </div>
+
+      <label>Model</label>
+      <div class="input-group">
+        <select id="openrouter-model">
+          <optgroup label="Budget — under $0.01/preso">
+            <option value="google/gemini-2.5-flash-lite">Gemini 2.5 Flash Lite · $0.10/$0.40 · 1M ctx</option>
+            <option value="google/gemini-3.1-flash-lite-preview">Gemini 3.1 Flash Lite · $0.25/$1.50 · 1M ctx</option>
+            <option value="openai/gpt-4.1-nano">GPT-4.1 Nano · $0.10/$0.40 · 1M ctx</option>
+            <option value="deepseek/deepseek-v3.2">DeepSeek V3.2 · $0.26/$0.38 · 164K ctx</option>
+          </optgroup>
+          <optgroup label="Mid-range — ~$0.01–0.03/preso">
+            <option value="google/gemini-2.5-flash" selected>Gemini 2.5 Flash · $0.30/$2.50 · 1M ctx · Recommended</option>
+            <option value="google/gemini-3-flash-preview">Gemini 3 Flash · $0.50/$3.00 · 1M ctx</option>
+            <option value="openai/gpt-4.1-mini">GPT-4.1 Mini · $0.40/$1.60 · 1M ctx</option>
+            <option value="moonshotai/kimi-k2.5">Kimi K2.5 (Moonshot) · $0.45/$2.20 · 262K ctx</option>
+            <option value="deepseek/deepseek-r1-0528">DeepSeek R1 · $0.45/$2.15 · 164K ctx · Reasoning</option>
+            <option value="mistralai/mistral-large-2512">Mistral Large 3 · $0.50/$1.50 · 262K ctx</option>
+            <option value="anthropic/claude-3.5-haiku">Claude 3.5 Haiku · $0.80/$4.00 · 200K ctx</option>
+          </optgroup>
+          <optgroup label="Premium — ~$0.03–0.10/preso">
+            <option value="google/gemini-2.5-pro">Gemini 2.5 Pro · $1.25/$10 · 1M ctx</option>
+            <option value="google/gemini-3.1-pro-preview">Gemini 3.1 Pro · $2.00/$12 · 1M ctx · Latest Google</option>
+            <option value="openai/gpt-4.1">GPT-4.1 · $2.00/$8.00 · 1M ctx</option>
+            <option value="x-ai/grok-4.20-beta">Grok 4.20 (xAI) · $2.00/$6.00 · 2M ctx</option>
+            <option value="anthropic/claude-sonnet-4.6">Claude Sonnet 4.6 · $3.00/$15 · 1M ctx</option>
+          </optgroup>
+          <optgroup label="Top-tier — $0.10+/preso">
+            <option value="anthropic/claude-opus-4.6">Claude Opus 4.6 · $5.00/$25 · 1M ctx</option>
+          </optgroup>
+          <optgroup label="Custom">
+            <option value="__custom__">Enter a custom model ID…</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="custom-model-row input-group">
+        <input type="text" id="openrouter-custom" class="hidden" placeholder="e.g. meta-llama/llama-4-scout" autocomplete="off">
+      </div>
+      <div class="model-info" id="openrouter-model-info"></div>
+    </div>
+
+    <button class="btn" id="save-btn">Save Settings</button>
+    <div class="status" id="status"></div>
+
+    <div class="help">
+      <strong>Anthropic:</strong> Get your key from <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>.<br>
+      <strong>OpenRouter:</strong> Get your key from <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>.
+      Access 200+ models from Google, OpenAI, Meta, Mistral, DeepSeek, and more.<br><br>
+      Pricing shown is per 1M tokens. A typical presentation uses ~2K input + ~4K output tokens.<br>
+      Keys are stored locally in Chrome and never shared.
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

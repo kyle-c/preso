@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "Doc Preso",
+  "version": "1.1.0",
+  "description": "Turn any Notion page or Google Doc into a beautiful Felix Pago presentation",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": [
+    "https://www.notion.so/*",
+    "https://docs.google.com/*",
+    "https://api.anthropic.com/*",
+    "https://openrouter.ai/*"
+  ],
+  "background": {
+    "service_worker": "dist/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.notion.so/*",
+        "https://docs.google.com/document/*"
+      ],
+      "js": ["dist/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "options_page": "options/options.html",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["fonts/*"],
+      "matches": ["https://www.notion.so/*", "https://docs.google.com/*"]
+    }
+  ]
+}

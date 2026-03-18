@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 280px;
+      padding: 20px;
+      background: #082422;
+      font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      color: #FEFCF9;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .logo {
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+    .tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(254,252,249,0.4);
+      font-family: monospace;
+    }
+    .desc {
+      font-size: 12px;
+      color: rgba(254,252,249,0.5);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #2BF2F1;
+      color: #082422;
+    }
+    .btn-primary:hover { background: #5DF7F5; }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: rgba(254,252,249,0.7);
+      margin-top: 8px;
+      font-size: 11px;
+      padding: 8px;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+    .status {
+      font-size: 11px;
+      color: rgba(254,252,249,0.4);
+      text-align: center;
+      margin-top: 12px;
+      display: none;
+    }
+    .status.visible { display: block; }
+    .status.error { color: #F26629; }
+    .not-notion {
+      font-size: 12px;
+      color: rgba(254,252,249,0.4);
+      text-align: center;
+      padding: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="logo">Doc Preso</span>
+    <span class="tag">by Felix</span>
+  </div>
+
+  <div id="main-content">
+    <p class="desc">Turn this page into a beautiful full-screen presentation.</p>
+    <div id="model-badge" style="font-size:10px;color:rgba(254,252,249,0.35);text-align:center;margin-bottom:10px;font-family:monospace;"></div>
+    <button class="btn btn-primary" id="generate-btn">Generate Presentation</button>
+    <p class="cache-hint" style="font-size:10px;color:rgba(254,252,249,0.25);text-align:center;margin-top:6px;">Cached results load instantly. Regenerate forces a fresh call.</p>
+    <button class="btn btn-secondary" id="regen-btn" style="margin-top:4px;">↻ Regenerate (skip cache)</button>
+    <button class="btn btn-secondary" id="options-btn">⚙ Settings</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div id="not-notion" style="display:none">
+    <p class="not-notion">Open a Notion page or Google Doc to generate a presentation.</p>
+    <button class="btn btn-secondary" id="options-btn-2">⚙ API Key Settings</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

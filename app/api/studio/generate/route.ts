@@ -305,6 +305,37 @@ function guessImageMediaType(filename: string): string {
 // SSE parsing helpers
 // ---------------------------------------------------------------------------
 
+/** Extract a JSON object that follows "document": { ... } from accumulated text */
+function tryExtractDocument(text: string): Record<string, unknown> | null {
+  const clean = text.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '')
+  const docMatch = clean.match(/"document"\s*:\s*\{/)
+  if (!docMatch || docMatch.index === undefined) return null
+
+  const start = clean.indexOf('{', docMatch.index)
+  if (start === -1) return null
+
+  let depth = 0; let inStr = false; let esc = false
+  for (let i = start; i < clean.length; i++) {
+    const ch = clean[i]
+    if (esc) { esc = false; continue }
+    if (ch === '\\') { esc = true; continue }
+    if (ch === '"') { inStr = !inStr; continue }
+    if (inStr) continue
+    if (ch === '{') depth++
+    else if (ch === '}') {
+      depth--
+      if (depth === 0) {
+        try {
+          const doc = JSON.parse(clean.slice(start, i + 1))
+          if (doc.title && doc.sections) return doc
+        } catch (_e) { /* parse failed */ }
+        return null
+      }
+    }
+  }
+  return null
+}
+
 function createSSEStream(
   upstreamResponse: Response,
   provider: 'anthropic' | 'openrouter',
@@ -313,17 +344,32 @@ function createSSEStream(
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
 
+  const send = (controller: ReadableStreamDefaultController, event: Record<string, unknown>) => {
+    controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`))
+  }
+
+  const finish = (controller: ReadableStreamDefaultController, accumulated: string) => {
+    if (extractDocument && accumulated) {
+      const doc = tryExtractDocument(accumulated)
+      if (doc) {
+        send(controller, { document: doc })
+        console.log('[studio/generate] Document extracted successfully')
+      } else {
+        console.error('[studio/generate] Document extraction failed. Accumulated length:', accumulated.length)
+        send(controller, { error: 'Could not extract document from AI response' })
+      }
+    }
+    controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+    controller.close()
+  }
+
   return new ReadableStream({
     async start(controller) {
       const reader = upstreamResponse.body?.getReader()
-      if (!reader) {
-        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-        controller.close()
-        return
-      }
+      if (!reader) { finish(controller, ''); return }
 
       let buffer = ''
-      let accumulated = '' // Accumulate all text for document extraction
+      let accumulated = ''
 
       try {
         while (true) {
@@ -338,36 +384,7 @@ function createSSEStream(
             if (!line.startsWith('data: ')) continue
             const data = line.slice(6).trim()
 
-            if (data === '[DONE]') {
-              // Before closing, try to extract document from accumulated text
-              if (extractDocument && accumulated) {
-                try {
-                  const docMatch = accumulated.match(/"document"\s*:\s*\{/)
-                  if (docMatch && docMatch.index !== undefined) {
-                    const start = accumulated.indexOf('{', docMatch.index)
-                    let depth = 0; let inStr = false; let esc = false
-                    for (let i = start; i < accumulated.length; i++) {
-                      const ch = accumulated[i]
-                      if (esc) { esc = false; continue }
-                      if (ch === '\\') { esc = true; continue }
-                      if (ch === '"') { inStr = !inStr; continue }
-                      if (inStr) continue
-                      if (ch === '{') depth++
-                      else if (ch === '}') { depth--; if (depth === 0) {
-                        const doc = JSON.parse(accumulated.slice(start, i + 1))
-                        if (doc.title && doc.sections) {
-                          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ document: doc })}\n\n`))
-                        }
-                        break
-                      }}
-                    }
-                  }
-                } catch (_e) { /* document extraction failed */ }
-              }
-              controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-              controller.close()
-              return
-            }
+            if (data === '[DONE]') { finish(controller, accumulated); return }
 
             try {
               const parsed = JSON.parse(data)
@@ -377,90 +394,25 @@ function createSSEStream(
                 if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
                   text = parsed.delta.text
                 }
-                if (parsed.type === 'message_stop') {
-                  // Extract document before closing
-                  if (extractDocument && accumulated) {
-                    try {
-                      const docMatch = accumulated.match(/"document"\s*:\s*\{/)
-                      if (docMatch && docMatch.index !== undefined) {
-                        const start = accumulated.indexOf('{', docMatch.index)
-                        let depth = 0; let inStr = false; let esc = false
-                        for (let i = start; i < accumulated.length; i++) {
-                          const ch = accumulated[i]
-                          if (esc) { esc = false; continue }
-                          if (ch === '\\') { esc = true; continue }
-                          if (ch === '"') { inStr = !inStr; continue }
-                          if (inStr) continue
-                          if (ch === '{') depth++
-                          else if (ch === '}') { depth--; if (depth === 0) {
-                            const doc = JSON.parse(accumulated.slice(start, i + 1))
-                            if (doc.title && doc.sections) {
-                              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ document: doc })}\n\n`))
-                            }
-                            break
-                          }}
-                        }
-                      }
-                    } catch (_e) { /* extraction failed */ }
-                  }
-                  controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-                  controller.close()
-                  return
-                }
+                if (parsed.type === 'message_stop') { finish(controller, accumulated); return }
               } else {
                 const delta = parsed.choices?.[0]?.delta?.content
                 if (delta) text = delta
-                if (parsed.choices?.[0]?.finish_reason) {
-                  // Extract document before closing
-                  if (extractDocument && accumulated) {
-                    try {
-                      const clean = accumulated.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '')
-                      const docMatch = clean.match(/"document"\s*:\s*\{/)
-                      if (docMatch && docMatch.index !== undefined) {
-                        const start = clean.indexOf('{', docMatch.index)
-                        let depth = 0; let inStr = false; let esc = false
-                        for (let i = start; i < clean.length; i++) {
-                          const ch = clean[i]
-                          if (esc) { esc = false; continue }
-                          if (ch === '\\') { esc = true; continue }
-                          if (ch === '"') { inStr = !inStr; continue }
-                          if (inStr) continue
-                          if (ch === '{') depth++
-                          else if (ch === '}') { depth--; if (depth === 0) {
-                            const doc = JSON.parse(clean.slice(start, i + 1))
-                            if (doc.title && doc.sections) {
-                              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ document: doc })}\n\n`))
-                            }
-                            break
-                          }}
-                        }
-                      }
-                    } catch (_e) { /* extraction failed */ }
-                  }
-                  controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-                  controller.close()
-                  return
-                }
+                if (parsed.choices?.[0]?.finish_reason) { finish(controller, accumulated); return }
               }
 
               if (text) {
                 accumulated += text
-                const chunk = JSON.stringify({ text })
-                controller.enqueue(encoder.encode(`data: ${chunk}\n\n`))
+                send(controller, { text })
               }
-            } catch (_e) {
-              // Ignore non-JSON lines
-            }
+            } catch (_e) { /* ignore non-JSON lines */ }
           }
         }
 
-        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-        controller.close()
+        finish(controller, accumulated)
       } catch (err) {
         console.error('[studio/generate stream]', err)
-        controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify({ error: 'Stream error' })}\n\n`),
-        )
+        send(controller, { error: 'Stream error' })
         controller.enqueue(encoder.encode('data: [DONE]\n\n'))
         controller.close()
       }
@@ -476,7 +428,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as GenerateBody
 
-    if (!body.prompt) {
+    if (!body.prompt && !body.reverseEngineer) {
       return new Response(JSON.stringify({ error: 'Prompt is required' }), {
         status: 400, headers: { 'Content-Type': 'application/json' },
       })
@@ -597,7 +549,7 @@ Create one section per slide (or group related slides). Each section MUST have 3
       )
     }
 
-    const stream = createSSEStream(upstreamResponse, body.provider, true)
+    const stream = createSSEStream(upstreamResponse, body.provider, false)
 
     return new Response(stream, {
       headers: {

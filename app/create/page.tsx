@@ -141,7 +141,7 @@ export default function CreatePage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: '', provider, apiKey, model,
+          prompt: 'Generate document from slides', provider, apiKey, model,
           reverseEngineer: true, slides,
         }),
       })

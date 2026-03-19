@@ -78,15 +78,15 @@ function SlideVision() {
               <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `${C.turquoise}20` }}>
                 <Handshake size={28} style={{ color: C.evergreen }} />
               </div>
-              <span className="inline-block rounded-full px-4 py-1.5 text-sm sm:text-base font-bold text-slate mb-4" style={{ background: C.turquoise }}>Design as connective tissue</span>
-              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">The platform gives us speed and consistency. The business lines give us depth and market fit. Design ensures every touchpoint feels like the same trusted&nbsp;companion.</p>
+              <span className="inline-block rounded-full px-4 py-1.5 text-sm sm:text-base font-bold text-slate mb-4" style={{ background: C.turquoise }}>One experience, every surface</span>
+              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">Platform gives speed. Business lines give depth. Design makes it all feel like&nbsp;Felix.</p>
             </div>
             <div className="bg-white rounded-2xl p-7 sm:p-8 border border-border shadow-sm">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `${C.cactus}20` }}>
                 <Globe size={28} style={{ color: C.evergreen }} />
               </div>
-              <span className="inline-block rounded-full px-4 py-1.5 text-sm sm:text-base font-bold text-slate mb-4" style={{ background: C.cactus }}>Build once, deploy everywhere</span>
-              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">Design the system once at the platform level, adapt it for each business line and surface. This is how we ship quality at speed across WhatsApp, app, web, and whatever comes&nbsp;next.</p>
+              <span className="inline-block rounded-full px-4 py-1.5 text-sm sm:text-base font-bold text-slate mb-4" style={{ background: C.cactus }}>Design once, ship everywhere</span>
+              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">One system, many surfaces. WhatsApp, app, web — consistent quality without rebuilding from scratch every&nbsp;time.</p>
             </div>
           </div>
         </div>

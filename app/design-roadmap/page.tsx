@@ -67,17 +67,17 @@ const slides: SlideData[] = [
       {
         title: 'Q1–Q2: Foundation',
         titleColor: '#2BF2F1',
-        body: '**5–6 + you.** Design System Designer, Content Design Lead, Consumer Payments ×2, Fintech Core Designer. 1 contractor for design system.',
+        body: '**5–6 + you**\n• Design System Designer\n• Content Design Lead\n• Consumer Payments ×2\n• Fintech Core Designer\n• 1 contractor for design system',
       },
       {
         title: 'Q3: Build Capability',
         titleColor: '#FFCD9C',
-        body: '**8–9 + you.** App Designer, UX Researcher, Credit Designer, Wallet Designer. Flex contractor for app launch.',
+        body: '**8–9 + you**\n• App Designer\n• UX Researcher\n• Credit Designer\n• Wallet Designer\n• Flex contractor for app launch',
       },
       {
         title: 'Q4+: Scale',
         titleColor: '#F19D38',
-        body: '**10–12 + you.** Second UX Researcher, Conversational UX Designer (evaluate), 3rd Consumer Payments (if needed).',
+        body: '**10–12 + you**\n• Second UX Researcher\n• Conversational UX Designer (evaluate)\n• 3rd Consumer Payments (if needed)\n• Steady-state contractors',
       },
     ],
     notes: 'The design system designer is our highest-priority hire — it unlocks staff augmentation and makes every other designer more productive.',

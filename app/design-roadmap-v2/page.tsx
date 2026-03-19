@@ -176,79 +176,80 @@ function SlideOrgModel() {
 
 function SlideCoverageTarget() {
   const assignments = [
-    { pm: 'Santi', product: 'Core Send', designer: 'Pato', status: 'covered' as const, isNew: false },
-    { pm: 'Hernan', product: 'Activation', designer: 'Pato', status: 'covered' as const, isNew: false },
-    { pm: 'Carla', product: 'Pricing / Multilingual', designer: 'New Hire', status: 'covered' as const, isNew: true },
-    { pm: 'Dani', product: 'New Geos', designer: 'Pato', status: 'covered' as const, isNew: false },
-    { pm: 'Diego', product: 'New Bets', designer: 'New Hire', status: 'covered' as const, isNew: true },
-    { pm: 'Eva', product: 'Checkout', designer: 'Patricia', status: 'covered' as const, isNew: false },
-    { pm: 'Samu', product: 'Tools', designer: 'Patricia', status: 'covered' as const, isNew: false },
-    { pm: 'Tomas', product: 'Disbursements', designer: 'Patricia', status: 'covered' as const, isNew: false },
-    { pm: 'Lexie', product: 'AI', designer: 'New Hire', status: 'covered' as const, isNew: true },
-    { pm: 'Memo', product: 'Wallet', designer: 'New Hire', status: 'covered' as const, isNew: true },
-    { pm: 'Sebas', product: 'Credit', designer: 'New Hire', status: 'covered' as const, isNew: true },
+    { pm: 'Santi', product: 'Core Send', coverage: 'Lead Designer' },
+    { pm: 'Hernan', product: 'Activation', coverage: 'Senior Designer' },
+    { pm: 'Carla', product: 'Pricing / Multilingual', coverage: 'Content Design Lead + Shared Product Design' },
+    { pm: 'Dani', product: 'New Geos', coverage: 'Senior Designer + Shared Support' },
+    { pm: 'Diego', product: 'New Bets', coverage: 'Senior Designer + Flexible Support' },
+    { pm: 'Eva', product: 'Checkout', coverage: 'Senior Designer' },
+    { pm: 'Samu', product: 'Tools', coverage: 'Senior Designer + Shared Support' },
+    { pm: 'Tomas', product: 'Disbursements', coverage: 'Senior Designer' },
+    { pm: 'Lexie', product: 'AI', coverage: 'Content Design Lead + Product Design Support' },
+    { pm: 'Memo', product: 'Wallet', coverage: 'Product Designer / New Hire' },
+    { pm: 'Sebas', product: 'Credit', coverage: 'Senior Designer' },
   ]
   const platform = [
-    { role: 'Design System', person: 'New Hire', status: 'covered' as const, isNew: true },
-    { role: 'Conv. Guidelines', person: 'Content Lead', status: 'covered' as const, isNew: true },
-    { role: 'Research', person: 'Jose', status: 'covered' as const, isNew: false },
-    { role: 'Multi-surface + App', person: 'Product Designer', status: 'covered' as const, isNew: true },
+    { role: 'Design System', person: 'New Hire' },
+    { role: 'Conversational Guidelines', person: 'Content Design Lead' },
+    { role: 'Research', person: 'Research Lead' },
+    { role: 'Multi-surface + App', person: 'Product Designer' },
   ]
-  const statusColor = { covered: C.cactus, stretched: C.mango, gap: C.papaya }
-  const statusLabel = { covered: 'Covered', stretched: 'Stretched', gap: 'No designer' }
+  const legend = [
+    { label: 'Lead', desc: 'primary ownership of a major initiative' },
+    { label: 'Senior', desc: 'leads key work and supports adjacent streams' },
+    { label: 'Shared', desc: 'cross-squad support' },
+    { label: 'Specialist', desc: 'content, research, system, platform' },
+  ]
 
   return (
     <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
           <div className="mb-5"><PillBadge dark>With New Hires</PillBadge></div>
-          <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">11 PMs. Full&nbsp;Coverage.</h1>
-          <p className="text-linen/60 text-lg mb-6">Hiring prioritized around supporting every PM with a&nbsp;designer</p>
+          <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">11 PMs. Full Design&nbsp;Coverage.</h1>
+          <p className="text-linen/60 text-lg mb-6">Coverage model pairs senior ownership with shared product, content, and research&nbsp;support.</p>
 
           <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden mb-4">
-            <div className="grid grid-cols-[1fr_2fr_1fr_1fr] gap-x-6 px-5 py-2.5 bg-white/[0.03] border-b border-white/10">
+            <div className="grid grid-cols-[1fr_2fr_3fr_1fr] gap-x-6 px-5 py-2.5 bg-white/[0.03] border-b border-white/10">
               <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">PM</span>
-              <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Product</span>
-              <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Designer</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Product Area</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Design Coverage</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Status</span>
             </div>
             {assignments.map((a, i) => (
-              <div key={a.pm} className={`grid grid-cols-[1fr_2fr_1fr_1fr] gap-x-6 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white/[0.02]' : 'bg-transparent'} ${i < assignments.length - 1 ? 'border-b border-white/5' : ''}`}>
+              <div key={a.pm} className={`grid grid-cols-[1fr_2fr_3fr_1fr] gap-x-6 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white/[0.02]' : 'bg-transparent'} ${i < assignments.length - 1 ? 'border-b border-white/5' : ''}`}>
                 <span className="text-sm font-medium text-linen/80">{a.pm}</span>
                 <span className="text-sm text-linen/50">{a.product}</span>
-                <span className={`text-sm font-medium ${a.isNew ? 'text-cactus' : 'text-linen/80'}`}>{a.designer}</span>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${statusColor[a.status]}20`, color: statusColor[a.status] }}>{statusLabel[a.status]}</span>
+                <span className="text-sm font-medium text-linen/80">{a.coverage}</span>
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
               </div>
             ))}
           </div>
 
-          <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+          <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden mb-4">
             <div className="px-5 py-2.5 bg-white/[0.03] border-b border-white/10">
-              <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Platform &amp; Shared Roles</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Platform + Shared Design Roles</span>
             </div>
             <div className="flex divide-x divide-white/10">
               {platform.map((p) => (
                 <div key={p.role} className="flex-1 px-5 py-3 flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-linen/80">{p.role}</p>
-                    <p className={`text-xs ${p.isNew ? 'text-cactus font-semibold' : 'text-linen/50'}`}>{p.person}</p>
+                    <p className="text-xs text-linen/50">{p.person}</p>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${statusColor[p.status]}20`, color: statusColor[p.status] }}>{statusLabel[p.status]}</span>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex items-center gap-5 mt-4">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: C.cactus }} />
-              <span className="text-xs text-linen/40">Existing</span>
+          <div className="flex items-center justify-between mt-4">
+            <span className="text-xs text-linen/40">Coverage model preserves ownership without one-to-one staffing</span>
+            <div className="flex items-center gap-4">
+              {legend.map((l) => (
+                <span key={l.label} className="text-xs text-linen/40"><strong className="text-linen/60 font-semibold">{l.label}</strong> = {l.desc}</span>
+              ))}
             </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full border-2" style={{ borderColor: C.cactus, background: 'transparent' }} />
-              <span className="text-xs text-linen/40">New hire</span>
-            </div>
-            <span className="text-xs text-linen/40 ml-auto">Every PM supported · Kyle freed up to lead</span>
           </div>
         </div>
       </div>

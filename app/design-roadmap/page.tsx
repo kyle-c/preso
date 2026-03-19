@@ -208,9 +208,9 @@ function SlideHiring() {
       { name: 'Product Designer: Conv. Experiences', note: 'Platform' },
     ], aug: '' },
     { phase: 'Later', time: 'Q3 & Beyond', label: 'Scale', color: C.mango, hires: [
-      { name: 'App Designer', note: '' },
-      { name: 'Wallet Designer', note: 'if product ready' },
-      { name: 'UX Researcher (R2)', note: 'month 6-9' },
+      { name: 'App Designer', note: 'multisurface' },
+      { name: 'Product Designer', note: 'Wallet (tentative)' },
+      { name: 'UX Researcher (R2)', note: '(tentative)' },
     ], aug: 'Steady-state: 1 permanent + flex contractors' },
   ]
   return (

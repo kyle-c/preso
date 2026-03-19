@@ -506,8 +506,8 @@ function SlideRoadmapOverview() {
           <p className="text-center text-linen/60 text-base mb-8">With the org at full build, two design tracks run in&nbsp;parallel</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {[
-              { title: 'Track 1: Design Foundation', color: C.cactus, icon: Clipboard, sub: 'What the centralized design org builds — regardless of what any product team ships', items: ['Design system & pattern library', 'Content & conversational UX patterns', 'Research infrastructure & practice', 'Cross-surface experience coherence', 'Omnichannel + AI design patterns'] },
-              { title: 'Track 2: Design in Product', color: C.papaya, icon: DeviceMobile, sub: 'How design shows up within the product roadmap — the design lens on product priorities', items: ['Core Conversion and Retention UX', 'Multi-product discovery framework', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design'] },
+              { title: 'Track 1: Design Foundation', color: C.cactus, icon: Clipboard, sub: 'Consistency and quality at scale — so every surface feels like Felix', items: ['Design system & pattern library', 'Content & conversational UX patterns', 'Research infrastructure & practice', 'Cross-surface experience coherence', 'Omnichannel + AI design patterns'] },
+              { title: 'Track 2: Design in Product', color: C.papaya, icon: DeviceMobile, sub: 'Driving conversion, retention, and trust across every product touchpoint', items: ['Core Conversion and Retention UX', 'Multi-product discovery framework', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design'] },
             ].map((t) => (
               <div key={t.title} className="bg-white/5 rounded-2xl p-7 border border-white/10" style={{ borderTopWidth: 3, borderTopColor: t.color }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${t.color}20` }}>

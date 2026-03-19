@@ -200,7 +200,7 @@ function SlideCoverageTarget() {
     <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
-          <div className="mb-5"><PillBadge dark>With New Hires</PillBadge></div>
+          <div className="mb-5"><PillBadge dark>End of Year</PillBadge></div>
           <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">11 PMs. Full Design&nbsp;Coverage.</h1>
           <p className="text-linen/60 text-lg mb-6">Coverage model pairs senior ownership with shared product, content, and research&nbsp;support.</p>
 
@@ -403,7 +403,7 @@ function SlideCoverage() {
 function SlideHiring() {
   const phases = [
     { phase: 'Now', time: 'Q1', label: 'Foundation', color: C.cactus, hires: [
-      { name: 'Designer', note: 'Consumer Payments' },
+      { name: 'Senior Designer', note: 'Consumer Payments' },
       { name: 'Designer', note: 'Checkout' },
       { name: 'UX Researcher', note: 'Platform' },
     ], aug: '+ 1 contractor for design system build-out (Darwoft)' },
@@ -507,7 +507,7 @@ function SlideRoadmapOverview() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {[
               { title: 'Track 1: Design Foundation', color: C.cactus, icon: Clipboard, sub: 'What the centralized design org builds — regardless of what any product team ships', items: ['Design system & pattern library', 'Content & conversational UX patterns', 'Research infrastructure & practice', 'Cross-surface experience coherence', 'Omnichannel + AI design patterns'] },
-              { title: 'Track 2: Design in Product', color: C.papaya, icon: DeviceMobile, sub: 'How design shows up within the product roadmap — the design lens on product priorities', items: ['Multi-product discovery framework', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design', 'Receiver-side experience'] },
+              { title: 'Track 2: Design in Product', color: C.papaya, icon: DeviceMobile, sub: 'How design shows up within the product roadmap — the design lens on product priorities', items: ['Core Conversion and Retention UX', 'Multi-product discovery framework', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design'] },
             ].map((t) => (
               <div key={t.title} className="bg-white/5 rounded-2xl p-7 border border-white/10" style={{ borderTopWidth: 3, borderTopColor: t.color }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${t.color}20` }}>
@@ -645,8 +645,8 @@ function SlideContentDesign() {
       <div className="absolute bottom-[6%] right-[4%] w-[130px] lg:w-[180px] opacity-[0.1] rotate-3 pointer-events-none" style={{ animation: 'ds-float 10s ease-in-out infinite' }}><Illo src="Speech%20Bubbles%20%2B%20Hearts.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
-          <div className="mb-5 text-center"><PillBadge>Deep Dive</PillBadge></div>
-          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2 text-center">Content Design Lead — Key&nbsp;Projects</h1>
+          <div className="mb-5 text-center"><PillBadge>Key Projects</PillBadge></div>
+          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2 text-center">Content Design&nbsp;Lead</h1>
           <p className="text-muted-foreground text-lg mb-8 text-center">Shaping how Felix communicates across every surface, language, and&nbsp;interaction</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">

@@ -879,7 +879,7 @@ function SlideFintechDemo() {
       <div className="flex-1 flex flex-col items-center justify-center relative z-10">
         <div className="w-full h-full overflow-hidden relative">
           <iframe
-            src="/fintechtestflow"
+            src="/fintechtestflow/embed"
             className="border-0 transition-all duration-300"
             style={canvasOpen
               ? { width: '100%', height: 'calc(100% + 40px)', marginTop: '-20px', marginLeft: '0' }

@@ -406,12 +406,12 @@ function SlideHiring() {
       { name: 'Designer', note: 'Consumer Payments' },
       { name: 'Designer', note: 'Checkout' },
       { name: 'UX Researcher', note: 'Platform' },
-      { name: 'Content Design Lead', note: 'Platform' },
     ], aug: '+ 1 contractor for design system build-out (Darwoft)' },
     { phase: 'Next', time: 'Q2', label: 'Build capability', color: C.sky, hires: [
-      { name: 'Designer', note: 'Consumer Payments' },
+      { name: 'Lead Designer', note: 'Consumer Payments' },
       { name: 'Senior Designer', note: 'Credit' },
-      { name: 'Designer', note: 'Platform' },
+      { name: 'Senior Designer', note: 'Consumer Payments' },
+      { name: 'Content Design Lead', note: 'Platform' },
     ], aug: '' },
     { phase: 'Later', time: 'Q3 & Beyond', label: 'Scale', color: C.mango, hires: [
       { name: 'Designer', note: 'Multi-surface / App' },

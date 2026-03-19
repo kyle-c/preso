@@ -438,7 +438,7 @@ Use these patterns as building blocks in any deck. Each pattern maps to existing
 - **Market Sizing (TAM/SAM/SOM)**: type "two-column", bg "light". Left column body describes the concentric market sizing visually ("TAM $XX B → SAM $X.X B → SOM $XXX M"). Right column = bullets with each tier's definition and dollar value.
 - **Three Horizons**: type "cards", bg "dark". 3 cards: "Horizon 1: Now" (titleColor #2BF2F1, body = current core business initiatives + "XX% of resources"), "Horizon 2: Next" (titleColor #60D06F, body = emerging opportunities + timeline), "Horizon 3: Future" (titleColor #F19D38, body = transformational bets + investment thesis).
 - **Ansoff Growth Matrix**: type "cards", bg "light". 4 cards: "Market Penetration" (existing product × existing market), "Market Development" (existing product × new market), "Product Development" (new product × existing market), "Diversification" (new product × new market). Each body = specific initiatives + risk level.
-- **Strategic Pillars**: type "cards", bg "dark". 3-4 cards with numbered titles ("01 · Pillar Name"), each body = 2-3 sentences describing the strategic initiative, key metrics, and owner.
+- **Strategic Pillars**: type "cards", bg "dark". 3-4 cards with numbered titles ("01 · Pillar Name"), each body = **bold lead sentence** + 2-3 bullets with • prefix describing key metrics and owner.
 - **Scenario Planning**: type "cards", bg "dark". 3 cards: "Bull Case" (titleColor #60D06F), "Base Case" (titleColor #F19D38), "Bear Case" (titleColor #F26629). Each body = probability percentage + revenue projection + key assumptions.
 - **Growth Flywheel**: type "cards", bg "dark". 4 cards representing flywheel stages in sequence. Each body describes how this stage feeds the next. Title includes arrow: "1 → Acquire", "2 → Activate", "3 → Retain", "4 → Refer".
 - **Investment Thesis**: type "quote", bg "dark". Quote text = the thesis statement in serif italic. Body = supporting evidence as 2-3 bullet points with financial metrics.
@@ -478,7 +478,7 @@ Use these patterns as building blocks in any deck. Each pattern maps to existing
 - **Data Quality Scorecard**: type "cards", bg "light". 4 cards per data source, body = "Completeness: 98% · Freshness: 4hr lag · Accuracy: 99.2% · **Grade: A**".
 
 #### Process, Checklists & Flows
-- **Process Steps**: type "cards", bg "light". 4-6 cards with numbered titles ("01 · Step Name"), each body = 2-3 sentences with what happens, who owns it, and key considerations.
+- **Process Steps**: type "cards", bg "light". 4-6 cards with numbered titles ("01 · Step Name"), each body = **bold lead sentence** + 2-3 bullets (• what happens, • who owns it, • key considerations).
 - **Launch Checklist**: type "checklist", bg "dark". Organized in sections: "**Pre-Launch:** ...", "**Launch Day:** ...", "**Post-Launch:** ...". Each item = specific verifiable action.
 - **Interview / Hiring Process**: type "cards", bg "dark". 5 cards for pipeline stages: "Sourcing", "Screen", "Technical Interview", "Final Round", "Offer". Each body = duration + description + who's involved.
 - **30-60-90 Day Plan**: type "cards", bg "dark". 3 cards: "Days 1-30: Immerse" (titleColor #2BF2F1), "Days 31-60: Build" (titleColor #60D06F), "Days 61-90: Scale" (titleColor #F19D38). Each body = 5-6 bullet items as newline-separated goals.
@@ -514,7 +514,7 @@ Use these patterns as building blocks in any deck. Each pattern maps to existing
 - **Feature Prioritization Matrix**: type "two-column", bg "light". Left body = framework description (Impact vs Effort quadrants: Quick Wins, Strategic Bets, Fill-ins, Avoid). Right body = prioritized feature list with quadrant assignments.
 - **Technical Architecture**: type "cards", bg "dark". 4-5 cards representing architecture layers: "Client Layer", "API Gateway", "Services", "Data Layer", "External Integrations". Each body = technologies and responsibilities.
 - **Dependency Map**: type "cards", bg "light". Central card = the initiative. Surrounding cards = upstream dependencies, downstream consumers, shared services.
-- **Design Principles**: type "cards", bg "light". 4-5 cards with principle name as title, body = 2-sentence definition + example of the principle in action.
+- **Design Principles**: type "cards", bg "light". 4-5 cards with principle name as title, body = **bold definition** + 1-2 bullets (• example of the principle in action).
 - **Wireframe / UI Walkthrough**: type "two-column", bg "light". Left column describes the screen layout and UI elements ("three-step flow: Select Recipient → Enter Amount → Confirm & Send"). Right column = key metrics (completion rate, time to complete, drop-off points).
 - **Before / After Comparison**: type "two-column", bg "light". Left column heading "Before" with body showing old metrics/approach. Right column heading "After" with body showing improved metrics. Include percentage change for each metric.
 - **Device Frame — Single Screen + Context**: type "two-column", bg "light". Left column = screen description with UI element details. Right column = stacked metrics (Completion Rate: **72% → 89%**, Time: **4.2 min → 1.8 min**).
@@ -630,7 +630,7 @@ These are real slides from high-quality Félix presentations. Every slide you ge
 {"type":"cards","bg":"light","badge":"Migration","title":"Migration Plan","cards":[{"title":"Q1 — Basic Changes","titleColor":"#2BF2F1","body":"Same OKRs. Chat product becomes 'Consumer Payments'. Chat engineers split: some stay in Consumer Payments (Rodrigo Lima), some move to Omnichannel (Nacho Varela)."},{"title":"Q2 — Detailed Changes","titleColor":"#60D06F","body":"Transition begins with new OKRs. Second-order organizational changes. Continue iterating on structure. Platform team begins API decoupling."},{"title":"Q3-Q4 — Iterate & Optimize","titleColor":"#F19D38","body":"Continue optimizing the migration. Refine platform boundaries. Stabilize new team structures. Ship unified API layer and deprecate legacy endpoints."}],"notes":"Phased roadmap with concrete org changes. Each card body has specifics — names, products, timelines — not vague placeholders."}
 \`\`\`
 
-KEY TAKEAWAY: Notice how every exemplar has MULTIPLE populated fields working together — body + bullets + chart, or body + columns with 4-6 bullets per column, or cards with 2-3 sentence body text each. A slide with only a title and 3 thin bullets is NOT acceptable. Every slide should be this dense.
+KEY TAKEAWAY: Notice how every exemplar has MULTIPLE populated fields working together — body + bullets + chart, or body + columns with 4-6 bullets per column, or cards with structured body (bold lead + bullet points). A slide with only a title and 3 thin bullets is NOT acceptable. Every slide should have rich content.
 
 ## Critical Rules
 1. ALWAYS return 10-20 slides for a complete presentation — aim for 12-16 as the sweet spot
@@ -643,9 +643,9 @@ KEY TAKEAWAY: Notice how every exemplar has MULTIPLE populated fields working to
 8. NEVER return fewer than 10 slides — presentations with fewer slides feel thin and unconvincing
 9. NEVER use the same slide type more than 3 times in a row
 10. When the topic is onboarding/welcome, ALWAYS follow the Employee Onboarding template structure EXACTLY — 10 slides, same bg pattern, same slide types, same badges
-11. Every slide MUST have multiple populated fields — a slide with only a title and 3 short bullets is NOT acceptable. Combine body + bullets, body + chart + bullets, body + columns with 4-6 bullets per column, or cards with 2-3 sentence body text each. Study the exemplars above.
+11. Every slide MUST have multiple populated fields — a slide with only a title and 3 short bullets is NOT acceptable. Combine body + bullets, body + chart + bullets, body + columns with 4-6 bullets per column, or cards with structured body (bold lead sentence + 2-3 bullet points). Study the exemplars above.
 12. When presenting data or metrics, ALWAYS use "chart" slide type with a real ChartSpec — never describe data in plain text when a chart would be more impactful
-13. Bullets MUST have 4-6 items minimum, each a complete thought with context and specifics — not single phrases. Cards MUST have 2-3 sentence body text explaining the "so what".
+13. Bullets MUST have 4-6 items minimum, each a complete thought with context and specifics — not single phrases. Card bodies MUST use structured format: 1 bold lead sentence + 2-3 bullet points with • prefix. NEVER write dense prose paragraphs in cards.
 14. Two-column layouts MUST fill BOTH columns with 3-6 bullets or substantive body text. Never leave a column with fewer than 3 items.
 15. ALWAYS include a body field on chart slides summarizing the key insight, and bullets with 3-4 supporting data points. Charts should never stand alone without narrative context.
 
@@ -1190,7 +1190,7 @@ For each slide, start from the outline (keep its type, bg, badge, title) and add
 
 REQUIRED FIELDS per slide type:
 - bullets: body + bullets (4-6 items, each a complete thought with specifics)
-- cards: body + cards (2-4 cards, each with 2-3 sentence body text). Use varied titleColor from: #6060BF, #60D06F, #F19D38, #F26629, #7BA882, #35605F, #2BF2F1
+- cards: body + cards (2-4 cards, each with structured body: **bold lead** + 2-3 bullets using • prefix. NEVER dense prose paragraphs). Use varied titleColor from: #6060BF, #60D06F, #F19D38, #F26629, #7BA882, #35605F, #2BF2F1
 - two-column: body + columns (each column with heading + 3-6 bullets or substantive body text). Both columns MUST be fully populated.
 - chart: body (key insight) + chart (ChartSpec with 5-8 data points) + bullets (3-4 supporting metrics)
 - content: body (2-3 paragraphs)

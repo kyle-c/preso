@@ -18,7 +18,7 @@ import {
 } from '@/components-next/phosphor-icons'
 
 const C = { turquoise: '#2BF2F1', slate: '#082422', blueberry: '#6060BF', evergreen: '#35605F', cactus: '#60D06F', mango: '#F19D38', papaya: '#F26629', sage: '#7BA882', lime: '#DCFF00', lychee: '#FFCD9C', sky: '#8DFDFA', stone: '#EFEBE7', concrete: '#CFCABF', mocha: '#877867' }
-const TOTAL = 11
+const TOTAL = 10
 
 function Illo({ src, className }: { src: string; className?: string }) {
   return <object type="image/svg+xml" data={`/illustrations/${src}`} className={className ?? 'w-full h-auto'} style={{ pointerEvents: 'none' }} aria-hidden="true" />
@@ -194,88 +194,6 @@ function SlideTeamDetail() {
   )
 }
 
-function SlideCoverage() {
-  const assignments = [
-    { pm: 'Santi', product: 'Core Send', designer: 'Pato', status: 'covered' as const },
-    { pm: 'Hernan', product: 'Activation', designer: 'Pato', status: 'covered' as const },
-    { pm: 'Carla', product: 'Pricing / Multilingual', designer: 'Kyle', status: 'stretched' as const },
-    { pm: 'Dani', product: 'New Geos', designer: 'Pato', status: 'stretched' as const },
-    { pm: 'Diego', product: 'New Bets', designer: 'Kyle', status: 'stretched' as const },
-    { pm: 'Eva', product: 'Checkout', designer: 'Patricia', status: 'covered' as const },
-    { pm: 'Samu', product: 'Tools', designer: 'Patricia', status: 'stretched' as const },
-    { pm: 'Lexie', product: 'AI', designer: 'No designer', status: 'gap' as const },
-    { pm: 'Memo', product: 'Wallet', designer: 'No designer', status: 'gap' as const },
-    { pm: 'Sebas', product: 'Credit', designer: 'No designer', status: 'gap' as const },
-  ]
-  const platform = [
-    { role: 'Design System', person: 'Kyle', status: 'stretched' as const },
-    { role: 'Conversational Guidelines', person: 'TBH', status: 'gap' as const },
-    { role: 'Research', person: 'Jose', status: 'covered' as const },
-  ]
-  const statusColor = { covered: C.cactus, stretched: C.mango, gap: C.papaya }
-  const statusLabel = { covered: 'Covered', stretched: 'Stretched', gap: 'No designer' }
-
-  return (
-    <div className="relative h-full w-full bg-stone flex flex-col overflow-x-hidden overflow-y-auto">
-      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
-        <div className="w-full max-w-[1200px]">
-          <div className="mb-5"><PillBadge>Today</PillBadge></div>
-          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">10 PMs. 3&nbsp;Designers.</h1>
-          <p className="text-muted-foreground text-lg mb-6">Current coverage model — the team is stretched&nbsp;thin</p>
-
-          {/* Embedded assignments table */}
-          <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden mb-4">
-            <div className="grid grid-cols-[1fr_1.4fr_1fr_auto] gap-x-4 px-5 py-2.5 bg-foreground/[0.03] border-b border-border">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">PM</span>
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Product</span>
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Designer</span>
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Status</span>
-            </div>
-            {assignments.map((a, i) => (
-              <div key={a.pm} className={`grid grid-cols-[1fr_1.4fr_1fr_auto] gap-x-4 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white' : 'bg-foreground/[0.02]'} ${i < assignments.length - 1 ? 'border-b border-border/50' : ''}`}>
-                <span className="text-sm font-medium text-foreground">{a.pm}</span>
-                <span className="text-sm text-muted-foreground">{a.product}</span>
-                <span className={`text-sm font-medium ${a.status === 'gap' ? 'text-papaya' : 'text-foreground'}`}>{a.designer}</span>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${statusColor[a.status]}20`, color: statusColor[a.status] }}>{statusLabel[a.status]}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Platform roles */}
-          <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
-            <div className="px-5 py-2.5 bg-foreground/[0.03] border-b border-border">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Platform &amp; Shared Roles</span>
-            </div>
-            <div className="flex divide-x divide-border/50">
-              {platform.map((p) => (
-                <div key={p.role} className="flex-1 px-5 py-3 flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{p.role}</p>
-                    <p className={`text-xs ${p.status === 'gap' ? 'text-papaya font-semibold' : 'text-muted-foreground'}`}>{p.person}</p>
-                  </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${statusColor[p.status]}20`, color: statusColor[p.status] }}>{statusLabel[p.status]}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Legend */}
-          <div className="flex items-center gap-5 mt-4">
-            {Object.entries(statusLabel).map(([key, label]) => (
-              <div key={key} className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: statusColor[key as keyof typeof statusColor] }} />
-                <span className="text-xs text-muted-foreground">{label}</span>
-              </div>
-            ))}
-            <span className="text-xs text-muted-foreground ml-auto">3 products with no design coverage · 4 designers splitting 10+ workstreams</span>
-          </div>
-        </div>
-      </div>
-      <SlideFooter num={4} />
-    </div>
-  )
-}
-
 function SlideHiring() {
   const phases = [
     { phase: 'Now', time: 'Q1–Q2', label: 'Foundation', color: C.cactus, hires: [
@@ -328,7 +246,7 @@ function SlideHiring() {
           </div>
         </div>
       </div>
-      <SlideFooter num={5} dark />
+      <SlideFooter num={4} dark />
     </div>
   )
 }
@@ -366,7 +284,7 @@ function SlideStaffAug() {
           </div>
         </div>
       </div>
-      <SlideFooter num={6} />
+      <SlideFooter num={5} />
     </div>
   )
 }
@@ -397,7 +315,7 @@ function SlideRoadmapOverview() {
           </div>
         </div>
       </div>
-      <SlideFooter num={7} dark />
+      <SlideFooter num={6} dark />
     </div>
   )
 }
@@ -463,7 +381,7 @@ function SlideNow() {
           </div>
         </div>
       </div>
-      <SlideFooter num={8} />
+      <SlideFooter num={7} />
     </div>
   )
 }
@@ -508,7 +426,7 @@ function SlideResearch() {
           </div>
         </div>
       </div>
-      <SlideFooter num={9} dark />
+      <SlideFooter num={8} dark />
     </div>
   )
 }
@@ -548,7 +466,7 @@ function SlideContentDesign() {
           </div>
         </div>
       </div>
-      <SlideFooter num={10} />
+      <SlideFooter num={9} />
     </div>
   )
 }
@@ -582,20 +500,19 @@ function SlideClosingGoal() {
           </div>
         </div>
       </div>
-      <SlideFooter num={11} dark />
+      <SlideFooter num={10} dark />
     </div>
   )
 }
 
 /* ═══════════════════════════════════════ SHELL ════════════ */
 
-const slides = [SlideCover, SlideVision, SlideTeamDetail, SlideCoverage, SlideHiring, SlideStaffAug, SlideRoadmapOverview, SlideNow, SlideResearch, SlideContentDesign, SlideClosingGoal]
-const darkSlideSet = new Set([0, 4, 6, 8, 10])
+const slides = [SlideCover, SlideVision, SlideTeamDetail, SlideHiring, SlideStaffAug, SlideRoadmapOverview, SlideNow, SlideResearch, SlideContentDesign, SlideClosingGoal]
+const darkSlideSet = new Set([0, 3, 5, 7, 9])
 const slideMeta = [
   { title: 'Product Design Roadmap', subtitle: 'Cover' },
   { title: "Design's Role at Felix", subtitle: 'Vision' },
   { title: 'Team Composition', subtitle: 'Roles' },
-  { title: 'Current Coverage', subtitle: 'Today' },
   { title: 'Hiring Sequence', subtitle: 'Timeline' },
   { title: 'Staff Augmentation', subtitle: 'Strategy' },
   { title: 'Two Tracks', subtitle: 'Roadmap' },

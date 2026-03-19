@@ -192,6 +192,7 @@ function SlideCoverageTarget() {
     { role: 'Design System', person: 'New Hire', status: 'covered' as const, isNew: true },
     { role: 'Conv. Guidelines', person: 'Content Lead', status: 'covered' as const, isNew: true },
     { role: 'Research', person: 'Jose', status: 'covered' as const, isNew: false },
+    { role: 'Multi-surface + App', person: 'Product Designer', status: 'covered' as const, isNew: true },
   ]
   const statusColor = { covered: C.cactus, stretched: C.mango, gap: C.papaya }
   const statusLabel = { covered: 'Covered', stretched: 'Stretched', gap: 'No designer' }

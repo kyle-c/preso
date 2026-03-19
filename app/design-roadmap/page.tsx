@@ -139,7 +139,6 @@ function SlideTeamDetail() {
     'UX Researcher',
     'Product Designer: Design Systems',
     'Content Design Lead',
-    'Product Designer: Conv. Experiences',
     'App Designer',
     'UX Researcher',
   ]
@@ -180,7 +179,7 @@ function SlideTeamDetail() {
                 <Gear size={18} style={{ color: C.evergreen }} />
               </div>
               <h3 className="font-display font-extrabold text-foreground text-lg">Surface &amp; UX Platform</h3>
-              <span className="text-sm text-muted-foreground ml-auto">6 roles — horizontal leverage</span>
+              <span className="text-sm text-muted-foreground ml-auto">5 roles — horizontal leverage</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {platformRoles.map((r) => (

@@ -243,6 +243,7 @@ function SlideCoverage() {
     { pm: 'Diego', product: 'New Bets', designer: 'Kyle', status: 'stretched' as const },
     { pm: 'Eva', product: 'Checkout', designer: 'Patricia', status: 'covered' as const },
     { pm: 'Samu', product: 'Tools', designer: 'Patricia', status: 'stretched' as const },
+    { pm: 'Tomas', product: 'Disbursements', designer: 'Patricia', status: 'stretched' as const },
     { pm: 'Lexie', product: 'AI', designer: 'No designer', status: 'gap' as const },
     { pm: 'Memo', product: 'Wallet', designer: 'No designer', status: 'gap' as const },
     { pm: 'Sebas', product: 'Credit', designer: 'No designer', status: 'gap' as const },
@@ -260,7 +261,7 @@ function SlideCoverage() {
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
           <div className="mb-5"><PillBadge>Today</PillBadge></div>
-          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">10 PMs. 3&nbsp;Designers.</h1>
+          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">11 PMs. 3&nbsp;Designers.</h1>
           <p className="text-muted-foreground text-lg mb-6">Current coverage — the team is stretched&nbsp;thin</p>
 
           <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden mb-4">
@@ -304,7 +305,7 @@ function SlideCoverage() {
                 <span className="text-xs text-muted-foreground">{label}</span>
               </div>
             ))}
-            <span className="text-xs text-muted-foreground ml-auto">3 products with no design coverage · 4 designers splitting 10+ workstreams</span>
+            <span className="text-xs text-muted-foreground ml-auto">3 products with no design coverage · 4 designers splitting 11+ workstreams</span>
           </div>
         </div>
       </div>

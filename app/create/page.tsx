@@ -1165,6 +1165,7 @@ export default function CreatePage() {
             <div className="flex items-center gap-1 mb-6">
               {([
                 { key: 'mine' as TabKey, label: 'My Decks' },
+                { key: 'shared-by-me' as TabKey, label: 'Shared by Me' },
                 { key: 'shared-with-me' as TabKey, label: 'Shared with Me' },
                 { key: 'archived' as TabKey, label: 'Archived' },
               ]).map(tab => {

@@ -71,7 +71,7 @@ function SlideVision() {
           <div className="flex flex-col justify-center">
             <div className="mb-5 lg:mb-6"><PillBadge>Vision</PillBadge></div>
             <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight mb-6 lg:mb-8">Design&apos;s Role at&nbsp;Felix</h1>
-            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-lg">Felix&apos;s vision is to be the <strong className="text-foreground">Trusted Financial Companion for Latinos in the&nbsp;US</strong>. That&apos;s fundamentally an experience claim, not a feature claim. Design is how we deliver on&nbsp;it.</p>
+            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-lg">&ldquo;Trusted Financial Companion&rdquo; is an <strong className="text-foreground">experience claim</strong>, not a feature claim. Design is how we deliver&nbsp;on&nbsp;it.</p>
           </div>
           <div className="flex flex-col gap-5">
             <div className="bg-white rounded-2xl p-7 sm:p-8 border border-border shadow-sm">

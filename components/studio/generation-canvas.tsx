@@ -40,7 +40,6 @@ export function GenerationCanvas({
 }: GenerationCanvasProps) {
   const [phase, setPhase] = useState<Phase>('placeholders')
   const [displayCount, setDisplayCount] = useState(0)
-  const [canvasBounds, setCanvasBounds] = useState<DOMRect | null>(null)
   const [zoomIndex, setZoomIndex] = useState<number | null>(null)
 
   const gridRef = useRef<HTMLDivElement>(null)
@@ -110,25 +109,6 @@ export function GenerationCanvas({
   // Responsive grid columns based on count
   const cols = finalCount <= 4 ? 2 : finalCount <= 9 ? 3 : 4
 
-  // Track full viewport bounds for agent cursors (spread across entire screen)
-  const updateBounds = useCallback(() => {
-    // Use the full viewport so cursors spread across all slides
-    setCanvasBounds(new DOMRect(0, 56, window.innerWidth, window.innerHeight - 56))
-  }, [])
-
-  useEffect(() => {
-    updateBounds()
-    const observer = new ResizeObserver(() => {
-      requestAnimationFrame(updateBounds)
-    })
-    if (gridRef.current) observer.observe(gridRef.current)
-    const interval = setInterval(updateBounds, 500)
-    return () => {
-      observer.disconnect()
-      clearInterval(interval)
-    }
-  }, [updateBounds, displayCount])
-
   return (
     <div
       className="fixed inset-0 bg-[#050505] flex flex-col z-50"
@@ -187,7 +167,7 @@ export function GenerationCanvas({
           }}
         >
           {Array.from({ length: displayCount }).map((_, i) => (
-            <div key={i} className="min-h-0 flex items-center justify-center">
+            <div key={i} className="min-h-0 flex items-center justify-center" data-slide-tile>
               <div className="w-full" style={{ maxHeight: '100%', aspectRatio: '16/9' }}>
                 <CanvasSlideCard
                   index={i}
@@ -205,13 +185,8 @@ export function GenerationCanvas({
         </div>
       </div>
 
-      {/* Agent cursors — 3 per slide tile, spread across the grid */}
-      <AgentCursors
-        slideCount={finalCount}
-        cols={cols}
-        canvasBounds={canvasBounds}
-        visible={phase !== 'complete'}
-      />
+      {/* Agent cursors — read actual tile positions from DOM */}
+      <AgentCursors gridRef={gridRef} phase={phase} />
     </div>
   )
 }

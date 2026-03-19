@@ -78,6 +78,7 @@ Use these illustrations throughout presentations (≥30% of slides). Use the ima
 - Use badge pills to categorize slide sections
 - Vary slide types — don't use the same type more than twice in a row
 - Use secondary palette colors for card titleColor fields — vary them
+- NEVER use emoji icons on bullet items unless the user explicitly requests them. Use "✓" or "→" for functional indicators only. Omit the icon field by default. Emoji-heavy slides look unprofessional.
 
 ## Presentation Templates
 

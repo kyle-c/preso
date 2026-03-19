@@ -115,7 +115,7 @@ function SlideToday() {
             <div className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: C.cactus }}>
               <h3 className="font-display font-extrabold text-linen text-lg sm:text-xl mb-4">What we&nbsp;have</h3>
               <ul className="space-y-2.5">
-                {['Head of Design (Kyle)', '2 Product Designers (Pato, Patricia)', '1 UX Researcher (Jose)', 'Strong product partnership with\u00A0PMs'].map((item) => (
+                {['Head of Design (Kyle)', '2 Product Designers (Pato, Patricia)', '1 UX Researcher (Jose)', 'Newly defined design system (pre-launch)', 'Strong product partnership with\u00A0PMs'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-cactus/60" strokeWidth={1.5} /><span className="text-base text-linen/70 leading-snug">{item}</span></li>
                 ))}
               </ul>
@@ -123,7 +123,7 @@ function SlideToday() {
             <div className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: C.papaya }}>
               <h3 className="font-display font-extrabold text-linen text-lg sm:text-xl mb-4">What we&apos;re&nbsp;missing</h3>
               <ul className="space-y-2.5">
-                {['No design system — every screen is bespoke', 'No content design — voice and tone are ad\u00A0hoc', 'No app designer — multi-surface is a\u00A0gap', 'No embedded coverage for Credit or\u00A0Wallet', 'No research infrastructure or\u00A0tooling'].map((item) => (
+                {['Design system defined but not yet launched', 'No content design — voice and tone are ad\u00A0hoc', 'No app designer — multi-surface is a\u00A0gap', 'No embedded coverage for Credit or\u00A0Wallet', 'No research infrastructure or\u00A0tooling'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-papaya/60" strokeWidth={1.5} /><span className="text-base text-linen/70 leading-snug">{item}</span></li>
                 ))}
               </ul>
@@ -524,7 +524,7 @@ function SlideClosingGoal() {
             <div className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: C.papaya }}>
               <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.papaya }}>Today</h3>
               <ul className="space-y-2.5">
-                {['3 designers + Head of Design', 'No design system — bespoke everything', 'No content design or research infra', 'Reactive to product requests', 'Single-surface focus (WhatsApp)'].map((item) => (
+                {['3 designers + Head of Design', 'Design system defined but not yet launched', 'No content design or research infra', 'Reactive to product requests', 'Single-surface focus (WhatsApp)'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-papaya/50" strokeWidth={1.5} /><span className="text-base text-linen/60 leading-snug">{item}</span></li>
                 ))}
               </ul>

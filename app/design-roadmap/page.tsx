@@ -377,14 +377,14 @@ function SlideContentDesign() {
           <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2 text-center">Content Design Lead — Key&nbsp;Projects</h1>
           <p className="text-muted-foreground text-lg mb-8 text-center">The words are the UI — especially in a conversational-first&nbsp;product</p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
             {projects.map((p) => (
-              <div key={p.project} className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: p.color }}>
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug">{p.project}</h3>
-                  <span className="text-xs px-2.5 py-1 rounded-full font-semibold flex-shrink-0 ml-3" style={{ background: `${p.color}20`, color: C.evergreen }}>{p.timeline}</span>
+              <div key={p.project} className="bg-white rounded-2xl p-7 sm:p-8 lg:p-9 border border-border shadow-sm" style={{ borderTopWidth: 4, borderTopColor: p.color }}>
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="font-display font-extrabold text-foreground text-xl sm:text-2xl leading-snug">{p.project}</h3>
+                  <span className="text-sm px-3 py-1 rounded-full font-semibold flex-shrink-0 ml-3" style={{ background: `${p.color}20`, color: C.evergreen }}>{p.timeline}</span>
                 </div>
-                <p className="text-base text-muted-foreground leading-relaxed">{p.desc}</p>
+                <p className="text-lg text-muted-foreground leading-relaxed">{p.desc}</p>
               </div>
             ))}
           </div>

@@ -387,6 +387,16 @@
   }
 }
 
+/* Document panel prose — paragraph spacing, list styles */
+.doc-prose p { margin-bottom: 1em; }
+.doc-prose p:last-child { margin-bottom: 0; }
+.doc-prose ul, .doc-prose ol { margin-bottom: 1em; padding-left: 1.5em; }
+.doc-prose ul { list-style-type: disc; }
+.doc-prose ol { list-style-type: decimal; }
+.doc-prose li { margin-bottom: 0.35em; }
+.doc-prose strong { font-weight: 600; }
+.doc-prose code { font-size: 0.9em; padding: 0.15em 0.4em; border-radius: 4px; background: rgba(0,0,0,0.05); }
+
 /* Focus visible override — unlayered so it takes precedence over @layer utilities.
    Replaces the crisp 3px ring with a diffuse shadow tonal to the border color. */
 :focus-visible {

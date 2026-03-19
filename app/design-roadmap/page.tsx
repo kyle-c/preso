@@ -399,7 +399,7 @@ function SlideResearch() {
               <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 1 — Platform</h3>
               <p className="text-sm mb-4" style={{ color: C.sky }}>Hired in Phase 1 · Surface &amp; UX team</p>
               <ul className="space-y-2">
-                {['Foundational studies: trust, mental models, financial literacy', 'Build research practice: templates, pipelines, insight repo', 'Teach designers and PMs to self-serve on evaluative research'].map((item) => (
+                {['Foundational studies to support multi-product', 'Build research practice: templates, pipelines, insight repo', 'Teach designers and PMs to self-serve on evaluative research'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-turquoise/40" strokeWidth={1.5} /><span className="text-base text-linen/60 leading-snug">{item}</span></li>
                 ))}
               </ul>

@@ -28,7 +28,7 @@ function SlideFooter({ num, dark }: { num: number; dark?: boolean }) {
   return (
     <div className="absolute bottom-0 inset-x-0 flex items-center justify-between px-8 sm:px-12 pb-5 sm:pb-6 text-sm font-sans">
       <span className={`font-display font-extrabold text-xs sm:text-sm ${dark ? 'text-linen' : 'text-foreground'}`}>Product Design Roadmap</span>
-      <span className={`text-xs sm:text-sm ${dark ? 'text-linen/50' : 'text-muted-foreground'} absolute left-1/2 -translate-x-1/2`}>felixpago.com</span>
+      <span className={`text-xs sm:text-sm ${dark ? 'text-linen/60' : 'text-muted-foreground'} absolute left-1/2 -translate-x-1/2`}>felixpago.com</span>
       <span className={`text-xs sm:text-sm font-medium ${dark ? 'text-linen' : 'text-foreground'}`}>{num} / {TOTAL}</span>
     </div>
   )
@@ -51,7 +51,7 @@ function SlideCover() {
         <div className="flex flex-col items-center text-center max-w-3xl">
           <div className="mb-6 lg:mb-8"><PillBadge dark>Q2–Q4 2026 &amp;&nbsp;Beyond</PillBadge></div>
           <h1 className="font-display font-black text-linen text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight mb-6 lg:mb-8">Product Design{'\u00A0'}Roadmap</h1>
-          <p className="text-lg sm:text-xl lg:text-2xl text-linen/50 leading-relaxed max-w-2xl">Establishing a centralized, embedded design organization to support Felix&apos;s platform + business lines&nbsp;model</p>
+          <p className="text-lg sm:text-xl lg:text-2xl text-linen/60 leading-relaxed max-w-2xl">Establishing a centralized, embedded design organization to support Felix&apos;s platform + business lines&nbsp;model</p>
         </div>
       </div>
       <SlideFooter num={1} dark />
@@ -104,7 +104,7 @@ function SlideOrgModel() {
         <div className="w-full max-w-[1200px]">
           <div className="mb-5 text-center"><PillBadge dark>Org Model</PillBadge></div>
           <h1 className="font-display font-black text-linen text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight mb-3 text-center">Centralized but&nbsp;Embedded</h1>
-          <p className="text-center text-linen/50 text-lg mb-8">Two design functions aligned to the platform&nbsp;architecture</p>
+          <p className="text-center text-linen/60 text-lg mb-8">Two design functions aligned to the platform&nbsp;architecture</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             <div className="bg-white/5 rounded-2xl p-7 border border-white/10">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${C.cactus}20` }}>
@@ -112,7 +112,7 @@ function SlideOrgModel() {
               </div>
               <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate mb-3" style={{ background: C.cactus }}>Surface &amp; UX Platform</span>
               <p className="font-display font-black text-linen text-3xl mb-2">5–6 <span className="text-lg font-semibold text-linen/60">designers</span></p>
-              <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Design system, content design, UX research, app design, conversational UX&nbsp;(future)</p>
+              <p className="text-base sm:text-lg text-linen/60 leading-relaxed">Design system, content design, UX research, app design, conversational UX&nbsp;(future)</p>
             </div>
             <div className="bg-white/5 rounded-2xl p-7 border border-white/10">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${C.papaya}20` }}>
@@ -120,12 +120,12 @@ function SlideOrgModel() {
               </div>
               <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate mb-3" style={{ background: C.papaya }}>Embedded in Business Lines</span>
               <p className="font-display font-black text-linen text-3xl mb-2">5–6 <span className="text-lg font-semibold text-linen/60">designers</span></p>
-              <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Consumer Payments (2-3), Credit (1), Wallet/Store of Value (1), Fintech Core&nbsp;(1)</p>
+              <p className="text-base sm:text-lg text-linen/60 leading-relaxed">Consumer Payments (2-3), Credit (1), Wallet/Store of Value (1), Fintech Core&nbsp;(1)</p>
             </div>
           </div>
           <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex items-center justify-between">
-            <div><p className="font-display font-bold text-linen text-lg sm:text-xl">Total team: 10–12&nbsp;people</p><p className="text-base text-linen/40">Including Head of Design · ~50% platform / ~50%&nbsp;embedded</p></div>
-            <div className="text-right text-base text-linen/40"><p>+ 1–2 staff aug contractors</p><p>for design system &amp; app&nbsp;production</p></div>
+            <div><p className="font-display font-bold text-linen text-lg sm:text-xl">Total team: 10–12&nbsp;people</p><p className="text-base text-linen/60">Including Head of Design · ~50% platform / ~50%&nbsp;embedded</p></div>
+            <div className="text-right text-base text-linen/60"><p>+ 1–2 staff aug contractors</p><p>for design system &amp; app&nbsp;production</p></div>
           </div>
         </div>
       </div>
@@ -196,20 +196,20 @@ function SlideTeamDetail() {
 
 function SlideHiring() {
   const phases = [
-    { phase: 'Phase 1', time: 'Q1–Q2', label: 'Foundation', color: C.cactus, hires: [
+    { phase: 'Now', time: 'Q1–Q2', label: 'Foundation', color: C.cactus, hires: [
       { name: 'Product Designer: Conversational Experiences', note: 'Pato' },
       { name: 'Product Designer: Conversational Experiences', note: 'TBH' },
       { name: 'Fintech Designer / Design Systems', note: 'Patricia' },
       { name: 'UX Researcher', note: 'Jose' },
       { name: 'Content Design Lead', note: 'TBH' },
     ], aug: '+ 1 contractor for design system build-out (Darwoft)' },
-    { phase: 'Phase 2', time: 'Q2', label: 'Build capability', color: C.sky, hires: [
+    { phase: 'Next', time: 'Q2', label: 'Build capability', color: C.sky, hires: [
       { name: 'Product Designer: Conv. Experiences', note: 'Credit' },
       { name: 'App Designer', note: '' },
       { name: 'Wallet Designer', note: 'if product ready' },
       { name: 'Product Designer: Conv. Experiences', note: 'Platform' },
     ], aug: '' },
-    { phase: 'Phase 3', time: 'Q4+', label: 'Scale', color: C.mango, hires: [
+    { phase: 'Later', time: 'Q4+', label: 'Scale', color: C.mango, hires: [
       { name: 'UX Researcher (R2)', note: 'month 6-9' },
     ], aug: 'Steady-state: 1 permanent + flex contractors' },
   ]
@@ -235,12 +235,12 @@ function SlideHiring() {
                       <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-turquoise/40" strokeWidth={1.5} />
                       <div>
                         <p className="text-base text-linen font-medium leading-snug">{h.name}</p>
-                        {h.note && <p className="text-sm text-linen/40 mt-0.5">{h.note}</p>}
+                        {h.note && <p className="text-sm text-linen/60 mt-0.5">{h.note}</p>}
                       </div>
                     </li>
                   ))}
                 </ul>
-                {p.aug && <p className="text-sm text-linen/50 mt-5 pt-4 border-t border-white/10">{p.aug}</p>}
+                {p.aug && <p className="text-sm text-linen/60 mt-5 pt-4 border-t border-white/10">{p.aug}</p>}
               </div>
             ))}
           </div>
@@ -290,7 +290,7 @@ function SlideRoadmapOverview() {
         <div className="w-full max-w-[1200px]">
           <div className="mb-5 text-center"><PillBadge dark>Roadmap</PillBadge></div>
           <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2 text-center">Design Roadmap — Two&nbsp;Tracks</h1>
-          <p className="text-center text-linen/50 text-base mb-8">Complements the product roadmap, doesn&apos;t duplicate&nbsp;it</p>
+          <p className="text-center text-linen/60 text-base mb-8">Complements the product roadmap, doesn&apos;t duplicate&nbsp;it</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {[
               { title: 'Track 1: Design Foundation', color: C.cactus, icon: Clipboard, sub: 'What the centralized design org builds — regardless of what any product team ships', items: ['Design system & pattern library', 'Content & conversational UX patterns', 'Research infrastructure & practice', 'Cross-surface experience coherence', 'Omnichannel + AI design patterns'] },
@@ -301,7 +301,7 @@ function SlideRoadmapOverview() {
                   <t.icon size={24} style={{ color: t.color }} />
                 </div>
                 <h3 className="font-display font-extrabold text-linen text-xl sm:text-2xl mb-1">{t.title}</h3>
-                <p className="text-base text-linen/40 mb-5">{t.sub}</p>
+                <p className="text-base text-linen/60 mb-5">{t.sub}</p>
                 <ul className="space-y-3">{t.items.map((item) => <li key={item} className="flex items-start gap-3"><CheckCircle2 className="h-5 w-5 flex-shrink-0 text-turquoise/40 mt-0.5" strokeWidth={1.5} /><span className="text-base sm:text-lg text-linen/60">{item}</span></li>)}</ul>
               </div>
             ))}
@@ -383,7 +383,7 @@ function SlideResearch() {
         <div className="w-full max-w-[1200px]">
           <div className="mb-5"><PillBadge dark>Deep Dive</PillBadge></div>
           <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Research&nbsp;Model</h1>
-          <p className="text-linen/50 text-base mb-8">Building the practice from scratch with a staggered two-researcher&nbsp;approach</p>
+          <p className="text-linen/60 text-base mb-8">Building the practice from scratch with a staggered two-researcher&nbsp;approach</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.sky }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${C.sky}15` }}>
@@ -391,7 +391,7 @@ function SlideResearch() {
               </div>
               <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 1 — Platform</h3>
               <p className="text-sm mb-3" style={{ color: C.sky }}>Hired in Phase 1 · Surface &amp; UX team</p>
-              <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Foundational studies (trust, mental models, financial literacy). Builds research practice: templates, recruiting pipelines, insight repository, lightweight testing toolkit. Teaches designers and PMs to self-serve on evaluative&nbsp;research.</p>
+              <p className="text-base sm:text-lg text-linen/60 leading-relaxed">Foundational studies (trust, mental models, financial literacy). Builds research practice: templates, recruiting pipelines, insight repository, lightweight testing toolkit. Teaches designers and PMs to self-serve on evaluative&nbsp;research.</p>
             </div>
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.sky }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${C.sky}15` }}>
@@ -399,11 +399,11 @@ function SlideResearch() {
               </div>
               <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 2 — Roaming</h3>
               <p className="text-sm mb-3" style={{ color: C.sky }}>Hired at month 6–9 · Rotates across business lines</p>
-              <p className="text-base sm:text-lg text-linen/50 leading-relaxed">6–8 week research sprints aligned to highest-priority product decisions. Tactical and evaluative research: usability testing, concept validation, funnel analysis. Quarterly rotation planning with Head of&nbsp;Design.</p>
+              <p className="text-base sm:text-lg text-linen/60 leading-relaxed">6–8 week research sprints aligned to highest-priority product decisions. Tactical and evaluative research: usability testing, concept validation, funnel analysis. Quarterly rotation planning with Head of&nbsp;Design.</p>
             </div>
           </div>
           <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
-            <p className="text-base sm:text-lg text-linen/50 leading-relaxed"><strong className="text-linen">Why stagger:</strong> Starting from zero, R1 needs 2–3 months to establish how research works at Felix. Once those rails exist, R2 rides them from day one and focuses on producing research rather than also building&nbsp;infrastructure.</p>
+            <p className="text-base sm:text-lg text-linen/60 leading-relaxed"><strong className="text-linen">Why stagger:</strong> Starting from zero, R1 needs 2–3 months to establish how research works at Felix. Once those rails exist, R2 rides them from day one and focuses on producing research rather than also building&nbsp;infrastructure.</p>
           </div>
         </div>
       </div>

@@ -397,20 +397,28 @@ function SlideResearch() {
                 <MagnifyingGlass size={22} style={{ color: C.sky }} />
               </div>
               <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 1 — Platform</h3>
-              <p className="text-sm mb-3" style={{ color: C.sky }}>Hired in Phase 1 · Surface &amp; UX team</p>
-              <p className="text-base sm:text-lg text-linen/60 leading-relaxed">Foundational studies (trust, mental models, financial literacy). Builds research practice: templates, recruiting pipelines, insight repository, lightweight testing toolkit. Teaches designers and PMs to self-serve on evaluative&nbsp;research.</p>
+              <p className="text-sm mb-4" style={{ color: C.sky }}>Hired in Phase 1 · Surface &amp; UX team</p>
+              <ul className="space-y-2">
+                {['Foundational studies: trust, mental models, financial literacy', 'Build research practice: templates, pipelines, insight repo', 'Teach designers and PMs to self-serve on evaluative research'].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-turquoise/40" strokeWidth={1.5} /><span className="text-base text-linen/60 leading-snug">{item}</span></li>
+                ))}
+              </ul>
             </div>
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.sky }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${C.sky}15` }}>
                 <Globe size={22} style={{ color: C.sky }} />
               </div>
               <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 2 — Roaming</h3>
-              <p className="text-sm mb-3" style={{ color: C.sky }}>Hired at month 6–9 · Rotates across business lines</p>
-              <p className="text-base sm:text-lg text-linen/60 leading-relaxed">6–8 week research sprints aligned to highest-priority product decisions. Tactical and evaluative research: usability testing, concept validation, funnel analysis. Quarterly rotation planning with Head of&nbsp;Design.</p>
+              <p className="text-sm mb-4" style={{ color: C.sky }}>Hired at month 6–9 · Rotates across business lines</p>
+              <ul className="space-y-2">
+                {['6–8 week sprints on highest-priority product decisions', 'Usability testing, concept validation, funnel analysis', 'Quarterly rotation planning with Head of\u00A0Design'].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-turquoise/40" strokeWidth={1.5} /><span className="text-base text-linen/60 leading-snug">{item}</span></li>
+                ))}
+              </ul>
             </div>
           </div>
           <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
-            <p className="text-base sm:text-lg text-linen/60 leading-relaxed"><strong className="text-linen">Why stagger:</strong> Starting from zero, R1 needs 2–3 months to establish how research works at Felix. Once those rails exist, R2 rides them from day one and focuses on producing research rather than also building&nbsp;infrastructure.</p>
+            <p className="text-base text-linen/60 leading-relaxed"><strong className="text-linen">Why stagger:</strong> R1 needs 2–3 months to establish how research works. Once those rails exist, R2 rides them from day one — producing research, not building&nbsp;infrastructure.</p>
           </div>
         </div>
       </div>

@@ -281,7 +281,7 @@ function SlideTeamDetail() {
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1100px]">
           <div className="mb-5"><PillBadge>Org Model</PillBadge></div>
-          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Team Composition &amp;&nbsp;Ratios</h1>
+          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Alignment with Business&nbsp;Units</h1>
           <p className="text-muted-foreground text-lg mb-8">Platform creates leverage. Embedded creates&nbsp;depth.</p>
 
           {/* Vertical columns — Embedded business lines */}

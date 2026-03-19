@@ -363,28 +363,31 @@ function SlideResearch() {
 
 function SlideContentDesign() {
   const projects = [
-    { project: 'Felix voice & tone system', timeline: 'Foundational', desc: 'Define how Felix speaks across every touchpoint. Bilingual guidelines (Spanish, English, Spanglish and when to use each). Emotional tone calibration by moment type. Writing principles the whole team can follow.' },
-    { project: 'Conversational flow patterns library', timeline: 'Next', desc: 'Standardized patterns for: greetings, disambiguation, high-stakes confirmations, error recovery, product introduction within conversation. Directly feeds the multi-product discovery framework.' },
-    { project: 'AI agent personality & prompt guidelines', timeline: 'Soon', desc: 'Working with the omnichannel + AI team, define personality parameters that guide the LLM agent. Behavioral rules, tone constraints, things Felix should never say.' },
-    { project: 'Cross-channel content adaptation', timeline: 'Later', desc: "How Felix's voice adapts across WhatsApp (conversational), app (scannable), push notifications (action-oriented), SMS (ultra-concise). Same personality, different expression." },
+    { project: 'Felix Voice &\u00A0Tone', timeline: 'Foundational', color: C.turquoise, desc: 'How Felix speaks across every touchpoint. Bilingual guidelines, emotional tone calibration by moment type, writing principles for the whole\u00A0team.' },
+    { project: 'Conversational Flow\u00A0Patterns', timeline: 'Next', color: C.cactus, desc: 'Standardized patterns for greetings, disambiguation, confirmations, error recovery, and product introduction within\u00A0conversation.' },
+    { project: 'AI Agent Personality', timeline: 'Soon', color: C.mango, desc: 'Personality parameters for the LLM agent. Behavioral rules, tone constraints, things Felix should never\u00A0say.' },
+    { project: 'Cross-Channel\u00A0Adaptation', timeline: 'Later', color: C.papaya, desc: 'WhatsApp (conversational), app (scannable), push (action-oriented), SMS (ultra-concise). Same personality, different\u00A0expression.' },
   ]
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
       <div className="absolute bottom-[6%] right-[4%] w-[130px] lg:w-[180px] opacity-[0.1] rotate-3 pointer-events-none" style={{ animation: 'ds-float 10s ease-in-out infinite' }}><Illo src="Speech%20Bubbles%20%2B%20Hearts.svg" /></div>
-      <div className="flex-1 flex flex-col justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
-          <div className="mb-5"><PillBadge>Deep Dive</PillBadge></div>
-          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Content Design Lead — Key&nbsp;Projects</h1>
-          <p className="text-muted-foreground text-base mb-6">The words are the UI — especially in a conversational-first&nbsp;product</p>
-          <div className="space-y-3">{projects.map((p) => (
-            <div key={p.project} className="bg-white rounded-2xl p-5 border border-border shadow-sm" style={{ borderLeftWidth: 3, borderLeftColor: C.cactus }}>
-              <div className="flex justify-between items-baseline mb-2">
-                <h3 className="font-display font-bold text-foreground text-base sm:text-lg">{p.project}</h3>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold" style={{ background: `${C.cactus}20`, color: C.evergreen }}>{p.timeline}</span>
+          <div className="mb-5 text-center"><PillBadge>Deep Dive</PillBadge></div>
+          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2 text-center">Content Design Lead — Key&nbsp;Projects</h1>
+          <p className="text-muted-foreground text-lg mb-8 text-center">The words are the UI — especially in a conversational-first&nbsp;product</p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {projects.map((p) => (
+              <div key={p.project} className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: p.color }}>
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl leading-snug">{p.project}</h3>
+                  <span className="text-xs px-2.5 py-1 rounded-full font-semibold flex-shrink-0 ml-3" style={{ background: `${p.color}20`, color: C.evergreen }}>{p.timeline}</span>
+                </div>
+                <p className="text-base text-muted-foreground leading-relaxed">{p.desc}</p>
               </div>
-              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">{p.desc}</p>
-            </div>
-          ))}</div>
+            ))}
+          </div>
         </div>
       </div>
       <SlideFooter num={10} />

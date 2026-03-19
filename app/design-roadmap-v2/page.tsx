@@ -191,7 +191,7 @@ function SlideCoverageTarget() {
     { pm: 'Lexie', product: 'AI', coverage: 'Content Design Lead + Shared Designer' },
   ]
   const platform = [
-    { role: 'Design System', person: 'New Hire' },
+    { role: 'Design Systems', person: 'Product Designer' },
     { role: 'Conversational Guidelines', person: 'Content Design Lead' },
     { role: 'Research', person: 'Research Lead' },
     { role: 'Multi-surface + App', person: 'Product Designer' },
@@ -265,7 +265,7 @@ function SlideTeamDetail() {
     'UX Researcher',
     'Product Designer: Design Systems',
     'Content Design Lead',
-    'App Designer',
+    'Multi-Surface + App',
     'UX Researcher',
   ]
   const embeddedLines = [
@@ -403,20 +403,20 @@ function SlideCoverage() {
 function SlideHiring() {
   const phases = [
     { phase: 'Now', time: 'Q1–Q2', label: 'Foundation', color: C.cactus, hires: [
-      { name: 'Product Designer: Conversational Experiences', note: 'Pato' },
-      { name: 'Product Designer: Conversational Experiences', note: 'TBH' },
-      { name: 'Fintech Designer / Design Systems', note: 'Patricia' },
-      { name: 'UX Researcher', note: 'Jose' },
-      { name: 'Content Design Lead', note: 'TBH' },
+      { name: 'Product Designer: Conversational Experiences', note: 'Consumer Payments' },
+      { name: 'Product Designer: Conversational Experiences', note: 'Consumer Payments' },
+      { name: 'Fintech Designer / Design Systems', note: 'Platform' },
+      { name: 'UX Researcher', note: 'Platform' },
+      { name: 'Content Design Lead', note: 'Platform' },
     ], aug: '+ 1 contractor for design system build-out (Darwoft)' },
     { phase: 'Next', time: 'Q2', label: 'Build capability', color: C.sky, hires: [
-      { name: 'Product Designer: Conv. Experiences', note: 'Credit' },
+      { name: 'Senior Product Designer', note: 'Credit' },
       { name: 'Product Designer: Conv. Experiences', note: 'Platform' },
     ], aug: '' },
     { phase: 'Later', time: 'Q3 & Beyond', label: 'Scale', color: C.mango, hires: [
       { name: 'Product Designer', note: 'Multi-surface / App' },
       { name: 'Product Designer', note: 'Wallet (tentative)' },
-      { name: 'UX Researcher', note: 'Tentative' },
+      { name: 'UX Researcher', note: 'Platform (tentative)' },
     ], aug: 'Steady-state: 1 permanent + flex contractors' },
   ]
   return (

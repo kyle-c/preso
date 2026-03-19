@@ -10,6 +10,12 @@ import { PresentationPassword } from '@/components/presentation-password'
 import { SlideRating } from '@/components/studio/slide-rating'
 import type { SlideData } from '@/components/studio/slide-renderer'
 import { CheckCircle2 } from 'lucide-react'
+import {
+  Rocket, Handshake, Users, Sparkle, Lightning, Globe,
+  MagnifyingGlass, ChatDots, PaperPlaneTilt, Gear, BookOpen,
+  CalendarBlank, Shield, ChartLineUp, DeviceMobile, Heart,
+  Flag, UserCircle, Clipboard, CreditCard, Wallet, Star,
+} from '@/components-next/phosphor-icons'
 
 const C = { turquoise: '#2BF2F1', slate: '#082422', blueberry: '#6060BF', evergreen: '#35605F', cactus: '#60D06F', mango: '#F19D38', papaya: '#F26629', sage: '#7BA882', lime: '#DCFF00', lychee: '#FFCD9C', sky: '#8DFDFA', stone: '#EFEBE7', concrete: '#CFCABF', mocha: '#877867' }
 const TOTAL = 11
@@ -69,11 +75,17 @@ function SlideVision() {
           </div>
           <div className="flex flex-col gap-5">
             <div className="bg-white rounded-2xl p-7 sm:p-8 border border-border shadow-sm">
-              <span className="inline-block rounded-full px-4 py-1.5 text-sm sm:text-base font-bold text-slate mb-4" style={{ background: C.turquoise }}>Design as connective tissue</span>
+              <div className="flex items-center gap-3 mb-4">
+                <Handshake size={28} className="text-slate/60 flex-shrink-0" />
+                <span className="inline-block rounded-full px-4 py-1.5 text-sm sm:text-base font-bold text-slate" style={{ background: C.turquoise }}>Design as connective tissue</span>
+              </div>
               <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">The platform gives us speed and consistency. The business lines give us depth and market fit. Design ensures every touchpoint feels like the same trusted&nbsp;companion.</p>
             </div>
             <div className="bg-white rounded-2xl p-7 sm:p-8 border border-border shadow-sm">
-              <span className="inline-block rounded-full px-4 py-1.5 text-sm sm:text-base font-bold text-slate mb-4" style={{ background: C.cactus }}>Build once, deploy everywhere</span>
+              <div className="flex items-center gap-3 mb-4">
+                <Globe size={28} className="text-slate/60 flex-shrink-0" />
+                <span className="inline-block rounded-full px-4 py-1.5 text-sm sm:text-base font-bold text-slate" style={{ background: C.cactus }}>Build once, deploy everywhere</span>
+              </div>
               <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">Design the system once at the platform level, adapt it for each business line and surface. This is how we ship quality at speed across WhatsApp, app, web, and whatever comes&nbsp;next.</p>
             </div>
           </div>
@@ -95,12 +107,18 @@ function SlideOrgModel() {
           <p className="text-center text-linen/50 text-lg mb-8">Two design functions aligned to the platform&nbsp;architecture</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             <div className="bg-white/5 rounded-2xl p-7 border border-white/10">
-              <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate mb-3" style={{ background: C.cactus }}>Surface &amp; UX Platform</span>
+              <div className="flex items-center gap-3 mb-3">
+                <Users size={24} className="text-turquoise/60 flex-shrink-0" />
+                <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate" style={{ background: C.cactus }}>Surface &amp; UX Platform</span>
+              </div>
               <p className="font-display font-black text-linen text-3xl mb-2">5–6 <span className="text-lg font-semibold text-linen/60">designers</span></p>
               <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Design system, content design, UX research, app design, conversational UX&nbsp;(future)</p>
             </div>
             <div className="bg-white/5 rounded-2xl p-7 border border-white/10">
-              <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate mb-3" style={{ background: C.papaya }}>Embedded in Business Lines</span>
+              <div className="flex items-center gap-3 mb-3">
+                <Rocket size={24} className="text-turquoise/60 flex-shrink-0" />
+                <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate" style={{ background: C.papaya }}>Embedded in Business Lines</span>
+              </div>
               <p className="font-display font-black text-linen text-3xl mb-2">5–6 <span className="text-lg font-semibold text-linen/60">designers</span></p>
               <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Consumer Payments (2-3), Credit (1), Wallet/Store of Value (1), Fintech Core&nbsp;(1)</p>
             </div>
@@ -122,6 +140,7 @@ function SlideTeamDetail() {
       title: 'Surface & UX Platform',
       subtitle: '4 roles — creates leverage for everyone',
       color: C.cactus,
+      icon: Gear,
       roles: [
         { name: 'Design System Designer', note: 'Highest-leverage hire — enables staff aug, speeds every designer' },
         { name: 'Content Design Lead', note: 'Voice, tone, conversational patterns, bilingual guidelines' },
@@ -133,6 +152,7 @@ function SlideTeamDetail() {
       title: 'Roaming',
       subtitle: '1 role — rotates across business lines',
       color: C.sky,
+      icon: Globe,
       roles: [
         { name: 'UX Researcher (R2)', note: '6–8 week research sprints · Hired at month 6-9' },
       ],
@@ -141,6 +161,7 @@ function SlideTeamDetail() {
       title: 'Embedded in Business Lines',
       subtitle: '4 roles — creates depth in each line',
       color: C.papaya,
+      icon: Lightning,
       roles: [
         { name: 'Fintech Core Designer', note: 'KYC, payments, fraud alerts, FX — patterns shared org-wide' },
         { name: 'Consumer Payments ×2-3', note: '~3:1 PM-to-designer ratio · Organized by funnel stage' },
@@ -160,9 +181,14 @@ function SlideTeamDetail() {
           <p className="text-muted-foreground text-lg mb-8">Platform roles create leverage. Embedded roles create&nbsp;depth.</p>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {groups.map((g) => (
+            {groups.map((g) => {
+              const Icon = g.icon
+              return (
               <div key={g.title} className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: g.color }}>
-                <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl mb-1">{g.title}</h3>
+                <div className="flex items-center gap-2.5 mb-1">
+                  <Icon size={22} className="flex-shrink-0" style={{ color: g.color }} />
+                  <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl">{g.title}</h3>
+                </div>
                 <p className="text-sm text-muted-foreground mb-5">{g.subtitle}</p>
                 <ul className="space-y-4">
                   {g.roles.map((r) => (
@@ -176,7 +202,7 @@ function SlideTeamDetail() {
                   ))}
                 </ul>
               </div>
-            ))}
+            )})}
           </div>
         </div>
       </div>
@@ -284,11 +310,11 @@ function SlideRoadmapOverview() {
           <p className="text-center text-linen/50 text-base mb-8">Complements the product roadmap, doesn&apos;t duplicate&nbsp;it</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {[
-              { title: 'Track 1: Design Foundation', color: C.cactus, sub: 'What the centralized design org builds — regardless of what any product team ships', items: ['Design system & pattern library', 'Content & conversational UX patterns', 'Research infrastructure & practice', 'Cross-surface experience coherence', 'Omnichannel + AI design patterns'] },
-              { title: 'Track 2: Design in Product', color: C.papaya, sub: 'How design shows up within the product roadmap — the design lens on product priorities', items: ['Multi-product discovery framework', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design', 'Receiver-side experience'] },
+              { title: 'Track 1: Design Foundation', color: C.cactus, icon: Clipboard, sub: 'What the centralized design org builds — regardless of what any product team ships', items: ['Design system & pattern library', 'Content & conversational UX patterns', 'Research infrastructure & practice', 'Cross-surface experience coherence', 'Omnichannel + AI design patterns'] },
+              { title: 'Track 2: Design in Product', color: C.papaya, icon: DeviceMobile, sub: 'How design shows up within the product roadmap — the design lens on product priorities', items: ['Multi-product discovery framework', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design', 'Receiver-side experience'] },
             ].map((t) => (
               <div key={t.title} className="bg-white/5 rounded-2xl p-7 border border-white/10" style={{ borderTopWidth: 3, borderTopColor: t.color }}>
-                <h3 className="font-display font-extrabold text-linen text-xl sm:text-2xl mb-1">{t.title}</h3>
+                <div className="flex items-center gap-3 mb-1"><t.icon size={24} style={{ color: t.color }} /><h3 className="font-display font-extrabold text-linen text-xl sm:text-2xl">{t.title}</h3></div>
                 <p className="text-base text-linen/40 mb-5">{t.sub}</p>
                 <ul className="space-y-3">{t.items.map((item) => <li key={item} className="flex items-start gap-3"><CheckCircle2 className="h-5 w-5 flex-shrink-0 text-turquoise/40 mt-0.5" strokeWidth={1.5} /><span className="text-base sm:text-lg text-linen/60">{item}</span></li>)}</ul>
               </div>
@@ -318,7 +344,7 @@ function SlideNow() {
           <div className="flex flex-col gap-6">
             {/* Product track */}
             <div className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: C.papaya }}>
-              <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.papaya }}>Design in&nbsp;Product</h3>
+              <div className="flex items-center gap-2.5 mb-4"><CreditCard size={22} style={{ color: C.papaya }} /><h3 className="font-display font-extrabold text-lg sm:text-xl" style={{ color: C.papaya }}>Design in&nbsp;Product</h3></div>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
@@ -333,7 +359,7 @@ function SlideNow() {
 
             {/* Foundation track */}
             <div className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: C.cactus }}>
-              <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.cactus }}>Design&nbsp;Foundation</h3>
+              <div className="flex items-center gap-2.5 mb-4"><Gear size={22} style={{ color: C.cactus }} /><h3 className="font-display font-extrabold text-lg sm:text-xl" style={{ color: C.cactus }}>Design&nbsp;Foundation</h3></div>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
@@ -368,12 +394,12 @@ function SlideResearch() {
           <p className="text-linen/50 text-base mb-8">Building the practice from scratch with a staggered two-researcher&nbsp;approach</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.sky }}>
-              <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 1 — Platform</h3>
+              <div className="flex items-center gap-2.5 mb-1"><MagnifyingGlass size={22} style={{ color: C.sky }} /><h3 className="font-display font-bold text-linen text-lg sm:text-xl">Researcher 1 — Platform</h3></div>
               <p className="text-sm mb-3" style={{ color: C.sky }}>Hired in Phase 1 · Surface &amp; UX team</p>
               <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Foundational studies (trust, mental models, financial literacy). Builds research practice: templates, recruiting pipelines, insight repository, lightweight testing toolkit. Teaches designers and PMs to self-serve on evaluative&nbsp;research.</p>
             </div>
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.sky }}>
-              <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 2 — Roaming</h3>
+              <div className="flex items-center gap-2.5 mb-1"><Globe size={22} style={{ color: C.sky }} /><h3 className="font-display font-bold text-linen text-lg sm:text-xl">Researcher 2 — Roaming</h3></div>
               <p className="text-sm mb-3" style={{ color: C.sky }}>Hired at month 6–9 · Rotates across business lines</p>
               <p className="text-base sm:text-lg text-linen/50 leading-relaxed">6–8 week research sprints aligned to highest-priority product decisions. Tactical and evaluative research: usability testing, concept validation, funnel analysis. Quarterly rotation planning with Head of&nbsp;Design.</p>
             </div>
@@ -390,10 +416,10 @@ function SlideResearch() {
 
 function SlideContentDesign() {
   const projects = [
-    { project: 'Felix Voice &\u00A0Tone', timeline: 'Foundational', color: C.turquoise, desc: 'How Felix speaks across every touchpoint. Bilingual guidelines, emotional tone calibration by moment type, writing principles for the whole\u00A0team.' },
-    { project: 'Conversational Flow\u00A0Patterns', timeline: 'Next', color: C.cactus, desc: 'Standardized patterns for greetings, disambiguation, confirmations, error recovery, and product introduction within\u00A0conversation.' },
-    { project: 'AI Agent Personality', timeline: 'Soon', color: C.mango, desc: 'Personality parameters for the LLM agent. Behavioral rules, tone constraints, things Felix should never\u00A0say.' },
-    { project: 'Cross-Channel\u00A0Adaptation', timeline: 'Later', color: C.papaya, desc: 'WhatsApp (conversational), app (scannable), push (action-oriented), SMS (ultra-concise). Same personality, different\u00A0expression.' },
+    { project: 'Felix Voice &\u00A0Tone', timeline: 'Foundational', color: C.turquoise, icon: ChatDots, desc: 'How Felix speaks across every touchpoint. Bilingual guidelines, emotional tone calibration by moment type, writing principles for the whole\u00A0team.' },
+    { project: 'Conversational Flow\u00A0Patterns', timeline: 'Next', color: C.cactus, icon: BookOpen, desc: 'Standardized patterns for greetings, disambiguation, confirmations, error recovery, and product introduction within\u00A0conversation.' },
+    { project: 'AI Agent Personality', timeline: 'Soon', color: C.mango, icon: Sparkle, desc: 'Personality parameters for the LLM agent. Behavioral rules, tone constraints, things Felix should never\u00A0say.' },
+    { project: 'Cross-Channel\u00A0Adaptation', timeline: 'Later', color: C.papaya, icon: DeviceMobile, desc: 'WhatsApp (conversational), app (scannable), push (action-oriented), SMS (ultra-concise). Same personality, different\u00A0expression.' },
   ]
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
@@ -405,15 +431,21 @@ function SlideContentDesign() {
           <p className="text-muted-foreground text-lg mb-8 text-center">The words are the UI — especially in a conversational-first&nbsp;product</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
-            {projects.map((p) => (
+            {projects.map((p) => {
+              const Icon = p.icon
+              return (
               <div key={p.project} className="bg-white rounded-2xl p-7 sm:p-8 lg:p-9 border border-border shadow-sm" style={{ borderTopWidth: 4, borderTopColor: p.color }}>
                 <div className="flex justify-between items-start mb-4">
-                  <h3 className="font-display font-extrabold text-foreground text-xl sm:text-2xl leading-snug">{p.project}</h3>
+                  <div className="flex items-center gap-3">
+                    <Icon size={26} className="flex-shrink-0" style={{ color: p.color }} />
+                    <h3 className="font-display font-extrabold text-foreground text-xl sm:text-2xl leading-snug">{p.project}</h3>
+                  </div>
                   <span className="text-sm px-3 py-1 rounded-full font-semibold flex-shrink-0 ml-3" style={{ background: `${p.color}20`, color: C.evergreen }}>{p.timeline}</span>
                 </div>
                 <p className="text-lg text-muted-foreground leading-relaxed">{p.desc}</p>
               </div>
-            ))}
+            )})}
+
           </div>
         </div>
       </div>

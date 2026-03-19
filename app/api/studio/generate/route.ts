@@ -533,7 +533,7 @@ Create one section per slide (or group related slides). Each section MUST have 3
           headers: {
             'Content-Type': 'application/json',
             'x-api-key': body.apiKey,
-            'anthropic-version': '2025-04-14',
+            'anthropic-version': '2023-06-01',
           },
           body: JSON.stringify(buildAnthropicPayload(docBody)),
         })
@@ -571,7 +571,7 @@ Create one section per slide (or group related slides). Each section MUST have 3
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': body.apiKey,
-          'anthropic-version': '2025-04-14',
+          'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify(buildAnthropicPayload(body)),
       })

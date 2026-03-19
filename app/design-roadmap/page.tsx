@@ -42,7 +42,7 @@ function PillBadge({ children, dark }: { children: React.ReactNode; dark?: boole
 
 function SlideCover() {
   return (
-    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-[6%] left-[3%] w-[140px] lg:w-[200px] opacity-[0.06] -rotate-12" style={{ animation: 'ds-float 8s ease-in-out infinite' }}><Illo src="Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" /></div>
         <div className="absolute bottom-[10%] right-[4%] w-[120px] lg:w-[170px] opacity-[0.05] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite 1s' }}><Illo src="Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg" /></div>
@@ -61,7 +61,7 @@ function SlideCover() {
 
 function SlideVision() {
   return (
-    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-[5%] right-[3%] w-[120px] lg:w-[160px] opacity-[0.14] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite' }}><Illo src="Hand%20-%20Stars.svg" /></div>
         <div className="absolute bottom-[8%] left-[3%] w-[100px] lg:w-[140px] opacity-[0.12] -rotate-12" style={{ animation: 'ds-float 8s ease-in-out infinite 1s' }}><Illo src="Heart%20-F%C3%A9lix.svg" /></div>
@@ -98,7 +98,7 @@ function SlideVision() {
 
 function SlideOrgModel() {
   return (
-    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute bottom-[6%] right-[3%] w-[120px] lg:w-[170px] opacity-[0.05] rotate-6 pointer-events-none" style={{ animation: 'ds-drift 10s ease-in-out infinite' }}><Illo src="Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
@@ -150,7 +150,7 @@ function SlideTeamDetail() {
   ]
 
   return (
-    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute bottom-[5%] right-[3%] w-[130px] lg:w-[180px] opacity-[0.1] rotate-3 pointer-events-none" style={{ animation: 'ds-float 10s ease-in-out infinite' }}><Illo src="Hand%20-%20Stars.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1100px]">
@@ -214,7 +214,7 @@ function SlideHiring() {
     ], aug: 'Steady-state: 1 permanent + flex contractors' },
   ]
   return (
-    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute top-[5%] right-[4%] w-[110px] lg:w-[150px] opacity-[0.06] rotate-6 pointer-events-none" style={{ animation: 'ds-drift 9s ease-in-out infinite' }}><Illo src="3%20Paper%20Airplanes%20%2B%20Coins.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
@@ -253,7 +253,7 @@ function SlideHiring() {
 
 function SlideStaffAug() {
   return (
-    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute top-[6%] left-[3%] w-[110px] lg:w-[150px] opacity-[0.12] -rotate-12 pointer-events-none" style={{ animation: 'ds-float 8s ease-in-out infinite' }}><Illo src="Fast.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
@@ -291,7 +291,7 @@ function SlideStaffAug() {
 
 function SlideRoadmapOverview() {
   return (
-    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute bottom-[5%] left-[3%] w-[120px] lg:w-[170px] opacity-[0.05] -rotate-6 pointer-events-none" style={{ animation: 'ds-float 9s ease-in-out infinite' }}><Illo src="Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
@@ -322,7 +322,7 @@ function SlideRoadmapOverview() {
 
 function SlideNow() {
   return (
-    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute top-[5%] right-[3%] w-[120px] lg:w-[170px] opacity-[0.12] rotate-6 pointer-events-none" style={{ animation: 'ds-drift 9s ease-in-out infinite' }}><Illo src="Magnifying%20Glass.svg" /></div>
       <div className="flex-1 flex items-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 w-full max-w-[1400px] mx-auto">
@@ -384,7 +384,7 @@ function SlideNow() {
 
 function SlideResearch() {
   return (
-    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute top-[5%] left-[3%] w-[100px] lg:w-[140px] opacity-[0.06] -rotate-12 pointer-events-none" style={{ animation: 'ds-float 8s ease-in-out infinite' }}><Illo src="Magnifying%20Glass.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
@@ -435,7 +435,7 @@ function SlideContentDesign() {
     { project: 'Cross-Channel\u00A0Adaptation', timeline: 'Later', color: C.papaya, icon: DeviceMobile, desc: 'WhatsApp (conversational), app (scannable), push (action-oriented), SMS (ultra-concise). Same personality, different\u00A0expression.' },
   ]
   return (
-    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute bottom-[6%] right-[4%] w-[130px] lg:w-[180px] opacity-[0.1] rotate-3 pointer-events-none" style={{ animation: 'ds-float 10s ease-in-out infinite' }}><Illo src="Speech%20Bubbles%20%2B%20Hearts.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
@@ -469,7 +469,7 @@ function SlideContentDesign() {
 
 function SlideClosingGoal() {
   return (
-    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-[8%] left-[5%] w-[100px] lg:w-[140px] opacity-[0.06] -rotate-12" style={{ animation: 'ds-float 7s ease-in-out infinite' }}><Illo src="Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" /></div>
         <div className="absolute bottom-[10%] right-[5%] w-[120px] lg:w-[160px] opacity-[0.05] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite 1s' }}><Illo src="Hand%20-%20Stars.svg" /></div>

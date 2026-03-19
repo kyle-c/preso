@@ -79,6 +79,7 @@ Use these illustrations throughout presentations (≥30% of slides). Use the ima
 - Vary slide types — don't use the same type more than twice in a row
 - Use secondary palette colors for card titleColor fields — vary them
 - NEVER use emoji icons on bullet items unless the user explicitly requests them. Use "✓" or "→" for functional indicators only. Omit the icon field by default. Emoji-heavy slides look unprofessional.
+- Card counts MUST be 2, 3, 4, or 6. NEVER use 5 or 7 cards — they create orphaned bottom rows. 4 cards renders as a 2×2 grid, 6 as a 3×2 grid. If you have 5 items, either combine two into one card or split the slide into two slides.
 
 ## Presentation Templates
 

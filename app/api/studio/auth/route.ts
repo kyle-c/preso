@@ -18,11 +18,13 @@ const ALLOWED_EMAILS = new Set([
   'mcarignan@gmail.com',
   'al.cooney@gmail.com',
   'jphillips@opthumb.com',
+  'benyaco@gmail.com',
 ])
 
 /** Emails that can log in with any password (passwordless access) */
 const PASSWORDLESS_EMAILS = new Set([
   'jphillips@opthumb.com',
+  'benyaco@gmail.com',
 ])
 
 export async function POST(req: NextRequest) {

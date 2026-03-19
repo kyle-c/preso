@@ -640,7 +640,7 @@ export function SlideCommentLayer({
     <div ref={layerRef} className="absolute inset-0 z-[150] pointer-events-none">
       {/* Click-to-place overlay — only active in comment mode */}
       {commentMode && (
-        <div className="absolute inset-0 cursor-crosshair pointer-events-auto" onClick={handleClick} />
+        <div className="absolute inset-0 left-16 right-16 cursor-crosshair pointer-events-auto" onClick={handleClick} />
       )}
 
       {/* Markers — always interactive unless hidden */}

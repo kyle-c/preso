@@ -910,6 +910,7 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
     // Clean grid layout (toolkit-style from jose deck)
     const gridCols = cardCount <= 2 ? 'lg:grid-cols-2'
       : cardCount === 3 ? 'lg:grid-cols-3'
+      : cardCount === 4 ? 'sm:grid-cols-2 lg:grid-cols-2'
       : cardCount <= 6 ? 'sm:grid-cols-2 lg:grid-cols-3'
       : 'sm:grid-cols-2 lg:grid-cols-4'
     return (

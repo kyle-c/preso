@@ -178,9 +178,9 @@ function SlideCoverageTarget() {
   const dedicated = [
     { pm: 'Santi', product: 'Core Send', coverage: 'Lead Designer' },
     { pm: 'Hernan', product: 'Activation', coverage: 'Senior Designer' },
-    { pm: 'Eva', product: 'Checkout', coverage: 'Senior Designer' },
     { pm: 'Sebas', product: 'Credit', coverage: 'Senior Designer' },
     { pm: 'Diego', product: 'New Bets', coverage: 'Designer' },
+    { pm: 'Eva', product: 'Checkout', coverage: 'Designer' },
     { pm: 'Memo', product: 'Wallet', coverage: 'Designer' },
   ]
   const shared = [
@@ -402,14 +402,14 @@ function SlideCoverage() {
 
 function SlideHiring() {
   const phases = [
-    { phase: 'Now', time: 'Q1–Q2', label: 'Foundation', color: C.cactus, hires: [
+    { phase: 'Now', time: 'Q1', label: 'Foundation', color: C.cactus, hires: [
       { name: 'Designer', note: 'Consumer Payments' },
-      { name: 'Designer', note: 'Consumer Payments' },
-      { name: 'Designer', note: 'Design Systems Platform' },
+      { name: 'Designer', note: 'Checkout' },
       { name: 'UX Researcher', note: 'Platform' },
       { name: 'Content Design Lead', note: 'Platform' },
     ], aug: '+ 1 contractor for design system build-out (Darwoft)' },
     { phase: 'Next', time: 'Q2', label: 'Build capability', color: C.sky, hires: [
+      { name: 'Designer', note: 'Consumer Payments' },
       { name: 'Senior Designer', note: 'Credit' },
       { name: 'Designer', note: 'Platform' },
     ], aug: '' },

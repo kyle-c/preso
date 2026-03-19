@@ -117,17 +117,39 @@ function SlideOrgModel() {
 }
 
 function SlideTeamDetail() {
-  const roles = [
-    { role: 'Design System Designer', team: 'Surface & UX', note: 'Highest-leverage hire — enables staff aug, speeds every designer', color: C.cactus },
-    { role: 'Content Design Lead', team: 'Surface & UX', note: 'Voice, tone, conversational patterns, bilingual guidelines', color: C.cactus },
-    { role: 'UX Researcher (R1)', team: 'Surface & UX', note: 'Foundational research + building the practice org-wide', color: C.cactus },
-    { role: 'App Designer', team: 'Surface & UX', note: 'Cross-product app experience, works across all business lines', color: C.cactus },
-    { role: 'UX Researcher (R2)', team: 'Roaming', note: '6–8 week rotations across business lines · Hired at month 6-9', color: C.sky },
-    { role: 'Fintech Core Designer', team: 'Embedded', note: 'KYC, payments, fraud alerts, FX — embedded with fintech eng', color: C.papaya },
-    { role: 'Consumer Payments ×2-3', team: 'Embedded', note: '~3:1 PM-to-designer ratio · Organized by funnel stage', color: C.papaya },
-    { role: 'Credit Designer', team: 'Embedded', note: 'Senior IC, comfortable with ambiguity · 1:1 with PM', color: C.papaya },
-    { role: 'Wallet Designer', team: 'Embedded', note: 'Scrappy, autonomous · Greenfield product exploration', color: C.papaya },
+  const groups = [
+    {
+      title: 'Surface & UX Platform',
+      subtitle: '4 roles — creates leverage for everyone',
+      color: C.cactus,
+      roles: [
+        { name: 'Design System Designer', note: 'Highest-leverage hire — enables staff aug, speeds every designer' },
+        { name: 'Content Design Lead', note: 'Voice, tone, conversational patterns, bilingual guidelines' },
+        { name: 'UX Researcher (R1)', note: 'Foundational research + building the practice org-wide' },
+        { name: 'App Designer', note: 'Cross-product app experience, works across all business lines' },
+      ],
+    },
+    {
+      title: 'Roaming',
+      subtitle: '1 role — rotates across business lines',
+      color: C.sky,
+      roles: [
+        { name: 'UX Researcher (R2)', note: '6–8 week research sprints · Hired at month 6-9' },
+      ],
+    },
+    {
+      title: 'Embedded in Business Lines',
+      subtitle: '4 roles — creates depth in each line',
+      color: C.papaya,
+      roles: [
+        { name: 'Fintech Core Designer', note: 'KYC, payments, fraud alerts, FX — patterns shared org-wide' },
+        { name: 'Consumer Payments ×2-3', note: '~3:1 PM-to-designer ratio · Organized by funnel stage' },
+        { name: 'Credit Designer', note: 'Senior IC, comfortable with ambiguity · 1:1 with PM' },
+        { name: 'Wallet Designer', note: 'Scrappy, autonomous · Greenfield product exploration' },
+      ],
+    },
   ]
+
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
       <div className="absolute bottom-[5%] right-[3%] w-[130px] lg:w-[180px] opacity-[0.1] rotate-3 pointer-events-none" style={{ animation: 'ds-float 10s ease-in-out infinite' }}><Illo src="Hand%20-%20Stars.svg" /></div>
@@ -135,13 +157,24 @@ function SlideTeamDetail() {
         <div className="w-full max-w-[1200px]">
           <div className="mb-5"><PillBadge>Org Model</PillBadge></div>
           <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Team Composition &amp;&nbsp;Ratios</h1>
-          <p className="text-muted-foreground text-base mb-6">Platform roles create leverage. Embedded roles create&nbsp;depth.</p>
-          <div className="space-y-1.5">
-            {roles.map((r, i) => (
-              <div key={i} className={`grid grid-cols-[200px_100px_1fr] gap-3 items-center px-4 py-3 rounded-lg ${i % 2 === 0 ? 'bg-white border border-border shadow-sm' : ''}`}>
-                <span className="font-display font-bold text-foreground text-base sm:text-lg">{r.role}</span>
-                <span className="text-sm font-semibold" style={{ color: r.color }}>{r.team}</span>
-                <span className="text-sm sm:text-base text-muted-foreground">{r.note}</span>
+          <p className="text-muted-foreground text-lg mb-8">Platform roles create leverage. Embedded roles create&nbsp;depth.</p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {groups.map((g) => (
+              <div key={g.title} className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: g.color }}>
+                <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl mb-1">{g.title}</h3>
+                <p className="text-sm text-muted-foreground mb-5">{g.subtitle}</p>
+                <ul className="space-y-4">
+                  {g.roles.map((r) => (
+                    <li key={r.name} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
+                      <div>
+                        <p className="font-display font-bold text-foreground text-base">{r.name}</p>
+                        <p className="text-sm text-muted-foreground leading-snug mt-0.5">{r.note}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>

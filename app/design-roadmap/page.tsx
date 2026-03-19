@@ -135,74 +135,57 @@ function SlideOrgModel() {
 }
 
 function SlideTeamDetail() {
-  const groups = [
-    {
-      title: 'Surface & UX Platform',
-      subtitle: '4 roles — creates leverage for everyone',
-      color: C.cactus,
-      icon: Gear,
-      roles: [
-        { name: 'Design System Designer', note: 'Highest-leverage hire — enables staff aug, speeds every designer' },
-        { name: 'Content Design Lead', note: 'Voice, tone, conversational patterns, bilingual guidelines' },
-        { name: 'UX Researcher (R1)', note: 'Foundational research + building the practice org-wide' },
-        { name: 'App Designer', note: 'Cross-product app experience, works across all business lines' },
-      ],
-    },
-    {
-      title: 'Roaming',
-      subtitle: '1 role — rotates across business lines',
-      color: C.sky,
-      icon: Globe,
-      roles: [
-        { name: 'UX Researcher (R2)', note: '6–8 week research sprints · Hired at month 6-9' },
-      ],
-    },
-    {
-      title: 'Embedded in Business Lines',
-      subtitle: '4 roles — creates depth in each line',
-      color: C.papaya,
-      icon: Lightning,
-      roles: [
-        { name: 'Fintech Core Designer', note: 'KYC, payments, fraud alerts, FX — patterns shared org-wide' },
-        { name: 'Consumer Payments ×2-3', note: '~3:1 PM-to-designer ratio · Organized by funnel stage' },
-        { name: 'Credit Designer', note: 'Senior IC, comfortable with ambiguity · 1:1 with PM' },
-        { name: 'Wallet Designer', note: 'Scrappy, autonomous · Greenfield product exploration' },
-      ],
-    },
+  const platformRoles = [
+    'UX Researcher',
+    'Content Design Lead',
+    'App Designer',
+    'Design System Designer',
+    'Prod. Designer: Conv. Experiences',
+  ]
+  const embeddedLines = [
+    { name: 'Consumer\u00A0Payments', count: '2-3', color: C.papaya },
+    { name: 'Credit', count: '1', color: C.mango },
+    { name: 'Wallet', count: '1', color: C.lychee },
+    { name: 'Fintech\u00A0Core', count: '1', color: C.sage },
   ]
 
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
       <div className="absolute bottom-[5%] right-[3%] w-[130px] lg:w-[180px] opacity-[0.1] rotate-3 pointer-events-none" style={{ animation: 'ds-float 10s ease-in-out infinite' }}><Illo src="Hand%20-%20Stars.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
-        <div className="w-full max-w-[1200px]">
+        <div className="w-full max-w-[1100px]">
           <div className="mb-5"><PillBadge>Org Model</PillBadge></div>
           <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Team Composition &amp;&nbsp;Ratios</h1>
-          <p className="text-muted-foreground text-lg mb-8">Platform roles create leverage. Embedded roles create&nbsp;depth.</p>
+          <p className="text-muted-foreground text-lg mb-8">Platform creates leverage. Embedded creates&nbsp;depth.</p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {groups.map((g) => {
-              const Icon = g.icon
-              return (
-              <div key={g.title} className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: g.color }}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: `${g.color}15` }}>
-                  <Icon size={24} style={{ color: C.evergreen }} />
-                </div>
-                <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl mb-1">{g.title}</h3>
-                <p className="text-sm text-muted-foreground mb-5">{g.subtitle}</p>
-                <ul className="space-y-4">
-                  {g.roles.map((r) => (
-                    <li key={r.name} className="flex items-start gap-3">
-                      <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
-                      <div>
-                        <p className="font-display font-bold text-foreground text-base">{r.name}</p>
-                        <p className="text-sm text-muted-foreground leading-snug mt-0.5">{r.note}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+          {/* Horizontal bar — Surface & UX Platform */}
+          <div className="rounded-2xl p-5 mb-4 border border-border shadow-sm" style={{ background: `${C.cactus}10`, borderTopWidth: 4, borderTopColor: C.cactus }}>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${C.cactus}20` }}>
+                <Gear size={18} style={{ color: C.evergreen }} />
               </div>
-            )})}
+              <h3 className="font-display font-extrabold text-foreground text-lg">Surface &amp; UX Platform</h3>
+              <span className="text-sm text-muted-foreground ml-auto">5 roles — horizontal leverage</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {platformRoles.map((r) => (
+                <span key={r} className="text-sm font-medium px-3 py-1.5 rounded-lg bg-white border border-border text-foreground">{r}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Vertical columns — Embedded business lines */}
+          <div className="grid grid-cols-4 gap-3">
+            {embeddedLines.map((line) => (
+              <div key={line.name} className="rounded-2xl p-5 border border-border shadow-sm bg-white text-center" style={{ borderTopWidth: 4, borderTopColor: line.color }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-3" style={{ background: `${line.color}20` }}>
+                  <Lightning size={18} style={{ color: C.evergreen }} />
+                </div>
+                <p className="font-display font-extrabold text-foreground text-base mb-1">{line.name}</p>
+                <p className="font-display font-black text-2xl" style={{ color: line.color }}>{line.count}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">designer{line.count !== '1' ? 's' : ''}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

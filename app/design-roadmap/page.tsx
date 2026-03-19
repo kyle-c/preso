@@ -65,17 +65,17 @@ const slides: SlideData[] = [
     title: 'Three Phases, All Reqs Open in Parallel',
     cards: [
       {
-        title: 'Q1–Q2: Foundation (5–6)',
+        title: 'Q1–Q2: Foundation',
         titleColor: '#2BF2F1',
-        body: '• Design System Designer\n• Content Design Lead\n• Consumer Payments ×2\n• Fintech Core Designer\n• 1 contractor for design system',
+        body: '• Design System Designer\n• Content Design Lead\n• Consumer Payments ×1\n• Fintech Core Designer\n• 1 contractor for design system',
       },
       {
-        title: 'Q3: Build Capability (8–9)',
+        title: 'Q3: Build Capability',
         titleColor: '#FFCD9C',
-        body: '• App Designer\n• UX Researcher\n• Credit Designer\n• Wallet Designer\n• Flex contractor for app launch',
+        body: '• App Designer\n• Consumer Payments ×2\n• Credit Designer\n• Wallet Designer\n• Flex contractor for app launch',
       },
       {
-        title: 'Q4+: Scale (10–12)',
+        title: 'Q4+: Scale',
         titleColor: '#F19D38',
         body: '• Second UX Researcher\n• Conversational UX Designer (evaluate)\n• 3rd Consumer Payments (if needed)\n• Steady-state contractors',
       },

@@ -200,7 +200,7 @@ function SlideCoverageTarget() {
     <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
-          <div className="mb-5"><PillBadge dark>End of Year</PillBadge></div>
+          <div className="mb-5"><PillBadge dark>End of Year Proposal</PillBadge></div>
           <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">11 PMs. Full Design&nbsp;Coverage.</h1>
           <p className="text-linen/60 text-lg mb-6">Coverage model pairs senior ownership with shared product, content, and research&nbsp;support.</p>
 
@@ -424,7 +424,7 @@ function SlideHiring() {
       <div className="absolute top-[5%] right-[4%] w-[110px] lg:w-[150px] opacity-[0.06] rotate-6 pointer-events-none" style={{ animation: 'ds-drift 9s ease-in-out infinite' }}><Illo src="3%20Paper%20Airplanes%20%2B%20Coins.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
-          <div className="mb-5"><PillBadge dark>Org Model</PillBadge></div>
+          <div className="mb-5"><PillBadge dark>For Discussion</PillBadge></div>
           <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Team Build&nbsp;Sequence</h1>
           <p className="text-linen/60 text-lg mb-8">Existing roles, new hires, and future additions — phased to the&nbsp;reorg</p>
 
@@ -506,8 +506,8 @@ function SlideRoadmapOverview() {
           <p className="text-center text-linen/60 text-base mb-8">With the org at full build, two design tracks run in&nbsp;parallel</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {[
-              { title: 'Track 1: Design Foundation', color: C.cactus, icon: Clipboard, sub: 'Consistency and quality at scale — so every surface feels like Felix', items: ['Design system & pattern library', 'Content & conversational UX patterns', 'Research infrastructure & practice', 'Cross-surface experience coherence', 'Omnichannel + AI design patterns'] },
-              { title: 'Track 2: Design in Product', color: C.papaya, icon: DeviceMobile, sub: 'Driving conversion, retention, and trust across every product touchpoint', items: ['Core Conversion and Retention UX', 'Multi-product discovery framework', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design'] },
+              { title: 'Track 1: Design Foundation', color: C.cactus, icon: Clipboard, sub: 'Consistency and quality at scale — so every surface feels like Felix', items: ['Multi-surface + AI design patterns', 'Design system & pattern library', 'Content & conversational UX patterns', 'Research infrastructure & practice', 'Cross-surface experience coherence'] },
+              { title: 'Track 2: Design in Product', color: C.papaya, icon: DeviceMobile, sub: 'Driving conversion, retention, and trust across every product touchpoint', items: ['Multi-product discovery framework', 'Core Conversion and Retention UX', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design'] },
             ].map((t) => (
               <div key={t.title} className="bg-white/5 rounded-2xl p-7 border border-white/10" style={{ borderTopWidth: 3, borderTopColor: t.color }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${t.color}20` }}>

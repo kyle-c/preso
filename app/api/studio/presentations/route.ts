@@ -25,8 +25,12 @@ export async function GET(req: NextRequest) {
       presentations = await getUserSharedPresentations(session.userId)
     } else if (tab === 'shared-with-me') {
       presentations = await getPresentationsSharedWithEmail(session.user.email)
+    } else if (tab === 'archived') {
+      const all = await getUserPresentations(session.userId)
+      presentations = all.filter((p: any) => p.archived)
     } else {
-      presentations = await getUserPresentations(session.userId)
+      const all = await getUserPresentations(session.userId)
+      presentations = all.filter((p: any) => !p.archived)
     }
 
     // Enrich with comment counts

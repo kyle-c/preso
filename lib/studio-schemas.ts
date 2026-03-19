@@ -53,6 +53,7 @@ export const updatePresentationSchema = z.object({
   document: z.any().nullable().optional(),
   outline: z.any().nullable().optional(),
   isPublic: z.boolean().optional(),
+  archived: z.boolean().optional(),
 })
 
 // ---------------------------------------------------------------------------

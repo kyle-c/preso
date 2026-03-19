@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Trash2 } from 'lucide-react'
+import { Archive, ArchiveRestore } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { cn } from '@/lib/utils'
 import type { SlideData } from './slide-renderer'
@@ -16,7 +16,8 @@ export interface PresentationCardProps {
   model: string
   createdAt: number
   firstSlide?: SlideData | null
-  onDelete?: (id: string) => void
+  onArchive?: (id: string) => void
+  archiveLabel?: string
   selectable?: boolean
   selected?: boolean
   onSelect?: (id: string) => void
@@ -57,7 +58,8 @@ export function PresentationCard({
   model,
   createdAt,
   firstSlide,
-  onDelete,
+  onArchive,
+  archiveLabel = 'Archive',
   selectable,
   selected,
   onSelect,
@@ -66,10 +68,10 @@ export function PresentationCard({
 }: PresentationCardProps) {
   const [isHovered, setIsHovered] = useState(false)
 
-  const handleDelete = (e: React.MouseEvent) => {
+  const handleArchive = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    onDelete?.(id)
+    onArchive?.(id)
   }
 
   const handleClick = (e: React.MouseEvent) => {
@@ -178,21 +180,21 @@ export function PresentationCard({
             </div>
           )}
 
-          {/* Delete button */}
-          {onDelete && (
+          {/* Archive / Unarchive button */}
+          {onArchive && (
             <button
               type="button"
-              onClick={handleDelete}
+              onClick={handleArchive}
               className={cn(
                 'absolute top-2 right-2 p-1.5 rounded-lg transition-all duration-200 backdrop-blur-sm',
-                colors.deleteBg,
-                colors.deleteText,
+                colors.overlayBg,
+                colors.overlayText,
                 isHovered ? 'opacity-100' : 'opacity-0 sm:opacity-0',
-                'max-sm:opacity-100', // Always visible on touch devices
+                'max-sm:opacity-100',
               )}
-              aria-label={`Delete ${title}`}
+              aria-label={`${archiveLabel} ${title}`}
             >
-              <Trash2 className="w-3.5 h-3.5" />
+              {archiveLabel === 'Unarchive' ? <ArchiveRestore className="w-3.5 h-3.5" /> : <Archive className="w-3.5 h-3.5" />}
             </button>
           )}
 

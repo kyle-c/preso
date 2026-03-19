@@ -435,9 +435,9 @@ export default function CreatePage() {
   const [sortOpen, setSortOpen] = useState(false)
 
   // Tab state
-  type TabKey = 'mine' | 'shared-by-me' | 'shared-with-me'
+  type TabKey = 'mine' | 'shared-by-me' | 'shared-with-me' | 'archived'
   const [activeTab, setActiveTab] = useState<TabKey>('mine')
-  const tabCache = useRef<Record<TabKey, any[] | null>>({ mine: null, 'shared-by-me': null, 'shared-with-me': null })
+  const tabCache = useRef<Record<TabKey, any[] | null>>({ mine: null, 'shared-by-me': null, 'shared-with-me': null, archived: null })
 
   // Multi-select state
   const [multiSelect, setMultiSelect] = useState(false)
@@ -486,16 +486,19 @@ export default function CreatePage() {
     }
   }, [])
 
-  const handleDeletePresentation = async (id: string) => {
-    if (!confirm('Delete this presentation? This cannot be undone.')) return
+  const handleArchivePresentation = async (id: string) => {
+    const isArchived = activeTab === 'archived'
     try {
-      const res = await fetch(`/api/studio/presentations/${id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/studio/presentations/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ archived: !isArchived }),
+      })
       if (res.ok) {
         setPresentations((prev) => prev.filter((p) => p.id !== id))
-        // Clear from cache too
-        if (tabCache.current[activeTab]) {
-          tabCache.current[activeTab] = tabCache.current[activeTab]!.filter((p: any) => p.id !== id)
-        }
+        // Invalidate both tabs so they refresh
+        tabCache.current['mine'] = null
+        tabCache.current['archived'] = null
       }
     } catch { /* silent */ }
   }
@@ -1162,8 +1165,8 @@ export default function CreatePage() {
             <div className="flex items-center gap-1 mb-6">
               {([
                 { key: 'mine' as TabKey, label: 'My Decks' },
-                { key: 'shared-by-me' as TabKey, label: 'Shared by Me' },
                 { key: 'shared-with-me' as TabKey, label: 'Shared with Me' },
+                { key: 'archived' as TabKey, label: 'Archived' },
               ]).map(tab => {
                 // Count selections from this tab (if cached)
                 const tabItems = tabCache.current[tab.key]
@@ -1235,7 +1238,8 @@ export default function CreatePage() {
                       createdAt={p.createdAt}
                       firstSlide={p.slides?.[0] ?? null}
                       commentCount={p.commentCount}
-                      onDelete={activeTab === 'mine' ? handleDeletePresentation : undefined}
+                      onArchive={(activeTab === 'mine' || activeTab === 'archived') ? handleArchivePresentation : undefined}
+                      archiveLabel={activeTab === 'archived' ? 'Unarchive' : 'Archive'}
                       selectable={multiSelect}
                       selected={selectedIds.has(p.id)}
                       onSelect={toggleSelect}

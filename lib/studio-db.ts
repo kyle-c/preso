@@ -59,6 +59,7 @@ export interface Presentation {
   translations: Record<string, Record<string, string>> | null
   shareToken: string | null
   isPublic: boolean
+  archived: boolean
   provider: string
   model: string
   createdAt: number
@@ -107,6 +108,7 @@ interface StoredPresentation {
   translations: string // JSON string
   shareToken: string
   isPublic: number
+  archived: number
   provider: string
   model: string
   createdAt: number
@@ -146,6 +148,7 @@ function toPresentation(stored: StoredPresentation): Presentation {
     translations,
     shareToken: stored.shareToken || null,
     isPublic: stored.isPublic === 1,
+    archived: stored.archived === 1,
     provider: stored.provider,
     model: stored.model,
     createdAt: stored.createdAt,
@@ -274,6 +277,7 @@ export async function createPresentation(
     translations: '',
     shareToken: '',
     isPublic: 0,
+    archived: 0,
     provider,
     model,
     createdAt: now,
@@ -295,6 +299,7 @@ export async function createPresentation(
     translations: null,
     shareToken: null,
     isPublic: false,
+    archived: false,
     provider,
     model,
     createdAt: now,
@@ -357,6 +362,7 @@ export async function updatePresentation(
     translations: translationsToStore,
     shareToken: data.shareToken !== undefined ? (data.shareToken ?? '') : (existing.shareToken ?? ''),
     isPublic: data.isPublic !== undefined ? (data.isPublic ? 1 : 0) : (existing.isPublic ? 1 : 0),
+    archived: data.archived !== undefined ? (data.archived ? 1 : 0) : (existing.archived ? 1 : 0),
     provider: data.provider ?? existing.provider,
     model: data.model ?? existing.model,
     createdAt: existing.createdAt,

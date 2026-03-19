@@ -501,7 +501,7 @@ function SlideBullets({ slide, slideIndex }: { slide: SlideData; slideIndex: num
       <div className={cn('h-full w-full flex flex-col relative overflow-hidden', c.container)}>
         <FloatingIllos slideIndex={slideIndex} />
         {slide.imageUrl && <AnchorIllustration imageUrl={slide.imageUrl} bg={slide.bg} />}
-        <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-8 relative z-10">
+        <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
           <div className="w-full max-w-[1300px]">
             {slide.badge && <div className="mb-5 lg:mb-6 text-center" data-slide-field="badge"><Badge bg={slide.bg}>{slide.badge}</Badge></div>}
             <h1 data-slide-field="title" className={cn('font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-8 lg:mb-10 text-center', c.text)}>
@@ -582,7 +582,7 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
           <img src={slide.imageUrl} alt="" className="w-full h-full" />
         </div>
       )}
-      <div className="flex-1 flex items-center px-8 sm:px-12 lg:px-16 py-10 relative z-10">
+      <div className="flex-1 flex items-center px-10 sm:px-14 lg:px-20 py-10 relative z-10">
         <div data-slide-field="columns" className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 w-full max-w-[1400px] mx-auto items-center">
           {/* Left column — title area with inline illustration */}
           <div className="flex flex-col overflow-hidden">
@@ -921,7 +921,7 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
       <div className={cn('h-full w-full flex flex-col relative overflow-hidden', c.container)}>
         <FloatingIllos slideIndex={slideIndex} />
         {slide.imageUrl && <AnchorIllustration imageUrl={slide.imageUrl} bg={slide.bg} />}
-        <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 py-8 relative z-10">
+        <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
           <div className="w-full max-w-[1100px]">
             {slide.badge && <div className="mb-5 lg:mb-6 text-center" data-slide-field="badge"><Badge bg={slide.bg}>{slide.badge}</Badge></div>}
             <h1 data-slide-field="title" className={cn('font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-8 lg:mb-10 text-center', c.text)}>
@@ -1017,7 +1017,7 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
       <FloatingIllos slideIndex={slideIndex} />
       {slide.imageUrl && <AnchorIllustration imageUrl={slide.imageUrl} bg={slide.bg} />}
 
-      <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-12 lg:px-16 pb-32 relative z-10">
+      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 pb-32 relative z-10">
         {slide.badge && <div className="mb-6"><Badge bg={slide.bg}>{slide.badge}</Badge></div>}
         <h1 data-slide-field="title" className={cn('font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] tracking-tight mb-6 sm:mb-8 lg:mb-10 text-center', c.text)}>
           {parseBold(slide.title)}

@@ -706,8 +706,20 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
             )}
           </div>
 
-          {/* Right column — video, chart, or card panel */}
-          {hasVideo ? (
+          {/* Right column — embed, video, chart, or card panel */}
+          {slide.embedUrl ? (
+            <div className="flex items-center justify-center">
+              <div className="relative">
+                <div className={cn('rounded-[40px] border-[6px] overflow-hidden shadow-2xl', slide.bg === 'dark' ? 'border-white/10 bg-slate-900' : 'border-black/10 bg-white')}>
+                  <div className="relative">
+                    <div className={cn('absolute top-0 left-1/2 -translate-x-1/2 w-[100px] h-[26px] rounded-b-2xl z-10', slide.bg === 'dark' ? 'bg-slate-900' : 'bg-white')} />
+                  </div>
+                  <iframe src={slide.embedUrl} className="w-[320px] border-0" style={{ height: '692px' }} title={slide.title} />
+                </div>
+                <div className={cn('absolute bottom-2 left-1/2 -translate-x-1/2 w-[100px] h-[4px] rounded-full', slide.bg === 'dark' ? 'bg-white/20' : 'bg-black/15')} />
+              </div>
+            </div>
+          ) : hasVideo ? (
             <div className="flex items-center justify-center">
               <VideoEmbed videoUrl={slide.videoUrl!} bg={slide.bg} />
             </div>

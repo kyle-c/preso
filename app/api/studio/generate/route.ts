@@ -113,6 +113,7 @@ Follow these rules strictly to ensure all content meets WCAG 2.1 AA contrast req
 - NEVER use emoji icons on bullet items unless the user explicitly requests them. Use "✓" or "→" for functional indicators only. Omit the icon field by default. Emoji-heavy slides look unprofessional.
 - Card counts MUST be 2, 3, 4, or 6. NEVER use 5 or 7 cards — they create orphaned bottom rows. 4 cards renders as a 2×2 grid, 6 as a 3×2 grid. If you have 5 items, combine two into one card or split into two slides.
 - Card body format: Use STRUCTURED format, not dense paragraphs. Each card: 1 bold lead sentence + 2-3 short bullet points (• prefix). Total 20-40 words per card. NEVER write 5+ sentences in a card body.
+- When a slide contains 2+ metrics or stats, NEVER bury them in a prose paragraph. Break them out as visual elements: cards (each stat as title), bullets (bold number leading), or two-column stat callouts. Dense paragraphs with embedded bold numbers are hard to scan in a live presentation.
 
 ## Presentation Templates
 
@@ -585,6 +586,25 @@ Design every chart slide as if you are a 30-year McKinsey senior partner present
 \`\`\`
 
 NOTE: imageUrl can be added to ANY slide type, not just "image" slides. The renderer will display it as an anchored illustration on the slide. Use it on title, content, bullets, cards, quote, closing, etc. to add visual personality.
+
+### Embedded Product Demo (embedUrl)
+Any slide can include an "embedUrl" field with a URL to render inside a mobile device frame on the right side of the slide. Use this for:
+- Live product demos and interactive prototypes
+- Figma prototypes (use format: https://www.figma.com/embed?embed_host=share&url=FIGMA_PROTOTYPE_URL)
+- Any hosted web page or app flow
+
+When to use: If the user mentions a product walkthrough, demo, prototype, app flow, or provides a URL they want embedded. The slide renders as a split layout: editorial content (title, body, bullets) on the left, embedded device frame on the right.
+
+Built-in Felix demos available:
+- /fintechtestflow/embed — Full remittance payment flow
+- /wallet/embed — Digital wallet experience
+- /topups/embed/monto — Mobile top-ups flow
+- /mobiletestflow/embed — Mobile payment flow
+
+Example: If a user says "show the send money flow" or "include a product demo", use type "two-column" with embedUrl:
+{ "type": "two-column", "bg": "dark", "badge": "Product Demo", "title": "Send Money in 60 Seconds", "body": "Our remittance flow is designed for speed and trust.", "bullets": [{"text": "Corridor Selection — auto-detected from profile"}, {"text": "Amount & FX Lock — 30-second rate guarantee"}, {"text": "Review & Confirm — biometric, no hidden fees"}], "embedUrl": "/fintechtestflow/embed" }
+
+For external URLs provided by the user, use the full URL as embedUrl. For Figma prototypes, wrap in the embed format.
 
 ## Exemplar Slides — Match This Content Density
 

@@ -178,10 +178,10 @@ function SlideCoverageTarget() {
   const assignments = [
     { pm: 'Santi', product: 'Core Send', coverage: 'Lead Designer' },
     { pm: 'Hernan', product: 'Activation', coverage: 'Senior Designer' },
-    { pm: 'Diego', product: 'New Bets', coverage: 'Senior Designer' },
+    { pm: 'Diego', product: 'New Bets', coverage: 'Designer' },
     { pm: 'Eva', product: 'Checkout', coverage: 'Senior Designer' },
     { pm: 'Sebas', product: 'Credit', coverage: 'Senior Designer' },
-    { pm: 'Memo', product: 'Wallet', coverage: 'Product Designer / New Hire' },
+    { pm: 'Memo', product: 'Wallet', coverage: 'Designer' },
     { pm: 'Carla', product: 'Pricing / Multilingual', coverage: 'Content Design Lead + Shared Designer' },
     { pm: 'Lexie', product: 'AI', coverage: 'Content Design Lead + Shared Designer' },
     { pm: 'Dani', product: 'New Geos', coverage: 'Shared Designer' },

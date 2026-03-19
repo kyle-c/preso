@@ -134,6 +134,45 @@ export default function CreatePage() {
     el.style.height = el.scrollHeight + 'px'
   }, [prompt])
 
+  // Lazy-load document generation in background after slides are saved
+  const generateDocumentInBackground = useCallback(async (presId: string, slides: SlideData[]) => {
+    try {
+      const res = await fetch('/api/studio/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: '', provider, apiKey, model,
+          reverseEngineer: true, slides,
+        }),
+      })
+      if (!res.ok) return
+      const reader = res.body?.getReader()
+      if (!reader) return
+      const decoder = new TextDecoder()
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        const chunk = decoder.decode(value, { stream: true })
+        for (const line of chunk.split('\n')) {
+          if (!line.startsWith('data: ')) continue
+          const payload = line.slice(6)
+          if (payload === '[DONE]') continue
+          try {
+            const event = JSON.parse(payload)
+            if (event.document) {
+              setGeneratedDocument(event.document)
+              fetch(`/api/studio/presentations/${presId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ document: event.document }),
+              }).catch(() => {})
+            }
+          } catch { /* ignore */ }
+        }
+      }
+    } catch { /* background doc gen is non-critical */ }
+  }, [provider, apiKey, model])
+
   const handleGenerate = useCallback(async () => {
     if (!prompt.trim()) return
     if (!apiKey.trim()) {
@@ -289,6 +328,10 @@ export default function CreatePage() {
               setDone(true)
               // Save presentation — keep the promise so document handler can await it
               savePromise = savePresentation(currentSlides)
+              // Lazy-load document in background
+              savePromise.then(() => {
+                if (localSavedId) generateDocumentInBackground(localSavedId, currentSlides)
+              })
             } else if (event.document) {
               // Capture document for document generation view
               setGeneratedDocument(event.document)
@@ -351,7 +394,12 @@ export default function CreatePage() {
           setSlides(result.slides)
           setGenerating(false)
           setDone(true)
-          savePresentation(result.slides, result.document)
+          // Save slides first (no document yet)
+          await savePresentation(result.slides, result.document)
+          // Lazy-load: generate document + outline in background after slides are saved
+          if (!result.document && localSavedId) {
+            generateDocumentInBackground(localSavedId, result.slides)
+          }
         } else {
           setError('Could not parse slides from the response. Please try again.')
           setGenerating(false)

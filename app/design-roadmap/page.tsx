@@ -18,7 +18,7 @@ import {
 } from '@/components-next/phosphor-icons'
 
 const C = { turquoise: '#2BF2F1', slate: '#082422', blueberry: '#6060BF', evergreen: '#35605F', cactus: '#60D06F', mango: '#F19D38', papaya: '#F26629', sage: '#7BA882', lime: '#DCFF00', lychee: '#FFCD9C', sky: '#8DFDFA', stone: '#EFEBE7', concrete: '#CFCABF', mocha: '#877867' }
-const TOTAL = 11
+const TOTAL = 10
 
 function Illo({ src, className }: { src: string; className?: string }) {
   return <object type="image/svg+xml" data={`/illustrations/${src}`} className={className ?? 'w-full h-auto'} style={{ pointerEvents: 'none' }} aria-hidden="true" />
@@ -189,7 +189,7 @@ function SlideTeamDetail() {
           </div>
         </div>
       </div>
-      <SlideFooter num={4} />
+      <SlideFooter num={3} />
     </div>
   )
 }
@@ -246,7 +246,7 @@ function SlideHiring() {
           </div>
         </div>
       </div>
-      <SlideFooter num={5} dark />
+      <SlideFooter num={4} dark />
     </div>
   )
 }
@@ -277,7 +277,7 @@ function SlideStaffAug() {
           </div>
         </div>
       </div>
-      <SlideFooter num={6} />
+      <SlideFooter num={5} />
     </div>
   )
 }
@@ -308,7 +308,7 @@ function SlideRoadmapOverview() {
           </div>
         </div>
       </div>
-      <SlideFooter num={7} dark />
+      <SlideFooter num={6} dark />
     </div>
   )
 }
@@ -370,7 +370,7 @@ function SlideNow() {
           </div>
         </div>
       </div>
-      <SlideFooter num={8} />
+      <SlideFooter num={7} />
     </div>
   )
 }
@@ -407,7 +407,7 @@ function SlideResearch() {
           </div>
         </div>
       </div>
-      <SlideFooter num={9} dark />
+      <SlideFooter num={8} dark />
     </div>
   )
 }
@@ -447,7 +447,7 @@ function SlideContentDesign() {
           </div>
         </div>
       </div>
-      <SlideFooter num={10} />
+      <SlideFooter num={9} />
     </div>
   )
 }
@@ -481,19 +481,18 @@ function SlideClosingGoal() {
           </div>
         </div>
       </div>
-      <SlideFooter num={11} dark />
+      <SlideFooter num={10} dark />
     </div>
   )
 }
 
 /* ═══════════════════════════════════════ SHELL ════════════ */
 
-const slides = [SlideCover, SlideVision, SlideOrgModel, SlideTeamDetail, SlideHiring, SlideStaffAug, SlideRoadmapOverview, SlideNow, SlideResearch, SlideContentDesign, SlideClosingGoal]
-const darkSlideSet = new Set([0, 2, 4, 6, 8, 10])
+const slides = [SlideCover, SlideVision, SlideTeamDetail, SlideHiring, SlideStaffAug, SlideRoadmapOverview, SlideNow, SlideResearch, SlideContentDesign, SlideClosingGoal]
+const darkSlideSet = new Set([0, 3, 5, 7, 9])
 const slideMeta = [
   { title: 'Product Design Roadmap', subtitle: 'Cover' },
   { title: "Design's Role at Felix", subtitle: 'Vision' },
-  { title: 'Centralized but Embedded', subtitle: 'Org Model' },
   { title: 'Team Composition', subtitle: 'Roles' },
   { title: 'Hiring Sequence', subtitle: 'Timeline' },
   { title: 'Staff Augmentation', subtitle: 'Strategy' },

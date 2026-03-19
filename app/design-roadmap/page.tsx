@@ -438,7 +438,7 @@ export default function DesignRoadmapPage() {
   const btnIcon = isDark ? 'text-white/70' : 'text-foreground'
 
   return (
-    <PresentationPassword>
+    <>
     <div className="h-screen w-screen overflow-hidden relative select-none" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <div className={`absolute top-0 inset-x-0 h-1 z-50 transition-colors duration-500 ${trackBg}`}><div className={`h-full transition-all duration-500 ease-out ${trackFill}`} style={{ width: `${((current + 1) / total) * 100}%` }} /></div>
       <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50"><div className={`px-3 py-1.5 backdrop-blur-sm rounded-full border transition-colors duration-500 ${pillBg}`}><span className={`text-xs sm:text-sm font-medium transition-colors duration-500 ${pillText}`}>{current + 1} / {total}</span></div></div>
@@ -456,6 +456,6 @@ export default function DesignRoadmapPage() {
       <SlidePreTranslator slides={slides} locale={locale} />
       <SlidePdfOverlay progress={pdfProgress} onCancel={cancelPdf} />
     </div>
-    </PresentationPassword>
+    </>
   )
 }

@@ -137,10 +137,11 @@ function SlideOrgModel() {
 function SlideTeamDetail() {
   const platformRoles = [
     'UX Researcher',
+    'Product Designer: Design Systems',
     'Content Design Lead',
+    'Product Designer: Conv. Experiences',
     'App Designer',
-    'Design System Designer',
-    'Prod. Designer: Conv. Experiences',
+    'UX Researcher',
   ]
   const embeddedLines = [
     { name: 'Consumer\u00A0Payments', count: '2-3', color: C.papaya },

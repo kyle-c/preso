@@ -275,27 +275,54 @@ function SlideRoadmapOverview() {
 }
 
 function SlideNow() {
-  const items = [
-    { area: 'Multi-product discovery', color: C.papaya, desc: 'Establish scalable framework for exposing top-ups, bill pay, and credit in WhatsApp — accounting for user journey, session intensity, transaction history, and likely next actions' },
-    { area: 'Checkout improvements', color: C.papaya, desc: 'Collaborate with Fintech Core on UX restructuring of checkout flow to optimize for scalable payment methods across business lines' },
-    { area: 'Design system', color: C.cactus, desc: 'Expand component library to support redesigned checkout, wallet, top-ups, and bill pay. Define UX guidelines and pattern library for shared patterns across WhatsApp and web/app' },
-    { area: 'Research foundation', color: C.cactus, desc: 'Empower PMs and engineers to conduct more research, more regularly. Establish consistent framework and cadence for user recruitment pipelines' },
-    { area: 'Content design', color: C.cactus, desc: 'Hire our Content Lead to partner with brand and establish the Felix voice & tone system across all touchpoints. Build initial conversational flow patterns library. Establish bilingual content guidelines' },
-  ]
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
       <div className="absolute top-[5%] right-[3%] w-[120px] lg:w-[170px] opacity-[0.12] rotate-6 pointer-events-none" style={{ animation: 'ds-drift 9s ease-in-out infinite' }}><Illo src="Magnifying%20Glass.svg" /></div>
-      <div className="flex-1 flex flex-col justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
-        <div className="w-full max-w-[1200px]">
-          <div className="mb-5"><PillBadge>Roadmap</PillBadge></div>
-          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Now — Q2&nbsp;2026</h1>
-          <p className="text-muted-foreground text-base mb-6">Stand up the org, establish credibility, support current&nbsp;priorities</p>
-          <div className="space-y-3">{items.map((r) => (
-            <div key={r.area} className="bg-white rounded-2xl p-5 border border-border shadow-sm" style={{ borderLeftWidth: 3, borderLeftColor: r.color }}>
-              <h3 className="font-display font-bold text-base sm:text-lg mb-2" style={{ color: r.color }}>{r.area}</h3>
-              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">{r.desc}</p>
+      <div className="flex-1 flex items-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 w-full max-w-[1400px] mx-auto">
+          {/* Left — Title + context */}
+          <div className="flex flex-col justify-center">
+            <div className="mb-5"><PillBadge>Roadmap</PillBadge></div>
+            <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight mb-4">Now — Q2&nbsp;2026</h1>
+            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-lg">Stand up the org, establish credibility, support current&nbsp;priorities</p>
+          </div>
+
+          {/* Right — Two track groups */}
+          <div className="flex flex-col gap-6">
+            {/* Product track */}
+            <div className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: C.papaya }}>
+              <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.papaya }}>Design in&nbsp;Product</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
+                  <div><p className="font-display font-bold text-foreground text-base">Multi-product discovery</p><p className="text-sm text-muted-foreground mt-0.5">Scalable framework for top-ups, bill pay, and credit in&nbsp;WhatsApp</p></div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
+                  <div><p className="font-display font-bold text-foreground text-base">Checkout improvements</p><p className="text-sm text-muted-foreground mt-0.5">UX restructuring for scalable payment methods across business&nbsp;lines</p></div>
+                </li>
+              </ul>
             </div>
-          ))}</div>
+
+            {/* Foundation track */}
+            <div className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: C.cactus }}>
+              <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.cactus }}>Design&nbsp;Foundation</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
+                  <div><p className="font-display font-bold text-foreground text-base">Design system</p><p className="text-sm text-muted-foreground mt-0.5">Expand components for checkout, wallet, top-ups. UX guidelines across WhatsApp and&nbsp;web/app</p></div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
+                  <div><p className="font-display font-bold text-foreground text-base">Research foundation</p><p className="text-sm text-muted-foreground mt-0.5">Empower PMs and engineers to research more regularly. User recruitment&nbsp;pipelines</p></div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
+                  <div><p className="font-display font-bold text-foreground text-base">Content design</p><p className="text-sm text-muted-foreground mt-0.5">Felix voice &amp; tone system. Conversational flow patterns. Bilingual content&nbsp;guidelines</p></div>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
       <SlideFooter num={8} />

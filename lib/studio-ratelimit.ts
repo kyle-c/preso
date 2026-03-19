@@ -32,6 +32,16 @@ export const apiLimiter = new Ratelimit({
   prefix: 'rl:api',
 })
 
+/**
+ * Comment rate limiter: 30 writes per 15 minutes per IP.
+ * Prevents spam/abuse on public comment endpoints.
+ */
+export const commentLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(30, '15 m'),
+  prefix: 'rl:comment',
+})
+
 /** Check rate limit and return a 429 response if exceeded, or null if OK */
 export async function checkRateLimit(
   limiter: Ratelimit,

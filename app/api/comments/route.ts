@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getComments, addComment } from '@/lib/redis-comments'
+import { commentLimiter, checkRateLimit } from '@/lib/studio-ratelimit'
+import { createCommentSchema } from '@/lib/studio-schemas'
+import { getRequestIp } from '@/lib/studio-audit'
 
 export const runtime = 'nodejs'
 
@@ -17,26 +20,18 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json() as {
-      deckId: string
-      slideIndex: number
-      x: number
-      y: number
-      name: string
-      email?: string
-      text: string
+    const ip = getRequestIp(req.headers)
+    const rateLimited = await checkRateLimit(commentLimiter, ip)
+    if (rateLimited) return rateLimited
+
+    const raw = await req.json()
+    const parsed = createCommentSchema.safeParse(raw)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid input', details: parsed.error.flatten().fieldErrors }, { status: 400 })
     }
-    if (!body.deckId || !body.name || !body.text) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-    }
-    const comment = await addComment(body.deckId, {
-      slideIndex: body.slideIndex,
-      x: body.x,
-      y: body.y,
-      name: body.name,
-      email: body.email,
-      text: body.text,
-    })
+
+    const { deckId, slideIndex, x, y, name, email, text } = parsed.data
+    const comment = await addComment(deckId, { slideIndex, x, y, name, email, text })
     return NextResponse.json(comment, { status: 201 })
   } catch (e) {
     console.error('[comments POST]', e)

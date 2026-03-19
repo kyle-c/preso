@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const PASSWORD = process.env.SITE_PASSWORD || 'felix2026andbeyond!'
+const PASSWORD = process.env.SITE_PASSWORD
+if (!PASSWORD) {
+  throw new Error('SITE_PASSWORD environment variable is required')
+}
 const COOKIE_NAME = 'site-auth'
 
 const PUBLIC_ROUTES = new Set([

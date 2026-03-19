@@ -128,6 +128,37 @@ export const translateSchema = z.object({
 // Analytics
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Comments
+// ---------------------------------------------------------------------------
+
+export const createCommentSchema = z.object({
+  deckId: z.string().min(1).max(200),
+  slideIndex: z.number().int().min(0).max(500),
+  x: z.number().min(0).max(1),
+  y: z.number().min(0).max(1),
+  name: z.string().min(1).max(100),
+  email: z.string().email().max(254).optional(),
+  text: z.string().min(1).max(5000),
+})
+
+export const updateCommentSchema = z.object({
+  deckId: z.string().min(1).max(200),
+  text: z.string().min(1).max(5000).optional(),
+  flaggedForRebuild: z.boolean().optional(),
+  resolved: z.boolean().optional(),
+  resolvedBy: z.string().max(100).optional(),
+  reply: z.object({
+    name: z.string().min(1).max(100),
+    text: z.string().min(1).max(5000),
+  }).optional(),
+  deleteReplyId: z.string().max(200).optional(),
+})
+
+// ---------------------------------------------------------------------------
+// Analytics
+// ---------------------------------------------------------------------------
+
 export const analyticsSchema = z.object({
   type: z.enum(['edit', 'edits', 'beacon', 'session_end', 'generation_outcome']),
   event: z.record(z.unknown()).optional(),

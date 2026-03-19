@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getFlaggedAsMarkdown, getComments, setComments } from '@/lib/redis-comments'
+import { commentLimiter, checkRateLimit } from '@/lib/studio-ratelimit'
+import { getRequestIp } from '@/lib/studio-audit'
 
 export const runtime = 'nodejs'
 
 // GET /api/comments/flagged?deck=felix-investor
-// Returns flagged comments as plain markdown — paste into Claude Code for deck rebuild
 export async function GET(req: NextRequest) {
   const deckId = req.nextUrl.searchParams.get('deck')
   if (!deckId) return NextResponse.json({ error: 'Missing deck param' }, { status: 400 })
@@ -20,11 +21,15 @@ export async function GET(req: NextRequest) {
 }
 
 // DELETE /api/comments/flagged?deck=felix-investor
-// Removes all flagged comments — call after a rebuild
 export async function DELETE(req: NextRequest) {
-  const deckId = req.nextUrl.searchParams.get('deck')
-  if (!deckId) return NextResponse.json({ error: 'Missing deck param' }, { status: 400 })
   try {
+    const ip = getRequestIp(req.headers)
+    const rateLimited = await checkRateLimit(commentLimiter, ip)
+    if (rateLimited) return rateLimited
+
+    const deckId = req.nextUrl.searchParams.get('deck')
+    if (!deckId) return NextResponse.json({ error: 'Missing deck param' }, { status: 400 })
+
     const comments = await getComments(deckId)
     await setComments(deckId, comments.filter(c => !c.flaggedForRebuild))
     return NextResponse.json({ ok: true })

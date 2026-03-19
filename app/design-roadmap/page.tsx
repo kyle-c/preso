@@ -67,7 +67,7 @@ const slides: SlideData[] = [
       {
         title: 'Q1–Q2: Foundation',
         titleColor: '#2BF2F1',
-        body: '• Design System Designer\n• Content Design Lead\n• Consumer Payments ×1\n• Fintech Core Designer\n• 1 contractor for design system',
+        body: '• Design System Designer\n• Content Design Lead\n• Consumer Payments ×1\n• Fintech Core / Design System (staff aug)',
       },
       {
         title: 'Q3: Build Capability',

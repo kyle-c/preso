@@ -205,11 +205,11 @@ function SlideHiring() {
     ], aug: '+ 1 contractor for design system build-out (Darwoft)' },
     { phase: 'Next', time: 'Q2', label: 'Build capability', color: C.sky, hires: [
       { name: 'Product Designer: Conv. Experiences', note: 'Credit' },
-      { name: 'App Designer', note: '' },
-      { name: 'Wallet Designer', note: 'if product ready' },
       { name: 'Product Designer: Conv. Experiences', note: 'Platform' },
     ], aug: '' },
-    { phase: 'Later', time: 'Q4+', label: 'Scale', color: C.mango, hires: [
+    { phase: 'Later', time: 'Q3 & Beyond', label: 'Scale', color: C.mango, hires: [
+      { name: 'App Designer', note: '' },
+      { name: 'Wallet Designer', note: 'if product ready' },
       { name: 'UX Researcher (R2)', note: 'month 6-9' },
     ], aug: 'Steady-state: 1 permanent + flex contractors' },
   ]

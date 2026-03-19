@@ -18,7 +18,7 @@ import {
 } from '@/components-next/phosphor-icons'
 
 const C = { turquoise: '#2BF2F1', slate: '#082422', blueberry: '#6060BF', evergreen: '#35605F', cactus: '#60D06F', mango: '#F19D38', papaya: '#F26629', sage: '#7BA882', lime: '#DCFF00', lychee: '#FFCD9C', sky: '#8DFDFA', stone: '#EFEBE7', concrete: '#CFCABF', mocha: '#877867' }
-const TOTAL = 13
+const TOTAL = 12
 
 function Illo({ src, className }: { src: string; className?: string }) {
   return <object type="image/svg+xml" data={`/illustrations/${src}`} className={className ?? 'w-full h-auto'} style={{ pointerEvents: 'none' }} aria-hidden="true" />
@@ -526,6 +526,8 @@ function SlideRoadmapOverview() {
   )
 }
 
+/* SlideNow removed — content folded into roadmap */
+
 function SlideNow() {
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-x-hidden overflow-y-auto">
@@ -594,7 +596,7 @@ function SlideResearch() {
       <div className="absolute top-[5%] left-[3%] w-[100px] lg:w-[140px] opacity-[0.06] -rotate-12 pointer-events-none" style={{ animation: 'ds-float 8s ease-in-out infinite' }}><Illo src="Magnifying%20Glass.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
-          <div className="mb-5"><PillBadge dark>Deep Dive</PillBadge></div>
+          <div className="mb-5"><PillBadge dark>Appendix</PillBadge></div>
           <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Research&nbsp;Model</h1>
           <p className="text-linen/60 text-base mb-8">Building the practice from scratch with a staggered two-researcher&nbsp;approach</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
@@ -629,6 +631,7 @@ function SlideResearch() {
         </div>
       </div>
       <SlideFooter num={11} dark />
+
     </div>
   )
 }
@@ -645,7 +648,7 @@ function SlideContentDesign() {
       <div className="absolute bottom-[6%] right-[4%] w-[130px] lg:w-[180px] opacity-[0.1] rotate-3 pointer-events-none" style={{ animation: 'ds-float 10s ease-in-out infinite' }}><Illo src="Speech%20Bubbles%20%2B%20Hearts.svg" /></div>
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
-          <div className="mb-5 text-center"><PillBadge>Key Projects</PillBadge></div>
+          <div className="mb-5 text-center"><PillBadge>Appendix</PillBadge></div>
           <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2 text-center">Content Design&nbsp;Lead</h1>
           <p className="text-muted-foreground text-lg mb-8 text-center">Shaping how Felix communicates across every surface, language, and&nbsp;interaction</p>
 
@@ -690,7 +693,7 @@ function SlideClosingGoal() {
             <div className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: C.papaya }}>
               <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.papaya }}>Today</h3>
               <ul className="space-y-2.5">
-                {['Design system defined but not yet launched', 'No content design or research infra', 'Reactive to product requests', 'Single-surface focus (WhatsApp)'].map((item) => (
+                {['Design system defined but not yet launched', 'No content design or research infra', 'Reactive to product requests', 'Single-surface focus (WhatsApp)', 'Single-product focus (remittances)'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-papaya/50" strokeWidth={1.5} /><span className="text-base text-linen/60 leading-snug">{item}</span></li>
                 ))}
               </ul>
@@ -700,7 +703,7 @@ function SlideClosingGoal() {
             <div className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: C.cactus }}>
               <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.cactus }}>End of&nbsp;Year</h3>
               <ul className="space-y-2.5">
-                {['Unified design system + pattern library', 'Content design, research, and app coverage', 'Proactive — shaping product direction', 'Multi-surface: WhatsApp, app, web, and\u00A0beyond'].map((item) => (
+                {['Unified design system + pattern library', 'Content design, research, and app coverage', 'Proactive — shaping product direction', 'Multi-surface: WhatsApp, app, web, and\u00A0beyond', 'Multi-product: Payments, Credit, Wallet, and\u00A0more'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-cactus/60" strokeWidth={1.5} /><span className="text-base text-linen/60 leading-snug">{item}</span></li>
                 ))}
               </ul>
@@ -712,15 +715,15 @@ function SlideClosingGoal() {
           </div>
         </div>
       </div>
-      <SlideFooter num={13} dark />
+      <SlideFooter num={10} dark />
     </div>
   )
 }
 
 /* ═══════════════════════════════════════ SHELL ════════════ */
 
-const slides = [SlideCover, SlideVision, SlideToday, SlideCoverage, SlideCoverageTarget, SlideTeamDetail, SlideHiring, SlideStaffAug, SlideRoadmapOverview, SlideNow, SlideResearch, SlideContentDesign, SlideClosingGoal]
-const darkSlideSet = new Set([0, 2, 4, 6, 8, 10, 12])
+const slides = [SlideCover, SlideVision, SlideToday, SlideCoverage, SlideCoverageTarget, SlideTeamDetail, SlideHiring, SlideStaffAug, SlideRoadmapOverview, SlideClosingGoal, SlideResearch, SlideContentDesign]
+const darkSlideSet = new Set([0, 2, 4, 6, 8, 10])
 const slideMeta = [
   { title: 'Product Design Roadmap', subtitle: 'Cover' },
   { title: "Design's Role at Felix", subtitle: 'Vision' },
@@ -731,10 +734,9 @@ const slideMeta = [
   { title: 'Team Build Sequence', subtitle: 'Timeline' },
   { title: 'Staff Augmentation', subtitle: 'Strategy' },
   { title: 'What This Unlocks', subtitle: 'Roadmap' },
-  { title: 'Now — Q2 2026', subtitle: 'Priorities' },
-  { title: 'Research Model', subtitle: 'Deep Dive' },
-  { title: 'Content Design', subtitle: 'Deep Dive' },
   { title: 'Today vs. End of Year', subtitle: 'Closing' },
+  { title: 'Research Model', subtitle: 'Appendix' },
+  { title: 'Content Design', subtitle: 'Appendix' },
 ]
 const slideRatingStubs: SlideData[] = slides.map((_, i) => ({ type: 'bullets' as const, bg: darkSlideSet.has(i) ? 'dark' as const : 'light' as const, title: slideMeta[i]?.title ?? '', bullets: [] }))
 

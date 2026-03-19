@@ -107,7 +107,7 @@ function SlideToday() {
           <div className="flex flex-col justify-center">
             <div className="mb-5"><PillBadge dark>Today</PillBadge></div>
             <h1 className="font-display font-black text-linen text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight mb-4">Where We Are&nbsp;Now</h1>
-            <p className="text-lg sm:text-xl text-linen/60 leading-relaxed max-w-lg">A small, talented team punching above its weight — but stretched thin across too many&nbsp;surfaces.</p>
+            <p className="text-lg sm:text-xl text-linen/60 leading-relaxed max-w-lg">A small, talented team punching above its weight — but stretched thin across too many&nbsp;teams.</p>
           </div>
 
           {/* Right — Two cards */}

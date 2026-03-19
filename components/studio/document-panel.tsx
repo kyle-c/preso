@@ -24,20 +24,56 @@ function renderMarkdown(text: string): string {
   const lines = html.split('\n')
   const out: string[] = []
   let inList: 'ul' | 'ol' | null = null
+  let inTable = false
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
     const ulMatch = line.match(/^(\s*)[\*\-]\s+(.+)/)
     const olMatch = line.match(/^(\s*)\d+\.\s+(.+)/)
+    const h3Match = line.match(/^###\s+(.+)/)
+    const h4Match = line.match(/^####\s+(.+)/)
+    const hrMatch = line.match(/^---+$/)
+    const tableMatch = line.match(/^\|(.+)\|$/)
+    const tableSepMatch = line.match(/^\|[\s\-:|]+\|$/)
 
-    if (ulMatch) {
-      if (inList !== 'ul') { if (inList) out.push(`</${inList}>`); out.push('<ul>'); inList = 'ul' }
+    // Close list if transitioning out
+    if (!ulMatch && !olMatch && inList) { out.push(`</${inList}>`); inList = null }
+
+    if (h3Match) {
+      if (inTable) { out.push('</tbody></table>'); inTable = false }
+      out.push(`<h3>${h3Match[1]}</h3>`)
+    } else if (h4Match) {
+      if (inTable) { out.push('</tbody></table>'); inTable = false }
+      out.push(`<h4>${h4Match[1]}</h4>`)
+    } else if (hrMatch) {
+      if (inTable) { out.push('</tbody></table>'); inTable = false }
+      out.push('<hr/>')
+    } else if (tableSepMatch) {
+      // Skip separator row (already started table from header)
+      continue
+    } else if (tableMatch) {
+      const cells = tableMatch[1].split('|').map(c => c.trim())
+      if (!inTable) {
+        // First table row = header
+        out.push('<table><thead><tr>')
+        cells.forEach(c => out.push(`<th>${c}</th>`))
+        out.push('</tr></thead><tbody>')
+        inTable = true
+      } else {
+        out.push('<tr>')
+        cells.forEach(c => out.push(`<td>${c}</td>`))
+        out.push('</tr>')
+      }
+    } else if (ulMatch) {
+      if (inTable) { out.push('</tbody></table>'); inTable = false }
+      if (inList !== 'ul') { out.push('<ul>'); inList = 'ul' }
       out.push(`<li>${ulMatch[2]}</li>`)
     } else if (olMatch) {
-      if (inList !== 'ol') { if (inList) out.push(`</${inList}>`); out.push('<ol>'); inList = 'ol' }
+      if (inTable) { out.push('</tbody></table>'); inTable = false }
+      if (inList !== 'ol') { out.push('<ol>'); inList = 'ol' }
       out.push(`<li>${olMatch[2]}</li>`)
     } else {
-      if (inList) { out.push(`</${inList}>`); inList = null }
+      if (inTable) { out.push('</tbody></table>'); inTable = false }
       if (line.trim() === '') {
         out.push('<br/>')
       } else {
@@ -46,6 +82,7 @@ function renderMarkdown(text: string): string {
     }
   }
   if (inList) out.push(`</${inList}>`)
+  if (inTable) out.push('</tbody></table>')
 
   return out.join('')
 }

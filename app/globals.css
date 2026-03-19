@@ -387,7 +387,7 @@
   }
 }
 
-/* Document panel prose — paragraph spacing, list styles */
+/* Document panel prose — paragraph spacing, list styles, tables, headings */
 .doc-prose p { margin-bottom: 1em; }
 .doc-prose p:last-child { margin-bottom: 0; }
 .doc-prose ul, .doc-prose ol { margin-bottom: 1em; padding-left: 1.5em; }
@@ -396,6 +396,14 @@
 .doc-prose li { margin-bottom: 0.35em; }
 .doc-prose strong { font-weight: 600; }
 .doc-prose code { font-size: 0.9em; padding: 0.15em 0.4em; border-radius: 4px; background: rgba(0,0,0,0.05); }
+.doc-prose h3 { font-size: 1.15em; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; color: #082422; }
+.doc-prose h4 { font-size: 1em; font-weight: 600; margin-top: 1.25em; margin-bottom: 0.4em; color: #35605F; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8em; }
+.doc-prose hr { border: none; border-top: 1px solid #CFCABF; margin: 1.5em 0; }
+.doc-prose table { width: 100%; border-collapse: collapse; margin-bottom: 1.25em; font-size: 0.9em; }
+.doc-prose thead { border-bottom: 2px solid #082422; }
+.doc-prose th { text-align: left; padding: 0.5em 0.75em; font-weight: 600; color: #082422; }
+.doc-prose td { padding: 0.45em 0.75em; border-bottom: 1px solid #EFEBE7; }
+.doc-prose tbody tr:hover { background: rgba(0,0,0,0.02); }
 
 /* Focus visible override — unlayered so it takes precedence over @layer utilities.
    Replaces the crisp 3px ring with a diffuse shadow tonal to the border color. */

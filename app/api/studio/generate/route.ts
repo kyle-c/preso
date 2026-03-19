@@ -2072,15 +2072,33 @@ ${slidesPayload}
 
 Your task:
 1. Analyze each slide's content, structure, data, charts, quotes, and story arc
-2. Synthesize the presentation into a rich narrative document that:
-   - Expands bullet points into full paragraphs with context, rationale, and supporting detail
-   - Adds connective tissue between sections (transitions, context, implications)
-   - Strengthens arguments with additional depth beyond what fits on a slide
-   - Includes relevant data points, examples, and specifics from the slides
-   - Integrates chart data and statistics into prose with analysis and interpretation
-   - Maintains the presentation's voice and perspective while being far more thorough
-   - Tells a cohesive story from beginning to end
-   - Reads like a professional report, memo, or strategy document — NOT like slide notes
+2. Synthesize the presentation into a richly structured professional document
+
+The document should follow best-in-class professional document conventions (like top PRDs, strategy memos, and executive briefs):
+
+### Formatting Requirements
+- **Subheadings** (### and ####): Break sections into scannable subsections. Use ### for major subsections, #### for labeled categories
+- **Bulleted lists**: Use for requirements, criteria, user stories, action items, features — anything with 3+ parallel items. Don't bury lists in prose
+- **Numbered lists**: Use for sequential steps, prioritized items, or processes
+- **Tables**: Use markdown tables (| col1 | col2 |) for comparisons, metrics, timelines, scoring matrices, feature grids, or any data with 2+ dimensions. Tables are STRONGLY preferred over prose for structured data
+- **Bold labels**: Use **Label:** pattern for definition lists (e.g., **Owner:** Kyle, **Timeline:** Q2 2026)
+- **Horizontal rules** (---): Use to separate major topic shifts within a section
+- **Short paragraphs**: Max 3-4 sentences per paragraph. Break long prose into digestible chunks
+- Never write a wall of unbroken text. Every section should mix prose + structured elements (lists, tables, bold labels)
+
+### Content Structure Per Section
+Each section's content should follow this pattern:
+1. Opening context paragraph (2-3 sentences framing the topic)
+2. Structured content (table, bulleted list, or bold-labeled items)
+3. Analysis/implications paragraph (the "so what")
+4. Optional: additional structured data or subsections
+
+### Example Patterns
+- **Metrics section**: Opening paragraph → Table of KPIs with Target/Actual/Status columns → Analysis paragraph
+- **Requirements section**: Context → Numbered user stories → Priority table (Feature | Priority | Effort | Owner)
+- **Competitive analysis**: Context → Comparison table (Competitor | Strengths | Weaknesses | Our Advantage) → Strategy implications
+- **Timeline/Roadmap**: Context → Table (Phase | Dates | Deliverables | Owner) → Risk callouts as bullets
+- **Goals/OKRs**: Context → Each objective as ### heading → KRs as bulleted list with metrics → Status table
 
 Return a JSON object:
 {
@@ -2090,7 +2108,7 @@ Return a JSON object:
   "sections": [
     {
       "title": "Section heading",
-      "content": "Rich markdown content — 3-8 paragraphs per section. Use **bold** for emphasis, bullet lists where appropriate, and subheadings (### ) for longer sections. Each section should be substantive enough to stand alone as a professional written piece. Include data, quotes, and specifics from the slides.",
+      "content": "Rich markdown content using ###/#### subheadings, bulleted/numbered lists, tables, **bold labels**, and short paragraphs. Each section should mix prose with structured elements. 3-8 paragraphs equivalent per section.",
       "slideIndex": 0
     }
   ]
@@ -2101,6 +2119,8 @@ Guidelines:
 - Map each section to its primary slideIndex for cross-referencing
 - Write at a senior professional level — authoritative, specific, insightful
 - Content should be 3-5x more detailed than the slides themselves
+- EVERY section must include at least one structured element (table, bulleted list, or bold-label list). Pure prose sections are not acceptable
+- Tables should have clear headers and use | column | format. Include 3-8 rows of data
 - Never leave widows or orphans — no single word alone on the last line of any paragraph
 - The document should be complete enough that someone who never saw the slides would fully understand the material
 

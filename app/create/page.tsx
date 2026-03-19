@@ -970,6 +970,11 @@ export default function CreatePage() {
     }
 
     if (generateMode === 'document') {
+      // When document is done and saved, navigate straight to the standard view with document tab selected
+      if (done && generatedDocument && savedId) {
+        router.push(`/create/${savedId}?view=document`)
+        return null
+      }
       return (
         <DocumentGenerationView
           slides={slides}

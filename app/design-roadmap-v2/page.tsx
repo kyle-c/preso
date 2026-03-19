@@ -175,13 +175,15 @@ function SlideOrgModel() {
 }
 
 function SlideCoverageTarget() {
-  const assignments = [
+  const dedicated = [
     { pm: 'Santi', product: 'Core Send', coverage: 'Lead Designer' },
     { pm: 'Hernan', product: 'Activation', coverage: 'Senior Designer' },
     { pm: 'Eva', product: 'Checkout', coverage: 'Senior Designer' },
     { pm: 'Sebas', product: 'Credit', coverage: 'Senior Designer' },
     { pm: 'Diego', product: 'New Bets', coverage: 'Designer' },
     { pm: 'Memo', product: 'Wallet', coverage: 'Designer' },
+  ]
+  const shared = [
     { pm: 'Dani', product: 'New Geos', coverage: 'Shared Designer' },
     { pm: 'Samu', product: 'Tools', coverage: 'Shared Designer' },
     { pm: 'Tomas', product: 'Disbursements', coverage: 'Shared Designer' },
@@ -194,13 +196,6 @@ function SlideCoverageTarget() {
     { role: 'Research', person: 'Research Lead' },
     { role: 'Multi-surface + App', person: 'Product Designer' },
   ]
-  const legend = [
-    { label: 'Lead', desc: 'primary ownership of a major initiative' },
-    { label: 'Senior', desc: 'leads key work and supports adjacent streams' },
-    { label: 'Shared', desc: 'cross-squad support' },
-    { label: 'Specialist', desc: 'content, research, system, platform' },
-  ]
-
   return (
     <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
@@ -210,14 +205,28 @@ function SlideCoverageTarget() {
           <p className="text-linen/60 text-lg mb-6">Coverage model pairs senior ownership with shared product, content, and research&nbsp;support.</p>
 
           <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden mb-4">
+            <div className="px-5 py-2 bg-white/[0.05] border-b border-white/10">
+              <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Dedicated</span>
+            </div>
             <div className="grid grid-cols-[1fr_2fr_3fr_1fr] gap-x-6 px-5 py-2.5 bg-white/[0.03] border-b border-white/10">
               <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">PM</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Product Area</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Design Coverage</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Status</span>
             </div>
-            {assignments.map((a, i) => (
-              <div key={a.pm} className={`grid grid-cols-[1fr_2fr_3fr_1fr] gap-x-6 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white/[0.02]' : 'bg-transparent'} ${i < assignments.length - 1 ? 'border-b border-white/5' : ''}`}>
+            {dedicated.map((a, i) => (
+              <div key={a.pm} className={`grid grid-cols-[1fr_2fr_3fr_1fr] gap-x-6 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white/[0.02]' : 'bg-transparent'} border-b border-white/5`}>
+                <span className="text-sm font-medium text-linen/80">{a.pm}</span>
+                <span className="text-sm text-linen/50">{a.product}</span>
+                <span className="text-sm font-medium text-linen/80">{a.coverage}</span>
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full w-fit" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
+              </div>
+            ))}
+            <div className="px-5 py-2 bg-white/[0.05] border-b border-white/10">
+              <span className="text-xs font-semibold uppercase tracking-wider text-linen/40">Shared Support</span>
+            </div>
+            {shared.map((a, i) => (
+              <div key={a.pm} className={`grid grid-cols-[1fr_2fr_3fr_1fr] gap-x-6 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white/[0.02]' : 'bg-transparent'} ${i < shared.length - 1 ? 'border-b border-white/5' : ''}`}>
                 <span className="text-sm font-medium text-linen/80">{a.pm}</span>
                 <span className="text-sm text-linen/50">{a.product}</span>
                 <span className="text-sm font-medium text-linen/80">{a.coverage}</span>
@@ -243,14 +252,7 @@ function SlideCoverageTarget() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <span className="text-xs text-linen/40">Coverage model preserves ownership without one-to-one staffing</span>
-            <div className="flex items-center gap-4">
-              {legend.map((l) => (
-                <span key={l.label} className="text-xs text-linen/40"><strong className="text-linen/60 font-semibold">{l.label}</strong> = {l.desc}</span>
-              ))}
-            </div>
-          </div>
+          <p className="text-xs text-linen/40 mt-4">Coverage model preserves ownership without one-to-one staffing</p>
         </div>
       </div>
       <SlideFooter num={5} dark />

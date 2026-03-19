@@ -186,7 +186,7 @@ function SlideTeamDetail() {
               return (
               <div key={g.title} className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: g.color }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: `${g.color}15` }}>
-                  <Icon size={24} style={{ color: g.color }} />
+                  <Icon size={24} style={{ color: C.evergreen }} />
                 </div>
                 <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl mb-1">{g.title}</h3>
                 <p className="text-sm text-muted-foreground mb-5">{g.subtitle}</p>
@@ -348,7 +348,7 @@ function SlideNow() {
             {/* Product track */}
             <div className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: C.papaya }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${C.papaya}15` }}>
-                <CreditCard size={22} style={{ color: C.papaya }} />
+                <CreditCard size={22} style={{ color: C.evergreen }} />
               </div>
               <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.papaya }}>Design in&nbsp;Product</h3>
               <ul className="space-y-3">
@@ -366,7 +366,7 @@ function SlideNow() {
             {/* Foundation track */}
             <div className="bg-white rounded-2xl p-6 sm:p-7 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: C.cactus }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${C.cactus}15` }}>
-                <Gear size={22} style={{ color: C.cactus }} />
+                <Gear size={22} style={{ color: C.evergreen }} />
               </div>
               <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.cactus }}>Design&nbsp;Foundation</h3>
               <ul className="space-y-3">
@@ -452,7 +452,7 @@ function SlideContentDesign() {
               <div key={p.project} className="bg-white rounded-2xl p-7 sm:p-8 lg:p-9 border border-border shadow-sm" style={{ borderTopWidth: 4, borderTopColor: p.color }}>
                 <div className="flex justify-between items-start mb-3">
                   <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: `${p.color}15` }}>
-                    <Icon size={26} style={{ color: p.color }} />
+                    <Icon size={26} style={{ color: C.evergreen }} />
                   </div>
                   <span className="text-sm px-3 py-1 rounded-full font-semibold" style={{ background: `${p.color}20`, color: C.evergreen }}>{p.timeline}</span>
                 </div>

@@ -187,9 +187,22 @@ function SlideTeamDetail() {
 
 function SlideHiring() {
   const phases = [
-    { phase: 'Phase 1 · Q1–Q2', label: 'Foundation', color: C.cactus, hires: ['Product Designer: Conversational Experiences (Pato)', 'Product Designer: Conversational Experiences (TBH)', 'Fintech Designer / Design Systems (Patricia)', 'UX Researcher (Jose)', 'Content Design Lead (TBH)'], aug: '1 contractor for design system build-out + fintech support (Darwoft)' },
-    { phase: 'Phase 2 · Q2', label: 'Build capability', color: C.sky, hires: ['Product Designer: Conversational Experiences (Credit)', 'App Designer', 'Wallet Designer (if product ready)', 'Product Designer: Conversational Experiences (Platform)'], aug: '' },
-    { phase: 'Phase 3 · Q4+', label: 'Scale', color: C.mango, hires: ['UX Researcher (R2) — month 6-9'], aug: 'Steady-state: 1 permanent + flex contractors' },
+    { phase: 'Phase 1', time: 'Q1–Q2', label: 'Foundation', color: C.cactus, hires: [
+      { name: 'Product Designer: Conversational Experiences', note: 'Pato' },
+      { name: 'Product Designer: Conversational Experiences', note: 'TBH' },
+      { name: 'Fintech Designer / Design Systems', note: 'Patricia' },
+      { name: 'UX Researcher', note: 'Jose' },
+      { name: 'Content Design Lead', note: 'TBH' },
+    ], aug: '+ 1 contractor for design system build-out (Darwoft)' },
+    { phase: 'Phase 2', time: 'Q2', label: 'Build capability', color: C.sky, hires: [
+      { name: 'Product Designer: Conv. Experiences', note: 'Credit' },
+      { name: 'App Designer', note: '' },
+      { name: 'Wallet Designer', note: 'if product ready' },
+      { name: 'Product Designer: Conv. Experiences', note: 'Platform' },
+    ], aug: '' },
+    { phase: 'Phase 3', time: 'Q4+', label: 'Scale', color: C.mango, hires: [
+      { name: 'UX Researcher (R2)', note: 'month 6-9' },
+    ], aug: 'Steady-state: 1 permanent + flex contractors' },
   ]
   return (
     <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
@@ -198,13 +211,27 @@ function SlideHiring() {
         <div className="w-full max-w-[1200px]">
           <div className="mb-5"><PillBadge dark>Org Model</PillBadge></div>
           <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Hiring&nbsp;Sequence</h1>
-          <p className="text-linen/50 text-base mb-8">Aligned to the reorg migration&nbsp;timeline</p>
-          <div className="space-y-5">
+          <p className="text-linen/60 text-lg mb-8">Aligned to the reorg migration&nbsp;timeline</p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {phases.map((p) => (
-              <div key={p.phase} className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: p.color }}>
-                <div className="flex items-baseline gap-3 mb-3"><span className="font-display font-bold text-sm" style={{ color: p.color }}>{p.phase}</span><span className="text-base text-linen/40">— {p.label}</span></div>
-                <div className="flex flex-wrap gap-2 mb-2">{p.hires.map((h) => <span key={h} className="text-sm px-3 py-1.5 rounded-full bg-white/5 text-linen/70 border border-white/10">{h}</span>)}</div>
-                {p.aug && <p className="text-sm text-linen/30 mt-2">{p.aug}</p>}
+              <div key={p.phase} className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: p.color }}>
+                <div className="mb-4">
+                  <h3 className="font-display font-extrabold text-xl" style={{ color: p.color }}>{p.phase} · {p.time}</h3>
+                  <p className="text-base text-linen/60">{p.label}</p>
+                </div>
+                <ul className="space-y-3">
+                  {p.hires.map((h) => (
+                    <li key={h.name + h.note} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-turquoise/40" strokeWidth={1.5} />
+                      <div>
+                        <p className="text-base text-linen font-medium leading-snug">{h.name}</p>
+                        {h.note && <p className="text-sm text-linen/40 mt-0.5">{h.note}</p>}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                {p.aug && <p className="text-sm text-linen/50 mt-5 pt-4 border-t border-white/10">{p.aug}</p>}
               </div>
             ))}
           </div>

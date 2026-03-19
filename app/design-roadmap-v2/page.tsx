@@ -269,7 +269,7 @@ function SlideTeamDetail() {
     'UX Researcher',
   ]
   const embeddedLines = [
-    { name: 'Consumer\u00A0Payments', count: '2-3', color: C.papaya },
+    { name: 'Consumer\u00A0Payments', count: '3', color: C.papaya },
     { name: 'Fintech\u00A0Core', count: '1', color: C.sage },
     { name: 'Credit', count: '1', color: C.mango },
     { name: 'Wallet', count: '1', color: C.lychee },

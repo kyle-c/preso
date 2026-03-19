@@ -84,10 +84,17 @@ Use these illustrations throughout presentations (≥30% of slides). Use the ima
 ### Employee Onboarding (10-12 slides)
 1. **Welcome** (title, brand) — Personalized greeting with name, role, start date. imageUrl: Party Popper. badge: "Welcome to Félix"
 2. **Who We Are** (two-column, light) — Company description + mission + products. imageUrl: Félix Illo 1
-3. **Our Values** (cards, dark) — 4-6 value cards with varied titleColor
+3. **Our Values** (cards, light) — This slide is FIXED. Copy this EXACTLY — do not modify, rephrase, or omit any card:
+   badge: "Our DNA", title: "Our Values", bg: "light"
+   Card 1: title "User-Obsession", titleColor "#082422", body "We have to earn the right to serve our users every day and never take it for granted. We always remember the hard work our users went through to send this money. We are always here for them."
+   Card 2: title "Getting Sh*t Done With Urgency", titleColor "#2BF2F1", body "We have a bias towards action. Champions adjust! We care less about what others are doing and focus on what we want to accomplish."
+   Card 3: title "Extreme Ownership", titleColor "#35605F", body "Each person in the company owns a mission-critical piece of the vision. No weak links. No passengers."
+   Card 4: title "No-Ego Collaboration", titleColor "#877867", body "We disagree clearly, and we commit once a decision is made. We break silos, we move in lockstep. We are a team, not a group of individuals."
+   Card 5: title "Aim For Insanely Great", titleColor "#2BF2F1", body "We elevate the quality of our output by caring deeply. We obsess about every customer moment."
+   Card 6: title "Insatiable Curiosity", titleColor "#082422", body "We listen closely to our users and base our assumptions in data. We test assumptions and never take anything for granted. We experiment relentlessly."
 4. **Your Role** (two-column, dark) — Role description + responsibilities
 5. **Meet Your Team** (cards, light) — Team member cards
-6. **First 90 Days** (cards, dark) — 3 phase cards: Immerse, Build, Scale
+6. **First 90 Days** (cards, dark) — 3 cards: "Days 1-30: Immerse", "Days 31-60: Build", "Days 61-90: Scale". Each body MUST use bullet format with newline-separated items: "• Task 1\n• Task 2\n• Task 3\n• Task 4\n• Task 5". Each card needs 5-7 specific, actionable bullet items. NEVER use paragraph prose for 90-day cards
 7. **Tools & Access** (cards, light) — Tool grid
 8. **Our Users** (two-column, brand) — Personas
 9. **Week One** (bullets, light) — Day-by-day schedule
@@ -150,40 +157,22 @@ imageUrl can be added to ANY slide type. Notes field REQUIRED on every slide.
 11. When onboarding topic → ALWAYS follow Employee Onboarding template
 
 ## Output Format
-Return ONLY valid JSON — no markdown fences, no commentary. Structure:
+Return ONLY a valid JSON array of slide objects — no markdown fences, no wrapping object, no commentary. Each element:
 {
-  "slides": [
-    {
-      "type": "...", "bg": "dark"|"light"|"brand",
-      "badge": "optional section label",
-      "title": "...", "subtitle": "optional",
-      "body": "optional (supports **bold** and [links](url))",
-      "bullets": [{ "text": "...", "icon": "optional emoji" }],
-      "cards": [{ "title": "...", "titleColor": "#hex", "body": "..." }],
-      "columns": [{ "heading": "...", "body": "...", "bullets": [...] }],
-      "quote": { "text": "...", "attribution": "optional" },
-      "chart": { "chartType": "...", "data": [...], "xKey": "...", "yKeys": [...], "colors": [...] },
-      "imageUrl": "optional illustration path",
-      "notes": "REQUIRED: 3-5 sentence speaker notes"
-    }
-  ],
-  "document": {
-    "title": "document title",
-    "type": "prd"|"proposal"|"launch"|"review"|"research"|"onboarding"|"strategy"|"general",
-    "summary": "2-3 sentence summary of the full document",
-    "sections": [
-      {
-        "title": "Section Heading",
-        "content": "Detailed markdown content — 3-5 paragraphs per section with specific details. This is the stakeholder-ready written document, not slide notes.",
-        "slideIndex": 0
-      }
-    ]
-  }
+  "type": "...", "bg": "dark"|"light"|"brand",
+  "badge": "optional section label",
+  "title": "...", "subtitle": "optional",
+  "body": "optional (supports **bold** and [links](url))",
+  "bullets": [{ "text": "...", "icon": "optional emoji" }],
+  "cards": [{ "title": "...", "titleColor": "#hex", "body": "..." }],
+  "columns": [{ "heading": "...", "body": "...", "bullets": [...] }],
+  "quote": { "text": "...", "attribution": "optional" },
+  "chart": { "chartType": "...", "data": [...], "xKey": "...", "yKeys": [...], "colors": [...] },
+  "imageUrl": "optional illustration path",
+  "notes": "REQUIRED: 3-5 sentence speaker notes"
 }
 
-The "document" object is a FULL written companion document. Each section maps to a slide via slideIndex and should contain 3-5 paragraphs of detailed, stakeholder-ready prose. The document is independent from the slides — it reads as a complete written document.
-
-CRITICAL: You MUST output BOTH "slides" and "document" in EVERY response. The response must be a single JSON object with two top-level keys: "slides" (array) and "document" (object). Do NOT output just a bare array. Do NOT skip the document. The document is REQUIRED.
+Output ONLY the JSON array [ {...}, {...}, ... ] — no wrapper object, no "slides" key. Start with [ and end with ]. The companion document will be generated separately.
 `
 
 // ---------------------------------------------------------------------------
@@ -255,7 +244,7 @@ function buildAnthropicPayload(body: GenerateBody) {
 
   return {
     model: body.model,
-    max_tokens: 32768,
+    max_tokens: (body as any)._maxTokens ?? 8192,
     stream: true,
     system: systemPrompt,
     messages: [{ role: 'user', content }],
@@ -291,7 +280,7 @@ function buildOpenRouterPayload(body: GenerateBody) {
 
   return {
     model: body.model,
-    max_tokens: 32768,
+    max_tokens: (body as any)._maxTokens ?? 8192,
     stream: true,
     messages: [
       { role: 'system', content: systemPrompt },
@@ -524,7 +513,7 @@ Return a JSON object with this exact structure:
 
 Create one section per slide (or group related slides). Each section MUST have 3-5 paragraphs of detailed, stakeholder-ready prose — not just a repeat of the slide text. Expand with context, rationale, evidence, and implications.`
 
-      const docBody = { ...body, prompt: docPrompt, edit: true }
+      const docBody = { ...body, prompt: docPrompt, edit: true, _maxTokens: 16384 }
 
       let upstreamResponse: Response
       if (body.provider === 'anthropic') {

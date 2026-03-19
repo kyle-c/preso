@@ -495,8 +495,18 @@ const BLUEPRINTS: SlideBlueprint[] = [
     name: '30-60-90 Day Plan',
     category: 'hr-recruiting',
     mapsToType: 'cards',
-    spec: '3 cards on dark bg: "Days 1-30: Immerse" (turquoise), "Days 31-60: Build" (green), "Days 61-90: Scale" (orange). Each body: 5-6 bullet items as newline-separated goals. Action-oriented verbs.',
+    spec: '3 cards on dark bg: "Days 1-30: Immerse" (turquoise), "Days 31-60: Build" (green), "Days 61-90: Scale" (orange). Each body: 5-7 bullet items as newline-separated goals using "• " prefix. NEVER use paragraph prose — ALWAYS bulleted lists. Action-oriented verbs.',
     visual: 'bg: dark (Slate #082422). titleColors: Turquoise #2BF2F1 (Days 1-30), Cactus #60D06F (Days 31-60), Mango #F19D38 (Days 61-90). Card body: Stone #EFEBE7 Saans. Badge: "Onboarding" pill. imageUrl: /illustrations/Party%20Popper.svg. Heading: Plain font-black Stone.',
+    skeleton: {
+      type: 'cards', bg: 'dark', badge: 'Roadmap', title: 'Your First 90 Days',
+      cards: [
+        { title: 'Days 1-30: Immerse', titleColor: '#2BF2F1', body: '• [Action item 1 — specific and measurable]\n• [Action item 2 — specific and measurable]\n• [Action item 3 — specific and measurable]\n• [Action item 4 — specific and measurable]\n• [Action item 5 — specific and measurable]' },
+        { title: 'Days 31-60: Build', titleColor: '#60D06F', body: '• [Action item 1 — specific and measurable]\n• [Action item 2 — specific and measurable]\n• [Action item 3 — specific and measurable]\n• [Action item 4 — specific and measurable]\n• [Action item 5 — specific and measurable]' },
+        { title: 'Days 61-90: Scale', titleColor: '#F19D38', body: '• [Action item 1 — specific and measurable]\n• [Action item 2 — specific and measurable]\n• [Action item 3 — specific and measurable]\n• [Action item 4 — specific and measurable]\n• [Action item 5 — specific and measurable]' },
+      ],
+      imageUrl: '/illustrations/Party%20Popper.svg',
+      notes: '30-60-90 day plan. 3 cards. Each body MUST be bulleted list (• prefix), NEVER paragraph prose. 5-7 items per card.',
+    },
     signals: ['30-60-90', '30 60 90', 'first 90 days', 'ramp up', 'new hire plan'],
   },
   {

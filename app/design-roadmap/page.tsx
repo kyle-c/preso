@@ -262,13 +262,20 @@ function SlideStaffAug() {
           <p className="text-muted-foreground text-base mb-8">Contractors extend capacity — they don&apos;t replace&nbsp;ownership</p>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
             {[
-              { title: 'Good fit for contractors', color: C.cactus, body: 'Design system production (components, docs, Figma libraries), app UI screen production, Consumer Payments overflow during launches or geo expansion' },
-              { title: 'Situational', color: C.mango, body: 'Fintech core pattern execution (under FTE direction), usability test moderation and analysis support' },
-              { title: 'Must be full-time', color: C.papaya, body: 'Content design, UX research, Credit/Wallet embedded designers, design system IC (the strategist, not the production layer)' },
+              { title: 'Good fit for contractors', color: C.cactus, items: ['Design system production (components, docs, Figma libraries)', 'App UI screen production', 'Consumer Payments overflow during launches or geo expansion'] },
+              { title: 'Situational', color: C.mango, items: ['Fintech core pattern execution (under FTE direction)', 'Usability test moderation and analysis support'] },
+              { title: 'Must be full-time', color: C.papaya, items: ['Content design', 'UX research', 'Credit/Wallet embedded designers', 'Design system IC (strategist, not production)'] },
             ].map((c) => (
               <div key={c.title} className="bg-white rounded-2xl p-6 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: c.color }}>
-                <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl mb-3">{c.title}</h3>
-                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">{c.body}</p>
+                <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl mb-4">{c.title}</h3>
+                <ul className="space-y-2">
+                  {c.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
+                      <span className="text-base text-muted-foreground leading-snug">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>

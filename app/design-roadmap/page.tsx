@@ -70,11 +70,11 @@ function SlideVision() {
           <div className="flex flex-col gap-5">
             <div className="bg-white rounded-2xl p-7 sm:p-8 border border-border shadow-sm">
               <span className="inline-block rounded-full px-3 py-0.5 text-xs font-bold text-slate mb-3" style={{ background: C.turquoise }}>Design as connective tissue</span>
-              <p className="text-base text-muted-foreground leading-relaxed">The platform gives us speed and consistency. The business lines give us depth and market fit. Design ensures every touchpoint feels like the same trusted&nbsp;companion.</p>
+              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">The platform gives us speed and consistency. The business lines give us depth and market fit. Design ensures every touchpoint feels like the same trusted&nbsp;companion.</p>
             </div>
             <div className="bg-white rounded-2xl p-7 sm:p-8 border border-border shadow-sm">
               <span className="inline-block rounded-full px-3 py-0.5 text-xs font-bold text-slate mb-3" style={{ background: C.cactus }}>Build once, deploy everywhere</span>
-              <p className="text-base text-muted-foreground leading-relaxed">Design the system once at the platform level, adapt it for each business line and surface. This is how we ship quality at speed across WhatsApp, app, web, and whatever comes&nbsp;next.</p>
+              <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">Design the system once at the platform level, adapt it for each business line and surface. This is how we ship quality at speed across WhatsApp, app, web, and whatever comes&nbsp;next.</p>
             </div>
           </div>
         </div>
@@ -97,17 +97,17 @@ function SlideOrgModel() {
             <div className="bg-white/5 rounded-2xl p-7 border border-white/10">
               <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate mb-3" style={{ background: C.cactus }}>Surface &amp; UX Platform</span>
               <p className="font-display font-black text-linen text-3xl mb-2">5–6 <span className="text-lg font-semibold text-linen/60">designers</span></p>
-              <p className="text-sm text-linen/50 leading-relaxed">Design system, content design, UX research, app design, conversational UX&nbsp;(future)</p>
+              <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Design system, content design, UX research, app design, conversational UX&nbsp;(future)</p>
             </div>
             <div className="bg-white/5 rounded-2xl p-7 border border-white/10">
               <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate mb-3" style={{ background: C.papaya }}>Embedded in Business Lines</span>
               <p className="font-display font-black text-linen text-3xl mb-2">5–6 <span className="text-lg font-semibold text-linen/60">designers</span></p>
-              <p className="text-sm text-linen/50 leading-relaxed">Consumer Payments (2-3), Credit (1), Wallet/Store of Value (1), Fintech Core&nbsp;(1)</p>
+              <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Consumer Payments (2-3), Credit (1), Wallet/Store of Value (1), Fintech Core&nbsp;(1)</p>
             </div>
           </div>
           <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex items-center justify-between">
-            <div><p className="font-display font-bold text-linen text-base">Total team: 10–12&nbsp;people</p><p className="text-sm text-linen/40">Including Head of Design · ~50% platform / ~50%&nbsp;embedded</p></div>
-            <div className="text-right text-sm text-linen/40"><p>+ 1–2 staff aug contractors</p><p>for design system &amp; app&nbsp;production</p></div>
+            <div><p className="font-display font-bold text-linen text-lg sm:text-xl">Total team: 10–12&nbsp;people</p><p className="text-base text-linen/40">Including Head of Design · ~50% platform / ~50%&nbsp;embedded</p></div>
+            <div className="text-right text-base text-linen/40"><p>+ 1–2 staff aug contractors</p><p>for design system &amp; app&nbsp;production</p></div>
           </div>
         </div>
       </div>
@@ -139,9 +139,9 @@ function SlideTeamDetail() {
           <div className="space-y-1.5">
             {roles.map((r, i) => (
               <div key={i} className={`grid grid-cols-[200px_100px_1fr] gap-3 items-center px-4 py-3 rounded-lg ${i % 2 === 0 ? 'bg-white border border-border shadow-sm' : ''}`}>
-                <span className="font-display font-bold text-foreground text-sm">{r.role}</span>
-                <span className="text-xs font-semibold" style={{ color: r.color }}>{r.team}</span>
-                <span className="text-xs text-muted-foreground">{r.note}</span>
+                <span className="font-display font-bold text-foreground text-base sm:text-lg">{r.role}</span>
+                <span className="text-sm font-semibold" style={{ color: r.color }}>{r.team}</span>
+                <span className="text-sm sm:text-base text-muted-foreground">{r.note}</span>
               </div>
             ))}
           </div>
@@ -169,9 +169,9 @@ function SlideHiring() {
           <div className="space-y-5">
             {phases.map((p) => (
               <div key={p.phase} className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: p.color }}>
-                <div className="flex items-baseline gap-3 mb-3"><span className="font-display font-bold text-sm" style={{ color: p.color }}>{p.phase}</span><span className="text-sm text-linen/40">— {p.label}</span></div>
-                <div className="flex flex-wrap gap-2 mb-2">{p.hires.map((h) => <span key={h} className="text-xs px-3 py-1 rounded-full bg-white/5 text-linen/70 border border-white/10">{h}</span>)}</div>
-                {p.aug && <p className="text-xs text-linen/30 mt-2">{p.aug}</p>}
+                <div className="flex items-baseline gap-3 mb-3"><span className="font-display font-bold text-sm" style={{ color: p.color }}>{p.phase}</span><span className="text-base text-linen/40">— {p.label}</span></div>
+                <div className="flex flex-wrap gap-2 mb-2">{p.hires.map((h) => <span key={h} className="text-sm px-3 py-1.5 rounded-full bg-white/5 text-linen/70 border border-white/10">{h}</span>)}</div>
+                {p.aug && <p className="text-sm text-linen/30 mt-2">{p.aug}</p>}
               </div>
             ))}
           </div>
@@ -198,13 +198,13 @@ function SlideStaffAug() {
               { title: 'Must be full-time', color: C.papaya, body: 'Content design, UX research, Credit/Wallet embedded designers, design system IC (the strategist, not the production layer)' },
             ].map((c) => (
               <div key={c.title} className="bg-white rounded-2xl p-6 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: c.color }}>
-                <h3 className="font-display font-extrabold text-foreground text-base mb-3">{c.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{c.body}</p>
+                <h3 className="font-display font-extrabold text-foreground text-lg sm:text-xl mb-3">{c.title}</h3>
+                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">{c.body}</p>
               </div>
             ))}
           </div>
           <div className="bg-white rounded-2xl p-6 border border-border shadow-sm">
-            <p className="text-sm text-muted-foreground leading-relaxed"><strong className="text-foreground">Key prerequisite:</strong> Staff aug only works once the design system has enough coverage to provide guardrails. A contractor without a design system is a freelancer making things up. A contractor with a design system produces on-brand, consistent work from week&nbsp;one.</p>
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed"><strong className="text-foreground">Key prerequisite:</strong> Staff aug only works once the design system has enough coverage to provide guardrails. A contractor without a design system is a freelancer making things up. A contractor with a design system produces on-brand, consistent work from week&nbsp;one.</p>
           </div>
         </div>
       </div>
@@ -228,9 +228,9 @@ function SlideRoadmapOverview() {
               { title: 'Track 2: Design in Product', color: C.papaya, sub: 'How design shows up within the product roadmap — the design lens on product priorities', items: ['Multi-product discovery framework', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design', 'Receiver-side experience'] },
             ].map((t) => (
               <div key={t.title} className="bg-white/5 rounded-2xl p-7 border border-white/10" style={{ borderTopWidth: 3, borderTopColor: t.color }}>
-                <h3 className="font-display font-extrabold text-linen text-lg mb-1">{t.title}</h3>
-                <p className="text-sm text-linen/40 mb-5">{t.sub}</p>
-                <ul className="space-y-3">{t.items.map((item) => <li key={item} className="flex items-start gap-3"><CheckCircle2 className="h-5 w-5 flex-shrink-0 text-turquoise/40 mt-0.5" strokeWidth={1.5} /><span className="text-sm text-linen/60">{item}</span></li>)}</ul>
+                <h3 className="font-display font-extrabold text-linen text-xl sm:text-2xl mb-1">{t.title}</h3>
+                <p className="text-base text-linen/40 mb-5">{t.sub}</p>
+                <ul className="space-y-3">{t.items.map((item) => <li key={item} className="flex items-start gap-3"><CheckCircle2 className="h-5 w-5 flex-shrink-0 text-turquoise/40 mt-0.5" strokeWidth={1.5} /><span className="text-base sm:text-lg text-linen/60">{item}</span></li>)}</ul>
               </div>
             ))}
           </div>
@@ -259,8 +259,8 @@ function SlideNow() {
           <p className="text-muted-foreground text-base mb-6">Stand up the org, establish credibility, support current&nbsp;priorities</p>
           <div className="space-y-3">{items.map((r) => (
             <div key={r.area} className="bg-white rounded-2xl p-5 border border-border shadow-sm" style={{ borderLeftWidth: 3, borderLeftColor: r.color }}>
-              <h3 className="font-display font-bold text-sm mb-1" style={{ color: r.color }}>{r.area}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{r.desc}</p>
+              <h3 className="font-display font-bold text-base sm:text-lg mb-2" style={{ color: r.color }}>{r.area}</h3>
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">{r.desc}</p>
             </div>
           ))}</div>
         </div>
@@ -281,18 +281,18 @@ function SlideResearch() {
           <p className="text-linen/50 text-base mb-8">Building the practice from scratch with a staggered two-researcher&nbsp;approach</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.blueberry }}>
-              <h3 className="font-display font-bold text-linen text-base mb-1">Researcher 1 — Platform</h3>
-              <p className="text-xs mb-3" style={{ color: C.blueberry }}>Hired in Phase 1 · Surface &amp; UX team</p>
-              <p className="text-sm text-linen/50 leading-relaxed">Foundational studies (trust, mental models, financial literacy). Builds research practice: templates, recruiting pipelines, insight repository, lightweight testing toolkit. Teaches designers and PMs to self-serve on evaluative&nbsp;research.</p>
+              <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 1 — Platform</h3>
+              <p className="text-sm mb-3" style={{ color: C.blueberry }}>Hired in Phase 1 · Surface &amp; UX team</p>
+              <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Foundational studies (trust, mental models, financial literacy). Builds research practice: templates, recruiting pipelines, insight repository, lightweight testing toolkit. Teaches designers and PMs to self-serve on evaluative&nbsp;research.</p>
             </div>
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.blueberry }}>
-              <h3 className="font-display font-bold text-linen text-base mb-1">Researcher 2 — Roaming</h3>
-              <p className="text-xs mb-3" style={{ color: C.blueberry }}>Hired at month 6–9 · Rotates across business lines</p>
-              <p className="text-sm text-linen/50 leading-relaxed">6–8 week research sprints aligned to highest-priority product decisions. Tactical and evaluative research: usability testing, concept validation, funnel analysis. Quarterly rotation planning with Head of&nbsp;Design.</p>
+              <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 2 — Roaming</h3>
+              <p className="text-sm mb-3" style={{ color: C.blueberry }}>Hired at month 6–9 · Rotates across business lines</p>
+              <p className="text-base sm:text-lg text-linen/50 leading-relaxed">6–8 week research sprints aligned to highest-priority product decisions. Tactical and evaluative research: usability testing, concept validation, funnel analysis. Quarterly rotation planning with Head of&nbsp;Design.</p>
             </div>
           </div>
           <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
-            <p className="text-sm text-linen/50 leading-relaxed"><strong className="text-linen">Why stagger:</strong> Starting from zero, R1 needs 2–3 months to establish how research works at Felix. Once those rails exist, R2 rides them from day one and focuses on producing research rather than also building&nbsp;infrastructure.</p>
+            <p className="text-base sm:text-lg text-linen/50 leading-relaxed"><strong className="text-linen">Why stagger:</strong> Starting from zero, R1 needs 2–3 months to establish how research works at Felix. Once those rails exist, R2 rides them from day one and focuses on producing research rather than also building&nbsp;infrastructure.</p>
           </div>
         </div>
       </div>
@@ -319,10 +319,10 @@ function SlideContentDesign() {
           <div className="space-y-3">{projects.map((p) => (
             <div key={p.project} className="bg-white rounded-2xl p-5 border border-border shadow-sm" style={{ borderLeftWidth: 3, borderLeftColor: C.cactus }}>
               <div className="flex justify-between items-baseline mb-2">
-                <h3 className="font-display font-bold text-foreground text-sm">{p.project}</h3>
+                <h3 className="font-display font-bold text-foreground text-base sm:text-lg">{p.project}</h3>
                 <span className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold" style={{ background: `${C.cactus}20`, color: C.evergreen }}>{p.timeline}</span>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">{p.desc}</p>
             </div>
           ))}</div>
         </div>
@@ -351,8 +351,8 @@ function SlideClosingGoal() {
             ].map((s) => (
               <div key={s.num} className="text-center">
                 <p className="font-display font-black text-turquoise text-4xl lg:text-5xl">{s.num}</p>
-                <p className="text-sm text-linen/70 mt-1">{s.label}</p>
-                <p className="text-xs text-linen/30 mt-0.5">{s.sub}</p>
+                <p className="text-base text-linen/70 mt-1">{s.label}</p>
+                <p className="text-sm text-linen/30 mt-0.5">{s.sub}</p>
               </div>
             ))}
           </div>

@@ -51,7 +51,7 @@ function SlideCover() {
         <div className="flex flex-col items-center text-center max-w-3xl">
           <div className="mb-6 lg:mb-8"><PillBadge dark>Q2–Q4 2026 &amp;&nbsp;Beyond</PillBadge></div>
           <h1 className="font-display font-black text-linen text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight mb-6 lg:mb-8">Product Design{'\u00A0'}Roadmap</h1>
-          <p className="text-lg sm:text-xl lg:text-2xl text-linen/60 leading-relaxed max-w-2xl">Establishing a centralized, embedded design organization to support Felix&apos;s platform + business lines&nbsp;model</p>
+          <p className="text-lg sm:text-xl lg:text-2xl text-linen/60 leading-relaxed max-w-2xl">Establishing a centralized, embedded design organization to support Felix&apos;s core platform + business&nbsp;units</p>
         </div>
       </div>
       <SlideFooter num={1} dark />

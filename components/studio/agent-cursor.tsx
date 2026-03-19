@@ -2,72 +2,104 @@
 
 import { useState, useEffect, useRef } from 'react'
 
-const CURSOR_AGENTS = [
-  { label: 'Layout', color: '#2BF2F1' },       // turquoise
-  { label: 'Content', color: '#F26629' },       // papaya
-  { label: 'Design', color: '#6060BF' },        // blueberry
-  { label: 'Typography', color: '#FF6B9D' },    // pink
-  { label: 'Color', color: '#7ED957' },         // green
-  { label: 'Animation', color: '#FFD93D' },     // gold
-  { label: 'Data', color: '#4ECDC4' },          // teal
-  { label: 'Imagery', color: '#FF8A5C' },       // coral
-  { label: 'Structure', color: '#A78BFA' },     // violet
-  { label: 'Spacing', color: '#67E8F9' },       // cyan
-  { label: 'Hierarchy', color: '#F472B6' },     // rose
-  { label: 'Narrative', color: '#FBBF24' },     // amber
+const AGENT_LABELS = [
+  'Layout', 'Content', 'Design', 'Typography', 'Color', 'Animation',
+  'Data', 'Imagery', 'Structure', 'Spacing', 'Hierarchy', 'Narrative',
+  'Interaction', 'Flow', 'Tone', 'Contrast', 'Alignment', 'Rhythm',
+  'Emphasis', 'Balance', 'Density', 'Clarity', 'Depth', 'Motion',
+  'Grid', 'Palette', 'Icons', 'Badges', 'Charts', 'Sections',
+  'Cards', 'Bullets', 'Columns', 'Headers', 'Footers', 'Quotes',
 ]
 
+const AGENT_COLORS = [
+  '#2BF2F1', '#F26629', '#6060BF', '#FF6B9D', '#7ED957', '#FFD93D',
+  '#4ECDC4', '#FF8A5C', '#A78BFA', '#67E8F9', '#F472B6', '#FBBF24',
+  '#60D06F', '#FFCD9C', '#7BA882', '#8DFDFA', '#DCFF00', '#F19D38',
+]
+
+interface CursorState {
+  x: number
+  y: number
+  label: string
+  color: string
+}
+
 interface AgentCursorsProps {
-  /** Number of cursors to show */
-  count?: number
+  /** Number of slide tiles on canvas */
+  slideCount?: number
+  /** Grid columns */
+  cols?: number
   /** Bounding rect of the canvas grid */
   canvasBounds: DOMRect | null
   /** Whether to show cursors */
   visible: boolean
 }
 
-export function AgentCursors({ count = 8, canvasBounds, visible }: AgentCursorsProps) {
-  const [positions, setPositions] = useState<{ x: number; y: number }[]>(() =>
-    Array.from({ length: count }, () => ({ x: 0.5, y: 0.5 }))
-  )
+export function AgentCursors({ slideCount = 12, cols = 4, canvasBounds, visible }: AgentCursorsProps) {
+  // 2-3 cursors per slide tile
+  const cursorsPerTile = 3
+  const totalCursors = Math.min(slideCount * cursorsPerTile, 36)
+  const rows = Math.ceil(slideCount / cols)
+
+  const [cursors, setCursors] = useState<CursorState[]>([])
   const intervalRefs = useRef<ReturnType<typeof setInterval>[]>([])
 
+  // Generate a position within a specific grid cell (with some jitter outside)
+  const posInCell = (col: number, row: number): { x: number; y: number } => {
+    const cellW = 1 / cols
+    const cellH = 1 / rows
+    // Position within the cell with ±15% bleed into neighbors
+    const jitterX = (Math.random() - 0.5) * 0.3 * cellW
+    const jitterY = (Math.random() - 0.5) * 0.3 * cellH
+    return {
+      x: Math.max(0.02, Math.min(0.98, (col + 0.2 + Math.random() * 0.6) * cellW + jitterX)),
+      y: Math.max(0.02, Math.min(0.98, (row + 0.2 + Math.random() * 0.6) * cellH + jitterY)),
+    }
+  }
+
   useEffect(() => {
-    // Clean up previous intervals
     intervalRefs.current.forEach(clearInterval)
     intervalRefs.current = []
 
     if (!visible || !canvasBounds) return
 
-    // Start each cursor on a jittered interval
-    const intervals = Array.from({ length: count }, (_, i) => {
-      const baseInterval = 1200 + Math.random() * 1000 // 1.2 - 2.2s (faster)
+    // Initialize: spread cursors across all tiles
+    const initial: CursorState[] = []
+    for (let i = 0; i < totalCursors; i++) {
+      const tileIndex = i % slideCount
+      const col = tileIndex % cols
+      const row = Math.floor(tileIndex / cols)
+      const pos = posInCell(col, row)
+      initial.push({
+        ...pos,
+        label: AGENT_LABELS[i % AGENT_LABELS.length],
+        color: AGENT_COLORS[i % AGENT_COLORS.length],
+      })
+    }
+    setCursors(initial)
+
+    // Animate: each cursor moves to a new position within its assigned tile area
+    const intervals = Array.from({ length: totalCursors }, (_, i) => {
+      const baseInterval = 1400 + Math.random() * 1200
       return setInterval(() => {
-        setPositions((prev) => {
+        setCursors(prev => {
           const next = [...prev]
-          next[i] = {
-            x: 0.05 + Math.random() * 0.9,
-            y: 0.05 + Math.random() * 0.9,
-          }
+          // Move to a nearby tile or stay in current area
+          const tileIndex = (i + Math.floor(Math.random() * 3)) % slideCount
+          const col = tileIndex % cols
+          const row = Math.floor(tileIndex / cols)
+          const pos = posInCell(col, row)
+          next[i] = { ...next[i], ...pos }
           return next
         })
       }, baseInterval)
     })
 
     intervalRefs.current = intervals
-
-    // Initial random positions spread across the canvas
-    setPositions(
-      Array.from({ length: count }, () => ({
-        x: 0.1 + Math.random() * 0.8,
-        y: 0.1 + Math.random() * 0.8,
-      }))
-    )
-
     return () => intervals.forEach(clearInterval)
-  }, [count, visible, canvasBounds])
+  }, [totalCursors, slideCount, cols, visible, canvasBounds])
 
-  if (!visible || !canvasBounds) return null
+  if (!visible || !canvasBounds || cursors.length === 0) return null
 
   return (
     <div
@@ -81,44 +113,39 @@ export function AgentCursors({ count = 8, canvasBounds, visible }: AgentCursorsP
         transition: 'opacity 800ms ease-out',
       }}
     >
-      {CURSOR_AGENTS.slice(0, count).map((agent, i) => {
-        const pos = positions[i] ?? { x: 0.5, y: 0.5 }
-        return (
+      {cursors.map((cursor, i) => (
+        <div
+          key={i}
+          className="absolute"
+          style={{
+            left: `${cursor.x * 100}%`,
+            top: `${cursor.y * 100}%`,
+            transition: 'left 1.6s cubic-bezier(0.4, 0, 0.2, 1), top 1.6s cubic-bezier(0.4, 0, 0.2, 1)',
+            animation: `cursor-bob 2s ease-in-out infinite ${i * 0.15}s`,
+          }}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill={cursor.color}
+            className="drop-shadow-sm"
+            style={{ filter: `drop-shadow(0 0 8px ${cursor.color}50)` }}
+          >
+            <path d="M1 1l5.5 14L8 9l6-1.5z" />
+          </svg>
           <div
-            key={agent.label}
-            className="absolute"
+            className="absolute left-3.5 top-2.5 whitespace-nowrap rounded-full px-1.5 py-[1px] text-[8px] font-semibold"
             style={{
-              left: `${pos.x * 100}%`,
-              top: `${pos.y * 100}%`,
-              transition: 'left 1.4s cubic-bezier(0.4, 0, 0.2, 1), top 1.4s cubic-bezier(0.4, 0, 0.2, 1)',
-              animation: `cursor-bob 2s ease-in-out infinite ${i * 0.3}s`,
+              backgroundColor: cursor.color,
+              color: '#082422',
+              boxShadow: `0 2px 10px ${cursor.color}40`,
             }}
           >
-            {/* Cursor arrow */}
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 16 16"
-              fill={agent.color}
-              className="drop-shadow-sm"
-              style={{ filter: `drop-shadow(0 0 8px ${agent.color}50)` }}
-            >
-              <path d="M1 1l5.5 14L8 9l6-1.5z" />
-            </svg>
-            {/* Label pill */}
-            <div
-              className="absolute left-3.5 top-2.5 whitespace-nowrap rounded-full px-1.5 py-[1px] text-[8px] font-semibold"
-              style={{
-                backgroundColor: agent.color,
-                color: '#082422',
-                boxShadow: `0 2px 10px ${agent.color}40`,
-              }}
-            >
-              {agent.label}
-            </div>
+            {cursor.label}
           </div>
-        )
-      })}
+        </div>
+      ))}
     </div>
   )
 }

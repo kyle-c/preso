@@ -129,9 +129,6 @@ export function GenerationCanvas({
     }
   }, [updateBounds, displayCount])
 
-  // Cursor count scales with slide count
-  const cursorCount = Math.min(Math.max(finalCount, 6), 12)
-
   return (
     <div
       className="fixed inset-0 bg-[#050505] flex flex-col z-50"
@@ -208,9 +205,10 @@ export function GenerationCanvas({
         </div>
       </div>
 
-      {/* Agent cursors */}
+      {/* Agent cursors — 3 per slide tile, spread across the grid */}
       <AgentCursors
-        count={cursorCount}
+        slideCount={finalCount}
+        cols={cols}
         canvasBounds={canvasBounds}
         visible={phase !== 'complete'}
       />

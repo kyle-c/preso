@@ -85,27 +85,26 @@ const slides: SlideData[] = [
 
   /* ── 5. Staff Aug ── */
   {
-    type: 'two-column',
+    type: 'cards',
     bg: 'light',
     badge: 'Org Model',
     title: 'Staff Augmentation Strategy',
     subtitle: 'Contractors extend capacity — they don\'t replace ownership.',
-    columns: [
+    cards: [
       {
-        heading: 'Contractors Can Do',
-        bullets: [
-          { text: 'Design system production — components, Figma libraries', icon: '✓' },
-          { text: 'App UI screen production with guardrails', icon: '✓' },
-          { text: 'Consumer Payments overflow during launches', icon: '✓' },
-        ],
+        title: 'Good for Contractors',
+        titleColor: '#35605F',
+        body: '• Design system component production\n• Figma library build-out\n• App UI screen production\n• Consumer Payments launch overflow',
       },
       {
-        heading: 'Must Be Full-Time',
-        bullets: [
-          { text: 'Content design and UX research', icon: '✓' },
-          { text: 'Credit and Wallet embedded designers', icon: '✓' },
-          { text: 'Design system strategist (not just production)', icon: '✓' },
-        ],
+        title: 'Situational',
+        titleColor: '#F19D38',
+        body: '• Fintech core pattern execution\n• Usability test moderation\n• Requires close FTE oversight',
+      },
+      {
+        title: 'Must Be Full-Time',
+        titleColor: '#F26629',
+        body: '• Content design\n• UX research\n• Credit & Wallet designers\n• Design system strategist',
       },
     ],
     imageUrl: '/illustrations/Fast.svg',

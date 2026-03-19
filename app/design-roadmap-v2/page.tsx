@@ -115,7 +115,7 @@ function SlideToday() {
             <div className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: C.cactus }}>
               <h3 className="font-display font-extrabold text-linen text-lg sm:text-xl mb-4">What we&nbsp;have</h3>
               <ul className="space-y-2.5">
-                {['Head of Design (Kyle)', '2 Product Designers (Pato, Patricia)', '1 UX Researcher (Jose)', 'Newly defined design system (pre-launch)', 'Strong product partnership with\u00A0PMs'].map((item) => (
+                {['Head of Design (Kyle)', '2 Product Designers (Pato, Patricia)', '1 UX Researcher (Jose)', 'Newly defined design system (pre-launch)', 'Support primarily for Consumer Payments + Fintech Checkout\u00A0Team'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-cactus/60" strokeWidth={1.5} /><span className="text-base text-linen/70 leading-snug">{item}</span></li>
                 ))}
               </ul>

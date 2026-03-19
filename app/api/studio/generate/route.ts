@@ -80,6 +80,12 @@ Use these illustrations throughout presentations (≥30% of slides). Use the ima
 - Use secondary palette colors for card titleColor fields — vary them
 - NEVER use emoji icons on bullet items unless the user explicitly requests them. Use "✓" or "→" for functional indicators only. Omit the icon field by default. Emoji-heavy slides look unprofessional.
 - Card counts MUST be 2, 3, 4, or 6. NEVER use 5 or 7 cards — they create orphaned bottom rows. 4 cards renders as a 2×2 grid, 6 as a 3×2 grid. If you have 5 items, either combine two into one card or split the slide into two slides.
+- NEVER create orphaned or widowed content. This applies to ALL slide types:
+  - Cards: use counts that fill rows evenly (2, 3, 4, 6)
+  - Bullets: avoid a single short bullet dangling at the end — aim for 4-6 balanced items
+  - Text: avoid a single word on the last line of a paragraph — rephrase to fill or shorten
+  - Two-column: both columns must have similar visual weight — never one full column and one with 1 bullet
+  - Titles: keep to 3-6 words so they don't wrap to a single orphaned word on the next line
 
 ## Presentation Templates
 

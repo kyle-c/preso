@@ -219,8 +219,8 @@ function SlideHiring() {
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
           <div className="mb-5"><PillBadge dark>Org Model</PillBadge></div>
-          <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Hiring&nbsp;Sequence</h1>
-          <p className="text-linen/60 text-lg mb-8">Aligned to the reorg migration&nbsp;timeline</p>
+          <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Team Build&nbsp;Sequence</h1>
+          <p className="text-linen/60 text-lg mb-8">Existing roles, new hires, and future additions — phased to the&nbsp;reorg</p>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {phases.map((p) => (

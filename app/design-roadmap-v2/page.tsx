@@ -123,7 +123,7 @@ function SlideToday() {
             <div className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: C.papaya }}>
               <h3 className="font-display font-extrabold text-linen text-lg sm:text-xl mb-4">What we&apos;re&nbsp;missing</h3>
               <ul className="space-y-2.5">
-                {['Design system defined but not yet launched', 'Inconsistent voice, tone, and conversational\u00A0structures', 'No app designer — multi-surface is a\u00A0gap', 'No coverage for Credit, Wallet, New\u00A0Bets', 'No research infrastructure or\u00A0tooling'].map((item) => (
+                {['Design system defined but not yet launched', 'Inconsistent voice, tone, and conversational\u00A0structures', 'No coverage for Credit, Wallet, New\u00A0Bets', 'No research infrastructure or\u00A0tooling', 'No app designer — not ready for\u00A0multisurface'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-papaya/60" strokeWidth={1.5} /><span className="text-base text-linen/70 leading-snug">{item}</span></li>
                 ))}
               </ul>

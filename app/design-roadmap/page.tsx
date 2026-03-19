@@ -441,7 +441,7 @@ function SlideContentDesign() {
         <div className="w-full max-w-[1200px]">
           <div className="mb-5 text-center"><PillBadge>Deep Dive</PillBadge></div>
           <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2 text-center">Content Design Lead — Key&nbsp;Projects</h1>
-          <p className="text-muted-foreground text-lg mb-8 text-center">The words are the UI — especially in a conversational-first&nbsp;product</p>
+          <p className="text-muted-foreground text-lg mb-8 text-center">Shaping how Felix communicates across every surface, language, and&nbsp;interaction</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
             {projects.map((p) => {

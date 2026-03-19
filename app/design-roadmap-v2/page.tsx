@@ -405,7 +405,7 @@ function SlideHiring() {
     { phase: 'Now', time: 'Q1–Q2', label: 'Foundation', color: C.cactus, hires: [
       { name: 'Designer', note: 'Consumer Payments' },
       { name: 'Designer', note: 'Consumer Payments' },
-      { name: 'Fintech Designer / Design Systems', note: 'Platform' },
+      { name: 'Designer', note: 'Design Systems Platform' },
       { name: 'UX Researcher', note: 'Platform' },
       { name: 'Content Design Lead', note: 'Platform' },
     ], aug: '+ 1 contractor for design system build-out (Darwoft)' },

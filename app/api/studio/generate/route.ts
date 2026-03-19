@@ -138,7 +138,11 @@ Title (brand) → Context (dark) → Vision (light, quote) → Pillars (dark, ca
 imageUrl can be added to ANY slide type. Notes field REQUIRED on every slide.
 
 ## Content Density Rules (CRITICAL)
-- **cards**: Each body MUST be ≥30 words (2-3 sentences). NEVER 1 vague sentence.
+- **cards**: Use STRUCTURED format, not dense paragraphs. Each card body should be:
+  - 1 bold lead sentence (the key point)
+  - 2-3 short supporting bullet points using "• " prefix
+  - Example: "**Instant Pix integration for same-minute delivery.**\n\n• 3.2x higher satisfaction vs traditional transfers\n• Direct rails integration — no intermediary\n• Only US app with native Pix support"
+  - Total: 20-40 words. NEVER write a dense paragraph of 5+ sentences in a card. Cards are for scanning, not reading.
 - **bullets**: ≥4 items. Each a complete thought ≥10 words. NEVER "Market growth" — instead "TAM: $161B — Total LatAm remittances per year, growing 4% annually"
 - **two-column**: BOTH columns MUST have ≥3 bullets or ≥40 words body. NEVER leave a column thin.
 - **2×2 grids (4 cards)**: All cards MUST have equal density (±10 words).

@@ -49,12 +49,21 @@ export function validateSlides(slides: any[]): ValidationResult {
       // Card body density
       for (let j = 0; j < slide.cards.length; j++) {
         const card = slide.cards[j]
-        if (card.body && wordCount(card.body) < 15) {
+        const wc = wordCount(card.body || '')
+        if (wc < 10) {
           issues.push({
             slideIndex: i,
             field: `cards[${j}].body`,
             severity: 'warning',
-            message: `Card "${card.title}" body is only ${wordCount(card.body)} words (min 15). Content may feel thin.`,
+            message: `Card "${card.title}" body is only ${wc} words (min 10). Content may feel thin.`,
+          })
+        }
+        if (wc > 60) {
+          issues.push({
+            slideIndex: i,
+            field: `cards[${j}].body`,
+            severity: 'warning',
+            message: `Card "${card.title}" body is ${wc} words (max ~40). Use bold lead + bullet points instead of dense paragraphs.`,
           })
         }
       }

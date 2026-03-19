@@ -122,7 +122,7 @@ function SlideTeamDetail() {
     { role: 'Content Design Lead', team: 'Surface & UX', note: 'Voice, tone, conversational patterns, bilingual guidelines', color: C.cactus },
     { role: 'UX Researcher (R1)', team: 'Surface & UX', note: 'Foundational research + building the practice org-wide', color: C.cactus },
     { role: 'App Designer', team: 'Surface & UX', note: 'Cross-product app experience, works across all business lines', color: C.cactus },
-    { role: 'UX Researcher (R2)', team: 'Roaming', note: '6–8 week rotations across business lines · Hired at month 6-9', color: C.blueberry },
+    { role: 'UX Researcher (R2)', team: 'Roaming', note: '6–8 week rotations across business lines · Hired at month 6-9', color: C.sky },
     { role: 'Fintech Core Designer', team: 'Embedded', note: 'KYC, payments, fraud alerts, FX — embedded with fintech eng', color: C.papaya },
     { role: 'Consumer Payments ×2-3', team: 'Embedded', note: '~3:1 PM-to-designer ratio · Organized by funnel stage', color: C.papaya },
     { role: 'Credit Designer', team: 'Embedded', note: 'Senior IC, comfortable with ambiguity · 1:1 with PM', color: C.papaya },
@@ -155,7 +155,7 @@ function SlideTeamDetail() {
 function SlideHiring() {
   const phases = [
     { phase: 'Phase 1 · Q1–Q2', label: 'Foundation', color: C.cactus, hires: ['Product Designer: Conversational Experiences (Pato)', 'Product Designer: Conversational Experiences (TBH)', 'Fintech Designer / Design Systems (Patricia)', 'UX Researcher (Jose)', 'Content Design Lead (TBH)'], aug: '1 contractor for design system build-out + fintech support (Darwoft)' },
-    { phase: 'Phase 2 · Q2', label: 'Build capability', color: C.blueberry, hires: ['Product Designer: Conversational Experiences (Credit)', 'App Designer', 'Wallet Designer (if product ready)', 'Product Designer: Conversational Experiences (Platform)'], aug: '' },
+    { phase: 'Phase 2 · Q2', label: 'Build capability', color: C.sky, hires: ['Product Designer: Conversational Experiences (Credit)', 'App Designer', 'Wallet Designer (if product ready)', 'Product Designer: Conversational Experiences (Platform)'], aug: '' },
     { phase: 'Phase 3 · Q4+', label: 'Scale', color: C.mango, hires: ['UX Researcher (R2) — month 6-9'], aug: 'Steady-state: 1 permanent + flex contractors' },
   ]
   return (
@@ -280,14 +280,14 @@ function SlideResearch() {
           <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Research&nbsp;Model</h1>
           <p className="text-linen/50 text-base mb-8">Building the practice from scratch with a staggered two-researcher&nbsp;approach</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.blueberry }}>
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.sky }}>
               <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 1 — Platform</h3>
-              <p className="text-sm mb-3" style={{ color: C.blueberry }}>Hired in Phase 1 · Surface &amp; UX team</p>
+              <p className="text-sm mb-3" style={{ color: C.sky }}>Hired in Phase 1 · Surface &amp; UX team</p>
               <p className="text-base sm:text-lg text-linen/50 leading-relaxed">Foundational studies (trust, mental models, financial literacy). Builds research practice: templates, recruiting pipelines, insight repository, lightweight testing toolkit. Teaches designers and PMs to self-serve on evaluative&nbsp;research.</p>
             </div>
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.blueberry }}>
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.sky }}>
               <h3 className="font-display font-bold text-linen text-lg sm:text-xl mb-1">Researcher 2 — Roaming</h3>
-              <p className="text-sm mb-3" style={{ color: C.blueberry }}>Hired at month 6–9 · Rotates across business lines</p>
+              <p className="text-sm mb-3" style={{ color: C.sky }}>Hired at month 6–9 · Rotates across business lines</p>
               <p className="text-base sm:text-lg text-linen/50 leading-relaxed">6–8 week research sprints aligned to highest-priority product decisions. Tactical and evaluative research: usability testing, concept validation, funnel analysis. Quarterly rotation planning with Head of&nbsp;Design.</p>
             </div>
           </div>

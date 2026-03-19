@@ -342,14 +342,18 @@ function SlideNow() {
               </div>
               <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.papaya }}>Design in&nbsp;Product</h3>
               <ul className="space-y-3">
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
-                  <div><p className="font-display font-bold text-foreground text-base">Multi-product discovery</p><p className="text-sm text-muted-foreground mt-0.5">Scalable framework for top-ups, bill pay, and credit in&nbsp;WhatsApp</p></div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
-                  <div><p className="font-display font-bold text-foreground text-base">Checkout improvements</p><p className="text-sm text-muted-foreground mt-0.5">UX restructuring for scalable payment methods across business&nbsp;lines</p></div>
-                </li>
+                {[
+                  { title: 'Activation', desc: 'Onboarding, first send, and habit formation' },
+                  { title: 'Core Send', desc: 'Checkout, payment methods, and transaction experience' },
+                  { title: 'Multilingual', desc: 'Spanish, English, and Spanglish across all surfaces' },
+                  { title: 'Pricing', desc: 'FX transparency, fee presentation, and value perception' },
+                  { title: 'New Bets', desc: 'Credit, wallet, top-ups, and bill pay discovery' },
+                ].map((item) => (
+                  <li key={item.title} className="flex items-start gap-3">
+                    <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-foreground/30" strokeWidth={1.5} />
+                    <div><p className="font-display font-bold text-foreground text-base">{item.title}</p><p className="text-sm text-muted-foreground mt-0.5">{item.desc}</p></div>
+                  </li>
+                ))}
               </ul>
             </div>
 

@@ -4,7 +4,6 @@ import { getServerSession } from '@/lib/studio-auth'
 import { computeUserStyleProfile, selectExemplars, formatProfileForPrompt, formatExemplarsForPrompt } from '@/lib/studio-quality'
 import { getBlueprintEnrichment, selectBlueprints } from '@/lib/training-blueprints'
 import { getExemplarSlides, getAntiExemplarSlides } from '@/lib/studio-db'
-import { generateLimiter, checkRateLimit } from '@/lib/studio-ratelimit'
 
 export const runtime = 'nodejs'
 export const maxDuration = 300
@@ -1689,21 +1688,9 @@ Section titles should be descriptive and specific. Include numbers and conclusio
 
 export async function POST(req: NextRequest) {
   try {
-    // Auth check — require a valid session
-    const session = await getServerSession()
-    if (!session) {
-      return new Response(JSON.stringify({ error: 'Not authenticated' }), {
-        status: 401, headers: { 'Content-Type': 'application/json' },
-      })
-    }
-
-    // Rate limit by user ID
-    const rateLimited = await checkRateLimit(generateLimiter, session.userId)
-    if (rateLimited) return rateLimited
-
     const body = (await req.json()) as GenerateBody
 
-    if (!body.prompt) {
+    if (!body.prompt && !body.reverseEngineer) {
       return new Response(JSON.stringify({ error: 'Prompt is required' }), {
         status: 400, headers: { 'Content-Type': 'application/json' },
       })

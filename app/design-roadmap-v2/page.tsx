@@ -264,14 +264,14 @@ function SlideCoverage() {
           <p className="text-muted-foreground text-lg mb-6">Current coverage — the team is stretched&nbsp;thin</p>
 
           <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden mb-4">
-            <div className="grid grid-cols-[1fr_1.4fr_1fr_auto] gap-x-4 px-5 py-2.5 bg-foreground/[0.03] border-b border-border">
+            <div className="grid grid-cols-[100px_180px_120px_100px] gap-x-6 px-5 py-2.5 bg-foreground/[0.03] border-b border-border">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">PM</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Product</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Designer</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Status</span>
             </div>
             {assignments.map((a, i) => (
-              <div key={a.pm} className={`grid grid-cols-[1fr_1.4fr_1fr_auto] gap-x-4 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white' : 'bg-foreground/[0.02]'} ${i < assignments.length - 1 ? 'border-b border-border/50' : ''}`}>
+              <div key={a.pm} className={`grid grid-cols-[100px_180px_120px_100px] gap-x-6 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white' : 'bg-foreground/[0.02]'} ${i < assignments.length - 1 ? 'border-b border-border/50' : ''}`}>
                 <span className="text-sm font-medium text-foreground">{a.pm}</span>
                 <span className="text-sm text-muted-foreground">{a.product}</span>
                 <span className={`text-sm font-medium ${a.status === 'gap' ? 'text-papaya' : 'text-foreground'}`}>{a.designer}</span>

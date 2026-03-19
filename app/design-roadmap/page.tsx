@@ -1,652 +1,461 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { SlideToc, SlideTocChrome } from '@/components/slide-toc'
+import { useComments, SlideCommentLayer } from '@/components/slide-comments'
+import { useLocale, useSlideTranslation, SlidePreTranslator } from '@/components/slide-translation'
+import { useSlidePdf } from '@/components/use-slide-pdf'
+import { SlidePdfOverlay } from '@/components/slide-pdf-overlay'
+import { PresentationPassword } from '@/components/presentation-password'
+import { SlideRating } from '@/components/studio/slide-rating'
+import type { SlideData } from '@/components/studio/slide-renderer'
+import { CheckCircle2 } from 'lucide-react'
 
-type Slide = {
-  id: string
-  section: string
-  title: string
-  subtitle: string | null
-  content: (() => JSX.Element) | null
-  footer?: string
+const C = { turquoise: '#2BF2F1', slate: '#082422', blueberry: '#6060BF', evergreen: '#35605F', cactus: '#60D06F', mango: '#F19D38', papaya: '#F26629', sage: '#7BA882', lime: '#DCFF00', lychee: '#FFCD9C', sky: '#8DFDFA', stone: '#EFEBE7', concrete: '#CFCABF', mocha: '#877867' }
+const TOTAL = 11
+
+function Illo({ src, className }: { src: string; className?: string }) {
+  return <object type="image/svg+xml" data={`/illustrations/${src}`} className={className ?? 'w-full h-auto'} style={{ pointerEvents: 'none' }} aria-hidden="true" />
 }
 
-const slides: Slide[] = [
-  {
-    id: 'cover',
-    section: '',
-    title: 'Product Design Roadmap',
-    subtitle: "Establishing a centralized, embedded design organization to support Felix's platform + business lines model",
-    content: null,
-    footer: 'Q2-Q4 2026 & Beyond',
-  },
-  {
-    id: 'vision',
-    section: 'VISION',
-    title: "Design's role at Felix",
-    subtitle: null,
-    content: () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-        <p style={{ fontSize: 18, lineHeight: 1.7, color: 'var(--color-text-secondary)', margin: 0 }}>
-          Felix&apos;s vision is to be the{' '}
-          <strong style={{ color: 'var(--color-text-primary)' }}>Trusted Financial Companion for Latinos in the US</strong>. That&apos;s
-          fundamentally an experience claim, not a feature claim. Design is how we deliver on it.
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-          <div style={{ background: 'var(--color-background-secondary)', borderRadius: 12, padding: 16 }}>
-            <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 500, color: 'var(--color-text-info)' }}>Design as connective tissue</p>
-            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>
-              The platform gives us speed and consistency. The business lines give us depth and market fit. Design ensures every touchpoint feels
-              like the same trusted companion.
-            </p>
-          </div>
-          <div style={{ background: 'var(--color-background-secondary)', borderRadius: 12, padding: 16 }}>
-            <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 500, color: 'var(--color-text-info)' }}>Build once, deploy everywhere</p>
-            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>
-              Design the system once at the platform level, adapt it for each business line and surface. This is how we ship quality at speed
-              across WhatsApp, app, web, and whatever comes next.
-            </p>
-          </div>
+function SlideFooter({ num, dark }: { num: number; dark?: boolean }) {
+  return (
+    <div className="absolute bottom-0 inset-x-0 flex items-center justify-between px-8 sm:px-12 pb-5 sm:pb-6 text-sm font-sans">
+      <span className={`font-display font-extrabold text-xs sm:text-sm ${dark ? 'text-linen' : 'text-foreground'}`}>Product Design Roadmap</span>
+      <span className={`text-xs sm:text-sm ${dark ? 'text-linen/50' : 'text-muted-foreground'} absolute left-1/2 -translate-x-1/2`}>felixpago.com</span>
+      <span className={`text-xs sm:text-sm font-medium ${dark ? 'text-linen' : 'text-foreground'}`}>{num} / {TOTAL}</span>
+    </div>
+  )
+}
+
+function PillBadge({ children, dark }: { children: React.ReactNode; dark?: boolean }) {
+  return <span className={`inline-block rounded-full px-5 py-1.5 font-sans font-semibold text-sm sm:text-base uppercase tracking-[0.12em] ${dark ? 'bg-turquoise/20 text-turquoise' : 'bg-turquoise text-slate'}`}>{children}</span>
+}
+
+/* ═══════════════════════════════════════════════ SLIDES ═══ */
+
+function SlideCover() {
+  return (
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-[6%] left-[3%] w-[140px] lg:w-[200px] opacity-[0.06] -rotate-12" style={{ animation: 'ds-float 8s ease-in-out infinite' }}><Illo src="Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" /></div>
+        <div className="absolute bottom-[10%] right-[4%] w-[120px] lg:w-[170px] opacity-[0.05] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite 1s' }}><Illo src="Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg" /></div>
+      </div>
+      <div className="flex-1 flex items-center justify-center px-8 sm:px-12 lg:px-16 py-10 relative z-10">
+        <div className="flex flex-col items-center text-center max-w-3xl">
+          <div className="mb-6 lg:mb-8"><PillBadge dark>Q2–Q4 2026 &amp;&nbsp;Beyond</PillBadge></div>
+          <h1 className="font-display font-black text-linen text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.95] tracking-tight mb-6 lg:mb-8">Product Design{'\u00A0'}Roadmap</h1>
+          <p className="text-lg sm:text-xl lg:text-2xl text-linen/50 leading-relaxed max-w-2xl">Establishing a centralized, embedded design organization to support Felix&apos;s platform + business lines&nbsp;model</p>
         </div>
       </div>
-    ),
-  },
-  {
-    id: 'org-model',
-    section: 'ORG MODEL',
-    title: 'Centralized but embedded',
-    subtitle: 'Two design functions aligned to the platform architecture',
-    content: () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          {[
-            {
-              label: 'Surface & UX platform',
-              color: '#0F6E56',
-              bg: '#E1F5EE',
-              count: '5-6',
-              desc: 'Design system, content design, UX research, app design, conversational UX (future)',
-            },
-            {
-              label: 'Embedded in business lines',
-              color: '#993C1D',
-              bg: '#FAECE7',
-              count: '5-6',
-              desc: 'Consumer Payments (2-3), Credit (1), Wallet/Store of Value (1), Fintech Core (1)',
-            },
-          ].map((c, i) => (
-            <div key={i} style={{ background: c.bg, padding: 16, borderLeft: `3px solid ${c.color}` }}>
-              <p style={{ margin: '0 0 2px', fontSize: 13, fontWeight: 500, color: c.color }}>{c.label}</p>
-              <p style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 500, color: c.color }}>{c.count} designers</p>
-              <p style={{ margin: 0, fontSize: 13, lineHeight: 1.5, color: 'var(--color-text-secondary)' }}>{c.desc}</p>
+      <SlideFooter num={1} dark />
+    </div>
+  )
+}
+
+function SlideVision() {
+  return (
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-[5%] right-[3%] w-[120px] lg:w-[160px] opacity-[0.14] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite' }}><Illo src="Hand%20-%20Stars.svg" /></div>
+        <div className="absolute bottom-[8%] left-[3%] w-[100px] lg:w-[140px] opacity-[0.12] -rotate-12" style={{ animation: 'ds-float 8s ease-in-out infinite 1s' }}><Illo src="Heart%20-F%C3%A9lix.svg" /></div>
+      </div>
+      <div className="flex-1 flex items-center px-10 sm:px-14 lg:px-20 py-10 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 w-full max-w-[1400px] mx-auto">
+          <div className="flex flex-col justify-center">
+            <div className="mb-5 lg:mb-6"><PillBadge>Vision</PillBadge></div>
+            <h1 className="font-display font-black text-foreground text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight mb-6 lg:mb-8">Design&apos;s Role at&nbsp;Felix</h1>
+            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-lg">Felix&apos;s vision is to be the <strong className="text-foreground">Trusted Financial Companion for Latinos in the&nbsp;US</strong>. That&apos;s fundamentally an experience claim, not a feature claim. Design is how we deliver on&nbsp;it.</p>
+          </div>
+          <div className="flex flex-col gap-5">
+            <div className="bg-white rounded-2xl p-7 sm:p-8 border border-border shadow-sm">
+              <span className="inline-block rounded-full px-3 py-0.5 text-xs font-bold text-slate mb-3" style={{ background: C.turquoise }}>Design as connective tissue</span>
+              <p className="text-base text-muted-foreground leading-relaxed">The platform gives us speed and consistency. The business lines give us depth and market fit. Design ensures every touchpoint feels like the same trusted&nbsp;companion.</p>
             </div>
-          ))}
-        </div>
-        <div
-          style={{
-            background: 'var(--color-background-secondary)',
-            borderRadius: 12,
-            padding: 16,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div>
-            <p style={{ margin: 0, fontSize: 15, fontWeight: 500, color: 'var(--color-text-primary)' }}>Total team: 10-12 people</p>
-            <p style={{ margin: 0, fontSize: 13, color: 'var(--color-text-secondary)' }}>
-              Including Head of Design · ~50% platform / ~50% embedded
-            </p>
-          </div>
-          <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', textAlign: 'right' }}>
-            <p style={{ margin: 0 }}>+ 1-2 staff aug contractors</p>
-            <p style={{ margin: 0 }}>for design system & app production</p>
-          </div>
-        </div>
-        <div style={{ background: 'var(--color-background-secondary)', borderRadius: 12, padding: 16 }}>
-          <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>
-            Two functions: platform (creates leverage) and embedded (creates depth). Fintech Core designer is embedded with the fintech
-            engineering team but their trust & payment patterns are shared across all business lines.
-          </p>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 'team-detail',
-    section: 'ORG MODEL',
-    title: 'Team composition & ratios',
-    subtitle: 'Platform roles create leverage for everyone. Embedded roles create depth in each business line.',
-    content: () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {[
-          {
-            role: 'Design System Designer',
-            team: 'Surface & UX',
-            note: 'Highest-leverage hire - enables staff aug, speeds every designer',
-            accent: '#0F6E56',
-          },
-          { role: 'Content Design Lead', team: 'Surface & UX', note: 'Voice, tone, conversational patterns, bilingual guidelines', accent: '#0F6E56' },
-          { role: 'UX Researcher (R1)', team: 'Surface & UX', note: 'Foundational research + building the practice org-wide', accent: '#0F6E56' },
-          { role: 'App Designer', team: 'Surface & UX', note: 'Cross-product app experience, works across all business lines', accent: '#0F6E56' },
-          { role: 'UX Researcher (R2)', team: 'Roaming', note: '6-8 week rotations across business lines · Hired at month 6-9', accent: '#534AB7' },
-          {
-            role: 'Fintech Core Designer',
-            team: 'Embedded',
-            note: 'KYC, payments, fraud alerts, FX - embedded with fintech eng, patterns shared org-wide',
-            accent: '#993C1D',
-          },
-          { role: 'Consumer Payments x2-3', team: 'Embedded', note: '~3:1 PM-to-designer ratio · Organized by funnel stage', accent: '#993C1D' },
-          { role: 'Credit Designer', team: 'Embedded', note: 'Senior IC, comfortable with ambiguity · 1:1 with PM', accent: '#993C1D' },
-          { role: 'Wallet Designer', team: 'Embedded', note: 'Scrappy, autonomous · Greenfield product exploration', accent: '#993C1D' },
-        ].map((r, i) => (
-          <div
-            key={i}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '200px 100px 1fr',
-              gap: 8,
-              padding: '8px 12px',
-              background: i % 2 === 0 ? 'var(--color-background-secondary)' : 'transparent',
-              borderRadius: 6,
-              alignItems: 'center',
-            }}
-          >
-            <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--color-text-primary)' }}>{r.role}</span>
-            <span style={{ fontSize: 12, color: r.accent, fontWeight: 500 }}>{r.team}</span>
-            <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{r.note}</span>
-          </div>
-        ))}
-      </div>
-    ),
-  },
-  {
-    id: 'hiring',
-    section: 'ORG MODEL',
-    title: 'Hiring sequence',
-    subtitle: 'Aligned to the reorg migration timeline',
-    content: () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {[
-          {
-            phase: 'Phase 1 · Q1-Q2',
-            label: 'Foundation',
-            color: '#0F6E56',
-            hires: [
-              'Product Designer: Conversational Experiences (Pato)',
-              'Product Designer: Conversational Experiences (TBH)',
-              'Fintech Designer / Design Systems (Patricia)',
-              'UX Researcher (Jose)',
-              'Content Design Lead (TBH)',
-            ],
-            aug: '1 contractor for design system build-out + fintech support (Darwoft)',
-          },
-          {
-            phase: 'Phase 2 · Q2',
-            label: 'Build capability',
-            color: '#534AB7',
-            hires: [
-              'Product Designer: Conversational Experiences (Credit)',
-              'App Designer',
-              'Wallet Designer (if product ready)',
-              'Product Designer: Conversational Experiences (Platform)',
-            ],
-            aug: '',
-          },
-          {
-            phase: 'Phase 3 · Q4+',
-            label: 'Scale',
-            color: '#BA7517',
-            hires: ['UX Researcher (R2) - month 6-9'],
-            aug: 'Steady-state: 1 permanent + flex contractors',
-          },
-        ].map((p, i) => (
-          <div key={i} style={{ borderLeft: `3px solid ${p.color}`, paddingLeft: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
-              <span style={{ fontSize: 14, fontWeight: 500, color: p.color }}>{p.phase}</span>
-              <span style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>- {p.label}</span>
+            <div className="bg-white rounded-2xl p-7 sm:p-8 border border-border shadow-sm">
+              <span className="inline-block rounded-full px-3 py-0.5 text-xs font-bold text-slate mb-3" style={{ background: C.cactus }}>Build once, deploy everywhere</span>
+              <p className="text-base text-muted-foreground leading-relaxed">Design the system once at the platform level, adapt it for each business line and surface. This is how we ship quality at speed across WhatsApp, app, web, and whatever comes&nbsp;next.</p>
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
-              {p.hires.map((h, j) => (
-                <span
-                  key={j}
-                  style={{
-                    fontSize: 12,
-                    padding: '3px 10px',
-                    borderRadius: 20,
-                    background: 'var(--color-background-secondary)',
-                    color: 'var(--color-text-primary)',
-                  }}
-                >
-                  {h}
-                </span>
-              ))}
+          </div>
+        </div>
+      </div>
+      <SlideFooter num={2} />
+    </div>
+  )
+}
+
+function SlideOrgModel() {
+  return (
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+      <div className="absolute bottom-[6%] right-[3%] w-[120px] lg:w-[170px] opacity-[0.05] rotate-6 pointer-events-none" style={{ animation: 'ds-drift 10s ease-in-out infinite' }}><Illo src="Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg" /></div>
+      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+        <div className="w-full max-w-[1200px]">
+          <div className="mb-5 text-center"><PillBadge dark>Org Model</PillBadge></div>
+          <h1 className="font-display font-black text-linen text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight mb-3 text-center">Centralized but&nbsp;Embedded</h1>
+          <p className="text-center text-linen/50 text-lg mb-8">Two design functions aligned to the platform&nbsp;architecture</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+            <div className="bg-white/5 rounded-2xl p-7 border border-white/10">
+              <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate mb-3" style={{ background: C.cactus }}>Surface &amp; UX Platform</span>
+              <p className="font-display font-black text-linen text-3xl mb-2">5–6 <span className="text-lg font-semibold text-linen/60">designers</span></p>
+              <p className="text-sm text-linen/50 leading-relaxed">Design system, content design, UX research, app design, conversational UX&nbsp;(future)</p>
             </div>
-            {p.aug && <p style={{ margin: 0, fontSize: 12, color: 'var(--color-text-secondary)' }}>{p.aug}</p>}
+            <div className="bg-white/5 rounded-2xl p-7 border border-white/10">
+              <span className="inline-block rounded-full px-4 py-1 text-sm font-semibold text-slate mb-3" style={{ background: C.papaya }}>Embedded in Business Lines</span>
+              <p className="font-display font-black text-linen text-3xl mb-2">5–6 <span className="text-lg font-semibold text-linen/60">designers</span></p>
+              <p className="text-sm text-linen/50 leading-relaxed">Consumer Payments (2-3), Credit (1), Wallet/Store of Value (1), Fintech Core&nbsp;(1)</p>
+            </div>
           </div>
-        ))}
-      </div>
-    ),
-  },
-  {
-    id: 'staff-aug',
-    section: 'ORG MODEL',
-    title: 'Staff augmentation strategy',
-    subtitle: "Contractors extend capacity - they don't replace ownership",
-    content: () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-          <div style={{ background: '#EAF3DE', padding: 16, borderLeft: '3px solid #3B6D11' }}>
-            <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 500, color: '#27500A' }}>Good fit for contractors</p>
-            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.5, color: '#3B6D11' }}>
-              Design system production (components, docs, Figma libraries), app UI screen production, Consumer Payments overflow during
-              launches or geo expansion
-            </p>
+          <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex items-center justify-between">
+            <div><p className="font-display font-bold text-linen text-base">Total team: 10–12&nbsp;people</p><p className="text-sm text-linen/40">Including Head of Design · ~50% platform / ~50%&nbsp;embedded</p></div>
+            <div className="text-right text-sm text-linen/40"><p>+ 1–2 staff aug contractors</p><p>for design system &amp; app&nbsp;production</p></div>
           </div>
-          <div style={{ background: '#FAEEDA', padding: 16, borderLeft: '3px solid #854F0B' }}>
-            <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 500, color: '#633806' }}>Situational</p>
-            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.5, color: '#854F0B' }}>
-              Fintech core pattern execution (under FTE direction), usability test moderation and analysis support
-            </p>
-          </div>
-          <div style={{ background: '#FCEBEB', padding: 16, borderLeft: '3px solid #A32D2D' }}>
-            <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 500, color: '#791F1F' }}>Must be full-time</p>
-            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.5, color: '#A32D2D' }}>
-              Content design, UX research, Credit/Wallet embedded designers, design system IC (the strategist, not the production layer)
-            </p>
-          </div>
-        </div>
-        <div style={{ background: 'var(--color-background-secondary)', borderRadius: 12, padding: 16 }}>
-          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>
-            <strong style={{ color: 'var(--color-text-primary)' }}>Key prerequisite:</strong> Staff aug only works once the design system has
-            enough coverage to provide guardrails. A contractor without a design system is a freelancer making things up. A contractor with a
-            design system produces on-brand, consistent work from week one. This is why the design system designer is our highest-priority hire.
-          </p>
         </div>
       </div>
-    ),
-  },
-  {
-    id: 'roadmap-overview',
-    section: 'ROADMAP',
-    title: 'Design roadmap - two tracks',
-    subtitle: "Complements the product roadmap, doesn't duplicate it",
-    content: () => (
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-        <div style={{ background: '#E1F5EE', padding: 20, borderLeft: '3px solid #0F6E56' }}>
-          <p style={{ margin: '0 0 4px', fontSize: 15, fontWeight: 500, color: '#085041' }}>Track 1: Design foundation</p>
-          <p style={{ margin: '0 0 12px', fontSize: 13, color: '#0F6E56' }}>
-            What the centralized design org builds - regardless of what any product team ships
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {[
-              'Design system & pattern library',
-              'Content & conversational UX patterns',
-              'Research infrastructure & practice',
-              'Cross-surface experience coherence',
-              'Omnichannel + AI design patterns',
-            ].map((t, i) => (
-              <p key={i} style={{ margin: 0, fontSize: 13, color: '#085041', padding: '4px 0', borderBottom: i < 4 ? '1px solid #9FE1CB' : 'none' }}>
-                {t}
-              </p>
-            ))}
-          </div>
-        </div>
-        <div style={{ background: '#FAECE7', padding: 20, borderLeft: '3px solid #993C1D' }}>
-          <p style={{ margin: '0 0 4px', fontSize: 15, fontWeight: 500, color: '#712B13' }}>Track 2: Design in product</p>
-          <p style={{ margin: '0 0 12px', fontSize: 13, color: '#993C1D' }}>
-            How design shows up within the product roadmap - the design lens on product priorities
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {[
-              'Multi-product discovery framework',
-              'Checkout flow restructuring',
-              'Credit & wallet product definition',
-              'Geo expansion experience design',
-              'Receiver-side experience',
-            ].map((t, i) => (
-              <p key={i} style={{ margin: 0, fontSize: 13, color: '#712B13', padding: '4px 0', borderBottom: i < 4 ? '1px solid #F5C4B3' : 'none' }}>
-                {t}
-              </p>
+      <SlideFooter num={3} dark />
+    </div>
+  )
+}
+
+function SlideTeamDetail() {
+  const roles = [
+    { role: 'Design System Designer', team: 'Surface & UX', note: 'Highest-leverage hire — enables staff aug, speeds every designer', color: C.cactus },
+    { role: 'Content Design Lead', team: 'Surface & UX', note: 'Voice, tone, conversational patterns, bilingual guidelines', color: C.cactus },
+    { role: 'UX Researcher (R1)', team: 'Surface & UX', note: 'Foundational research + building the practice org-wide', color: C.cactus },
+    { role: 'App Designer', team: 'Surface & UX', note: 'Cross-product app experience, works across all business lines', color: C.cactus },
+    { role: 'UX Researcher (R2)', team: 'Roaming', note: '6–8 week rotations across business lines · Hired at month 6-9', color: C.blueberry },
+    { role: 'Fintech Core Designer', team: 'Embedded', note: 'KYC, payments, fraud alerts, FX — embedded with fintech eng', color: C.papaya },
+    { role: 'Consumer Payments ×2-3', team: 'Embedded', note: '~3:1 PM-to-designer ratio · Organized by funnel stage', color: C.papaya },
+    { role: 'Credit Designer', team: 'Embedded', note: 'Senior IC, comfortable with ambiguity · 1:1 with PM', color: C.papaya },
+    { role: 'Wallet Designer', team: 'Embedded', note: 'Scrappy, autonomous · Greenfield product exploration', color: C.papaya },
+  ]
+  return (
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      <div className="absolute bottom-[5%] right-[3%] w-[130px] lg:w-[180px] opacity-[0.1] rotate-3 pointer-events-none" style={{ animation: 'ds-float 10s ease-in-out infinite' }}><Illo src="Hand%20-%20Stars.svg" /></div>
+      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+        <div className="w-full max-w-[1200px]">
+          <div className="mb-5"><PillBadge>Org Model</PillBadge></div>
+          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Team Composition &amp;&nbsp;Ratios</h1>
+          <p className="text-muted-foreground text-base mb-6">Platform roles create leverage. Embedded roles create&nbsp;depth.</p>
+          <div className="space-y-1.5">
+            {roles.map((r, i) => (
+              <div key={i} className={`grid grid-cols-[200px_100px_1fr] gap-3 items-center px-4 py-3 rounded-lg ${i % 2 === 0 ? 'bg-white border border-border shadow-sm' : ''}`}>
+                <span className="font-display font-bold text-foreground text-sm">{r.role}</span>
+                <span className="text-xs font-semibold" style={{ color: r.color }}>{r.team}</span>
+                <span className="text-xs text-muted-foreground">{r.note}</span>
+              </div>
             ))}
           </div>
         </div>
       </div>
-    ),
-  },
-  {
-    id: 'roadmap-now',
-    section: 'ROADMAP',
-    title: 'Now - Q2 2026',
-    subtitle: 'Stand up the org, establish credibility, support current priorities',
-    content: () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {[
-          {
-            area: 'Multi-product discovery',
-            color: '#993C1D',
-            bg: '#FAECE7',
-            items:
-              'Establish scalable framework for exposing top-ups, bill pay, and credit in WhatsApp - accounting for user journey, session intensity, transaction history, and likely next actions',
-          },
-          {
-            area: 'Checkout improvements',
-            color: '#993C1D',
-            bg: '#FAECE7',
-            items:
-              'Collaborate with Fintech Core on UX restructuring of checkout flow to optimize for scalable payment methods across business lines',
-          },
-          {
-            area: 'Design system',
-            color: '#0F6E56',
-            bg: '#E1F5EE',
-            items:
-              'Expand component library to support redesigned checkout, wallet, top-ups, and bill pay. Define UX guidelines and pattern library for shared patterns across WhatsApp and web/app',
-          },
-          {
-            area: 'Research foundation',
-            color: '#0F6E56',
-            bg: '#E1F5EE',
-            items:
-              'Empower PMs and engineers to conduct more research, more regularly. Establish consistent framework and cadence for user recruitment pipelines. Research support for multi-product discovery, wallet/credit validation, and future product definition',
-          },
-          {
-            area: 'Content design',
-            color: '#0F6E56',
-            bg: '#E1F5EE',
-            items:
-              'Hire our Content Lead to partner with brand and establish the Felix voice & tone system across all touchpoints (WhatsApp, app, notifications, errors). Build initial conversational flow patterns library. Establish bilingual content guidelines (Spanish, English, Spanglish)',
-          },
-        ].map((r, i) => (
-          <div key={i} style={{ background: r.bg, padding: 16, borderLeft: `3px solid ${r.color}` }}>
-            <p style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 500, color: r.color }}>{r.area}</p>
-            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>{r.items}</p>
-          </div>
-        ))}
-      </div>
-    ),
-  },
-  {
-    id: 'research',
-    section: 'DEEP DIVE',
-    title: 'Research model',
-    subtitle: 'Building the practice from scratch with a staggered two-researcher approach',
-    content: () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-          <div style={{ background: '#EEEDFE', padding: 16, borderLeft: '3px solid #534AB7' }}>
-            <p style={{ margin: '0 0 2px', fontSize: 14, fontWeight: 500, color: '#3C3489' }}>Researcher 1 - Platform</p>
-            <p style={{ margin: '0 0 8px', fontSize: 12, color: '#534AB7' }}>Hired in Phase 1 · Surface & UX team</p>
-            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>
-              Foundational studies (trust, mental models, financial literacy). Builds research practice: templates, recruiting pipelines,
-              insight repository, lightweight testing toolkit. Teaches designers and PMs to self-serve on evaluative research.
-            </p>
-          </div>
-          <div style={{ background: '#EEEDFE', padding: 16, borderLeft: '3px solid #534AB7' }}>
-            <p style={{ margin: '0 0 2px', fontSize: 14, fontWeight: 500, color: '#3C3489' }}>Researcher 2 - Roaming</p>
-            <p style={{ margin: '0 0 8px', fontSize: 12, color: '#534AB7' }}>Hired at month 6-9 · Rotates across business lines</p>
-            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>
-              6-8 week research sprints aligned to highest-priority product decisions. Tactical and evaluative research: usability testing,
-              concept validation, funnel analysis. Quarterly rotation planning with Head of Design.
-            </p>
+      <SlideFooter num={4} />
+    </div>
+  )
+}
+
+function SlideHiring() {
+  const phases = [
+    { phase: 'Phase 1 · Q1–Q2', label: 'Foundation', color: C.cactus, hires: ['Product Designer: Conversational Experiences (Pato)', 'Product Designer: Conversational Experiences (TBH)', 'Fintech Designer / Design Systems (Patricia)', 'UX Researcher (Jose)', 'Content Design Lead (TBH)'], aug: '1 contractor for design system build-out + fintech support (Darwoft)' },
+    { phase: 'Phase 2 · Q2', label: 'Build capability', color: C.blueberry, hires: ['Product Designer: Conversational Experiences (Credit)', 'App Designer', 'Wallet Designer (if product ready)', 'Product Designer: Conversational Experiences (Platform)'], aug: '' },
+    { phase: 'Phase 3 · Q4+', label: 'Scale', color: C.mango, hires: ['UX Researcher (R2) — month 6-9'], aug: 'Steady-state: 1 permanent + flex contractors' },
+  ]
+  return (
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+      <div className="absolute top-[5%] right-[4%] w-[110px] lg:w-[150px] opacity-[0.06] rotate-6 pointer-events-none" style={{ animation: 'ds-drift 9s ease-in-out infinite' }}><Illo src="3%20Paper%20Airplanes%20%2B%20Coins.svg" /></div>
+      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+        <div className="w-full max-w-[1200px]">
+          <div className="mb-5"><PillBadge dark>Org Model</PillBadge></div>
+          <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Hiring&nbsp;Sequence</h1>
+          <p className="text-linen/50 text-base mb-8">Aligned to the reorg migration&nbsp;timeline</p>
+          <div className="space-y-5">
+            {phases.map((p) => (
+              <div key={p.phase} className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: p.color }}>
+                <div className="flex items-baseline gap-3 mb-3"><span className="font-display font-bold text-sm" style={{ color: p.color }}>{p.phase}</span><span className="text-sm text-linen/40">— {p.label}</span></div>
+                <div className="flex flex-wrap gap-2 mb-2">{p.hires.map((h) => <span key={h} className="text-xs px-3 py-1 rounded-full bg-white/5 text-linen/70 border border-white/10">{h}</span>)}</div>
+                {p.aug && <p className="text-xs text-linen/30 mt-2">{p.aug}</p>}
+              </div>
+            ))}
           </div>
         </div>
-        <div style={{ background: 'var(--color-background-secondary)', borderRadius: 12, padding: 16 }}>
-          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>
-            <strong style={{ color: 'var(--color-text-primary)' }}>Why stagger:</strong> Starting from zero, R1 needs 2-3 months to establish
-            how research works at Felix. Once those rails exist, R2 rides them from day one and focuses on producing research rather than also
-            building infrastructure.
-          </p>
+      </div>
+      <SlideFooter num={5} dark />
+    </div>
+  )
+}
+
+function SlideStaffAug() {
+  return (
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      <div className="absolute top-[6%] left-[3%] w-[110px] lg:w-[150px] opacity-[0.12] -rotate-12 pointer-events-none" style={{ animation: 'ds-float 8s ease-in-out infinite' }}><Illo src="Fast.svg" /></div>
+      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+        <div className="w-full max-w-[1200px]">
+          <div className="mb-5"><PillBadge>Org Model</PillBadge></div>
+          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Staff Augmentation&nbsp;Strategy</h1>
+          <p className="text-muted-foreground text-base mb-8">Contractors extend capacity — they don&apos;t replace&nbsp;ownership</p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+            {[
+              { title: 'Good fit for contractors', color: C.cactus, body: 'Design system production (components, docs, Figma libraries), app UI screen production, Consumer Payments overflow during launches or geo expansion' },
+              { title: 'Situational', color: C.mango, body: 'Fintech core pattern execution (under FTE direction), usability test moderation and analysis support' },
+              { title: 'Must be full-time', color: C.papaya, body: 'Content design, UX research, Credit/Wallet embedded designers, design system IC (the strategist, not the production layer)' },
+            ].map((c) => (
+              <div key={c.title} className="bg-white rounded-2xl p-6 border border-border shadow-sm" style={{ borderTopWidth: 3, borderTopColor: c.color }}>
+                <h3 className="font-display font-extrabold text-foreground text-base mb-3">{c.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{c.body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="bg-white rounded-2xl p-6 border border-border shadow-sm">
+            <p className="text-sm text-muted-foreground leading-relaxed"><strong className="text-foreground">Key prerequisite:</strong> Staff aug only works once the design system has enough coverage to provide guardrails. A contractor without a design system is a freelancer making things up. A contractor with a design system produces on-brand, consistent work from week&nbsp;one.</p>
+          </div>
         </div>
       </div>
-    ),
-  },
-  {
-    id: 'content-design',
-    section: 'DEEP DIVE',
-    title: 'Content design lead — key projects',
-    subtitle: 'The words are the UI - especially in a conversational-first product',
-    content: () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {[
-          {
-            project: 'Felix voice & tone system',
-            timeline: 'Foundational',
-            desc:
-              'Define how Felix speaks across every touchpoint. Bilingual guidelines (Spanish, English, Spanglish and when to use each). Emotional tone calibration by moment type: celebratory (transfer landed), reassuring (KYC), calm (errors), warm (onboarding). Writing principles the whole team can follow.',
-          },
-          {
-            project: 'Conversational flow patterns library',
-            timeline: 'Next',
-            desc:
-              'Standardized patterns for: greetings (new vs. returning), disambiguation, high-stakes confirmations, error recovery, product introduction within conversation. Directly feeds the multi-product discovery framework.',
-          },
-          {
-            project: 'Partner with AI for agent personality & prompt guidelines',
-            timeline: 'Soon',
-            desc:
-              'Working with the omnichannel + AI team, define personality parameters that guide the LLM agent. Behavioral rules, tone constraints, things Felix should never say, and how personality adapts by context (first-time sender vs. power user).',
-          },
-          {
-            project: 'Cross-channel content adaptation',
-            timeline: 'Later',
-            desc:
-              "How Felix's voice adapts across WhatsApp (conversational, brief), app (scannable, structured), push notifications (action-oriented), SMS (ultra-concise). Same personality, different expression. Feeds directly into app launch and multi-surface expansion.",
-          },
-        ].map((p, i) => (
-          <div key={i} style={{ background: 'var(--color-background-secondary)', padding: 16, borderLeft: '3px solid #0F6E56' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 500, color: 'var(--color-text-primary)' }}>{p.project}</p>
-              <span
-                style={{
-                  fontSize: 11,
-                  padding: '2px 8px',
-                  borderRadius: 20,
-                  background: '#E1F5EE',
-                  color: '#0F6E56',
-                  fontWeight: 500,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {p.timeline}
-              </span>
+      <SlideFooter num={6} />
+    </div>
+  )
+}
+
+function SlideRoadmapOverview() {
+  return (
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+      <div className="absolute bottom-[5%] left-[3%] w-[120px] lg:w-[170px] opacity-[0.05] -rotate-6 pointer-events-none" style={{ animation: 'ds-float 9s ease-in-out infinite' }}><Illo src="Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" /></div>
+      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+        <div className="w-full max-w-[1200px]">
+          <div className="mb-5 text-center"><PillBadge dark>Roadmap</PillBadge></div>
+          <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2 text-center">Design Roadmap — Two&nbsp;Tracks</h1>
+          <p className="text-center text-linen/50 text-base mb-8">Complements the product roadmap, doesn&apos;t duplicate&nbsp;it</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {[
+              { title: 'Track 1: Design Foundation', color: C.cactus, sub: 'What the centralized design org builds — regardless of what any product team ships', items: ['Design system & pattern library', 'Content & conversational UX patterns', 'Research infrastructure & practice', 'Cross-surface experience coherence', 'Omnichannel + AI design patterns'] },
+              { title: 'Track 2: Design in Product', color: C.papaya, sub: 'How design shows up within the product roadmap — the design lens on product priorities', items: ['Multi-product discovery framework', 'Checkout flow restructuring', 'Credit & wallet product definition', 'Geo expansion experience design', 'Receiver-side experience'] },
+            ].map((t) => (
+              <div key={t.title} className="bg-white/5 rounded-2xl p-7 border border-white/10" style={{ borderTopWidth: 3, borderTopColor: t.color }}>
+                <h3 className="font-display font-extrabold text-linen text-lg mb-1">{t.title}</h3>
+                <p className="text-sm text-linen/40 mb-5">{t.sub}</p>
+                <ul className="space-y-3">{t.items.map((item) => <li key={item} className="flex items-start gap-3"><CheckCircle2 className="h-5 w-5 flex-shrink-0 text-turquoise/40 mt-0.5" strokeWidth={1.5} /><span className="text-sm text-linen/60">{item}</span></li>)}</ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <SlideFooter num={7} dark />
+    </div>
+  )
+}
+
+function SlideNow() {
+  const items = [
+    { area: 'Multi-product discovery', color: C.papaya, desc: 'Establish scalable framework for exposing top-ups, bill pay, and credit in WhatsApp — accounting for user journey, session intensity, transaction history, and likely next actions' },
+    { area: 'Checkout improvements', color: C.papaya, desc: 'Collaborate with Fintech Core on UX restructuring of checkout flow to optimize for scalable payment methods across business lines' },
+    { area: 'Design system', color: C.cactus, desc: 'Expand component library to support redesigned checkout, wallet, top-ups, and bill pay. Define UX guidelines and pattern library for shared patterns across WhatsApp and web/app' },
+    { area: 'Research foundation', color: C.cactus, desc: 'Empower PMs and engineers to conduct more research, more regularly. Establish consistent framework and cadence for user recruitment pipelines' },
+    { area: 'Content design', color: C.cactus, desc: 'Hire our Content Lead to partner with brand and establish the Felix voice & tone system across all touchpoints. Build initial conversational flow patterns library. Establish bilingual content guidelines' },
+  ]
+  return (
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      <div className="absolute top-[5%] right-[3%] w-[120px] lg:w-[170px] opacity-[0.12] rotate-6 pointer-events-none" style={{ animation: 'ds-drift 9s ease-in-out infinite' }}><Illo src="Magnifying%20Glass.svg" /></div>
+      <div className="flex-1 flex flex-col justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+        <div className="w-full max-w-[1200px]">
+          <div className="mb-5"><PillBadge>Roadmap</PillBadge></div>
+          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Now — Q2&nbsp;2026</h1>
+          <p className="text-muted-foreground text-base mb-6">Stand up the org, establish credibility, support current&nbsp;priorities</p>
+          <div className="space-y-3">{items.map((r) => (
+            <div key={r.area} className="bg-white rounded-2xl p-5 border border-border shadow-sm" style={{ borderLeftWidth: 3, borderLeftColor: r.color }}>
+              <h3 className="font-display font-bold text-sm mb-1" style={{ color: r.color }}>{r.area}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{r.desc}</p>
             </div>
-            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--color-text-secondary)' }}>{p.desc}</p>
-          </div>
-        ))}
+          ))}</div>
+        </div>
       </div>
-    ),
-  },
-  {
-    id: 'closing',
-    section: '',
-    title: 'End of year goal',
-    subtitle: null,
-    content: () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, paddingTop: 8 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
-          {[
-            { num: '10-12', label: 'designers at full build', sub: 'including 1-2 contractors' },
-            { num: '2', label: 'design functions', sub: 'Surface & UX Platform · Embedded' },
-            { num: "Q4 '26", label: 'target for full team', sub: 'phased hiring aligned to reorg' },
-          ].map((s, i) => (
-            <div key={i} style={{ textAlign: 'center', padding: 16 }}>
-              <p style={{ margin: 0, fontSize: 28, fontWeight: 500, color: 'var(--color-text-primary)' }}>{s.num}</p>
-              <p style={{ margin: '4px 0 0', fontSize: 14, color: 'var(--color-text-secondary)' }}>{s.label}</p>
-              <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--color-text-tertiary)' }}>{s.sub}</p>
+      <SlideFooter num={8} />
+    </div>
+  )
+}
+
+function SlideResearch() {
+  return (
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+      <div className="absolute top-[5%] left-[3%] w-[100px] lg:w-[140px] opacity-[0.06] -rotate-12 pointer-events-none" style={{ animation: 'ds-float 8s ease-in-out infinite' }}><Illo src="Magnifying%20Glass.svg" /></div>
+      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+        <div className="w-full max-w-[1200px]">
+          <div className="mb-5"><PillBadge dark>Deep Dive</PillBadge></div>
+          <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Research&nbsp;Model</h1>
+          <p className="text-linen/50 text-base mb-8">Building the practice from scratch with a staggered two-researcher&nbsp;approach</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.blueberry }}>
+              <h3 className="font-display font-bold text-linen text-base mb-1">Researcher 1 — Platform</h3>
+              <p className="text-xs mb-3" style={{ color: C.blueberry }}>Hired in Phase 1 · Surface &amp; UX team</p>
+              <p className="text-sm text-linen/50 leading-relaxed">Foundational studies (trust, mental models, financial literacy). Builds research practice: templates, recruiting pipelines, insight repository, lightweight testing toolkit. Teaches designers and PMs to self-serve on evaluative&nbsp;research.</p>
             </div>
-          ))}
-        </div>
-        <div style={{ background: 'var(--color-background-secondary)', borderRadius: 12, padding: 20, textAlign: 'center' }}>
-          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: 'var(--color-text-secondary)' }}>
-            Let&apos;s prepare ourselves for a period of learnings and iterating. It will be an adjustment that will take energy - but will
-            make us stronger.
-          </p>
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10" style={{ borderLeftWidth: 3, borderLeftColor: C.blueberry }}>
+              <h3 className="font-display font-bold text-linen text-base mb-1">Researcher 2 — Roaming</h3>
+              <p className="text-xs mb-3" style={{ color: C.blueberry }}>Hired at month 6–9 · Rotates across business lines</p>
+              <p className="text-sm text-linen/50 leading-relaxed">6–8 week research sprints aligned to highest-priority product decisions. Tactical and evaluative research: usability testing, concept validation, funnel analysis. Quarterly rotation planning with Head of&nbsp;Design.</p>
+            </div>
+          </div>
+          <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+            <p className="text-sm text-linen/50 leading-relaxed"><strong className="text-linen">Why stagger:</strong> Starting from zero, R1 needs 2–3 months to establish how research works at Felix. Once those rails exist, R2 rides them from day one and focuses on producing research rather than also building&nbsp;infrastructure.</p>
+          </div>
         </div>
       </div>
-    ),
-  },
+      <SlideFooter num={9} dark />
+    </div>
+  )
+}
+
+function SlideContentDesign() {
+  const projects = [
+    { project: 'Felix voice & tone system', timeline: 'Foundational', desc: 'Define how Felix speaks across every touchpoint. Bilingual guidelines (Spanish, English, Spanglish and when to use each). Emotional tone calibration by moment type. Writing principles the whole team can follow.' },
+    { project: 'Conversational flow patterns library', timeline: 'Next', desc: 'Standardized patterns for: greetings, disambiguation, high-stakes confirmations, error recovery, product introduction within conversation. Directly feeds the multi-product discovery framework.' },
+    { project: 'AI agent personality & prompt guidelines', timeline: 'Soon', desc: 'Working with the omnichannel + AI team, define personality parameters that guide the LLM agent. Behavioral rules, tone constraints, things Felix should never say.' },
+    { project: 'Cross-channel content adaptation', timeline: 'Later', desc: "How Felix's voice adapts across WhatsApp (conversational), app (scannable), push notifications (action-oriented), SMS (ultra-concise). Same personality, different expression." },
+  ]
+  return (
+    <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
+      <div className="absolute bottom-[6%] right-[4%] w-[130px] lg:w-[180px] opacity-[0.1] rotate-3 pointer-events-none" style={{ animation: 'ds-float 10s ease-in-out infinite' }}><Illo src="Speech%20Bubbles%20%2B%20Hearts.svg" /></div>
+      <div className="flex-1 flex flex-col justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
+        <div className="w-full max-w-[1200px]">
+          <div className="mb-5"><PillBadge>Deep Dive</PillBadge></div>
+          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Content Design Lead — Key&nbsp;Projects</h1>
+          <p className="text-muted-foreground text-base mb-6">The words are the UI — especially in a conversational-first&nbsp;product</p>
+          <div className="space-y-3">{projects.map((p) => (
+            <div key={p.project} className="bg-white rounded-2xl p-5 border border-border shadow-sm" style={{ borderLeftWidth: 3, borderLeftColor: C.cactus }}>
+              <div className="flex justify-between items-baseline mb-2">
+                <h3 className="font-display font-bold text-foreground text-sm">{p.project}</h3>
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold" style={{ background: `${C.cactus}20`, color: C.evergreen }}>{p.timeline}</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
+            </div>
+          ))}</div>
+        </div>
+      </div>
+      <SlideFooter num={10} />
+    </div>
+  )
+}
+
+function SlideClosingGoal() {
+  return (
+    <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-[8%] left-[5%] w-[100px] lg:w-[140px] opacity-[0.06] -rotate-12" style={{ animation: 'ds-float 7s ease-in-out infinite' }}><Illo src="Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" /></div>
+        <div className="absolute bottom-[10%] right-[5%] w-[120px] lg:w-[160px] opacity-[0.05] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite 1s' }}><Illo src="Hand%20-%20Stars.svg" /></div>
+      </div>
+      <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-10 relative z-10">
+        <div className="w-full max-w-[1000px]">
+          <div className="mb-5 text-center"><PillBadge dark>End of Year Goal</PillBadge></div>
+          <h1 className="font-display font-black text-linen text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-tight mb-10 text-center">Where We&apos;re&nbsp;Headed</h1>
+          <div className="grid grid-cols-3 gap-6 mb-10">
+            {[
+              { num: '10–12', label: 'designers at full build', sub: 'including 1-2 contractors' },
+              { num: '2', label: 'design functions', sub: 'Surface & UX Platform · Embedded' },
+              { num: "Q4 '26", label: 'target for full team', sub: 'phased hiring aligned to reorg' },
+            ].map((s) => (
+              <div key={s.num} className="text-center">
+                <p className="font-display font-black text-turquoise text-4xl lg:text-5xl">{s.num}</p>
+                <p className="text-sm text-linen/70 mt-1">{s.label}</p>
+                <p className="text-xs text-linen/30 mt-0.5">{s.sub}</p>
+              </div>
+            ))}
+          </div>
+          <div className="bg-white/5 rounded-2xl p-6 border border-white/10 text-center">
+            <p className="text-base text-linen/60 leading-relaxed">Let&apos;s prepare ourselves for a period of learnings and iterating. It will be an adjustment that will take energy — but will make us&nbsp;stronger.</p>
+          </div>
+        </div>
+      </div>
+      <SlideFooter num={11} dark />
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════ SHELL ════════════ */
+
+const slides = [SlideCover, SlideVision, SlideOrgModel, SlideTeamDetail, SlideHiring, SlideStaffAug, SlideRoadmapOverview, SlideNow, SlideResearch, SlideContentDesign, SlideClosingGoal]
+const darkSlideSet = new Set([0, 2, 4, 6, 8, 10])
+const slideMeta = [
+  { title: 'Product Design Roadmap', subtitle: 'Cover' },
+  { title: "Design's Role at Felix", subtitle: 'Vision' },
+  { title: 'Centralized but Embedded', subtitle: 'Org Model' },
+  { title: 'Team Composition', subtitle: 'Roles' },
+  { title: 'Hiring Sequence', subtitle: 'Timeline' },
+  { title: 'Staff Augmentation', subtitle: 'Strategy' },
+  { title: 'Two Tracks', subtitle: 'Roadmap' },
+  { title: 'Now — Q2 2026', subtitle: 'Priorities' },
+  { title: 'Research Model', subtitle: 'Deep Dive' },
+  { title: 'Content Design', subtitle: 'Deep Dive' },
+  { title: 'End of Year Goal', subtitle: 'Closing' },
 ]
+const slideRatingStubs: SlideData[] = slides.map((_, i) => ({ type: 'bullets' as const, bg: darkSlideSet.has(i) ? 'dark' as const : 'light' as const, title: slideMeta[i]?.title ?? '', bullets: [] }))
 
 export default function DesignRoadmapPage() {
-  const [idx, setIdx] = useState(0)
-  const [touchX, setTouchX] = useState<number | null>(null)
-  const s = slides[idx]
+  const [current, setCurrent] = useState(0)
+  const [mounted, setMounted] = useState(false)
+  const [tocOpen, setTocOpen] = useState(false)
+  const [tocView, setTocView] = useState<'list' | 'cards'>('list')
+  const { comments, commentMode, setCommentMode, addComment, deleteComment, editComment, flagComment, resolveComment, addReply, deleteReply } = useComments('design-roadmap-comments')
+  const { progress: pdfProgress, download: downloadPdf, cancel: cancelPdf } = useSlidePdf('design-roadmap.pdf')
+  const { locale, setLocale } = useLocale()
+  const slideRef = useRef<HTMLDivElement>(null)
+  useSlideTranslation(slideRef, locale, current)
   const total = slides.length
 
-  const prev = useCallback(() => setIdx((p) => Math.max(0, p - 1)), [])
-  const next = useCallback(() => setIdx((p) => Math.min(total - 1, p + 1)), [total])
+  useEffect(() => { setMounted(true); const h = window.location.hash; if (h) { const n = parseInt(h.replace('#slide-', ''), 10); if (!isNaN(n) && n >= 0 && n < total) setCurrent(n) } }, [total])
+  useEffect(() => { if (mounted) window.history.replaceState(null, '', `#slide-${current}`) }, [current, mounted])
+
+  const next = useCallback(() => setCurrent((p) => Math.min(p + 1, total - 1)), [total])
+  const prev = useCallback(() => setCurrent((p) => Math.max(p - 1, 0)), [])
 
   useEffect(() => {
-    const hash = window.location.hash
-    if (!hash) return
-    const n = parseInt(hash.replace('#slide-', ''), 10)
-    if (!Number.isNaN(n) && n >= 0 && n < total) setIdx(n)
-  }, [total])
-
-  useEffect(() => {
-    window.history.replaceState(null, '', `#slide-${idx}`)
-  }, [idx])
-
-  useEffect(() => {
+    if (!mounted) return
     const handler = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
-        e.preventDefault()
-        next()
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault()
-        prev()
-      } else if (e.key === 'Home') {
-        e.preventDefault()
-        setIdx(0)
-      } else if (e.key === 'End') {
-        e.preventDefault()
-        setIdx(total - 1)
-      }
+      if (e.key === 'Escape' && tocOpen) { e.preventDefault(); setTocOpen(false); return }
+      if (e.key === 'Escape' && commentMode) { e.preventDefault(); setCommentMode(false); return }
+      if (e.key === 'c' || e.key === 'C') { e.preventDefault(); setCommentMode(m => !m); return }
+      if (tocOpen || commentMode) return
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next() }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prev() }
+      else if (e.key === 'Home') { e.preventDefault(); setCurrent(0) }
+      else if (e.key === 'End') { e.preventDefault(); setCurrent(total - 1) }
     }
     window.addEventListener('keydown', handler, true)
     return () => window.removeEventListener('keydown', handler, true)
-  }, [next, prev, total])
+  }, [mounted, total, next, prev, tocOpen])
 
-  const onTouchStart = (e: React.TouchEvent) => setTouchX(e.targetTouches[0].clientX)
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchX === null) return
-    const diff = touchX - e.changedTouches[0].clientX
-    if (diff > 50) next()
-    else if (diff < -50) prev()
-    setTouchX(null)
-  }
+  const [touchX, setTouchX] = useState<number | null>(null)
+  const handleTouchStart = (e: React.TouchEvent) => setTouchX(e.targetTouches[0].clientX)
+  const handleTouchEnd = (e: React.TouchEvent) => { if (touchX === null) return; const diff = touchX - e.changedTouches[0].clientX; if (diff > 50) next(); else if (diff < -50) prev(); setTouchX(null) }
+
+  const Slide = slides[current]
+  const isDark = darkSlideSet.has(current)
+  const pillBg = isDark ? 'bg-white/10 border-white/10' : 'bg-white/90 border-border shadow-xs'
+  const pillText = isDark ? 'text-white/70' : 'text-foreground'
+  const hintText = isDark ? 'text-white/40' : 'text-muted-foreground'
+  const trackBg = isDark ? 'bg-white/10' : 'bg-concrete/30'
+  const trackFill = isDark ? 'bg-turquoise-400' : 'bg-turquoise-600'
+  const dotActive = isDark ? 'bg-turquoise-400' : 'bg-turquoise-600'
+  const dotInactive = isDark ? 'bg-white/20 hover:bg-white/30' : 'bg-concrete hover:bg-concrete/70'
+  const btnCls = isDark ? 'bg-white/10 border-white/10 hover:bg-white/20' : 'bg-white/90 border-border hover:bg-white hover:shadow-md'
+  const btnIcon = isDark ? 'text-white/70' : 'text-foreground'
 
   return (
-    <div
-      className="h-screen w-screen overflow-hidden relative bg-gradient-to-b from-stone to-linen"
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
-      <div className="absolute top-0 inset-x-0 h-1 z-50 bg-concrete/30">
-        <div className="h-full bg-turquoise-600 transition-all duration-400" style={{ width: `${((idx + 1) / total) * 100}%` }} />
+    <PresentationPassword>
+    <div className="h-screen w-screen overflow-hidden relative select-none" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div className={`absolute top-0 inset-x-0 h-1 z-50 transition-colors duration-500 ${trackBg}`}><div className={`h-full transition-all duration-500 ease-out ${trackFill}`} style={{ width: `${((current + 1) / total) * 100}%` }} /></div>
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50"><div className={`px-3 py-1.5 backdrop-blur-sm rounded-full border transition-colors duration-500 ${pillBg}`}><span className={`text-xs sm:text-sm font-medium transition-colors duration-500 ${pillText}`}>{current + 1} / {total}</span></div></div>
+      <SlideTocChrome tocOpen={tocOpen} onToggle={() => setTocOpen(!tocOpen)} tocView={tocView} onViewChange={setTocView} pillBg={pillBg} pillText={pillText} hintText={hintText} onReset={() => setCurrent(0)} commentMode={commentMode} onToggleComments={() => setCommentMode(!commentMode)} locale={locale} onLocaleChange={setLocale} onDownloadPdf={() => downloadPdf({ slideRef, total, currentSlide: current, goToSlide: setCurrent })} />
+      <div ref={slideRef} className="group/slide h-full w-full relative" key={current}>
+        <div className="h-full w-full animate-in fade-in duration-300"><Slide /></div>
+        <SlideCommentLayer slideIndex={current} commentMode={commentMode} comments={comments} onAddComment={addComment} onEditComment={editComment} onDeleteComment={deleteComment} onFlagComment={flagComment} onResolveComment={(id, resolved) => resolveComment(id, resolved)} onAddReply={addReply} onDeleteReply={deleteReply} onExitCommentMode={() => setCommentMode(false)} />
+        <div className="absolute bottom-12 right-6 z-[60] opacity-0 group-hover/slide:opacity-100 transition-opacity duration-200"><SlideRating slide={slideRatingStubs[current]} slideIndex={current} source="design-roadmap" dark={darkSlideSet.has(current)} /></div>
       </div>
-
-      <div className="absolute top-4 left-4 z-50 px-3 py-1.5 rounded-full border border-border bg-white/90">
-        <span className="text-xs sm:text-sm font-medium text-foreground">
-          {idx + 1} / {total}
-        </span>
-      </div>
-
-      <div className="h-full w-full px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
-        <div className="h-full max-w-[1180px] mx-auto rounded-2xl border border-border bg-white/95 shadow-xl p-6 sm:p-8 lg:p-10 overflow-auto">
-          <div style={{ minHeight: 480, display: 'flex', flexDirection: 'column' }}>
-            {s.section && (
-              <p
-                style={{
-                  margin: '0 0 4px',
-                  fontSize: 11,
-                  fontWeight: 500,
-                  letterSpacing: '0.08em',
-                  color: 'var(--color-text-tertiary)',
-                  textTransform: 'uppercase',
-                }}
-              >
-                {s.section}
-              </p>
-            )}
-            <h1 style={{ margin: '0 0 4px', fontSize: 28, fontWeight: 600, color: 'var(--color-text-primary)', lineHeight: 1.25 }}>
-              {s.title}
-            </h1>
-            {s.subtitle ? (
-              <p style={{ margin: '0 0 20px', fontSize: 14, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>{s.subtitle}</p>
-            ) : (
-              <div style={{ marginBottom: 20 }} />
-            )}
-            {s.id === 'cover' ? (
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 8 }}>
-                <p style={{ fontSize: 15, color: 'var(--color-text-secondary)', margin: 0, textAlign: 'center', maxWidth: 560 }}>{s.subtitle}</p>
-                <p style={{ fontSize: 13, color: 'var(--color-text-tertiary)', margin: 0 }}>{s.footer}</p>
-              </div>
-            ) : (
-              <div style={{ flex: 1 }}>{s.content && s.content()}</div>
-            )}
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '16px 0',
-              borderTop: '1px solid var(--color-border-tertiary)',
-              marginTop: 16,
-            }}
-          >
-            <button
-              onClick={prev}
-              disabled={idx === 0}
-              style={{
-                padding: '6px 16px',
-                borderRadius: 8,
-                border: '1px solid var(--color-border-tertiary)',
-                background: 'var(--color-background-primary)',
-                color: idx === 0 ? 'var(--color-text-tertiary)' : 'var(--color-text-primary)',
-                cursor: idx === 0 ? 'default' : 'pointer',
-                fontSize: 13,
-              }}
-            >
-              Previous
-            </button>
-
-            <div className="flex items-center gap-2">
-              {slides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setIdx(i)}
-                  aria-label={`Go to slide ${i + 1}`}
-                  className={`rounded-full transition-all duration-300 ${
-                    i === idx ? 'w-8 h-2 bg-turquoise-600' : 'w-2 h-2 bg-concrete hover:bg-concrete/70'
-                  }`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={next}
-              disabled={idx === slides.length - 1}
-              style={{
-                padding: '6px 16px',
-                borderRadius: 8,
-                border: '1px solid var(--color-border-tertiary)',
-                background: 'var(--color-background-primary)',
-                color: idx === slides.length - 1 ? 'var(--color-text-tertiary)' : 'var(--color-text-primary)',
-                cursor: idx === slides.length - 1 ? 'default' : 'pointer',
-                fontSize: 13,
-              }}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
+      <div className="absolute bottom-10 sm:bottom-12 left-1/2 -translate-x-1/2 z-50 flex gap-2">{slides.map((_, i) => <button key={i} onClick={() => setCurrent(i)} className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${current === i ? `w-8 sm:w-12 ${dotActive}` : `w-1.5 sm:w-2 ${dotInactive}`}`} aria-label={`Go to slide ${i + 1}`} />)}</div>
+      <button onClick={prev} disabled={current === 0} className={`hidden md:flex absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-[100] p-3 rounded-full backdrop-blur-sm border transition-all duration-500 ${btnCls} ${current === 0 ? 'opacity-0 pointer-events-none' : ''}`} aria-label="Previous slide" type="button"><svg className={`w-5 h-5 transition-colors duration-500 ${btnIcon}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
+      <button onClick={next} disabled={current === total - 1} className={`hidden md:flex absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-[100] p-3 rounded-full backdrop-blur-sm border transition-all duration-500 ${btnCls} ${current === total - 1 ? 'opacity-0 pointer-events-none' : ''}`} aria-label="Next slide" type="button"><svg className={`w-5 h-5 transition-colors duration-500 ${btnIcon}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
+      <div className="md:hidden absolute bottom-20 left-1/2 -translate-x-1/2 z-40"><div className={`px-3 py-1.5 backdrop-blur-sm rounded-full border transition-colors duration-500 ${pillBg}`}><span className={`text-xs transition-colors duration-500 ${hintText}`}>Swipe to navigate</span></div></div>
+      <SlideToc open={tocOpen} onClose={() => setTocOpen(false)} slides={slides} slideMeta={slideMeta} darkSlideSet={darkSlideSet} current={current} view={tocView} onSelect={(i) => { setCurrent(i); setTocOpen(false) }} />
+      <SlidePreTranslator slides={slides} locale={locale} />
+      <SlidePdfOverlay progress={pdfProgress} onCancel={cancelPdf} />
     </div>
+    </PresentationPassword>
   )
 }

@@ -264,14 +264,14 @@ function SlideCoverage() {
           <p className="text-muted-foreground text-lg mb-6">Current coverage — the team is stretched&nbsp;thin</p>
 
           <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden mb-4">
-            <div className="grid grid-cols-[100px_180px_120px_100px] gap-x-6 px-5 py-2.5 bg-foreground/[0.03] border-b border-border">
+            <div className="grid grid-cols-[1fr_2fr_1fr_1fr] gap-x-6 px-5 py-2.5 bg-foreground/[0.03] border-b border-border">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">PM</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Product</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Designer</span>
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Status</span>
             </div>
             {assignments.map((a, i) => (
-              <div key={a.pm} className={`grid grid-cols-[100px_180px_120px_100px] gap-x-6 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white' : 'bg-foreground/[0.02]'} ${i < assignments.length - 1 ? 'border-b border-border/50' : ''}`}>
+              <div key={a.pm} className={`grid grid-cols-[1fr_2fr_1fr_1fr] gap-x-6 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white' : 'bg-foreground/[0.02]'} ${i < assignments.length - 1 ? 'border-b border-border/50' : ''}`}>
                 <span className="text-sm font-medium text-foreground">{a.pm}</span>
                 <span className="text-sm text-muted-foreground">{a.product}</span>
                 <span className={`text-sm font-medium ${a.status === 'gap' ? 'text-papaya' : 'text-foreground'}`}>{a.designer}</span>
@@ -603,7 +603,7 @@ function SlideClosingGoal() {
             <div className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: C.papaya }}>
               <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.papaya }}>Today</h3>
               <ul className="space-y-2.5">
-                {['3 designers + Head of Design', 'Design system defined but not yet launched', 'No content design or research infra', 'Reactive to product requests', 'Single-surface focus (WhatsApp)'].map((item) => (
+                {['Design system defined but not yet launched', 'No content design or research infra', 'Reactive to product requests', 'Single-surface focus (WhatsApp)'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-papaya/50" strokeWidth={1.5} /><span className="text-base text-linen/60 leading-snug">{item}</span></li>
                 ))}
               </ul>
@@ -613,7 +613,7 @@ function SlideClosingGoal() {
             <div className="bg-white/5 rounded-2xl p-6 sm:p-7 border border-white/10" style={{ borderTopWidth: 4, borderTopColor: C.cactus }}>
               <h3 className="font-display font-extrabold text-lg sm:text-xl mb-4" style={{ color: C.cactus }}>End of&nbsp;Year</h3>
               <ul className="space-y-2.5">
-                {['10–12 designers across two functions', 'Unified design system + pattern library', 'Content design, research, and app coverage', 'Proactive — shaping product direction', 'Multi-surface: WhatsApp, app, web, and\u00A0beyond'].map((item) => (
+                {['Unified design system + pattern library', 'Content design, research, and app coverage', 'Proactive — shaping product direction', 'Multi-surface: WhatsApp, app, web, and\u00A0beyond'].map((item) => (
                   <li key={item} className="flex items-start gap-2.5"><CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-cactus/60" strokeWidth={1.5} /><span className="text-base text-linen/60 leading-snug">{item}</span></li>
                 ))}
               </ul>

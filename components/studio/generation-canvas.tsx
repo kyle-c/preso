@@ -186,7 +186,7 @@ export function GenerationCanvas({
       </div>
 
       {/* Agent cursors — read actual tile positions from DOM */}
-      <AgentCursors gridRef={gridRef} phase={phase} />
+      <AgentCursors gridRef={gridRef} phase={phase} expectedCount={finalCount} />
     </div>
   )
 }

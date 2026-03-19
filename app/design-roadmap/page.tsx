@@ -158,8 +158,22 @@ function SlideTeamDetail() {
           <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Team Composition &amp;&nbsp;Ratios</h1>
           <p className="text-muted-foreground text-lg mb-8">Platform creates leverage. Embedded creates&nbsp;depth.</p>
 
+          {/* Vertical columns — Embedded business lines */}
+          <div className="grid grid-cols-4 gap-3 mb-4">
+            {embeddedLines.map((line) => (
+              <div key={line.name} className="rounded-2xl p-5 border border-border shadow-sm bg-white text-center" style={{ borderTopWidth: 4, borderTopColor: line.color }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-3" style={{ background: `${line.color}20` }}>
+                  <Lightning size={18} style={{ color: C.evergreen }} />
+                </div>
+                <p className="font-display font-extrabold text-foreground text-base mb-1">{line.name}</p>
+                <p className="font-display font-black text-2xl" style={{ color: line.color }}>{line.count}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">designer{line.count !== '1' ? 's' : ''}</p>
+              </div>
+            ))}
+          </div>
+
           {/* Horizontal bar — Surface & UX Platform */}
-          <div className="rounded-2xl p-5 mb-4 border border-border shadow-sm" style={{ background: `${C.cactus}10`, borderTopWidth: 4, borderTopColor: C.cactus }}>
+          <div className="rounded-2xl p-5 border border-border shadow-sm" style={{ background: `${C.cactus}10`, borderBottomWidth: 4, borderBottomColor: C.cactus }}>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${C.cactus}20` }}>
                 <Gear size={18} style={{ color: C.evergreen }} />
@@ -172,20 +186,6 @@ function SlideTeamDetail() {
                 <span key={r} className="text-sm font-medium px-3 py-1.5 rounded-lg bg-white border border-border text-foreground">{r}</span>
               ))}
             </div>
-          </div>
-
-          {/* Vertical columns — Embedded business lines */}
-          <div className="grid grid-cols-4 gap-3">
-            {embeddedLines.map((line) => (
-              <div key={line.name} className="rounded-2xl p-5 border border-border shadow-sm bg-white text-center" style={{ borderTopWidth: 4, borderTopColor: line.color }}>
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-3" style={{ background: `${line.color}20` }}>
-                  <Lightning size={18} style={{ color: C.evergreen }} />
-                </div>
-                <p className="font-display font-extrabold text-foreground text-base mb-1">{line.name}</p>
-                <p className="font-display font-black text-2xl" style={{ color: line.color }}>{line.count}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">designer{line.count !== '1' ? 's' : ''}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>

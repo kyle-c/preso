@@ -381,12 +381,47 @@ export async function POST() {
       )
     )
 
-    const allResults = [...joseResults, ...presoResults]
+    // Seed consumer-payments squad mission slides as exemplars for strategy decks
+    const CP_STRATEGY_SLIDES: SlideData[] = [
+      {
+        type: 'two-column', bg: 'light', badge: 'Activation Squad', title: 'Activation Squad', layout: 'key-takeaways',
+        columns: [
+          { heading: '', body: 'Bridging the gap between discovery and habit, ensuring every user\'s introduction to our product is the start of a lasting financial relationship.' },
+          { heading: 'Mission', body: '**Bridge the gap between discovery and habit, ensuring every user\'s introduction is the start of a lasting financial relationship.**', bullets: [{ text: 'Nail the signup before the first send', icon: '✓' }, { text: 'Get money to the recipient with minimal friction', icon: '✓' }, { text: 'Assist at each drop-off until habit forms', icon: '✓' }] },
+        ],
+        imageUrl: '/illustrations/Hand%20-%20Stars.svg',
+      },
+      {
+        type: 'cards', bg: 'light', title: 'Activation Themes', layout: 'three-column',
+        cards: [
+          { title: 'Make it easy — non tech-savvy', titleColor: '#082422', body: '**Remove friction at every step**\n\n• Non-text inputs for key data (e.g., account photo)\n• Seamless web → WhatsApp handoff with full context\n• Step-by-step flow with clear guidance' },
+          { title: 'Make it easy — tech-savvy', titleColor: '#082422', body: '**Give them the wheel**\n\n• Capture preferences early (e.g., FX alerts)\n• Skip steps, fewer confirmations, faster path to send\n• Surface richer information on demand' },
+          { title: 'Nudges', titleColor: '#082422', body: '**Assist at every drop-off point**\n\n• FX nudges timed to convert\n• Proactive nudges for slow users (25–105 min)\n• Next-day re-engagement for late-night users\n• 50-day follow-up' },
+        ],
+      },
+      {
+        type: 'cards', bg: 'dark', title: 'Quality — users never need a human until they truly want one', layout: 'three-column',
+        cards: [
+          { title: 'Prevent the Problem', titleColor: '#2BF2F1', body: '• **Errors:** Error handling, bot failure recovery\n• **Reliability:** Kill Switch, Catalogs/Limits fix, speed indicators per payout method\n\n*Users never hit a dead-end we could have prevented*' },
+          { title: 'Let Them Solve It', titleColor: '#2BF2F1', body: '• **Self-service:** Cancellations, modifications, transaction status\n• **Options Menu:** Make every button functional\n• **Account Mgmt:** Self-service beneficiary deletion\n\n*If something does happen, users resolve it themselves*' },
+          { title: 'Enhanced Ninjas', titleColor: '#2BF2F1', body: '• **Process automation:** Holds & payment ops streamlined\n• **The guardrail:** Felix is never a bot carousel that blocks users from reaching help when they REALLY need it\n\n*When a human is truly needed, they arrive informed and fast*' },
+        ],
+      },
+    ]
+
+    const cpResults = await Promise.all(
+      CP_STRATEGY_SLIDES.map((slide, i) =>
+        rateSlide(slide.type, slide.bg, 1, slide, 'consumer-payments', i)
+      )
+    )
+
+    const allResults = [...joseResults, ...presoResults, ...cpResults]
 
     return NextResponse.json({
       seeded: allResults.length,
       jose: joseResults.length,
       'preso-sample': presoResults.length,
+      'consumer-payments': cpResults.length,
       slides: allResults.map(r => ({ id: r.id, type: r.slideType, bg: r.bg })),
     })
   } catch (err) {

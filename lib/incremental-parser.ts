@@ -124,8 +124,23 @@ export function parseIncrementalSlides(text: string): SlideData[] {
  */
 export function parseFinalResult(text: string): ParseResult {
   const clean = text.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '')
-  const slides = parseIncrementalSlides(text)
+  let slides = parseIncrementalSlides(text)
   const document = extractDocument(clean)
+
+  // Post-generation validation + auto-fix
+  if (slides.length > 0) {
+    try {
+      const { validateSlides } = require('./slide-validator')
+      const result = validateSlides(slides)
+      if (result.issues.length > 0) {
+        console.log(`[slide-validator] ${result.issues.length} issues found:`, result.issues.map((i: any) => i.message))
+      }
+      if (result.fixedSlides) {
+        console.log('[slide-validator] Auto-fixes applied')
+        slides = result.fixedSlides
+      }
+    } catch (_e) { /* validator not critical */ }
+  }
 
   return { slides, document }
 }

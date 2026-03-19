@@ -53,6 +53,10 @@ export interface SlideData {
   imageUrl?: string
   imageCaption?: string
   chart?: ChartSpec
+  /** Layout hint for the renderer — controls which variant of the slide type to use */
+  layout?: '2x2-grid' | 'agenda' | 'timeline' | 'pros-cons' | 'section-divider' | 'hero-metric' | 'three-column' | 'key-takeaways'
+  /** Speaker notes */
+  notes?: string
   /** URL to embed in a mobile device frame (content slides only) */
   embedUrl?: string
   /** Google Drive video URL — rendered as embedded player. Use format: https://drive.google.com/file/d/{ID}/preview */

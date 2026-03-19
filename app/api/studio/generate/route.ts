@@ -177,6 +177,7 @@ Return ONLY a valid JSON array of slide objects — no markdown fences, no wrapp
   "quote": { "text": "...", "attribution": "optional" },
   "chart": { "chartType": "...", "data": [...], "xKey": "...", "yKeys": [...], "colors": [...] },
   "imageUrl": "optional illustration path",
+  "layout": "optional — use when a blueprint matches: 2x2-grid, agenda, timeline, pros-cons, section-divider, hero-metric, three-column, key-takeaways",
   "notes": "REQUIRED: 3-5 sentence speaker notes"
 }
 

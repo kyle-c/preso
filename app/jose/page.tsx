@@ -40,7 +40,7 @@ function PillBadge({ children, dark }: { children: React.ReactNode; dark?: boole
   )
 }
 
-const TOTAL = 10
+const TOTAL = 9
 
 /* ═══════════════════════════════════════════════════════════ */
 /*                     SLIDE COMPONENTS                       */
@@ -329,7 +329,8 @@ function SlideTeam() {
     { name: 'Kyle Cooney', role: 'Head of Product\u00A0Design', initials: 'KC', photo: '/team/kyle.jpg' },
     { name: 'Patricia Caballero', role: 'Product\u00A0Designer', initials: 'PC', photo: '/team/patricia-c.jpg' },
     { name: 'Patricia Beltran', role: 'Product\u00A0Designer', initials: 'PB', photo: '/team/patricia-b.jpg' },
-    { name: 'You!', role: 'Sr. UX Researcher\u00A0(Founding)', initials: 'JO', photo: null },
+    { name: 'Nico Gandolfo', role: 'Sr. Product Designer\u00A0(contractor)', initials: 'NG', photo: null },
+    { name: 'You!', role: 'Sr. UX\u00A0Researcher', initials: 'JO', photo: null },
   ]
 
   return (
@@ -347,7 +348,7 @@ function SlideTeam() {
             Meet the Design Team
           </h1>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
             {team.map((t) => (
               <div key={t.name} className={`bg-white rounded-2xl p-6 border shadow-sm flex flex-col items-center text-center gap-2 ${t.name === 'You!' ? 'border-turquoise shadow-lg ring-2 ring-turquoise/20' : 'border-border'}`}>
                 {t.photo ? (
@@ -422,11 +423,8 @@ function SlideTools() {
     { name: 'Figma', desc: 'Design files, prototypes, and the design\u00A0system', category: 'Design' },
     { name: 'Notion', desc: 'Research repos, meeting notes, and\u00A0documentation', category: 'Knowledge' },
     { name: 'Slack', desc: '#design, #ux-research, #product-feedback', category: 'Communication' },
-    { name: 'Maze / UserTesting', desc: 'Remote usability testing and\u00A0surveys', category: 'Research' },
-    { name: 'Dovetail', desc: 'Research analysis, tagging, and\u00A0synthesis', category: 'Research' },
-    { name: 'Linear', desc: 'Project tracking and sprint\u00A0management', category: 'Project Management' },
-    { name: 'Loom', desc: 'Async video updates and research\u00A0walkthroughs', category: 'Communication' },
-    { name: 'GitHub', desc: 'Design system code and component\u00A0library', category: 'Engineering' },
+    { name: 'ClickUp', desc: 'Project tracking and sprint\u00A0management', category: 'Project Management' },
+    { name: 'Research Stack', desc: 'You tell us. What do we\u00A0need?', category: 'Research' },
   ]
 
   return (
@@ -466,6 +464,9 @@ function SlideOurUsers() {
 
   return (
     <div className="relative h-full w-full flex flex-col overflow-hidden" style={{ background: C.turquoise }}>
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50" aria-hidden="true">
+        <span className="text-[120px] sm:text-[160px] lg:text-[200px] font-display font-black text-slate/[0.07] uppercase tracking-widest whitespace-nowrap select-none" style={{ transform: 'rotate(-25deg)' }}>DRAFT — YOU DEFINE</span>
+      </div>
       <div className="absolute bottom-[5%] right-[3%] w-[180px] lg:w-[240px] opacity-[0.15] pointer-events-none" style={{ animation: 'ds-float 9s ease-in-out infinite' }}>
         <Illo src="Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg" />
       </div>
@@ -624,7 +625,7 @@ function SlideLetsGo() {
           </div>
         </div>
       </div>
-      <SlideFooter num={10} total={TOTAL} dark />
+      <SlideFooter num={9} total={TOTAL} dark />
     </div>
   )
 }
@@ -635,10 +636,10 @@ function SlideLetsGo() {
 
 const slides = [
   SlideWelcome, SlideWhoWeAre, SlideValues, SlideYourRole, SlideTeam,
-  SlideFirst90, SlideTools, SlideOurUsers, SlideWeekOne, SlideLetsGo,
+  SlideFirst90, SlideTools, SlideOurUsers, SlideLetsGo,
 ]
 
-const darkSlideSet = new Set([3, 5, 9])
+const darkSlideSet = new Set([3, 5, 8])
 const brandSlideSet = new Set([7])
 
 export default function JoseOnboardingPage() {

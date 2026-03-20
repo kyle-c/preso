@@ -880,10 +880,10 @@ function SlideFintechDemo() {
         <div className="w-full h-full overflow-hidden relative">
           <iframe
             src="/fintechtestflow/embed"
-            className="border-0 transition-all duration-300"
+            className={`border-0 transition-all duration-300 ${canvasOpen ? '' : 'lg:!w-[calc(100%+600px)] lg:!h-[calc(100%+60px)] lg:!mt-[36px] lg:!ml-[-160px]'}`}
             style={canvasOpen
               ? { width: '100%', height: 'calc(100% + 40px)', marginTop: '-20px', marginLeft: '0' }
-              : { width: 'calc(100% + 600px)', height: 'calc(100% + 60px)', marginTop: '36px', marginLeft: '-160px' }
+              : { width: '100%', height: '100%', marginTop: '0', marginLeft: '0' }
             }
             title="Fintech checkout flow with token viewer and translator"
           />

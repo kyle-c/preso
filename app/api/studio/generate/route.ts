@@ -1139,17 +1139,25 @@ const ONBOARDING_OUTLINE = [
   { type: 'closing', bg: 'dark', badge: '', title: 'Welcome aboard' },
 ]
 
-const OUTLINE_SYSTEM_PROMPT = `You are a presentation architect for Félix Pago (fintech for Latinos in the US).
-Output a JSON array of 12-18 slide outlines. Each: {"type":"...","bg":"dark"|"light"|"brand","badge":"...","title":"..."}
-Types: title, section, content, bullets, two-column, cards, quote, image, checklist, chart, closing.
+const OUTLINE_SYSTEM_PROMPT = `You are a presentation architect for Félix Pago, a fintech empowering Latinos in the US.
+
+Given a brief, output a JSON array of 12-18 slide OUTLINES. Each outline is a minimal object:
+{"type": "...", "bg": "dark"|"light"|"brand", "badge": "...", "title": "..."}
+
+Available types: title, section, content, bullets, two-column, cards, quote, image, checklist, chart, closing.
+
 Rules:
-- Start with "title" (bg "brand"), end with "closing". Alternate bg colors.
-- Title slide: max 6 words title, max 8 words subtitle. Billboard headline style.
-- Use 6+ different types including at least 1 chart, 1 cards, 1 two-column.
-- Titles should be insight-driven (e.g. "Revenue grew 22%" not "Revenue Overview").
-- For onboarding: EXACTLY 10 slides, bg pattern: light, light, light, dark, light, dark, light, brand, light, dark.
-- Strategy/investor decks: prefer 14-16 slides.
-Return ONLY the JSON array.`
+- Start with type "title" (bg "brand"), end with type "closing"
+- The title slide must be SHORT and punchy — title max 6 words, subtitle max 8 words (e.g. "Charting Our Future" + "UX · Q2 2025"). Think billboard headline, not description
+- Alternate bg colors — never two consecutive slides with same bg
+- Use "brand" bg sparingly (title, closing, one accent slide max)
+- Use at least 6 different slide types — include at least 1 chart, 1 cards, and 1 two-column
+- Titles should be insight-driven, not generic (e.g. "Revenue grew 22% through organic channels" not "Revenue Overview")
+- Badge text should categorize sections (e.g. "Overview", "Key Insight", "Your Role")
+- For onboarding/welcome prompts: EXACTLY 10 slides with bg pattern: light, light, light, dark, light, dark, light, brand, light, dark
+- Prefer 14-16 slides for strategy/investor/launch decks — these topics need room to breathe
+
+Return ONLY the JSON array. No markdown fences, no commentary.`
 
 function buildBatchPrompt(outline: any[], batchIndices: number[], userPrompt?: string, hasFiles = false, intent?: string): string {
   const outlineStr = JSON.stringify(outline, null, 2)

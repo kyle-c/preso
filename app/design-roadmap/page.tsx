@@ -176,17 +176,17 @@ function SlideOrgModel() {
 
 function SlideCoverageTarget() {
   const dedicated = [
-    { pm: 'Santi', product: 'Core Send', coverage: 'Lead Designer' },
-    { pm: 'Hernan', product: 'Activation', coverage: 'Senior Designer' },
-    { pm: 'Sebas', product: 'Credit', coverage: 'Senior Designer' },
-    { pm: 'Diego', product: 'New Bets', coverage: 'Designer' },
-    { pm: 'Eva', product: 'Checkout', coverage: 'Designer' },
-    { pm: 'Memo', product: 'Wallet', coverage: 'Designer' },
+    { pm: 'Santi', product: 'Core Send', coverage: 'Lead Designer', pill: 'New Hire' },
+    { pm: 'Hernan', product: 'Activation', coverage: 'Senior Designer', pill: 'Pato' },
+    { pm: 'Sebas', product: 'Credit', coverage: 'Senior Designer', pill: 'New Hire' },
+    { pm: 'Diego', product: 'New Bets', coverage: 'Designer', pill: 'New Hire' },
+    { pm: 'Eva', product: 'Checkout', coverage: 'Designer', pill: 'Replacement Hire' },
+    { pm: 'Memo', product: 'Wallet', coverage: 'Designer', pill: 'New Hire' },
   ]
   const shared = [
-    { pm: 'Dani', product: 'New Geos', coverage: 'Shared Designer' },
-    { pm: 'Samu', product: 'Tools', coverage: 'Shared Designer' },
-    { pm: 'Tomas', product: 'Disbursements', coverage: 'Shared Designer' },
+    { pm: 'Dani', product: 'New Geos', coverage: 'Flex from dedicated team' },
+    { pm: 'Samu', product: 'Tools', coverage: 'Flex from dedicated team' },
+    { pm: 'Tomas', product: 'Disbursements', coverage: 'Flex from dedicated team' },
     { pm: 'Carla', product: 'Pricing / Multilingual', coverage: 'Content Design Lead + Shared Designer' },
     { pm: 'Lexie', product: 'AI', coverage: 'Content Design Lead + Shared Designer' },
   ]
@@ -218,7 +218,7 @@ function SlideCoverageTarget() {
               <div key={a.pm} className={`grid grid-cols-[1fr_2fr_3fr_1fr] gap-x-6 px-5 py-2.5 items-center ${i % 2 === 0 ? 'bg-white/[0.02]' : 'bg-transparent'} border-b border-white/5`}>
                 <span className="text-sm font-medium text-linen/80">{a.pm}</span>
                 <span className="text-sm text-linen/50">{a.product}</span>
-                <span className="text-sm font-medium text-linen/80">{a.coverage}</span>
+                <span className="text-sm font-medium text-linen/80 flex items-center gap-2">{a.coverage} <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: a.pill === 'Pato' ? `${C.cactus}20` : a.pill === 'Replacement Hire' ? `${C.mango}20` : `${C.sky}20`, color: a.pill === 'Pato' ? C.cactus : a.pill === 'Replacement Hire' ? C.mango : C.sky }}>{a.pill}</span></span>
                 <span className="text-xs font-semibold px-2.5 py-1 rounded-full w-fit" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
               </div>
             ))}

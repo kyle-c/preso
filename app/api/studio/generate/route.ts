@@ -1894,13 +1894,8 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // Edit requests should use the parallel SSE stream for structured responses
-    if (body.edit && !body.parallel) {
-      body.parallel = true
-    }
-
     // Enrichment is deferred into createParallelSSEStream to run concurrently with outline generation.
-    // For non-parallel/edit flows, run enrichment inline.
+    // For non-parallel/edit flows, run enrichment inline. Edit requests use the regular streaming path.
     if (!body.edit && !body.parallel) {
       await runEnrichment(body)
     }

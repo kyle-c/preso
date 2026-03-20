@@ -1139,28 +1139,17 @@ const ONBOARDING_OUTLINE = [
   { type: 'closing', bg: 'dark', badge: '', title: 'Welcome aboard' },
 ]
 
-const OUTLINE_SYSTEM_PROMPT = `You are a presentation architect for Félix Pago, a fintech empowering Latinos in the US.
-
-Given a brief, output a JSON array of 12-18 slide OUTLINES. Each outline is a minimal object:
-{"type": "...", "bg": "dark"|"light"|"brand", "badge": "...", "title": "..."}
-
-Available types: title, section, content, bullets, two-column, cards, quote, image, checklist, chart, closing.
-
+const OUTLINE_SYSTEM_PROMPT = `You are a presentation architect for Félix Pago (fintech for Latinos in the US).
+Output a JSON array of 12-18 slide outlines. Each: {"type":"...","bg":"dark"|"light"|"brand","badge":"...","title":"..."}
+Types: title, section, content, bullets, two-column, cards, quote, image, checklist, chart, closing.
 Rules:
-- Start with type "title" (bg "brand"), end with type "closing"
-- The title slide must be SHORT and punchy — title max 6 words, subtitle max 8 words (e.g. "Charting Our Future" + "UX · Q2 2025"). Think billboard headline, not description
-- The presentation name used in the title should be concise (max 5-6 words) — no colons, no explanatory subclauses
-- Alternate bg colors — never two consecutive slides with same bg
-- Use "brand" bg sparingly (title, closing, one accent slide max)
-- Use at least 6 different slide types — include at least 1 chart, 1 cards, and 1 two-column
-- Titles should be insight-driven, not generic (e.g. "Revenue grew 22% through organic channels" not "Revenue Overview")
-- Badge text should categorize sections (e.g. "Overview", "Key Insight", "Your Role")
-- For onboarding/welcome prompts: EXACTLY 10 slides with bg pattern: light, light, light, dark, light, dark, light, brand, light, dark
-- NEVER leave widows or orphans — no single word alone on the last line of any title or badge. Rewrite to pull at least two words onto the final line.
-- Prefer 14-16 slides for strategy/investor/launch decks — these topics need room to breathe
-- Every major claim should have a supporting chart or data slide near it
-
-Return ONLY the JSON array. No markdown fences, no commentary.`
+- Start with "title" (bg "brand"), end with "closing". Alternate bg colors.
+- Title slide: max 6 words title, max 8 words subtitle. Billboard headline style.
+- Use 6+ different types including at least 1 chart, 1 cards, 1 two-column.
+- Titles should be insight-driven (e.g. "Revenue grew 22%" not "Revenue Overview").
+- For onboarding: EXACTLY 10 slides, bg pattern: light, light, light, dark, light, dark, light, brand, light, dark.
+- Strategy/investor decks: prefer 14-16 slides.
+Return ONLY the JSON array.`
 
 function buildBatchPrompt(outline: any[], batchIndices: number[], userPrompt?: string, hasFiles = false, intent?: string): string {
   const outlineStr = JSON.stringify(outline, null, 2)
@@ -1447,6 +1436,93 @@ function parseJSONResponse(text: string): any {
   throw new Error('Incomplete JSON in response')
 }
 
+async function runEnrichment(body: GenerateBody): Promise<void> {
+  // Enrich system prompt with user style profile + exemplars
+  try {
+    const session = await getServerSession()
+    if (session?.userId) {
+      body.userId = session.userId
+      const [profile, intentType] = await Promise.all([
+        computeUserStyleProfile(session.userId),
+        Promise.resolve(detectIntent(body.prompt)),
+      ])
+
+      let enrichment = ''
+      if (profile.sampleSize >= 3) {
+        enrichment += '\n\n' + formatProfileForPrompt(profile)
+      }
+
+      const exemplars = await selectExemplars(intentType, 3)
+      if (exemplars.length > 0) {
+        enrichment += '\n\n' + formatExemplarsForPrompt(exemplars)
+      }
+
+      if (enrichment) {
+        body.enrichedSystemPrompt = SYSTEM_PROMPT + enrichment
+        console.log('[studio/generate] Enriched prompt with profile + exemplars')
+      }
+    }
+  } catch (err) {
+    console.warn('[studio/generate] Profile/exemplar enrichment failed:', err)
+  }
+
+  // Inject manually-rated slide exemplars
+  try {
+    const [goodSlides, badSlides] = await Promise.all([
+      getExemplarSlides(undefined, 6),
+      getAntiExemplarSlides(3),
+    ])
+
+    if (goodSlides.length > 0 || badSlides.length > 0) {
+      const base = body.enrichedSystemPrompt || SYSTEM_PROMPT
+      const sections: string[] = []
+
+      if (goodSlides.length > 0) {
+        sections.push('## Curated Exemplar Slides (FOLLOW these patterns closely)')
+        sections.push('These slides have been manually rated as high-quality by the design team. Match their structure, content density, and style:\n')
+        for (const s of goodSlides) {
+          const truncated: any = { type: s.slideData.type, bg: s.slideData.bg, title: s.slideData.title }
+          if (s.slideData.subtitle) truncated.subtitle = s.slideData.subtitle
+          if (s.slideData.body) truncated.body = s.slideData.body
+          if (s.slideData.bullets) truncated.bullets = s.slideData.bullets.slice(0, 6)
+          if (s.slideData.cards) truncated.cards = s.slideData.cards.slice(0, 4)
+          if (s.slideData.columns) truncated.columns = s.slideData.columns
+          if (s.slideData.quote) truncated.quote = s.slideData.quote
+          if (s.slideData.chart) truncated.chart = s.slideData.chart
+          if (s.slideData.notes) truncated.notes = s.slideData.notes
+          sections.push(`### ${s.slideType} slide (bg: ${s.bg}, source: ${s.source})`)
+          sections.push('```json\n' + JSON.stringify(truncated, null, 2) + '\n```\n')
+        }
+      }
+
+      if (badSlides.length > 0) {
+        sections.push('## Anti-Exemplars (AVOID these patterns)')
+        sections.push('These slides were rated as low-quality. Do NOT follow their structure:\n')
+        for (const s of badSlides) {
+          sections.push(`- ${s.slideType} slide: "${s.slideData.title}"${s.note ? ` (reason: ${s.note})` : ''}`)
+        }
+      }
+
+      body.enrichedSystemPrompt = base + '\n\n' + sections.join('\n')
+      console.log(`[studio/generate] Injected ${goodSlides.length} exemplars + ${badSlides.length} anti-exemplars from manual ratings`)
+    }
+  } catch (err) {
+    console.warn('[studio/generate] Manual rating enrichment failed:', err)
+  }
+
+  // Inject training blueprints based on detected intent
+  try {
+    const blueprintSection = getBlueprintEnrichment(body.prompt)
+    if (blueprintSection) {
+      const base = body.enrichedSystemPrompt || SYSTEM_PROMPT
+      body.enrichedSystemPrompt = base + '\n\n' + blueprintSection
+      console.log('[studio/generate] Injected training blueprints')
+    }
+  } catch (err) {
+    console.warn('[studio/generate] Blueprint enrichment failed:', err)
+  }
+}
+
 function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array> {
   const encoder = new TextEncoder()
 
@@ -1476,6 +1552,9 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         }
 
         let outline: any[]
+
+        // Run enrichment concurrently with outline generation (don't block outline)
+        const enrichmentPromise = !body.edit ? runEnrichment(body) : Promise.resolve()
 
         // #6: Template short-circuit — skip outline API call for onboarding
         // BUT: if the user uploaded files, always use the LLM to generate an outline
@@ -1584,9 +1663,12 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         // Emit outline immediately so client shows slide shells
         emit({ outline })
 
+        // Wait for enrichment to complete before batch generation (runs concurrently with outline)
+        await enrichmentPromise
+
         // #10: Dynamic batch sizing based on slide count
         const batchCount = isMerge
-          ? Math.max(4, Math.ceil(outline.length / 5))
+          ? Math.min(6, Math.max(4, Math.ceil(outline.length / 5)))
           : outline.length <= 6 ? 2 : outline.length <= 14 ? 3 : 4
         const batchSize = Math.ceil(outline.length / batchCount)
         const batches: { indices: number[] }[] = []
@@ -1764,93 +1846,10 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // Skip enrichment for edit requests — they use the prompt as-is with the base system prompt
-    if (!body.edit) {
-      // Enrich system prompt with user style profile + exemplars (non-blocking)
-      try {
-        const session = await getServerSession()
-        if (session?.userId) {
-          body.userId = session.userId
-          const [profile, intentType] = await Promise.all([
-            computeUserStyleProfile(session.userId),
-            Promise.resolve(detectIntent(body.prompt)),
-          ])
-
-          let enrichment = ''
-          if (profile.sampleSize >= 3) {
-            enrichment += '\n\n' + formatProfileForPrompt(profile)
-          }
-
-          const exemplars = await selectExemplars(intentType, 3)
-          if (exemplars.length > 0) {
-            enrichment += '\n\n' + formatExemplarsForPrompt(exemplars)
-          }
-
-          if (enrichment) {
-            body.enrichedSystemPrompt = SYSTEM_PROMPT + enrichment
-            console.log('[studio/generate] Enriched prompt with profile + exemplars')
-          }
-        }
-      } catch (err) {
-        // Non-critical — proceed without enrichment
-        console.warn('[studio/generate] Profile/exemplar enrichment failed:', err)
-      }
-
-      // Inject manually-rated slide exemplars
-      try {
-        const [goodSlides, badSlides] = await Promise.all([
-          getExemplarSlides(undefined, 6),
-          getAntiExemplarSlides(3),
-        ])
-
-        if (goodSlides.length > 0 || badSlides.length > 0) {
-          const base = body.enrichedSystemPrompt || SYSTEM_PROMPT
-          const sections: string[] = []
-
-          if (goodSlides.length > 0) {
-            sections.push('## Curated Exemplar Slides (FOLLOW these patterns closely)')
-            sections.push('These slides have been manually rated as high-quality by the design team. Match their structure, content density, and style:\n')
-            for (const s of goodSlides) {
-              const truncated: any = { type: s.slideData.type, bg: s.slideData.bg, title: s.slideData.title }
-              if (s.slideData.subtitle) truncated.subtitle = s.slideData.subtitle
-              if (s.slideData.body) truncated.body = s.slideData.body
-              if (s.slideData.bullets) truncated.bullets = s.slideData.bullets.slice(0, 6)
-              if (s.slideData.cards) truncated.cards = s.slideData.cards.slice(0, 4)
-              if (s.slideData.columns) truncated.columns = s.slideData.columns
-              if (s.slideData.quote) truncated.quote = s.slideData.quote
-              if (s.slideData.chart) truncated.chart = s.slideData.chart
-              if (s.slideData.notes) truncated.notes = s.slideData.notes
-              sections.push(`### ${s.slideType} slide (bg: ${s.bg}, source: ${s.source})`)
-              sections.push('```json\n' + JSON.stringify(truncated, null, 2) + '\n```\n')
-            }
-          }
-
-          if (badSlides.length > 0) {
-            sections.push('## Anti-Exemplars (AVOID these patterns)')
-            sections.push('These slides were rated as low-quality. Do NOT follow their structure:\n')
-            for (const s of badSlides) {
-              sections.push(`- ${s.slideType} slide: "${s.slideData.title}"${s.note ? ` (reason: ${s.note})` : ''}`)
-            }
-          }
-
-          body.enrichedSystemPrompt = base + '\n\n' + sections.join('\n')
-          console.log(`[studio/generate] Injected ${goodSlides.length} exemplars + ${badSlides.length} anti-exemplars from manual ratings`)
-        }
-      } catch (err) {
-        console.warn('[studio/generate] Manual rating enrichment failed:', err)
-      }
-
-      // Inject training blueprints based on detected intent
-      try {
-        const blueprintSection = getBlueprintEnrichment(body.prompt)
-        if (blueprintSection) {
-          const base = body.enrichedSystemPrompt || SYSTEM_PROMPT
-          body.enrichedSystemPrompt = base + '\n\n' + blueprintSection
-          console.log('[studio/generate] Injected training blueprints')
-        }
-      } catch (err) {
-        console.warn('[studio/generate] Blueprint enrichment failed:', err)
-      }
+    // Enrichment is deferred into createParallelSSEStream to run concurrently with outline generation.
+    // For non-parallel/edit flows, run enrichment inline.
+    if (!body.edit && !body.parallel) {
+      await runEnrichment(body)
     }
 
     // Edit target mode: AI edit for document or outline view

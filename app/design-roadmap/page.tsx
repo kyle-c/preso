@@ -201,8 +201,8 @@ function SlideCoverageTarget() {
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
           <div className="mb-5"><PillBadge dark>End of Year Proposal</PillBadge></div>
-          <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">11 PMs. Full Design&nbsp;Coverage.</h1>
-          <p className="text-linen/60 text-lg mb-6">Coverage model pairs senior ownership with shared product, content, and research&nbsp;support.</p>
+          <h1 className="font-display font-black text-linen text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">The Plan: Every PM&nbsp;Covered</h1>
+          <p className="text-linen/60 text-lg mb-6">Senior ownership paired with shared product, content, and research&nbsp;support</p>
 
           <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden mb-4">
             <div className="px-5 py-2 bg-white/[0.05] border-b border-white/10">
@@ -347,8 +347,8 @@ function SlideCoverage() {
       <div className="flex-1 flex flex-col items-center justify-center px-10 sm:px-14 lg:px-20 py-8 relative z-10">
         <div className="w-full max-w-[1200px]">
           <div className="mb-5"><PillBadge>Today</PillBadge></div>
-          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">11 PMs. 3&nbsp;Designers.</h1>
-          <p className="text-muted-foreground text-lg mb-6">Current coverage — the team is stretched&nbsp;thin</p>
+          <h1 className="font-display font-black text-foreground text-3xl sm:text-4xl lg:text-5xl leading-[0.95] tracking-tight mb-2">Big Gaps in Design&nbsp;Coverage</h1>
+          <p className="text-muted-foreground text-lg mb-6">11 PMs, 3 designers — most teams have no dedicated design&nbsp;support</p>
 
           <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden mb-4">
             <div className="grid grid-cols-[1fr_2fr_1fr_1fr] gap-x-6 px-5 py-2.5 bg-foreground/[0.03] border-b border-border">

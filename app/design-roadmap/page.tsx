@@ -191,10 +191,10 @@ function SlideCoverageTarget() {
     { pm: 'Lexie', product: 'AI', coverage: 'Content Design Lead + Shared Designer' },
   ]
   const platform = [
-    { role: 'Design Systems', person: 'Product Designer' },
-    { role: 'Conversational Guidelines', person: 'Content Design Lead' },
-    { role: 'Research', person: 'Research Lead' },
-    { role: 'Multi-surface + App', person: 'Product Designer' },
+    { role: 'Design Systems', person: 'Product Designer', badge: 'New Hire' },
+    { role: 'Conversational Guidelines', person: 'Content Design Lead', badge: 'New Hire' },
+    { role: 'Research', person: 'Research Lead', badge: null },
+    { role: 'Multi-surface + App', person: 'Product Designer', badge: 'New Hire' },
   ]
   return (
     <div className="relative h-full w-full bg-slate-950 flex flex-col overflow-x-hidden overflow-y-auto">
@@ -243,7 +243,7 @@ function SlideCoverageTarget() {
               {platform.map((p) => (
                 <div key={p.role} className="flex-1 px-5 py-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-linen/80">{p.role}</p>
+                    <p className="text-sm font-medium text-linen/80 flex items-center gap-2">{p.role} {p.badge && <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: `${C.sky}20`, color: C.sky }}>{p.badge}</span>}</p>
                     <p className="text-xs text-linen/50">{p.person}</p>
                   </div>
                   <span className="text-xs font-semibold px-2.5 py-1 rounded-full w-fit" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>

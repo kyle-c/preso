@@ -1642,7 +1642,11 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         let outline: any[]
 
         // Run enrichment concurrently with outline generation (don't block outline)
-        const enrichmentPromise = !body.edit ? runEnrichment(body) : Promise.resolve()
+        const enrichmentPromise = !body.edit
+          ? runEnrichment(body).catch(err => {
+              console.warn('[studio/generate] Enrichment failed (non-fatal):', err)
+            })
+          : Promise.resolve()
 
         // #6: Template short-circuit — skip outline API call for onboarding
         // BUT: if the user uploaded files, always use the LLM to generate an outline
@@ -1735,14 +1739,34 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
           try {
             outline = parseJSONResponse(outlineText)
             if (!Array.isArray(outline) || outline.length === 0) {
-              throw new Error('Invalid outline')
+              throw new Error('Invalid outline — parsed result is not a non-empty array')
             }
-          } catch {
-            console.error('[studio/generate] Failed to parse outline, falling back. Raw:', outlineText?.slice(0, 300))
-            emit({ error: 'Failed to generate outline. The model returned an unexpected response — please try again.' })
-            controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-            controller.close()
-            return
+          } catch (parseErr: any) {
+            console.error('[studio/generate] Failed to parse outline. Error:', parseErr?.message, 'Raw response (first 500 chars):', outlineText?.slice(0, 500))
+            // Retry once with the user's model before giving up
+            try {
+              console.log('[studio/generate] Retrying outline with user model...')
+              const retryText = await makeNonStreamingCall(
+                body,
+                OUTLINE_SYSTEM_PROMPT,
+                outlinePrompt,
+                outlineMaxTokens,
+                false,
+                90000,
+                outlineFiles,
+              )
+              outline = parseJSONResponse(retryText)
+              if (!Array.isArray(outline) || outline.length === 0) {
+                throw new Error('Retry also returned invalid outline')
+              }
+              console.log('[studio/generate] Retry succeeded')
+            } catch (retryErr: any) {
+              console.error('[studio/generate] Outline retry also failed:', retryErr?.message)
+              emit({ error: 'Failed to generate outline. The model returned an unexpected response — please try again.' })
+              controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+              controller.close()
+              return
+            }
           }
         }
 

@@ -33,6 +33,7 @@ const PUBLIC_ROUTES = new Set([
   '/design-roadmap-v2',
   '/fintechtestflow',
   '/multisurface',
+  '/qbr-cord',
 ])
 
 const STATIC_EXT = /\.(png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|otf|eot|css|js|json|map|txt|xml|webmanifest)$/i

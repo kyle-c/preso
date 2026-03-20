@@ -241,13 +241,13 @@ function SlideCoverageTarget() {
             </div>
             <div className="flex divide-x divide-white/10">
               {platform.map((p) => (
-                <div key={p.role} className="flex-1 px-5 py-3 flex items-center justify-between">
+                <div key={p.role} className="flex-1 px-5 py-3 flex items-start justify-between">
                   <div>
                     <p className="text-sm font-medium text-linen/80">{p.role}</p>
                     <p className="text-xs text-linen/50">{p.person}</p>
                     {p.badge && <span className="inline-block mt-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: `${C.sky}20`, color: C.sky }}>{p.badge}</span>}
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full w-fit" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full w-fit mt-0.5" style={{ background: `${C.cactus}20`, color: C.cactus }}>Covered</span>
                 </div>
               ))}
             </div>

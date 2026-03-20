@@ -894,7 +894,7 @@ function SlideFintechDemo() {
       <div className="flex-1 flex flex-col items-center justify-center relative z-10">
         <div className="w-full h-full overflow-hidden relative">
           <iframe
-            src="/fintechtestflow/embed"
+            src="/fintechtestflow"
             className="border-0 transition-all duration-300"
             style={iframeStyle}
             title="Fintech checkout flow with token viewer and translator"

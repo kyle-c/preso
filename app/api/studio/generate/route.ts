@@ -1436,15 +1436,30 @@ function parseJSONResponse(text: string): any {
   throw new Error('Incomplete JSON in response')
 }
 
+// In-memory cache with TTL for expensive enrichment queries
+const enrichmentCache = new Map<string, { data: any; expiry: number }>()
+const CACHE_TTL = 60 * 60 * 1000 // 1 hour
+
+async function cachedFetch<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
+  const cached = enrichmentCache.get(key)
+  if (cached && Date.now() < cached.expiry) {
+    return cached.data as T
+  }
+  const data = await fetcher()
+  enrichmentCache.set(key, { data, expiry: Date.now() + CACHE_TTL })
+  return data
+}
+
 async function runEnrichment(body: GenerateBody): Promise<void> {
   // Enrich system prompt with user style profile + exemplars
   try {
     const session = await getServerSession()
     if (session?.userId) {
       body.userId = session.userId
-      const [profile, intentType] = await Promise.all([
-        computeUserStyleProfile(session.userId),
-        Promise.resolve(detectIntent(body.prompt)),
+      const intentType = detectIntent(body.prompt)
+      const [profile, exemplars] = await Promise.all([
+        cachedFetch(`profile:${session.userId}`, () => computeUserStyleProfile(session.userId!)),
+        cachedFetch(`exemplars:${intentType}`, () => selectExemplars(intentType, 3)),
       ])
 
       let enrichment = ''
@@ -1452,7 +1467,6 @@ async function runEnrichment(body: GenerateBody): Promise<void> {
         enrichment += '\n\n' + formatProfileForPrompt(profile)
       }
 
-      const exemplars = await selectExemplars(intentType, 3)
       if (exemplars.length > 0) {
         enrichment += '\n\n' + formatExemplarsForPrompt(exemplars)
       }
@@ -1469,8 +1483,8 @@ async function runEnrichment(body: GenerateBody): Promise<void> {
   // Inject manually-rated slide exemplars
   try {
     const [goodSlides, badSlides] = await Promise.all([
-      getExemplarSlides(undefined, 6),
-      getAntiExemplarSlides(3),
+      cachedFetch('exemplarSlides', () => getExemplarSlides(undefined, 6)),
+      cachedFetch('antiExemplarSlides', () => getAntiExemplarSlides(3)),
     ])
 
     if (goodSlides.length > 0 || badSlides.length > 0) {
@@ -1520,6 +1534,72 @@ async function runEnrichment(body: GenerateBody): Promise<void> {
     }
   } catch (err) {
     console.warn('[studio/generate] Blueprint enrichment failed:', err)
+  }
+}
+
+async function runDocumentGeneration(
+  body: GenerateBody,
+  allCompletedSlides: any[],
+  totalSlides: number,
+  emit: (data: any) => void,
+): Promise<void> {
+  try {
+    const finalSlides = allCompletedSlides.filter(Boolean)
+    const docPrompt = `Based on this presentation and the original brief, generate a professional document object.
+
+Original brief: ${body.prompt}
+
+Slides: ${JSON.stringify(finalSlides)}
+
+Return a JSON object (not array): {"title": "...", "type": "prd"|"proposal"|"launch"|"review"|"research"|"onboarding"|"strategy"|"general", "summary": "2-3 sentences", "sections": [{"title": "...", "content": "detailed markdown (3-5 paragraphs)", "slideIndex": number}]}
+
+IMPORTANT: Never leave widows or orphans — no single word alone on the last line of any title, section heading, paragraph, or bullet. Rewrite copy so every final line has at least two words.
+
+Return ONLY the JSON object. No markdown fences.`
+
+    const docTimeout = body.model.includes('opus') ? 180000 : 90000
+    const docText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, docPrompt, 8000, true, docTimeout)
+    const doc = parseJSONResponse(docText)
+    if (doc && doc.title) {
+      emit({ document: doc })
+
+      // Generate outline from the document
+      try {
+        const outlinePrompt = `Distill this document into a structured outline — a concise, hierarchical summary.
+
+Document: ${JSON.stringify(doc, null, 1)}
+
+The presentation has ${finalSlides.length} slides.
+
+Return a JSON object:
+{
+  "title": "Outline title",
+  "thesis": "One sentence capturing the core argument or purpose",
+  "sections": [
+    {
+      "title": "Section heading",
+      "summary": "1-2 sentence summary",
+      "slideIndices": [0, 1],
+      "subsections": [
+        { "title": "Subsection heading", "detail": "One sentence with specific data or conclusions" }
+      ]
+    }
+  ]
+}
+
+Section titles should be descriptive and specific. Include numbers and conclusions in subsection details. Return ONLY the JSON object.`
+
+        const outlineText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, outlinePrompt, 6000, true, 60000)
+        const docOutline = parseJSONResponse(outlineText)
+        if (docOutline && docOutline.title) {
+          emit({ outline: docOutline })
+        }
+      } catch (outlineErr) {
+        console.error('[studio/generate] Outline generation failed:', outlineErr)
+      }
+    }
+  } catch (err) {
+    console.error('[studio/generate] Document generation failed:', err)
   }
 }
 
@@ -1682,6 +1762,18 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
 
         // Track completed slides for document generation
         const allCompletedSlides: any[] = new Array(outline.length).fill(null)
+        let completedSlideCount = 0
+        const docThreshold = Math.ceil(outline.length * 0.8)
+        let docGenStarted = false
+        let docGenPromise: Promise<void> | null = null
+
+        // Start document generation once enough slides are ready
+        const maybeStartDocGen = () => {
+          if (docGenStarted || completedSlideCount < docThreshold) return
+          docGenStarted = true
+          console.log(`[studio/generate] Starting early doc gen (${completedSlideCount}/${outline.length} slides ready)`)
+          docGenPromise = runDocumentGeneration(body, allCompletedSlides, outline.length, emit)
+        }
 
         // For merge mode, inject full source material into batch prompts
         const mergeSuffix = isMerge && body.merge
@@ -1712,6 +1804,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
                 for (let i = 0; i < slides.length; i++) {
                   allCompletedSlides[batch.indices[i]] = slides[i]
                 }
+                completedSlideCount += slides.length
                 // #1: Emit immediately — don't wait for in-order completion
                 emit({ batch: slides, startIndex: batch.indices[0] })
               } else {
@@ -1719,15 +1812,20 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
                 for (let i = 0; i < fallback.length; i++) {
                   allCompletedSlides[batch.indices[i]] = fallback[i]
                 }
+                completedSlideCount += fallback.length
                 emit({ batch: fallback, startIndex: batch.indices[0] })
               }
+              // Check if we can start doc gen early
+              maybeStartDocGen()
             } catch (err) {
               console.error(`[studio/generate] Batch at ${batch.indices[0]} failed:`, err)
               const fallback = batch.indices.map(i => outline[i])
               for (let i = 0; i < fallback.length; i++) {
                 allCompletedSlides[batch.indices[i]] = fallback[i]
               }
+              completedSlideCount += fallback.length
               emit({ batch: fallback, startIndex: batch.indices[0] })
+              maybeStartDocGen()
             }
           }),
         )
@@ -1735,64 +1833,14 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         // #4: Signal slides ready — client can present immediately
         emit({ slidesReady: true })
 
-        // #4: Document generation (async — user is already viewing slides)
-        try {
-          const finalSlides = allCompletedSlides.filter(Boolean)
-          const docPrompt = `Based on this presentation and the original brief, generate a professional document object.
+        // If doc gen hasn't started yet (e.g. small deck), start it now
+        if (!docGenStarted) {
+          docGenPromise = runDocumentGeneration(body, allCompletedSlides, outline.length, emit)
+        }
 
-Original brief: ${body.prompt}
-
-Slides: ${JSON.stringify(finalSlides)}
-
-Return a JSON object (not array): {"title": "...", "type": "prd"|"proposal"|"launch"|"review"|"research"|"onboarding"|"strategy"|"general", "summary": "2-3 sentences", "sections": [{"title": "...", "content": "detailed markdown (3-5 paragraphs)", "slideIndex": number}]}
-
-IMPORTANT: Never leave widows or orphans — no single word alone on the last line of any title, section heading, paragraph, or bullet. Rewrite copy so every final line has at least two words.
-
-Return ONLY the JSON object. No markdown fences.`
-
-          const docTimeout = body.model.includes('opus') ? 180000 : 90000
-          const docText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, docPrompt, 8000, true, docTimeout)
-          const doc = parseJSONResponse(docText)
-          if (doc && doc.title) {
-            emit({ document: doc })
-
-            // Generate outline from the document
-            try {
-              const outlinePrompt = `Distill this document into a structured outline — a concise, hierarchical summary.
-
-Document: ${JSON.stringify(doc, null, 1)}
-
-The presentation has ${finalSlides.length} slides.
-
-Return a JSON object:
-{
-  "title": "Outline title",
-  "thesis": "One sentence capturing the core argument or purpose",
-  "sections": [
-    {
-      "title": "Section heading",
-      "summary": "1-2 sentence summary",
-      "slideIndices": [0, 1],
-      "subsections": [
-        { "title": "Subsection heading", "detail": "One sentence with specific data or conclusions" }
-      ]
-    }
-  ]
-}
-
-Section titles should be descriptive and specific. Include numbers and conclusions in subsection details. Return ONLY the JSON object.`
-
-              const outlineText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, outlinePrompt, 6000, true, 60000)
-              const outline = parseJSONResponse(outlineText)
-              if (outline && outline.title) {
-                emit({ outline })
-              }
-            } catch (outlineErr) {
-              console.error('[studio/generate] Outline generation failed:', outlineErr)
-            }
-          }
-        } catch (err) {
-          console.error('[studio/generate] Document generation failed:', err)
+        // Wait for document generation to finish before closing stream
+        if (docGenPromise) {
+          await docGenPromise
         }
 
         clearInterval(keepalive)
@@ -1844,6 +1892,11 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ error: 'Provider and model are required' }), {
         status: 400, headers: { 'Content-Type': 'application/json' },
       })
+    }
+
+    // Edit requests should use the parallel SSE stream for structured responses
+    if (body.edit && !body.parallel) {
+      body.parallel = true
     }
 
     // Enrichment is deferred into createParallelSSEStream to run concurrently with outline generation.

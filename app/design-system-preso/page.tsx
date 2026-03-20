@@ -874,17 +874,29 @@ function SlideDemo() {
 /* ── Slide 17: Fintech Flow Demo ──────────────────────────────────── */
 function SlideFintechDemo() {
   const canvasOpen = useContext(CanvasContext)
+  const [isLg, setIsLg] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)')
+    setIsLg(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsLg(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  const iframeStyle = canvasOpen
+    ? { width: '100%', height: 'calc(100% + 40px)', marginTop: '-20px', marginLeft: '0' }
+    : isLg
+      ? { width: 'calc(100% + 600px)', height: 'calc(100% + 60px)', marginTop: '36px', marginLeft: '-160px' }
+      : { width: '100%', height: '100%', marginTop: '0', marginLeft: '0' }
+
   return (
     <div className="relative h-full w-full bg-stone flex flex-col overflow-hidden">
       <div className="flex-1 flex flex-col items-center justify-center relative z-10">
         <div className="w-full h-full overflow-hidden relative">
           <iframe
             src="/fintechtestflow/embed"
-            className={`border-0 transition-all duration-300 ${canvasOpen ? '' : 'lg:!w-[calc(100%+600px)] lg:!h-[calc(100%+60px)] lg:!mt-[36px] lg:!ml-[-160px]'}`}
-            style={canvasOpen
-              ? { width: '100%', height: 'calc(100% + 40px)', marginTop: '-20px', marginLeft: '0' }
-              : { width: '100%', height: '100%', marginTop: '0', marginLeft: '0' }
-            }
+            className="border-0 transition-all duration-300"
+            style={iframeStyle}
             title="Fintech checkout flow with token viewer and translator"
           />
         </div>

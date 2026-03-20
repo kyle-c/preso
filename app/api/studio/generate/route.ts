@@ -1525,7 +1525,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
           // Use user's model when files are attached or merging (fast models can't handle large context)
           const effectiveOutlineBody = (hasFiles || isMerge) ? body : outlineBody
           const outlineMaxTokens = isMerge ? 6000 : 4000
-          const outlineTimeout = isMerge ? 60000 : hasFiles ? 60000 : 30000
+          const outlineTimeout = isMerge ? 90000 : hasFiles ? 90000 : 60000
 
           let outlineText: string
           try {
@@ -1548,7 +1548,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
                 outlinePrompt,
                 outlineMaxTokens,
                 false,
-                45000, // 45s timeout for fallback
+                90000, // 90s timeout for fallback
                 outlineFiles,
               )
             } catch (fallbackErr: any) {

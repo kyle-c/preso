@@ -1456,6 +1456,11 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`))
       }
 
+      // Keep connection alive while waiting for LLM responses
+      const keepalive = setInterval(() => {
+        try { emit({ keepalive: true }) } catch { /* stream closed */ }
+      }, 15000)
+
       try {
         const isMerge = !!body.merge
         const { strengthenedPrompt } = strengthenPrompt(body.prompt)
@@ -1708,9 +1713,11 @@ Section titles should be descriptive and specific. Include numbers and conclusio
           console.error('[studio/generate] Document generation failed:', err)
         }
 
+        clearInterval(keepalive)
         controller.enqueue(encoder.encode('data: [DONE]\n\n'))
         controller.close()
       } catch (err: any) {
+        clearInterval(keepalive)
         console.error('[studio/generate parallel]', err)
         const msg = err?.message || String(err)
         const isTimeout = msg.includes('timed out') || msg.includes('AbortError')

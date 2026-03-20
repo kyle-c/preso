@@ -315,7 +315,7 @@ function SlideTeamDetail() {
           </div>
         </div>
       </div>
-      <SlideFooter num={6} />
+      <SlideFooter num={7} />
     </div>
   )
 }
@@ -452,7 +452,7 @@ function SlideHiring() {
           </div>
         </div>
       </div>
-      <SlideFooter num={7} dark />
+      <SlideFooter num={6} dark />
     </div>
   )
 }
@@ -722,16 +722,16 @@ function SlideClosingGoal() {
 
 /* ═══════════════════════════════════════ SHELL ════════════ */
 
-const slides = [SlideCover, SlideVision, SlideToday, SlideCoverage, SlideCoverageTarget, SlideTeamDetail, SlideHiring, SlideStaffAug, SlideRoadmapOverview, SlideClosingGoal, SlideResearch, SlideContentDesign]
-const darkSlideSet = new Set([0, 2, 4, 6, 8, 10])
+const slides = [SlideCover, SlideVision, SlideToday, SlideCoverage, SlideCoverageTarget, SlideHiring, SlideTeamDetail, SlideStaffAug, SlideRoadmapOverview, SlideClosingGoal, SlideResearch, SlideContentDesign]
+const darkSlideSet = new Set([0, 2, 4, 5, 8, 10])
 const slideMeta = [
   { title: 'Product Design Roadmap', subtitle: 'Cover' },
   { title: "Design's Role at Felix", subtitle: 'Vision' },
   { title: 'Where We Are Now', subtitle: 'Today' },
   { title: 'Current Coverage', subtitle: 'Today' },
   { title: 'With New Hires', subtitle: 'Target' },
-  { title: 'Team Composition', subtitle: 'Roles' },
   { title: 'Team Build Sequence', subtitle: 'Timeline' },
+  { title: 'Team Composition', subtitle: 'Roles' },
   { title: 'Staff Augmentation', subtitle: 'Strategy' },
   { title: 'What This Unlocks', subtitle: 'Roadmap' },
   { title: 'Today vs. End of Year', subtitle: 'Closing' },

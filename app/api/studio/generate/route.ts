@@ -1669,8 +1669,21 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
 
   return new ReadableStream({
     async start(controller) {
+      let streamClosed = false
       const emit = (data: any) => {
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`))
+        if (streamClosed) return
+        try {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`))
+        } catch {
+          streamClosed = true
+        }
+      }
+      const closeStream = () => {
+        if (streamClosed) return
+        streamClosed = true
+        try {
+          closeStream()
+        } catch { /* already closed */ }
       }
 
       // Keep connection alive while waiting for LLM responses
@@ -1788,8 +1801,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
                 ? 'Authentication failed. Check your API key in Settings.'
                 : `Could not generate outline: ${msg.slice(0, 100)}`
               emit({ error: hint })
-              controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-              controller.close()
+              closeStream()
               return
             }
           }
@@ -1821,8 +1833,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
             } catch (retryErr: any) {
               console.error('[studio/generate] Outline retry also failed:', retryErr?.message)
               emit({ error: 'Failed to generate outline. The model returned an unexpected response — please try again.' })
-              controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-              controller.close()
+              closeStream()
               return
             }
           }
@@ -1934,8 +1945,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         }
 
         clearInterval(keepalive)
-        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-        controller.close()
+        closeStream()
       } catch (err: any) {
         clearInterval(keepalive)
         console.error('[studio/generate parallel]', err)
@@ -1951,8 +1961,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
           ? 'Rate limit hit. Wait a moment and try again.'
           : `Generation failed: ${msg.slice(0, 120)}`
         emit({ error: hint })
-        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-        controller.close()
+        closeStream()
       }
     },
   })
@@ -2073,7 +2082,7 @@ Guidelines:
             emit({ error: `${body.editTarget} edit failed` })
           }
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-          controller.close()
+          closeStream()
         },
       })
       return new Response(stream, {
@@ -2157,7 +2166,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
             emit({ error: 'Document generation failed' })
           }
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-          controller.close()
+          closeStream()
         },
       })
       return new Response(stream, {
@@ -2281,7 +2290,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
               emit({ error: `LLM call failed: ${err instanceof Error ? err.message : String(err)}` })
               clearInterval(keepalive)
               controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-              controller.close()
+              closeStream()
               return
             }
             let doc: any
@@ -2293,7 +2302,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
               emit({ error: 'Failed to parse LLM response as JSON' })
               clearInterval(keepalive)
               controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-              controller.close()
+              closeStream()
               return
             }
 
@@ -2361,7 +2370,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
             clearInterval(keepalive)
           }
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-          controller.close()
+          closeStream()
         },
       })
       return new Response(stream, {

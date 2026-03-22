@@ -697,10 +697,10 @@ export function SlideTocChrome({
 
   return (
     <div
-      className={`${isDocOrOutline ? 'fixed' : 'absolute'} top-4 right-4 sm:top-6 sm:right-6 z-[250] flex items-center gap-2 transition-opacity duration-300`}
+      className={`${isDocOrOutline ? 'fixed' : 'absolute'} top-4 right-4 sm:top-6 sm:right-6 z-[250] flex items-center gap-2 transition-opacity duration-200`}
       style={{
-        opacity: isDocOrOutline ? 1 : (showChrome ? 1 : 0.4),
-        pointerEvents: 'auto',
+        opacity: isDocOrOutline ? 1 : (showChrome ? 1 : 0),
+        pointerEvents: isDocOrOutline ? 'auto' : (showChrome ? 'auto' : 'none'),
       }}
     >
       {/* Extra children (close button, etc.) — only in presentation mode */}

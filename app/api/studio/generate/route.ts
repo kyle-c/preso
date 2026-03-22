@@ -115,6 +115,10 @@ Follow these rules strictly to ensure all content meets WCAG 2.1 AA contrast req
 - Card counts MUST be 2, 3, 4, or 6. NEVER use 5 or 7 cards — they create orphaned bottom rows. 4 cards renders as a 2×2 grid, 6 as a 3×2 grid. If you have 5 items, combine two into one card or split into two slides.
 - Card body format: Use STRUCTURED format, not dense paragraphs. Each card: 1 bold lead sentence + 2-3 short bullet points (• prefix). Total 20-40 words per card. NEVER write 5+ sentences in a card body.
 - When a slide contains 2+ metrics or stats, NEVER bury them in a prose paragraph. Break them out as visual elements: cards (each stat as title), bullets (bold number leading), or two-column stat callouts. Dense paragraphs with embedded bold numbers are hard to scan in a live presentation.
+- Section divider slides (type "section") MUST include a subtitle with a 1-sentence preview of what's coming. Never leave a section slide with just a title — it wastes the audience's attention.
+- Content slides (type "content") should have 40-80 words of body text. Under 40 feels empty, over 80 feels like a document page. If you have more than 80 words, split into bullets or two slides.
+- Every slide must have substantive content. No slide should show just a title with empty space below it. If a slide doesn't have enough content to fill it, merge it with the next slide or convert to a different type.
+- Body text paragraphs on slides should be 2-3 short sentences max. Long paragraphs belong in the document view, not on slides.
 
 ## Presentation Templates
 
@@ -1725,11 +1729,16 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
                   return `Deck: "${deckTitle}"`
                 }
               }).join('\n\n')
-            outlinePrompt = `${strengthenedPrompt}\n\nSource decks to ${body.merge.mode === 'narrative' ? 'create a unified narrative from' : 'merge and deduplicate'}:\n${condensed}`
+            outlinePrompt = `${body.prompt}\n\nSource decks to ${body.merge.mode === 'narrative' ? 'create a unified narrative from' : 'merge and deduplicate'}:\n${condensed}`
           } else if (hasFiles) {
-            outlinePrompt = strengthenedPrompt + '\n\nIMPORTANT: The user has uploaded files. Analyze their content carefully and structure the outline to recreate/adapt their content using the Félix design system. Do NOT default to a generic template — the outline must reflect the actual content in the uploaded files.'
+            // For outline: use the raw prompt (not strengthened) + file hint — the outline model
+            // has its own system prompt. The strengthened prompt's document guidance confuses it.
+            outlinePrompt = body.prompt + '\n\nIMPORTANT: The user has uploaded files. Analyze their content carefully and structure the outline to recreate/adapt their content using the Félix design system. Do NOT default to a generic template — the outline must reflect the actual content in the uploaded files.'
           } else {
-            outlinePrompt = strengthenedPrompt
+            // For outline: use the raw prompt, not the strengthened version.
+            // The OUTLINE_SYSTEM_PROMPT already has JSON output instructions.
+            // Sending document structure guidance causes the model to return markdown instead of JSON.
+            outlinePrompt = body.prompt
           }
           const outlineFiles = hasFiles ? body.files : undefined
           // Use user's model when files are attached or merging (fast models can't handle large context)

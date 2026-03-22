@@ -149,16 +149,96 @@ export function detectIntent(prompt: string): DocumentType {
   return 'general'
 }
 
+// ---------------------------------------------------------------------------
+// Narrative Structure Detection
+// ---------------------------------------------------------------------------
+
+export type NarrativeArc =
+  | 'problem-solution-impact'
+  | 'status-progress-plan'
+  | 'context-challenge-recommendation'
+  | 'welcome-role-roadmap'
+  | 'thesis-evidence-ask'
+  | 'general'
+
+interface NarrativeStructure {
+  arc: NarrativeArc
+  label: string
+  sections: string[]
+}
+
+const NARRATIVE_ARCS: Record<DocumentType, NarrativeStructure> = {
+  launch: {
+    arc: 'problem-solution-impact',
+    label: 'Problem → Solution → Impact',
+    sections: ['Problem/Opportunity', 'What We Built', 'How It Works', 'Key Features', 'Impact & Metrics', 'Rollout Plan', 'Next Steps'],
+  },
+  prd: {
+    arc: 'problem-solution-impact',
+    label: 'Problem → Solution → Impact',
+    sections: ['Problem Statement', 'User Pain Points', 'Proposed Solution', 'Key Features', 'User Experience', 'Success Metrics', 'Timeline'],
+  },
+  review: {
+    arc: 'status-progress-plan',
+    label: 'Status → Progress → Plan',
+    sections: ['Executive Summary', 'Goals Recap', 'Key Results', 'Wins', 'Challenges & Learnings', 'Deep Dives', 'Next Period Plan'],
+  },
+  strategy: {
+    arc: 'context-challenge-recommendation',
+    label: 'Context → Challenge → Recommendation',
+    sections: ['Landscape & Context', 'Core Challenges', 'Strategic Vision', 'Strategic Pillars', 'Roadmap', 'Resources Needed', 'Success Criteria'],
+  },
+  onboarding: {
+    arc: 'welcome-role-roadmap',
+    label: 'Welcome → Your Role → First 90 Days',
+    sections: ['Welcome', 'About the Company', 'Your Role', 'Meet the Team', 'First 90 Days', 'Tools & Resources', 'Culture & Values'],
+  },
+  proposal: {
+    arc: 'thesis-evidence-ask',
+    label: 'Thesis → Evidence → Ask',
+    sections: ['Executive Summary', 'The Opportunity', 'Our Solution', 'Market Evidence', 'Business Model', 'Traction & Team', 'The Ask'],
+  },
+  research: {
+    arc: 'context-challenge-recommendation',
+    label: 'Context → Findings → Recommendations',
+    sections: ['Research Objectives', 'Methodology', 'Key Findings', 'User Evidence', 'Implications', 'Recommendations', 'Next Steps'],
+  },
+  general: {
+    arc: 'general',
+    label: 'General',
+    sections: [],
+  },
+}
+
+/** Detect the narrative arc for a given intent type */
+export function detectNarrative(type: DocumentType): NarrativeStructure {
+  return NARRATIVE_ARCS[type] || NARRATIVE_ARCS.general
+}
+
+/** Format narrative arc as a generation constraint */
+export function formatNarrativeConstraint(narrative: NarrativeStructure): string {
+  if (narrative.arc === 'general' || narrative.sections.length === 0) return ''
+  const sectionList = narrative.sections.map((s, i) => `  ${i + 1}. ${s}`).join('\n')
+  return `\n\n--- NARRATIVE STRUCTURE (${narrative.label}) ---
+Follow this storytelling arc to ensure the presentation tells a coherent story:
+${sectionList}
+
+Each section should be 1-3 slides. The arc should feel like a natural progression — the audience should never wonder "why am I seeing this slide now?"`
+}
+
 export function strengthenPrompt(prompt: string): IntentResult {
   const type = detectIntent(prompt)
   const label = INTENT_PATTERNS.find((p) => p.type === type)?.label ?? 'Presentation'
+  const narrative = detectNarrative(type)
 
   const guidance = DOCUMENT_GUIDANCE[type]
+  const narrativeConstraint = formatNarrativeConstraint(narrative)
 
   const strengthenedPrompt = `${prompt}
 
 --- DOCUMENT STRUCTURE GUIDANCE ---
 ${guidance}
+${narrativeConstraint}
 
 Generate both a detailed business document AND a visual slide presentation from this prompt.
 
@@ -167,7 +247,8 @@ QUALITY BAR:
 - The slides should be a compelling visual narrative that stands on its own. Use insight-driven titles that convey the key takeaway, not placeholder headings.
 - Every slide MUST include a "notes" field with 3-5 sentences expanding on the visual content.
 - Aim for 12-16 slides minimum. Don't rush — give each topic the depth it deserves.
-- When the prompt references data, metrics, or results, generate "chart" type slides with concrete ChartSpec data rather than just describing numbers in text.`
+- When the prompt references data, metrics, or results, generate "chart" type slides with concrete ChartSpec data rather than just describing numbers in text.
+- ANTI-SLOP: No dense paragraphs on slides. No titles longer than 6 words on cover slides. No 5 or 7 card grids. No consecutive slides with the same background color. Vary slide types — don't use the same type 3x in a row.`
 
   return { type, label, strengthenedPrompt }
 }

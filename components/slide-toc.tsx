@@ -632,6 +632,7 @@ export function SlideTocChrome({
   onEdit,
   editActive,
   contentViewMode = 'presentation',
+  onHover,
 }: {
   tocOpen: boolean
   onToggle: () => void
@@ -658,6 +659,8 @@ export function SlideTocChrome({
   onDownloadPdf?: () => void
   onDownloadPptx?: () => void
   onShare?: () => void
+  /** Called when user hovers over the chrome — used to trigger visibility */
+  onHover?: () => void
   /** Callback for edit toggle */
   onEdit?: () => void
   /** Whether edit mode is currently active */
@@ -698,9 +701,10 @@ export function SlideTocChrome({
   return (
     <div
       className={`${isDocOrOutline ? 'fixed' : 'absolute'} top-4 right-4 sm:top-6 sm:right-6 z-[250] flex items-center gap-2 transition-opacity duration-200`}
+      onMouseEnter={onHover}
       style={{
         opacity: isDocOrOutline ? 1 : (showChrome ? 1 : 0),
-        pointerEvents: isDocOrOutline ? 'auto' : (showChrome ? 'auto' : 'none'),
+        pointerEvents: 'auto',
       }}
     >
       {/* Extra children (close button, etc.) — only in presentation mode */}

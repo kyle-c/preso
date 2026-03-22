@@ -1753,7 +1753,8 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
       {viewMode === 'presentation' && (
         <div
           className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 transition-opacity duration-200"
-          style={{ opacity: hoverTop ? 1 : 0, pointerEvents: hoverTop ? 'auto' : 'none' }}
+          style={{ opacity: hoverTop ? 1 : 0, pointerEvents: 'auto' }}
+          onMouseEnter={() => setHoverTop(true)}
         >
           {topLeftContent}
         </div>
@@ -1914,6 +1915,7 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
             console.error('[PPTX export]', err)
           }
         }}
+        onHover={() => setHoverTop(true)}
         onShare={onShare}
         onEdit={sharePermission === 'editor' || !sharePermission ? (tocOpen ? () => setTocEditMode(!tocEditMode) : onEdit) : undefined}
         editActive={tocOpen ? tocEditMode : editActive}

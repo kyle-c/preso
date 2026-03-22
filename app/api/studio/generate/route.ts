@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { strengthenPrompt, detectIntent } from '@/lib/prompt-strengthener'
+import { formatChartConstraint } from '@/lib/data-viz-intelligence'
 import { getServerSession } from '@/lib/studio-auth'
 import { getBrandKit, serializeBrandForPrompt, FELIX_BRAND_KIT } from '@/lib/brand-kit'
 import { computeUserStyleProfile, selectExemplars, formatProfileForPrompt, formatExemplarsForPrompt } from '@/lib/studio-quality'
@@ -815,9 +816,10 @@ function buildAnthropicPayload(body: GenerateBody) {
         source: { type: 'base64', media_type: 'application/pdf', data: base64 },
       })
     } else if (file.type === 'data') {
+      const chartHint = formatChartConstraint(file.data)
       content.push({
         type: 'text',
-        text: `\n\n--- Data file: ${file.name} ---\n${file.data}\n--- End of ${file.name} ---\n\nAnalyze this data and create appropriate data visualization slides. Choose the best chart/visualization type based on the data structure.`,
+        text: `\n\n--- Data file: ${file.name} ---\n${file.data}\n--- End of ${file.name} ---\n\nAnalyze this data and create appropriate data visualization slides.${chartHint}`,
       })
     }
   }
@@ -867,9 +869,10 @@ function buildOpenRouterPayload(body: GenerateBody) {
         text: `[PDF attached: ${file.name}]`,
       })
     } else if (file.type === 'data') {
+      const chartHint = formatChartConstraint(file.data)
       content.push({
         type: 'text',
-        text: `\n\n--- Data file: ${file.name} ---\n${file.data}\n--- End of ${file.name} ---\n\nAnalyze this data and create appropriate data visualization slides.`,
+        text: `\n\n--- Data file: ${file.name} ---\n${file.data}\n--- End of ${file.name} ---\n\nAnalyze this data and create appropriate data visualization slides.${chartHint}`,
       })
     }
   }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowUp, Paperclip, X, Settings, FileText, FileSpreadsheet, ChevronDown, Search, Layers, Sparkles, Loader2, ListOrdered, Palette } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
@@ -31,6 +31,7 @@ const INTENT_SLIDE_COUNTS: Record<string, number> = {
 
 export default function CreatePage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   // Form state
   const [prompt, setPrompt] = useState('')
@@ -448,6 +449,28 @@ export default function CreatePage() {
       clearTimeout(clientTimeout)
     }
   }, [prompt, files, provider, apiKey, model])
+
+  // Auto-trigger generation from audience adaptation
+  const adaptTriggered = useRef(false)
+  const handleGenerateRef = useRef(handleGenerate)
+  handleGenerateRef.current = handleGenerate
+  useEffect(() => {
+    if (adaptTriggered.current) return
+    if (searchParams.get('adapt') !== '1') return
+    if (!apiKey) return // Wait for settings to load
+    try {
+      const raw = sessionStorage.getItem('felix-adapt')
+      if (!raw) return
+      adaptTriggered.current = true
+      sessionStorage.removeItem('felix-adapt')
+      const data = JSON.parse(raw)
+      if (data.prompt) {
+        setPrompt(data.prompt)
+        // Delay to let React re-render with new prompt, then auto-generate
+        setTimeout(() => handleGenerateRef.current(), 600)
+      }
+    } catch {}
+  }, [searchParams, apiKey])
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [dragOver, setDragOver] = useState(false)

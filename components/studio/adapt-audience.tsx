@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils'
 /* ═══════════════════════════════════════════════════════════ */
 /*                   AUDIENCE ADAPTATION                       */
 /*                                                              */
-/*  Takes an existing presentation and regenerates it for a    */
-/*  different audience. Uses the original slides as context    */
-/*  and constrains the output for the target audience.         */
+/*  Takes an existing presentation and navigates to /create    */
+/*  with an adapt prompt, triggering the full generation       */
+/*  canvas experience (tile view + animated cursors).          */
 /* ═══════════════════════════════════════════════════════════ */
 
 const AUDIENCES = [
@@ -58,19 +58,16 @@ interface AdaptAudienceProps {
   apiKey: string
   model: string
   className?: string
-  /** Called when dropdown opens/closes — parent should lock hover state */
   onOpenChange?: (open: boolean) => void
 }
 
 export function AdaptAudienceButton({ presentationId, slides, title, provider, apiKey, model, className, onOpenChange }: AdaptAudienceProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [adapting, setAdapting] = useState<string | null>(null)
   const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
 
-  // Close on outside click
   useEffect(() => {
     if (!open) return
     const handleClick = (e: MouseEvent) => {
@@ -82,7 +79,7 @@ export function AdaptAudienceButton({ presentationId, slides, title, provider, a
     }
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
-  }, [open])
+  }, [open, onOpenChange])
 
   const toggleMenu = useCallback(() => {
     if (open) {
@@ -98,15 +95,13 @@ export function AdaptAudienceButton({ presentationId, slides, title, provider, a
     onOpenChange?.(true)
   }, [open, onOpenChange])
 
-  const handleAdapt = useCallback(async (audience: typeof AUDIENCES[0]) => {
-    setAdapting(audience.id)
-    try {
-      // Build a condensed version of the source deck for context
-      const sourceContext = slides.map((s, i) =>
-        `Slide ${i + 1} (${s.type}, ${s.bg}): ${s.title}${s.subtitle ? ' — ' + s.subtitle : ''}${s.body ? '\n' + s.body.substring(0, 200) : ''}${s.bullets ? '\n• ' + s.bullets.map((b: any) => b.text).join('\n• ') : ''}`
-      ).join('\n\n')
+  const handleAdapt = useCallback((audience: typeof AUDIENCES[0]) => {
+    // Build condensed source context
+    const sourceContext = slides.map((s, i) =>
+      `Slide ${i + 1} (${s.type}, ${s.bg}): ${s.title}${s.subtitle ? ' — ' + s.subtitle : ''}${s.body ? '\n' + s.body.substring(0, 200) : ''}${s.bullets ? '\n• ' + s.bullets.map((b: any) => b.text).join('\n• ') : ''}`
+    ).join('\n\n')
 
-      const adaptPrompt = `Adapt this presentation for a ${audience.label} audience.
+    const adaptPrompt = `Adapt this presentation for a ${audience.label} audience.
 
 SOURCE PRESENTATION: "${title}"
 ${sourceContext}
@@ -117,78 +112,21 @@ TONE: ${audience.tone}
 
 Create a NEW presentation adapted for this audience. Preserve the core message and data from the source, but restructure the narrative, adjust the detail level, and rewrite the copy for this specific audience. This is NOT a summary — it's a targeted re-presentation of the same material.`
 
-      const res = await fetch('/api/studio/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: adaptPrompt,
-          provider,
-          apiKey,
-          model,
-          parallel: true,
-        }),
-      })
+    // Store adapt data in sessionStorage for the create page to pick up
+    try {
+      sessionStorage.setItem('felix-adapt', JSON.stringify({
+        prompt: adaptPrompt,
+        audience: audience.label,
+        sourceTitle: title,
+      }))
+    } catch {}
 
-      if (!res.ok) {
-        console.error('Adapt failed:', res.status)
-        setAdapting(null)
-        return
-      }
-
-      // Stream the response and collect slides
-      const reader = res.body?.getReader()
-      if (!reader) { setAdapting(null); return }
-
-      const decoder = new TextDecoder()
-      let allSlides: any[] = []
-      let outline: any[] = []
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        const chunk = decoder.decode(value, { stream: true })
-        for (const line of chunk.split('\n')) {
-          if (!line.startsWith('data: ') || line === 'data: [DONE]') continue
-          try {
-            const event = JSON.parse(line.slice(6))
-            if (event.outline && Array.isArray(event.outline)) {
-              outline = event.outline
-              allSlides = [...event.outline]
-            }
-            if (event.batch && typeof event.startIndex === 'number') {
-              for (let i = 0; i < event.batch.length; i++) {
-                if (event.batch[i]) allSlides[event.startIndex + i] = event.batch[i]
-              }
-            }
-            if (event.slidesReady) {
-              // Save the adapted presentation
-              const finalSlides = allSlides.filter(s => s && s.type && s.title)
-              const adaptedTitle = `${title} — ${audience.label}`
-              const saveRes = await fetch('/api/studio/presentations', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  title: adaptedTitle,
-                  prompt: adaptPrompt,
-                  slides: finalSlides,
-                  provider,
-                  model,
-                }),
-              })
-              if (saveRes.ok) {
-                const saved = await saveRes.json()
-                router.push(`/create/${saved.id}#slide-0`)
-              }
-            }
-          } catch {}
-        }
-      }
-    } catch (err) {
-      console.error('Adapt error:', err)
-    }
-    setAdapting(null)
     setOpen(false)
-  }, [slides, title, provider, apiKey, model, router])
+    onOpenChange?.(false)
+
+    // Navigate to create page — it will detect the adapt data and auto-generate
+    router.push('/create?adapt=1')
+  }, [slides, title, router, onOpenChange])
 
   return (
     <div className="relative">
@@ -196,22 +134,16 @@ Create a NEW presentation adapted for this audience. Preserve the core message a
         ref={btnRef}
         type="button"
         onClick={toggleMenu}
-        disabled={!!adapting}
-        className={cn(
-          'inline-flex items-center gap-1.5 transition-colors',
-          className,
-        )}
+        className={cn('inline-flex items-center gap-1.5 transition-colors', className)}
         title="Adapt this deck for a different audience"
       >
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
         </svg>
-        <span className="text-xs font-medium hidden sm:inline">
-          {adapting ? 'Adapting...' : 'Adapt'}
-        </span>
+        <span className="text-xs font-medium hidden sm:inline">Adapt</span>
       </button>
 
-      {open && !adapting && menuPos && (
+      {open && menuPos && (
         <div
           ref={menuRef}
           className="fixed w-72 bg-slate-950 border border-white/10 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150"
@@ -234,18 +166,6 @@ Create a NEW presentation adapted for this audience. Preserve the core message a
               </div>
             </button>
           ))}
-        </div>
-      )}
-
-      {adapting && menuPos && (
-        <div className="fixed px-4 py-3 bg-slate-950 border border-white/10 rounded-xl shadow-2xl" style={{ top: menuPos.top, left: menuPos.left, zIndex: 9999 }}>
-          <div className="flex items-center gap-2 text-xs text-white/60">
-            <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
-            Adapting for {AUDIENCES.find(a => a.id === adapting)?.label}...
-          </div>
         </div>
       )}
     </div>

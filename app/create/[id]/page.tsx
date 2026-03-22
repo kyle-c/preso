@@ -6,6 +6,7 @@ import { Pencil, X, Sparkles, ArrowLeft, Check, Settings, MessageSquare, Flag } 
 import { SlideRenderer, type SlideData, type ChromeColors } from '@/components/studio/slide-renderer'
 import { PresenterView } from '@/components/studio/presenter-view'
 import { SaveAsTemplateButton } from '@/components/studio/template-picker'
+import { AdaptAudienceButton } from '@/components/studio/adapt-audience'
 import { AnalyticsPanel } from '@/components/studio/analytics-panel'
 import { usePresence, PresenceAvatars } from '@/components/studio/presence-avatars'
 import { loadModelDefaults, useServerSettings } from '@/components/studio/model-selector'
@@ -1381,6 +1382,17 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
                 slides={presentation.slides}
                 presId={presentation.id}
                 presTitle={presentation.title}
+                className={`h-7 px-2.5 rounded-full transition-colors duration-500 ${chrome.btnIcon} hover:bg-white/10`}
+              />
+              {/* Adapt for audience */}
+              <div className="w-px h-4 flex-shrink-0 bg-current opacity-15" />
+              <AdaptAudienceButton
+                presentationId={presentation.id}
+                slides={presentation.slides}
+                title={presentation.title}
+                provider={provider}
+                apiKey={apiKey}
+                model={model}
                 className={`h-7 px-2.5 rounded-full transition-colors duration-500 ${chrome.btnIcon} hover:bg-white/10`}
               />
               {/* Analytics */}

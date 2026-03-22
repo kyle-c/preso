@@ -64,16 +64,13 @@ export function AdaptAudienceButton({ presentationId, slides, title, provider, a
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [adapting, setAdapting] = useState<string | null>(null)
-  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(null)
+  const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
 
-  // Position menu relative to button and close on outside click
+  // Close on outside click
   useEffect(() => {
-    if (!open || !btnRef.current) return
-    const rect = btnRef.current.getBoundingClientRect()
-    setMenuPos({ top: rect.bottom + 8, right: window.innerWidth - rect.right })
-
+    if (!open) return
     const handleClick = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node) &&
           btnRef.current && !btnRef.current.contains(e.target as Node)) {
@@ -82,6 +79,19 @@ export function AdaptAudienceButton({ presentationId, slides, title, provider, a
     }
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
+  }, [open])
+
+  const toggleMenu = useCallback(() => {
+    if (open) {
+      setOpen(false)
+      return
+    }
+    // Calculate position at click time (not in useEffect) so the button rect is accurate
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect()
+      setMenuPos({ top: rect.bottom + 8, left: Math.max(8, rect.left - 200) })
+    }
+    setOpen(true)
   }, [open])
 
   const handleAdapt = useCallback(async (audience: typeof AUDIENCES[0]) => {
@@ -181,7 +191,7 @@ Create a NEW presentation adapted for this audience. Preserve the core message a
       <button
         ref={btnRef}
         type="button"
-        onClick={() => setOpen(!open)}
+        onClick={toggleMenu}
         disabled={!!adapting}
         className={cn(
           'inline-flex items-center gap-1.5 transition-colors',
@@ -201,7 +211,7 @@ Create a NEW presentation adapted for this audience. Preserve the core message a
         <div
           ref={menuRef}
           className="fixed w-72 bg-slate-950 border border-white/10 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150"
-          style={{ top: menuPos.top, right: menuPos.right, zIndex: 9999 }}
+          style={{ top: menuPos.top, left: menuPos.left, zIndex: 9999 }}
         >
           <div className="px-3 py-2 border-b border-white/10">
             <p className="text-[10px] uppercase tracking-widest text-white/40">Adapt for audience</p>
@@ -224,7 +234,7 @@ Create a NEW presentation adapted for this audience. Preserve the core message a
       )}
 
       {adapting && menuPos && (
-        <div className="fixed px-4 py-3 bg-slate-950 border border-white/10 rounded-xl shadow-2xl" style={{ top: menuPos.top, right: menuPos.right, zIndex: 9999 }}>
+        <div className="fixed px-4 py-3 bg-slate-950 border border-white/10 rounded-xl shadow-2xl" style={{ top: menuPos.top, left: menuPos.left, zIndex: 9999 }}>
           <div className="flex items-center gap-2 text-xs text-white/60">
             <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />

@@ -1594,8 +1594,8 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
     <>
     {/* Centered view mode toggle — rendered outside the overflow-hidden slide container */}
     <div
-      className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[190] transition-opacity duration-200"
-      style={{ opacity: hoverTop || viewMode !== 'presentation' ? 1 : 0, pointerEvents: hoverTop || viewMode !== 'presentation' ? 'auto' : 'none' }}
+      className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[190] transition-opacity duration-300"
+      style={{ opacity: hoverTop || viewMode !== 'presentation' ? 1 : 0.35, pointerEvents: 'auto' }}
       onMouseEnter={() => setHoverTop(true)}
       onMouseLeave={() => setHoverTop(false)}
     >
@@ -1750,8 +1750,9 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
       {/* Top-left extra — presentation mode only */}
       {viewMode === 'presentation' && (
         <div
-          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 transition-opacity duration-200"
-          style={{ opacity: hoverTop ? 1 : 0, pointerEvents: hoverTop ? 'auto' : 'none' }}
+          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 transition-opacity duration-300"
+          style={{ opacity: hoverTop ? 1 : 0.4, pointerEvents: 'auto' }}
+          onMouseEnter={() => setHoverTop(true)}
         >
           {topLeftContent}
         </div>

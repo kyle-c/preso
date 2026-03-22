@@ -22,27 +22,83 @@
   },
   "colors": {
     "primary": [
-      { "name": "Turquoise", "hex": "#2BF2F1", "usage": "Primary brand accent, CTAs, highlights, badges" },
-      { "name": "Slate", "hex": "#082422", "usage": "Primary text, dark backgrounds, phone chrome" }
+      {
+        "name": "Turquoise",
+        "hex": "#2BF2F1",
+        "usage": "Primary brand accent, CTAs, highlights, badges"
+      },
+      {
+        "name": "Slate",
+        "hex": "#082422",
+        "usage": "Primary text, dark backgrounds, phone chrome"
+      }
     ],
     "secondary": [
-      { "name": "Blueberry", "hex": "#6060BF" },
-      { "name": "Cactus", "hex": "#60D06F" },
-      { "name": "Mango", "hex": "#F19D38" },
-      { "name": "Papaya", "hex": "#F26629" },
-      { "name": "Lime", "hex": "#DCFF00" },
-      { "name": "Lychee", "hex": "#FFCD9C" },
-      { "name": "Sage", "hex": "#7BA882" },
-      { "name": "Sky", "hex": "#8DFDFA" },
-      { "name": "Evergreen", "hex": "#35605F" },
-      { "name": "Mocha", "hex": "#877867" },
-      { "name": "Yam", "hex": "#C1A98A" },
-      { "name": "Fortuna", "hex": "#FFB05A" }
+      {
+        "name": "Blueberry",
+        "hex": "#6060BF"
+      },
+      {
+        "name": "Cactus",
+        "hex": "#60D06F"
+      },
+      {
+        "name": "Mango",
+        "hex": "#F19D38"
+      },
+      {
+        "name": "Papaya",
+        "hex": "#F26629"
+      },
+      {
+        "name": "Lime",
+        "hex": "#DCFF00"
+      },
+      {
+        "name": "Lychee",
+        "hex": "#FFCD9C"
+      },
+      {
+        "name": "Sage",
+        "hex": "#7BA882"
+      },
+      {
+        "name": "Sky",
+        "hex": "#8DFDFA"
+      },
+      {
+        "name": "Evergreen",
+        "hex": "#35605F"
+      },
+      {
+        "name": "Mocha",
+        "hex": "#877867"
+      },
+      {
+        "name": "Yam",
+        "hex": "#C1A98A"
+      },
+      {
+        "name": "Fortuna",
+        "hex": "#FFB05A"
+      }
     ],
     "neutral": [
-      { "name": "Stone", "hex": "#EFEBE7", "usage": "Section backgrounds, cards, subtle fills" },
-      { "name": "Linen", "hex": "#FEFCF9", "usage": "Page background, phone screen bg" },
-      { "name": "Concrete", "hex": "#CFCABF", "usage": "Borders, dividers, disabled states" }
+      {
+        "name": "Stone",
+        "hex": "#EFEBE7",
+        "usage": "Section backgrounds, cards, subtle fills"
+      },
+      {
+        "name": "Linen",
+        "hex": "#FEFCF9",
+        "usage": "Page background, phone screen bg"
+      },
+      {
+        "name": "Concrete",
+        "hex": "#CFCABF",
+        "usage": "Borders, dividers, disabled states"
+      }
     ],
     "scales": {
       "turquoise": {
@@ -90,16 +146,66 @@
   },
   "typography": {
     "scale": [
-      { "level": "Display XL", "size": "72px", "leading": "1.0", "tracking": "-0.02em" },
-      { "level": "Display LG", "size": "60px", "leading": "1.0", "tracking": "-0.02em" },
-      { "level": "Display MD", "size": "48px", "leading": "1.1", "tracking": "-0.01em" },
-      { "level": "Heading 1", "size": "36px", "leading": "1.2", "tracking": "-0.01em" },
-      { "level": "Heading 2", "size": "30px", "leading": "1.3", "tracking": "0em" },
-      { "level": "Heading 3", "size": "24px", "leading": "1.4", "tracking": "0em" },
-      { "level": "Body LG", "size": "18px", "leading": "1.6", "tracking": "0em" },
-      { "level": "Body", "size": "16px", "leading": "1.6", "tracking": "0em" },
-      { "level": "Body SM", "size": "14px", "leading": "1.5", "tracking": "0em" },
-      { "level": "Caption", "size": "12px", "leading": "1.4", "tracking": "0.01em" }
+      {
+        "level": "Display XL",
+        "size": "72px",
+        "leading": "1.0",
+        "tracking": "-0.02em"
+      },
+      {
+        "level": "Display LG",
+        "size": "60px",
+        "leading": "1.0",
+        "tracking": "-0.02em"
+      },
+      {
+        "level": "Display MD",
+        "size": "48px",
+        "leading": "1.1",
+        "tracking": "-0.01em"
+      },
+      {
+        "level": "Heading 1",
+        "size": "36px",
+        "leading": "1.2",
+        "tracking": "-0.01em"
+      },
+      {
+        "level": "Heading 2",
+        "size": "30px",
+        "leading": "1.3",
+        "tracking": "0em"
+      },
+      {
+        "level": "Heading 3",
+        "size": "24px",
+        "leading": "1.4",
+        "tracking": "0em"
+      },
+      {
+        "level": "Body LG",
+        "size": "18px",
+        "leading": "1.6",
+        "tracking": "0em"
+      },
+      {
+        "level": "Body",
+        "size": "16px",
+        "leading": "1.6",
+        "tracking": "0em"
+      },
+      {
+        "level": "Body SM",
+        "size": "14px",
+        "leading": "1.5",
+        "tracking": "0em"
+      },
+      {
+        "level": "Caption",
+        "size": "12px",
+        "leading": "1.4",
+        "tracking": "0.01em"
+      }
     ]
   },
   "spacing": {
@@ -125,26 +231,461 @@
     "turquoise": "0 4px 14px rgba(43,242,241,0.25)"
   },
   "illustrations": [
-    { "url": "/illustrations/Dollar%20bills%20%2B%20Coins%20A.svg", "category": "Financial", "description": "Dollar bills and coins — financial topics, costs, budgets" },
-    { "url": "/illustrations/Flying%20Dollar%20Bills%20-%20Turquoise.svg", "category": "Financial", "description": "Flying money — growth, revenue, remittances" },
-    { "url": "/illustrations/Cloud%20Coin%20-%20Turquoise.svg", "category": "Financial", "description": "Cloud with coin — digital finance, cloud services" },
-    { "url": "/illustrations/Paper%20Airplane%20%2B%20Coin%20-%20Turquoise.svg", "category": "Financial", "description": "Paper airplane with coin — sending money, transfers" },
-    { "url": "/illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg", "category": "Growth", "description": "Rocket launch — growth, ambition, scaling, launches" },
-    { "url": "/illustrations/3%20Paper%20Airplanes%20%2B%20Coins.svg", "category": "Growth", "description": "Three paper airplanes — multiple products, scaling" },
-    { "url": "/illustrations/ray.svg", "category": "Growth", "description": "Starburst ray — excellence, quality" },
-    { "url": "/illustrations/Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg", "category": "People", "description": "Two hands with phones — collaboration, together" },
-    { "url": "/illustrations/Hand%20-%20Stars.svg", "category": "People", "description": "Hand with stars — welcome, celebration, recognition" },
-    { "url": "/illustrations/Hand%20-%20Cell%20Phone%20OK.svg", "category": "People", "description": "Hand with phone OK — mobile UX, approval, user success" },
-    { "url": "/illustrations/Speech%20Bubbles%20%2B%20Hearts.svg", "category": "Communication", "description": "Speech bubbles with hearts — user love, feedback" },
-    { "url": "/illustrations/Speech%20Bubble.svg", "category": "Communication", "description": "Speech bubble — communication, support" },
-    { "url": "/illustrations/Party%20Popper.svg", "category": "Celebration", "description": "Party popper — welcome, celebration, milestones" },
-    { "url": "/illustrations/Heart%20-F%C3%A9lix.svg", "category": "Celebration", "description": "Félix heart — brand love, values, passion" },
-    { "url": "/illustrations/Fast.svg", "category": "Objects", "description": "Speed/lightning — urgency, fast, shipping, action" },
-    { "url": "/illustrations/Magnifying%20Glass.svg", "category": "Objects", "description": "Magnifying glass — research, discovery, curiosity" },
-    { "url": "/illustrations/Lock.svg", "category": "Objects", "description": "Lock — security, trust, compliance" },
-    { "url": "/illustrations/Survey.svg", "category": "Objects", "description": "Survey/clipboard — research, planning, checklists" },
-    { "url": "/illustrations/F%C3%A9lix%20Illo%201.svg", "category": "Mascot", "description": "Félix mascot — company intro, brand slides" },
-    { "url": "/illustrations/F%C3%A9lix%20Illo%202.svg", "category": "Mascot", "description": "Félix mascot alternate" }
+    {
+      "url": "/illustrations/F%C3%A9lix%20Illo%201.svg",
+      "category": "Brand & Mascot",
+      "description": "Félix Illo 1"
+    },
+    {
+      "url": "/illustrations/F%C3%A9lix%20Illo%202.svg",
+      "category": "Brand & Mascot",
+      "description": "Félix Illo 2"
+    },
+    {
+      "url": "/illustrations/F%C3%A9lix%20Illo%203.svg",
+      "category": "Brand & Mascot",
+      "description": "Félix Illo 3"
+    },
+    {
+      "url": "/illustrations/F%C3%A9lix%20Illo%204.svg",
+      "category": "Brand & Mascot",
+      "description": "Félix Illo 4"
+    },
+    {
+      "url": "/illustrations/F%C3%A9lix%20Illo%205.svg",
+      "category": "Brand & Mascot",
+      "description": "Félix Illo 5"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Cell%20Phone%20-%20F%C3%A9lix%20WA.svg",
+      "category": "Brand & Mascot",
+      "description": "Hand   Cell Phone   Félix WA"
+    },
+    {
+      "url": "/illustrations/Heart%20-F%C3%A9lix.svg",
+      "category": "Brand & Mascot",
+      "description": "Heart  Félix"
+    },
+    {
+      "url": "/illustrations/Party%20Popper.svg",
+      "category": "Celebration & Emotion",
+      "description": "Party Popper"
+    },
+    {
+      "url": "/illustrations/Letter%20in%20Envelope.svg",
+      "category": "Communication",
+      "description": "Letter in Envelope"
+    },
+    {
+      "url": "/illustrations/Speaker.svg",
+      "category": "Communication",
+      "description": "Speaker"
+    },
+    {
+      "url": "/illustrations/Speech%20Bubble.svg",
+      "category": "Communication",
+      "description": "Speech Bubble"
+    },
+    {
+      "url": "/illustrations/Speech%20Bubble%202.svg",
+      "category": "Communication",
+      "description": "Speech Bubble 2"
+    },
+    {
+      "url": "/illustrations/Speech%20Bubbles.svg",
+      "category": "Communication",
+      "description": "Speech Bubbles"
+    },
+    {
+      "url": "/illustrations/Speech%20Bubbles%20%2B%20Hearts.svg",
+      "category": "Communication",
+      "description": "Speech Bubbles + Hearts"
+    },
+    {
+      "url": "/illustrations/Verification%20WA%201.svg",
+      "category": "Communication",
+      "description": "Verification WA 1"
+    },
+    {
+      "url": "/illustrations/Verification%20WA%203.svg",
+      "category": "Communication",
+      "description": "Verification WA 3"
+    },
+    {
+      "url": "/illustrations/ATM%20%2B%20cell%20phone.svg",
+      "category": "Devices",
+      "description": "ATM + cell phone"
+    },
+    {
+      "url": "/illustrations/Headphones.svg",
+      "category": "Devices",
+      "description": "Headphones"
+    },
+    {
+      "url": "/illustrations/Laptop%20Dark.svg",
+      "category": "Devices",
+      "description": "Laptop Dark"
+    },
+    {
+      "url": "/illustrations/Laptop%20Dark-1.svg",
+      "category": "Devices",
+      "description": "Laptop Dark 1"
+    },
+    {
+      "url": "/illustrations/Flag%203d%20a%20HND.svg",
+      "category": "Flags",
+      "description": "Flag 3d a HND"
+    },
+    {
+      "url": "/illustrations/Flag%203d%20CO.svg",
+      "category": "Flags",
+      "description": "Flag 3d CO"
+    },
+    {
+      "url": "/illustrations/Flag%203d%20GT.svg",
+      "category": "Flags",
+      "description": "Flag 3d GT"
+    },
+    {
+      "url": "/illustrations/Flag%203d%20MX.svg",
+      "category": "Flags",
+      "description": "Flag 3d MX"
+    },
+    {
+      "url": "/illustrations/Flag%203d%20NIC.svg",
+      "category": "Flags",
+      "description": "Flag 3d NIC"
+    },
+    {
+      "url": "/illustrations/Flag%203d%20RD.svg",
+      "category": "Flags",
+      "description": "Flag 3d RD"
+    },
+    {
+      "url": "/illustrations/Flag%203d%20SV.svg",
+      "category": "Flags",
+      "description": "Flag 3d SV"
+    },
+    {
+      "url": "/illustrations/Flag%20OG%20-%20Colombia.svg",
+      "category": "Flags",
+      "description": "Flag OG   Colombia"
+    },
+    {
+      "url": "/illustrations/Flag%20OG%20-%20El%20Salvador.svg",
+      "category": "Flags",
+      "description": "Flag OG   El Salvador"
+    },
+    {
+      "url": "/illustrations/Flag%20OG%20-%20Guatemala.svg",
+      "category": "Flags",
+      "description": "Flag OG   Guatemala"
+    },
+    {
+      "url": "/illustrations/Flag%20OG%20-%20Honduras.svg",
+      "category": "Flags",
+      "description": "Flag OG   Honduras"
+    },
+    {
+      "url": "/illustrations/Flag%20OG%20-%20Mexico.svg",
+      "category": "Flags",
+      "description": "Flag OG   Mexico"
+    },
+    {
+      "url": "/illustrations/Flag%20OG%20-%20Nicaragua.svg",
+      "category": "Flags",
+      "description": "Flag OG   Nicaragua"
+    },
+    {
+      "url": "/illustrations/Flag%20OG%20-%20Republica%20Dominicana.svg",
+      "category": "Flags",
+      "description": "Flag OG   Republica Dominicana"
+    },
+    {
+      "url": "/illustrations/Flags.svg",
+      "category": "Flags",
+      "description": "Flags"
+    },
+    {
+      "url": "/illustrations/Diffusion.svg",
+      "category": "Growth & Motion",
+      "description": "Diffusion"
+    },
+    {
+      "url": "/illustrations/Fast.svg",
+      "category": "Growth & Motion",
+      "description": "Fast"
+    },
+    {
+      "url": "/illustrations/ray.svg",
+      "category": "Growth & Motion",
+      "description": "ray"
+    },
+    {
+      "url": "/illustrations/Repeat%20A.svg",
+      "category": "Growth & Motion",
+      "description": "Repeat A"
+    },
+    {
+      "url": "/illustrations/Repeat%20B.svg",
+      "category": "Growth & Motion",
+      "description": "Repeat B"
+    },
+    {
+      "url": "/illustrations/Gift%20Box%20%2B%20Hands%20%2B%20Bills.svg",
+      "category": "Hands & Gestures",
+      "description": "Gift Box + Hands + Bills"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Card%201.svg",
+      "category": "Hands & Gestures",
+      "description": "Hand   Card 1"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Card%202.svg",
+      "category": "Hands & Gestures",
+      "description": "Hand   Card 2"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Cell%20Phone%20OK.svg",
+      "category": "Hands & Gestures",
+      "description": "Hand   Cell Phone OK"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Dollar%20Bills%201.svg",
+      "category": "Hands & Gestures",
+      "description": "Hand   Dollar Bills 1"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Dollar%20Bills%202.svg",
+      "category": "Hands & Gestures",
+      "description": "Hand   Dollar Bills 2"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Dollar%20Bills%203.svg",
+      "category": "Hands & Gestures",
+      "description": "Hand   Dollar Bills 3"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Star%20-%20Perks.svg",
+      "category": "Hands & Gestures",
+      "description": "Hand   Star   Perks"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Stars.svg",
+      "category": "Hands & Gestures",
+      "description": "Hand   Stars"
+    },
+    {
+      "url": "/illustrations/Hand%20-%20Tool.svg",
+      "category": "Hands & Gestures",
+      "description": "Hand   Tool"
+    },
+    {
+      "url": "/illustrations/Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg",
+      "category": "Hands & Gestures",
+      "description": "Hands   2 Cell Phones   Juntos we Succeed"
+    },
+    {
+      "url": "/illustrations/Hands%20-%202%20Cell%20Phones%20-%20Love.svg",
+      "category": "Hands & Gestures",
+      "description": "Hands   2 Cell Phones   Love"
+    },
+    {
+      "url": "/illustrations/3%20Paper%20Airplanes%20%2B%20Coins.svg",
+      "category": "Money & Finance",
+      "description": "3 Paper Airplanes + Coins"
+    },
+    {
+      "url": "/illustrations/bank.svg",
+      "category": "Money & Finance",
+      "description": "bank"
+    },
+    {
+      "url": "/illustrations/Calculator%20%2B%20Stack%20of%20coins.svg",
+      "category": "Money & Finance",
+      "description": "Calculator + Stack of coins"
+    },
+    {
+      "url": "/illustrations/card.svg",
+      "category": "Money & Finance",
+      "description": "card"
+    },
+    {
+      "url": "/illustrations/Cards.svg",
+      "category": "Money & Finance",
+      "description": "Cards"
+    },
+    {
+      "url": "/illustrations/cash.svg",
+      "category": "Money & Finance",
+      "description": "cash"
+    },
+    {
+      "url": "/illustrations/cashAirplane.svg",
+      "category": "Money & Finance",
+      "description": "cashAirplane"
+    },
+    {
+      "url": "/illustrations/Cell%20Phone%20%2B%20Flying%20Dollar%20Bills%20-%20Turquoise.svg",
+      "category": "Money & Finance",
+      "description": "Cell Phone + Flying Dollar Bills   Turquoise"
+    },
+    {
+      "url": "/illustrations/Cell%20Phone%20%2B%20Flying%20Dollar%20Bills%20-%20Turquoise%202.svg",
+      "category": "Money & Finance",
+      "description": "Cell Phone + Flying Dollar Bills   Turquoise 2"
+    },
+    {
+      "url": "/illustrations/Cloud%20Coin%20-%20Turquoise.svg",
+      "category": "Money & Finance",
+      "description": "Cloud Coin   Turquoise"
+    },
+    {
+      "url": "/illustrations/Coin%20-%20Lime.svg",
+      "category": "Money & Finance",
+      "description": "Coin   Lime"
+    },
+    {
+      "url": "/illustrations/Coins%20x2%20v1.svg",
+      "category": "Money & Finance",
+      "description": "Coins x2 v1"
+    },
+    {
+      "url": "/illustrations/Coins%20x2%20v2.svg",
+      "category": "Money & Finance",
+      "description": "Coins x2 v2"
+    },
+    {
+      "url": "/illustrations/Credit%20Score%20%2B%20Calculator.svg",
+      "category": "Money & Finance",
+      "description": "Credit Score + Calculator"
+    },
+    {
+      "url": "/illustrations/Dollar%20bill.svg",
+      "category": "Money & Finance",
+      "description": "Dollar bill"
+    },
+    {
+      "url": "/illustrations/Dollar%20bills%20%2B%20Coins%20A.svg",
+      "category": "Money & Finance",
+      "description": "Dollar bills + Coins A"
+    },
+    {
+      "url": "/illustrations/Dollar%20bills%20%2B%20Coins%20B%20-%20Turquoise.svg",
+      "category": "Money & Finance",
+      "description": "Dollar bills + Coins B   Turquoise"
+    },
+    {
+      "url": "/illustrations/Flying%20Dollar%20Bills%20-%20Turquoise.svg",
+      "category": "Money & Finance",
+      "description": "Flying Dollar Bills   Turquoise"
+    },
+    {
+      "url": "/illustrations/Gift%20Box%20%2B%20Coins.svg",
+      "category": "Money & Finance",
+      "description": "Gift Box + Coins"
+    },
+    {
+      "url": "/illustrations/Magic%20hat%20and%20magic%20wand%20%2B%20dollar%20bill.svg",
+      "category": "Money & Finance",
+      "description": "Magic hat and magic wand + dollar bill"
+    },
+    {
+      "url": "/illustrations/Paper%20Airplane%20%2B%20Coin%20-%20Turquoise.svg",
+      "category": "Money & Finance",
+      "description": "Paper Airplane + Coin   Turquoise"
+    },
+    {
+      "url": "/illustrations/Paper%20Airplane%20%2B%20Dollar%20Bills.svg",
+      "category": "Money & Finance",
+      "description": "Paper Airplane + Dollar Bills"
+    },
+    {
+      "url": "/illustrations/Payday%20%2B%20Calendar%20%2B%20Cell%20Phone.svg",
+      "category": "Money & Finance",
+      "description": "Payday + Calendar + Cell Phone"
+    },
+    {
+      "url": "/illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg",
+      "category": "Money & Finance",
+      "description": "Rocket Launch   Growth + Coin   Turquoise"
+    },
+    {
+      "url": "/illustrations/Rocket%20Launch%20%2B%20Coin%20-%20Growth%20-%20Lime.svg",
+      "category": "Money & Finance",
+      "description": "Rocket Launch + Coin   Growth   Lime"
+    },
+    {
+      "url": "/illustrations/Speaker%20%2B%20Dollar%20Bill.svg",
+      "category": "Money & Finance",
+      "description": "Speaker + Dollar Bill"
+    },
+    {
+      "url": "/illustrations/Stack%20of%20coins%20-%20Lime.svg",
+      "category": "Money & Finance",
+      "description": "Stack of coins   Lime"
+    },
+    {
+      "url": "/illustrations/Attention.svg",
+      "category": "Objects & UI",
+      "description": "Attention"
+    },
+    {
+      "url": "/illustrations/Attention%20-%20Siren.svg",
+      "category": "Objects & UI",
+      "description": "Attention   Siren"
+    },
+    {
+      "url": "/illustrations/Bot.svg",
+      "category": "Objects & UI",
+      "description": "Bot"
+    },
+    {
+      "url": "/illustrations/Check.svg",
+      "category": "Objects & UI",
+      "description": "Check"
+    },
+    {
+      "url": "/illustrations/Error.svg",
+      "category": "Objects & UI",
+      "description": "Error"
+    },
+    {
+      "url": "/illustrations/Lock.svg",
+      "category": "Objects & UI",
+      "description": "Lock"
+    },
+    {
+      "url": "/illustrations/Magnifying%20Glass.svg",
+      "category": "Objects & UI",
+      "description": "Magnifying Glass"
+    },
+    {
+      "url": "/illustrations/Map.svg",
+      "category": "Objects & UI",
+      "description": "Map"
+    },
+    {
+      "url": "/illustrations/Map%20%2B%20F%20symbol.svg",
+      "category": "Objects & UI",
+      "description": "Map + F symbol"
+    },
+    {
+      "url": "/illustrations/Map%20Marker.svg",
+      "category": "Objects & UI",
+      "description": "Map Marker"
+    },
+    {
+      "url": "/illustrations/Passport.svg",
+      "category": "Objects & UI",
+      "description": "Passport"
+    },
+    {
+      "url": "/illustrations/Survey.svg",
+      "category": "Objects & UI",
+      "description": "Survey"
+    }
   ],
   "designPrinciples": [
     "Presence Over Transaction — Remittances are acts of presence. Design should honor the emotional weight of sending money to family.",
@@ -154,6 +695,139 @@
     "Celebrate Growth — Acknowledge milestones and learning, not just task completion."
   ],
   "i18n": {
-    "languages": ["en", "es-mx", "pt-br"]
+    "languages": [
+      "en",
+      "es-mx",
+      "pt-br"
+    ]
+  },
+  "icons": {
+    "library": "Phosphor Icons",
+    "weight": "duotone",
+    "browsUrl": "https://phosphoricons.com/?weight=duotone",
+    "categories": [
+      {
+        "name": "Navigation & Actions",
+        "examples": [
+          "ArrowLeft",
+          "ArrowRight",
+          "Check",
+          "X",
+          "Plus",
+          "Minus"
+        ]
+      },
+      {
+        "name": "Finance & Commerce",
+        "examples": [
+          "Wallet",
+          "Bank",
+          "CreditCard",
+          "Money",
+          "CurrencyDollar",
+          "Coins",
+          "ChartLineUp",
+          "PiggyBank"
+        ]
+      },
+      {
+        "name": "Communication",
+        "examples": [
+          "PaperPlaneTilt",
+          "ChatCircle",
+          "EnvelopeSimple",
+          "Bell",
+          "WhatsappLogo",
+          "Megaphone"
+        ]
+      },
+      {
+        "name": "User & Identity",
+        "examples": [
+          "User",
+          "Shield",
+          "ShieldCheck",
+          "Lock",
+          "Key",
+          "Fingerprint"
+        ]
+      },
+      {
+        "name": "Interface & UI",
+        "examples": [
+          "House",
+          "Gear",
+          "MagnifyingGlass",
+          "Eye",
+          "Copy",
+          "Share",
+          "QrCode"
+        ]
+      },
+      {
+        "name": "Status & Feedback",
+        "examples": [
+          "Info",
+          "Warning",
+          "CheckCircle",
+          "XCircle",
+          "Sparkle",
+          "Star",
+          "Heart"
+        ]
+      },
+      {
+        "name": "Device & Connectivity",
+        "examples": [
+          "DeviceMobile",
+          "Globe",
+          "WifiHigh",
+          "MapPin",
+          "Clock"
+        ]
+      },
+      {
+        "name": "Misc",
+        "examples": [
+          "Lightning",
+          "Rocket",
+          "Gift",
+          "Handshake",
+          "Flag",
+          "Tag"
+        ]
+      }
+    ]
+  },
+  "tokens": {
+    "spacing": {
+      "xs": "4px",
+      "sm": "8px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px",
+      "2xl": "48px",
+      "3xl": "64px"
+    },
+    "radius": {
+      "none": "0px",
+      "sm": "4px",
+      "md": "8px",
+      "lg": "16px",
+      "xl": "24px",
+      "2xl": "32px",
+      "full": "9999px"
+    },
+    "shadows": {
+      "xs": "0 1px 2px rgba(8,36,34,0.03)",
+      "sm": "0 1px 3px rgba(8,36,34,0.06), 0 1px 2px rgba(8,36,34,0.04)",
+      "md": "0 4px 6px rgba(8,36,34,0.06), 0 2px 4px rgba(8,36,34,0.04)",
+      "lg": "0 10px 15px rgba(8,36,34,0.06), 0 4px 6px rgba(8,36,34,0.03)",
+      "xl": "0 20px 25px rgba(8,36,34,0.06), 0 8px 10px rgba(8,36,34,0.03)",
+      "2xl": "0 25px 50px rgba(8,36,34,0.12)",
+      "inner": "inset 0 2px 4px rgba(8,36,34,0.04)",
+      "turquoise": "0 4px 14px rgba(43,242,241,0.25)"
+    },
+    "focus": "ring-[3px] ring-turquoise/25 border-turquoise"
   }
 }

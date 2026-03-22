@@ -1394,6 +1394,7 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
                 apiKey={apiKey}
                 model={model}
                 className={`h-7 px-2.5 rounded-full transition-colors duration-500 ${chrome.btnIcon} hover:bg-white/10`}
+                onOpenChange={(isOpen) => chrome.lockHover(isOpen)}
               />
               {/* Analytics */}
               {presentation.shareToken && (

@@ -58,9 +58,11 @@ interface AdaptAudienceProps {
   apiKey: string
   model: string
   className?: string
+  /** Called when dropdown opens/closes — parent should lock hover state */
+  onOpenChange?: (open: boolean) => void
 }
 
-export function AdaptAudienceButton({ presentationId, slides, title, provider, apiKey, model, className }: AdaptAudienceProps) {
+export function AdaptAudienceButton({ presentationId, slides, title, provider, apiKey, model, className, onOpenChange }: AdaptAudienceProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [adapting, setAdapting] = useState<string | null>(null)
@@ -75,6 +77,7 @@ export function AdaptAudienceButton({ presentationId, slides, title, provider, a
       if (menuRef.current && !menuRef.current.contains(e.target as Node) &&
           btnRef.current && !btnRef.current.contains(e.target as Node)) {
         setOpen(false)
+        onOpenChange?.(false)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -84,15 +87,16 @@ export function AdaptAudienceButton({ presentationId, slides, title, provider, a
   const toggleMenu = useCallback(() => {
     if (open) {
       setOpen(false)
+      onOpenChange?.(false)
       return
     }
-    // Calculate position at click time (not in useEffect) so the button rect is accurate
     if (btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect()
       setMenuPos({ top: rect.bottom + 8, left: Math.max(8, rect.left - 200) })
     }
     setOpen(true)
-  }, [open])
+    onOpenChange?.(true)
+  }, [open, onOpenChange])
 
   const handleAdapt = useCallback(async (audience: typeof AUDIENCES[0]) => {
     setAdapting(audience.id)

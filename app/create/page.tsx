@@ -18,6 +18,7 @@ import { OutlineGenerationView, DocumentGenerationView } from '@/components/stud
 import { parseIncrementalSlides, parseFinalResult } from '@/lib/incremental-parser'
 import { detectIntent } from '@/lib/prompt-strengthener'
 import { useIntentPreprocessor } from '@/lib/use-intent-preprocessor'
+import { analyzeSlides, coachSummary, type CoachSuggestion } from '@/lib/slide-coach'
 import type { PresentationDocument } from '@/lib/studio-db'
 
 // #5: Predicted slide counts by intent for speculative layout
@@ -112,6 +113,7 @@ export default function CreatePage() {
   const [error, setError] = useState('')
   const [hint, setHint] = useState<string | null>(null)
   const [done, setDone] = useState(false)
+  const [coachResults, setCoachResults] = useState<{ suggestions: CoachSuggestion[]; score: number } | null>(null)
   const [showCanvas, setShowCanvas] = useState(false)
   const [savedId, setSavedId] = useState<string | null>(null)
   const [predictedCount, setPredictedCount] = useState(12)
@@ -338,6 +340,11 @@ export default function CreatePage() {
               setSlides(currentSlides)
               setGenerating(false)
               setDone(true)
+              // Run Slide Coach validation
+              const suggestions = analyzeSlides(currentSlides)
+              const summary = coachSummary(suggestions)
+              setCoachResults({ suggestions, score: summary.score })
+              if (summary.errors > 0) console.warn(`[Slide Coach] ${summary.errors} errors, ${summary.warnings} warnings — score: ${summary.score}/100`)
               // Save presentation — keep the promise so document handler can await it
               savePromise = savePresentation(currentSlides)
               // Lazy-load document in background
@@ -1024,6 +1031,31 @@ export default function CreatePage() {
             setTimeout(() => handleGenerate(), 100)
           }}
         />
+        {/* Coach score badge — shown after generation completes */}
+        {done && coachResults && (
+          <div className="fixed top-20 right-6 z-[200] animate-in fade-in slide-in-from-right-4 duration-500">
+            <div className={cn(
+              'px-4 py-2.5 rounded-xl backdrop-blur-md border shadow-lg flex items-center gap-3',
+              coachResults.score >= 80 ? 'bg-green-950/80 border-green-500/20 text-green-400' :
+              coachResults.score >= 50 ? 'bg-amber-950/80 border-amber-500/20 text-amber-400' :
+              'bg-red-950/80 border-red-500/20 text-red-400',
+            )}>
+              <div className="text-center">
+                <p className="text-lg font-black tabular-nums">{coachResults.score}</p>
+                <p className="text-[8px] uppercase tracking-widest opacity-60">Score</p>
+              </div>
+              <div className="text-[11px] opacity-80">
+                {coachResults.suggestions.filter(s => s.severity === 'error').length > 0 && (
+                  <p>{coachResults.suggestions.filter(s => s.severity === 'error').length} issues</p>
+                )}
+                {coachResults.suggestions.filter(s => s.severity === 'warning').length > 0 && (
+                  <p>{coachResults.suggestions.filter(s => s.severity === 'warning').length} warnings</p>
+                )}
+                {coachResults.score >= 80 && <p>Looking good!</p>}
+              </div>
+            </div>
+          </div>
+        )}
         {hint && (
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] max-w-lg animate-in fade-in slide-in-from-bottom-4 duration-300">
             <div className="flex items-start gap-3 px-5 py-4 bg-slate-900/95 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl">

@@ -450,7 +450,7 @@ function SlideContent({ slide, slideIndex }: { slide: SlideData; slideIndex: num
             {parseBold(slide.title)}
           </h1>
           {slide.body && (
-            <p data-slide-field="body" className={cn('leading-relaxed', c.muted, hasSidebar ? 'text-base sm:text-lg lg:text-xl max-w-xl' : 'text-lg sm:text-xl lg:text-2xl max-w-3xl')}>
+            <p data-slide-field="body" className={cn('leading-relaxed line-clamp-6', c.muted, hasSidebar ? 'text-base sm:text-lg lg:text-xl max-w-xl' : 'text-lg sm:text-xl lg:text-2xl max-w-3xl')}>
               {parseBold(slide.body)}
             </p>
           )}
@@ -1255,7 +1255,7 @@ function SlideClosing({ slide, slideIndex }: { slide: SlideData; slideIndex: num
             {parseBold(slide.title)}
           </h1>
           {slide.body && (
-            <p data-slide-field="body" className={cn('mt-5 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl', c.muted)}>
+            <p data-slide-field="body" className={cn('mt-5 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl line-clamp-5', c.muted)}>
               {parseBold(slide.body)}
             </p>
           )}
@@ -1306,7 +1306,7 @@ function SlideChart({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
           {parseBold(slide.title)}
         </h2>
         {slide.body && (
-          <p data-slide-field="body" className={cn('text-sm sm:text-base leading-relaxed', c.muted)}>
+          <p data-slide-field="body" className={cn('text-sm sm:text-base leading-relaxed line-clamp-4', c.muted)}>
             {parseBold(slide.body)}
           </p>
         )}

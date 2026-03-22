@@ -117,9 +117,16 @@ Follow these rules strictly to ensure all content meets WCAG 2.1 AA contrast req
 - Card body format: Use STRUCTURED format, not dense paragraphs. Each card: 1 bold lead sentence + 2-3 short bullet points (• prefix). Total 20-40 words per card. NEVER write 5+ sentences in a card body.
 - When a slide contains 2+ metrics or stats, NEVER bury them in a prose paragraph. Break them out as visual elements: cards (each stat as title), bullets (bold number leading), or two-column stat callouts. Dense paragraphs with embedded bold numbers are hard to scan in a live presentation.
 - Section divider slides (type "section") MUST include a subtitle with a 1-sentence preview of what's coming. Never leave a section slide with just a title — it wastes the audience's attention.
-- Content slides (type "content") should have 40-80 words of body text. Under 40 feels empty, over 80 feels like a document page. If you have more than 80 words, split into bullets or two slides.
-- Every slide must have substantive content. No slide should show just a title with empty space below it. If a slide doesn't have enough content to fill it, merge it with the next slide or convert to a different type.
-- Body text paragraphs on slides should be 2-3 short sentences max. Long paragraphs belong in the document view, not on slides.
+- Content slides (type "content") MUST have 40-80 words of body text MAX. This is a hard limit. If you have more than 80 words, you MUST either: (a) convert to bullet points, (b) split into two slides, or (c) use a two-column or cards layout instead. A presentation is NOT a document — every word must earn its place.
+- Every slide must have substantive content. No slide should show just a title with empty space below it.
+- Body text: MAX 2-3 SHORT sentences. Each sentence should be under 20 words. No paragraphs longer than 3 lines when displayed at 16px on a 1280px wide viewport. Long-form content belongs in the "notes" field and in the document view — NOT on the slide face.
+- CRITICAL: When a slide has numbers, metrics, KPIs, or financial data — NEVER write them as prose. Always use one of these formats:
+  * "cards" type with each metric as a card title (e.g. title: "$18", body: "Blended CAC")
+  * "chart" type with a ChartSpec for visual representation
+  * "bullets" type with bold number leading (e.g. "**$18** — Blended customer acquisition cost")
+  * "two-column" with metrics on one side and context on the other
+  A slide titled "CAC of $18 returns 26.7x" should NOT have a paragraph — it should have 3-4 metric cards showing CAC, LTV, LTV:CAC ratio, and payback period.
+- NEVER repeat information that's already in the title. If the title says "145K Subscribers, $1.45M MRR, 92% Retention" — the body should explain WHY, not restate the numbers.
 
 ## Presentation Templates
 

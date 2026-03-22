@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowUp, Paperclip, X, Settings, FileText, FileSpreadsheet, ChevronDown, Search, Layers, Sparkles, Loader2, ListOrdered } from 'lucide-react'
+import { ArrowUp, Paperclip, X, Settings, FileText, FileSpreadsheet, ChevronDown, Search, Layers, Sparkles, Loader2, ListOrdered, Palette } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { loadModelDefaults, useServerSettings } from '@/components/studio/model-selector'
@@ -10,6 +10,9 @@ import { type UploadedFile, processFileToUpload, ACCEPT } from '@/components/stu
 import { SettingsModal } from '@/components/studio/settings-modal'
 import type { SlideData } from '@/components/studio/slide-renderer'
 import { PresentationCard } from '@/components/studio/presentation-card'
+import { TemplatePicker } from '@/components/studio/template-picker'
+import { BrandKitEditor } from '@/components/studio/brand-kit-editor'
+import type { TemplateSectionSkeleton } from '@/lib/studio-db'
 import { GenerationCanvas } from '@/components/studio/generation-canvas'
 import { OutlineGenerationView, DocumentGenerationView } from '@/components/studio/generation-mode-views'
 import { parseIncrementalSlides, parseFinalResult } from '@/lib/incremental-parser'
@@ -32,6 +35,8 @@ export default function CreatePage() {
   const [prompt, setPrompt] = useState('')
   const [files, setFiles] = useState<UploadedFile[]>([])
   const [showSettings, setShowSettings] = useState(false)
+  const [showBrandKit, setShowBrandKit] = useState(false)
+  const [selectedTemplate, setSelectedTemplate] = useState<{ id: string; title: string; description: string; slideCount: number; sections: TemplateSectionSkeleton[]; createdAt: number } | null>(null)
 
   // Intent preprocessing (runs as user types / uploads files)
   const { intent, label: intentLabel, badgeClass, preprocessed } = useIntentPreprocessor(prompt, files)
@@ -215,6 +220,13 @@ export default function CreatePage() {
           apiKey,
           model,
           parallel: useParallel,
+          ...(selectedTemplate && {
+            templateStructure: {
+              title: selectedTemplate.title,
+              slideCount: selectedTemplate.slideCount,
+              sections: selectedTemplate.sections,
+            },
+          }),
         }),
         signal: controller.signal,
       })
@@ -892,6 +904,10 @@ export default function CreatePage() {
       setFiles((prev) => [...prev, googleFile])
       setShowGoogleImport(false)
       setGoogleUrl('')
+      // Auto-populate prompt for Slides redesign
+      if (data.type === 'slides' && !prompt.trim()) {
+        setPrompt(`Redesign "${data.title}" using Félix best practices. Preserve the original content and flow but apply the Félix design system — branded colors, typography, illustrations, and slide layouts. Improve the visual hierarchy and make it presentation-ready.`)
+      }
     } catch (err: any) {
       setGoogleError(err?.message || 'Failed to import')
     } finally {
@@ -1030,6 +1046,45 @@ export default function CreatePage() {
   /* ─── Prompt form ─── */
   return (
     <div className="min-h-[calc(100vh-56px)] flex flex-col items-center justify-center px-6 relative">
+      {/* Settings icons — fixed top-right, next to avatar */}
+      <div className="fixed top-3.5 right-16 z-20 flex items-center gap-1">
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => { setShowSettings(true); dismissSettingsTip() }}
+            className="p-2 rounded-lg hover:bg-stone/60 transition-colors text-muted-foreground hover:text-foreground"
+            aria-label="Model settings"
+            title="Model settings"
+          >
+            <Settings className="w-4 h-4" />
+          </button>
+          {showSettingsTip && (
+            <div className="absolute top-full mt-2 right-0 w-64 bg-slate-950 border border-white/10 rounded-xl shadow-2xl p-3.5 animate-in fade-in slide-in-from-top-2 duration-300 z-30">
+              <div className="absolute -top-1.5 right-4 w-3 h-3 bg-slate-950 border-l border-t border-white/10 rotate-45" />
+              <p className="text-xs text-white/70 leading-relaxed">
+                Choose a model provider and add your API key before creating your first presentation.
+              </p>
+              <button
+                type="button"
+                onClick={dismissSettingsTip}
+                className="mt-2 text-[10px] font-semibold text-turquoise hover:text-turquoise/80 transition-colors"
+              >
+                Got it
+              </button>
+            </div>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowBrandKit(true)}
+          className="p-2 rounded-lg hover:bg-stone/60 transition-colors text-muted-foreground hover:text-foreground"
+          aria-label="Brand Kit"
+          title="Brand Kit"
+        >
+          <Palette className="w-4 h-4" />
+        </button>
+      </div>
+
       {/* Presentations pill — fixed top center, aligned with header */}
       <div className="fixed top-3 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
         <button
@@ -1448,7 +1503,7 @@ export default function CreatePage() {
           )}
 
           {/* Bottom toolbar */}
-          <div className="flex items-center justify-between px-3 pb-3 pt-1">
+          <div className="flex items-center justify-between px-3 pb-3 pt-1 relative">
             <div className="flex items-center gap-1">
               {/* Attach button */}
               <button
@@ -1734,32 +1789,8 @@ export default function CreatePage() {
                 )}
               </div>
 
-              {/* Settings button + FTUX tip */}
-              <div className="relative">
-                {showSettingsTip && (
-                  <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-64 bg-slate-950 border border-white/10 rounded-xl shadow-2xl p-3.5 animate-in fade-in slide-in-from-bottom-2 duration-300 z-30">
-                    <p className="text-xs text-white/70 leading-relaxed">
-                      Choose a model provider and add your API key before creating your first presentation.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={dismissSettingsTip}
-                      className="mt-2 text-[10px] font-semibold text-turquoise hover:text-turquoise/80 transition-colors"
-                    >
-                      Got it
-                    </button>
-                    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-slate-950 border-r border-b border-white/10 rotate-45" />
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={() => { setShowSettings(true); dismissSettingsTip() }}
-                  className="p-2 rounded-lg hover:bg-stone/60 transition-colors text-muted-foreground hover:text-foreground"
-                  aria-label="Model settings"
-                >
-                  <Settings className="w-4.5 h-4.5" />
-                </button>
-              </div>
+              {/* Template picker */}
+              <TemplatePicker selected={selectedTemplate} onSelect={setSelectedTemplate} />
 
               {/* Intent badge */}
               {intent !== 'general' && prompt.trim().length >= 3 && (
@@ -1877,6 +1908,10 @@ export default function CreatePage() {
           clickupConnected={clickupConnected}
           onClickupConnectedChange={setClickupConnected}
         />
+      )}
+
+      {showBrandKit && (
+        <BrandKitEditor onClose={() => setShowBrandKit(false)} />
       )}
     </div>
   )

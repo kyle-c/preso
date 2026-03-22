@@ -2,6 +2,7 @@ import { getServerSession } from '@/lib/studio-auth'
 import { AuthForm } from '@/components/studio/auth-form'
 import { FelixLogo } from '@/components/design-system/felix-logo'
 import { AvatarDropdown } from '@/components/studio/avatar-dropdown'
+import { BrandProvider } from '@/lib/brand-context'
 
 export default async function CreateLayout({
   children,
@@ -29,7 +30,9 @@ export default async function CreateLayout({
       </header>
 
       {/* Main content */}
-      <main>{children}</main>
+      <BrandProvider>
+        <main>{children}</main>
+      </BrandProvider>
     </div>
   )
 }

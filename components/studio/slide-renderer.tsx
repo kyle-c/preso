@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useBrandColors, type BrandColors } from '@/lib/brand-context'
 import { SlideToc, SlideTocChrome, type SlideMeta } from '@/components/slide-toc'
 import { useLocale, useSlideTranslation } from '@/components/slide-translation'
 import { applyTranslations, applyDocumentTranslations } from '@/lib/slide-translations'
@@ -177,12 +178,18 @@ function parseBoldAccent(text: string, bg: SlideData['bg']): React.ReactNode {
 }
 
 /** Background + text classes for a given bg mode */
+/**
+ * Brand-aware background classes. Uses CSS custom properties set by the
+ * SlideRenderer from the active brand kit, falling back to Félix defaults.
+ * The container uses inline style for the bg color; text classes remain
+ * Tailwind since they're contrast-based (dark bg → white text).
+ */
 function bgClasses(bg: SlideData['bg']) {
   switch (bg) {
-    case 'dark': return { container: 'bg-slate-950', text: 'text-white', muted: 'text-white/60', accent: 'text-turquoise' }
-    case 'brand': return { container: 'bg-turquoise', text: 'text-slate-950', muted: 'text-slate-950/60', accent: 'text-slate-950' }
+    case 'dark': return { container: 'slide-bg-dark', text: 'text-white', muted: 'text-white/60', accent: 'text-turquoise', bgVar: '--brand-dark-bg' }
+    case 'brand': return { container: 'slide-bg-brand', text: 'text-slate-950', muted: 'text-slate-950/60', accent: 'text-slate-950', bgVar: '--brand-brand-bg' }
     case 'light':
-    default: return { container: 'bg-stone', text: 'text-foreground', muted: 'text-muted-foreground', accent: 'text-evergreen' }
+    default: return { container: 'slide-bg-light', text: 'text-foreground', muted: 'text-muted-foreground', accent: 'text-evergreen', bgVar: '--brand-light-bg' }
   }
 }
 
@@ -1355,6 +1362,7 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
   const [current, setCurrent] = useState(0)
   const [mounted, setMounted] = useState(false)
   const slideRef = useRef<HTMLDivElement>(null)
+  const brandColors = useBrandColors()
 
   /* ── Hover zone (top 10% of viewport) ── */
   const [hoverTop, setHoverTop] = useState(false)
@@ -1715,7 +1723,14 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
     )}
 
     <div
-      className="h-screen w-screen overflow-hidden relative select-none bg-slate-950"
+      className="h-screen w-screen overflow-hidden relative select-none"
+      style={{
+        backgroundColor: brandColors.darkBg,
+        '--brand-dark-bg': brandColors.darkBg,
+        '--brand-light-bg': brandColors.lightBg,
+        '--brand-brand-bg': brandColors.brandBg,
+        '--brand-accent': brandColors.accent,
+      } as React.CSSProperties}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onMouseMove={(e) => {
@@ -1876,6 +1891,25 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
             downloadViewPdf({ viewMode })
           } else {
             downloadPdf({ slideRef, total, currentSlide: current, goToSlide: setCurrent })
+          }
+        }}
+        onDownloadPptx={async () => {
+          try {
+            const res = await fetch('/api/studio/export/pptx', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ slides, title }),
+            })
+            if (!res.ok) throw new Error('Export failed')
+            const blob = await res.blob()
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `${(title || 'presentation').replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '-').toLowerCase()}.pptx`
+            a.click()
+            URL.revokeObjectURL(url)
+          } catch (err) {
+            console.error('[PPTX export]', err)
           }
         }}
         onShare={onShare}

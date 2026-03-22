@@ -6,18 +6,51 @@
   "fonts": {
     "display": {
       "family": "Plain",
-      "weights": "800-900",
-      "usage": "Display / headings — bold, confident, large"
+      "weights": [
+        {
+          "value": 800,
+          "name": "ExtraBold"
+        },
+        {
+          "value": 900,
+          "name": "Black"
+        }
+      ],
+      "usage": "Headlines, hero text, and important callouts. Tight tracking and heavy weights for maximum impact.",
+      "characteristics": "Geometric, confident, bold"
     },
     "body": {
       "family": "Saans",
-      "weights": "300-600",
-      "usage": "Body / UI text"
+      "weights": [
+        {
+          "value": 300,
+          "name": "Light"
+        },
+        {
+          "value": 400,
+          "name": "Regular"
+        },
+        {
+          "value": 500,
+          "name": "Medium"
+        },
+        {
+          "value": 600,
+          "name": "SemiBold"
+        }
+      ],
+      "usage": "Body text, UI elements, and general content. Excellent readability at all sizes.",
+      "characteristics": "Clean, neutral, readable"
     },
     "code": {
       "family": "Geist Mono",
-      "weights": "400",
-      "usage": "Code blocks"
+      "weights": [
+        {
+          "value": 400,
+          "name": "Regular"
+        }
+      ],
+      "usage": "Code blocks and monospace content"
     }
   },
   "colors": {
@@ -145,66 +178,106 @@
     }
   },
   "typography": {
+    "principle": "Typesetting is at the heart of the brand visual communication. Consistent application enhances clarity and brand cohesion.",
     "scale": [
       {
-        "level": "Display XL",
+        "style": "Display XL",
         "size": "72px",
-        "leading": "1.0",
-        "tracking": "-0.02em"
+        "lineHeight": "1",
+        "letterSpacing": "-0.02em",
+        "font": "display",
+        "weight": 800,
+        "tailwind": "text-7xl leading-none tracking-tight font-display font-extrabold"
       },
       {
-        "level": "Display LG",
+        "style": "Display LG",
         "size": "60px",
-        "leading": "1.0",
-        "tracking": "-0.02em"
+        "lineHeight": "1",
+        "letterSpacing": "-0.02em",
+        "font": "display",
+        "weight": 800,
+        "tailwind": "text-6xl leading-none tracking-tight font-display font-extrabold"
       },
       {
-        "level": "Display MD",
+        "style": "Display MD",
         "size": "48px",
-        "leading": "1.1",
-        "tracking": "-0.01em"
+        "lineHeight": "1.1",
+        "letterSpacing": "-0.01em",
+        "font": "display",
+        "weight": 800,
+        "tailwind": "text-5xl leading-tight tracking-tight font-display font-extrabold"
       },
       {
-        "level": "Heading 1",
+        "style": "Heading 1",
         "size": "36px",
-        "leading": "1.2",
-        "tracking": "-0.01em"
+        "lineHeight": "1.2",
+        "letterSpacing": "-0.01em",
+        "font": "display",
+        "weight": 800,
+        "tailwind": "text-4xl leading-tight tracking-tight font-display font-extrabold"
       },
       {
-        "level": "Heading 2",
+        "style": "Heading 2",
         "size": "30px",
-        "leading": "1.3",
-        "tracking": "0em"
+        "lineHeight": "1.3",
+        "letterSpacing": "0",
+        "font": "display",
+        "weight": 800,
+        "tailwind": "text-3xl leading-snug font-display font-extrabold"
       },
       {
-        "level": "Heading 3",
+        "style": "Heading 3",
         "size": "24px",
-        "leading": "1.4",
-        "tracking": "0em"
+        "lineHeight": "1.4",
+        "letterSpacing": "0",
+        "font": "display",
+        "weight": 800,
+        "tailwind": "text-2xl leading-normal font-display font-extrabold"
       },
       {
-        "level": "Body LG",
+        "style": "Heading 4",
+        "size": "20px",
+        "lineHeight": "1.5",
+        "letterSpacing": "0",
+        "font": "display",
+        "weight": 800,
+        "tailwind": "text-xl leading-relaxed font-display font-extrabold"
+      },
+      {
+        "style": "Body Large",
         "size": "18px",
-        "leading": "1.6",
-        "tracking": "0em"
+        "lineHeight": "1.6",
+        "letterSpacing": "0",
+        "font": "body",
+        "weight": 400,
+        "tailwind": "text-lg leading-relaxed font-sans"
       },
       {
-        "level": "Body",
+        "style": "Body",
         "size": "16px",
-        "leading": "1.6",
-        "tracking": "0em"
+        "lineHeight": "1.6",
+        "letterSpacing": "0",
+        "font": "body",
+        "weight": 400,
+        "tailwind": "text-base leading-relaxed font-sans"
       },
       {
-        "level": "Body SM",
+        "style": "Body Small",
         "size": "14px",
-        "leading": "1.5",
-        "tracking": "0em"
+        "lineHeight": "1.5",
+        "letterSpacing": "0",
+        "font": "body",
+        "weight": 400,
+        "tailwind": "text-sm leading-normal font-sans"
       },
       {
-        "level": "Caption",
+        "style": "Caption",
         "size": "12px",
-        "leading": "1.4",
-        "tracking": "0.01em"
+        "lineHeight": "1.4",
+        "letterSpacing": "0.01em",
+        "font": "body",
+        "weight": 400,
+        "tailwind": "text-xs leading-snug tracking-wide font-sans"
       }
     ]
   },

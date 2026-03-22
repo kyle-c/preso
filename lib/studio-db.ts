@@ -843,3 +843,80 @@ export async function getAntiExemplarSlides(limit = 3): Promise<SlideRating[]> {
 
   return results.filter((r): r is SlideRating => r !== null)
 }
+
+// ---------------------------------------------------------------------------
+// Templates
+// ---------------------------------------------------------------------------
+
+export interface TemplateSectionSkeleton {
+  type: string
+  title?: string
+  tone?: string
+}
+
+export interface Template {
+  id: string
+  userId: string
+  title: string
+  description: string
+  slideCount: number
+  sections: TemplateSectionSkeleton[]
+  sourcePresId: string
+  createdAt: number
+}
+
+const templateKey = (id: string) => `studio:template:${id}`
+const userTemplatesKey = (userId: string) => `studio:user:templates:${userId}`
+
+export async function createTemplate(
+  userId: string,
+  title: string,
+  description: string,
+  sections: TemplateSectionSkeleton[],
+  sourcePresId: string,
+): Promise<Template> {
+  const id = crypto.randomUUID()
+  const now = Math.floor(Date.now() / 1000)
+
+  const template: Template = {
+    id,
+    userId,
+    title,
+    description,
+    slideCount: sections.length,
+    sections,
+    sourcePresId,
+    createdAt: now,
+  }
+
+  await Promise.all([
+    redis.set(templateKey(id), JSON.stringify(template)),
+    redis.zadd(userTemplatesKey(userId), { score: now, member: id }),
+  ])
+
+  return template
+}
+
+export async function getUserTemplates(userId: string): Promise<Template[]> {
+  const ids = await redis.zrange<string[]>(userTemplatesKey(userId), 0, -1, { rev: true })
+  if (!ids || ids.length === 0) return []
+
+  const results = await Promise.all(
+    ids.map(async (id) => {
+      const raw = await redis.get<string | Template>(templateKey(id))
+      if (!raw) return null
+      return typeof raw === 'string' ? JSON.parse(raw) as Template : raw
+    })
+  )
+  return results.filter((t): t is Template => t !== null)
+}
+
+export async function deleteTemplate(id: string): Promise<void> {
+  const raw = await redis.get<string | Template>(templateKey(id))
+  if (!raw) return
+  const template: Template = typeof raw === 'string' ? JSON.parse(raw) : raw
+  await Promise.all([
+    redis.del(templateKey(id)),
+    redis.zrem(userTemplatesKey(template.userId), id),
+  ])
+}

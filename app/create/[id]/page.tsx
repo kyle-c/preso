@@ -4,6 +4,10 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { Pencil, X, Sparkles, ArrowLeft, Check, Settings, MessageSquare, Flag } from 'lucide-react'
 import { SlideRenderer, type SlideData, type ChromeColors } from '@/components/studio/slide-renderer'
+import { PresenterView } from '@/components/studio/presenter-view'
+import { SaveAsTemplateButton } from '@/components/studio/template-picker'
+import { AnalyticsPanel } from '@/components/studio/analytics-panel'
+import { usePresence, PresenceAvatars } from '@/components/studio/presence-avatars'
 import { loadModelDefaults, useServerSettings } from '@/components/studio/model-selector'
 import { SettingsModal } from '@/components/studio/settings-modal'
 import { ShareModal } from '@/components/studio/share-modal'
@@ -379,6 +383,11 @@ export default function PresentationViewerPage() {
   const [editFiles, setEditFiles] = useState<UploadedFile[]>([])
   const [editGenerating, setEditGenerating] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [presenterMode, setPresenterMode] = useState(false)
+  const [showAnalytics, setShowAnalytics] = useState(false)
+
+  // Real-time presence
+  const presence = usePresence(id, currentSlide)
 
   // Comments for edit panel (fetched when scope=comments)
   const [editComments, setEditComments] = useState<CommentData[]>([])
@@ -1352,7 +1361,51 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
                   </button>
                 </>
               )}
+              <div className="w-px h-4 flex-shrink-0 bg-current opacity-15" />
+              {/* Presenter mode */}
+              <button
+                type="button"
+                onClick={() => setPresenterMode(true)}
+                className={`h-7 px-2.5 rounded-full inline-flex items-center gap-1.5 transition-colors duration-500 ${chrome.btnIcon} hover:bg-white/10`}
+                aria-label="Presenter mode"
+                title="Presenter mode (speaker notes + timer)"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25z" />
+                </svg>
+                <span className="text-xs font-medium hidden sm:inline">Present</span>
+              </button>
+              <div className="w-px h-4 flex-shrink-0 bg-current opacity-15" />
+              {/* Save as template */}
+              <SaveAsTemplateButton
+                slides={presentation.slides}
+                presId={presentation.id}
+                presTitle={presentation.title}
+                className={`h-7 px-2.5 rounded-full transition-colors duration-500 ${chrome.btnIcon} hover:bg-white/10`}
+              />
+              {/* Analytics */}
+              {presentation.shareToken && (
+                <>
+                  <div className="w-px h-4 flex-shrink-0 bg-current opacity-15" />
+                  <button
+                    type="button"
+                    onClick={() => setShowAnalytics(true)}
+                    className={`h-7 px-2.5 rounded-full inline-flex items-center gap-1.5 transition-colors duration-500 ${chrome.btnIcon} hover:bg-white/10`}
+                    aria-label="View analytics"
+                    title="View analytics"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                    </svg>
+                    <span className="text-xs font-medium hidden sm:inline">Analytics</span>
+                  </button>
+                </>
+              )}
             </div>
+            {/* Presence avatars — show other viewers */}
+            {presence.users.length > 1 && (
+              <PresenceAvatars users={presence.users} className="ml-2" />
+            )}
           </div>
         )}
         onShare={() => {
@@ -1534,6 +1587,48 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
             editAbortRef.current?.abort()
             setEditOverlay(null)
             setEditGenerating(false)
+          }}
+        />
+      )}
+
+      {/* Analytics panel */}
+      {showAnalytics && presentation && (
+        <AnalyticsPanel
+          presId={presentation.id}
+          slideCount={presentation.slides.length}
+          onClose={() => setShowAnalytics(false)}
+        />
+      )}
+
+      {/* Presenter mode overlay */}
+      {presenterMode && presentation && (
+        <PresenterView
+          slides={presentation.slides}
+          currentSlide={currentSlide}
+          onSlideChange={(i) => {
+            setCurrentSlide(i)
+            window.location.hash = `#slide-${i}`
+          }}
+          onExit={() => setPresenterMode(false)}
+          deckTitle={presentation.title}
+          renderSlide={(slideIndex) => {
+            const s = presentation.slides[slideIndex]
+            if (!s) return null
+            const bgClass = s.bg === 'dark'
+              ? 'bg-[#082422]' : s.bg === 'brand'
+                ? 'bg-[#2BF2F1]' : 'bg-[#EFEBE7]'
+            const textClass = s.bg === 'dark' || s.bg === 'brand' && false
+              ? 'text-white' : s.bg === 'dark' ? 'text-white' : 'text-[#082422]'
+            return (
+              <div className={`w-full h-full ${bgClass} ${textClass} flex items-center justify-center p-8`}>
+                <div className="text-center max-w-[80%]">
+                  {s.badge && <span className="text-xs uppercase tracking-widest opacity-50 mb-2 block">{s.badge}</span>}
+                  <h2 className="font-display font-black text-2xl md:text-4xl leading-tight">{s.title}</h2>
+                  {s.subtitle && <p className="text-sm md:text-lg opacity-60 mt-3">{s.subtitle}</p>}
+                  {s.body && <p className="text-sm opacity-70 mt-4 max-w-lg mx-auto leading-relaxed">{s.body}</p>}
+                </div>
+              </div>
+            )
           }}
         />
       )}

@@ -256,11 +256,29 @@ async function fetchSlides(
 
   const lines: string[] = [`# ${title}`, '', `*${slides.length} slides*`, '']
 
+  // Structural summary for AI redesign
+  lines.push('## Deck Structure')
+  lines.push('')
   for (let i = 0; i < slides.length; i++) {
     const slide = slides[i]
     const slideTitle = extractSlideTitle(slide) || `Slide ${i + 1}`
+    const layout = detectSlideLayout(slide)
+    const hasTable = (slide.pageElements ?? []).some((e: any) => e.table)
+    const elementCount = (slide.pageElements ?? []).length
+    const meta = [layout, hasTable ? 'has table' : '', elementCount <= 2 ? 'minimal' : elementCount >= 6 ? 'dense' : ''].filter(Boolean).join(', ')
+    lines.push(`${i + 1}. **${slideTitle}** — ${meta}`)
+  }
+  lines.push('')
+  lines.push('---')
+  lines.push('')
 
-    lines.push(`## ${slideTitle}`)
+  for (let i = 0; i < slides.length; i++) {
+    const slide = slides[i]
+    const slideTitle = extractSlideTitle(slide) || `Slide ${i + 1}`
+    const layout = detectSlideLayout(slide)
+
+    lines.push(`## Slide ${i + 1}: ${slideTitle}`)
+    lines.push(`*Layout: ${layout}*`)
     lines.push('')
 
     // Extract all text content from the slide
@@ -288,6 +306,34 @@ async function fetchSlides(
   }
 
   return { title, data: lines.join('\n') }
+}
+
+/** Detect the layout type of a slide based on its placeholder types and element arrangement */
+function detectSlideLayout(slide: any): string {
+  const elements = slide.pageElements ?? []
+  const placeholderTypes = elements
+    .map((e: any) => e.shape?.placeholder?.type)
+    .filter(Boolean)
+
+  const hasTitle = placeholderTypes.includes('TITLE') || placeholderTypes.includes('CENTERED_TITLE')
+  const hasSubtitle = placeholderTypes.includes('SUBTITLE')
+  const hasBody = placeholderTypes.includes('BODY')
+  const hasTable = elements.some((e: any) => e.table)
+  const hasImage = elements.some((e: any) => e.image)
+  const textShapes = elements.filter((e: any) => e.shape?.text?.textElements?.length > 1)
+  const bulletCount = elements.reduce((count: number, e: any) => {
+    const bullets = (e.shape?.text?.textElements ?? []).filter((t: any) => t.paragraphMarker?.bullet)
+    return count + bullets.length
+  }, 0)
+
+  if (hasTitle && hasSubtitle && textShapes.length <= 3) return 'title slide'
+  if (hasTitle && !hasBody && textShapes.length <= 2) return 'section divider'
+  if (hasTable) return 'data table'
+  if (hasImage && textShapes.length <= 2) return 'image + text'
+  if (bulletCount >= 4) return 'bullet list'
+  if (textShapes.length >= 4) return 'multi-block (cards or columns)'
+  if (hasTitle && hasBody) return 'title + body content'
+  return 'content'
 }
 
 /** Extract the title from a slide (first text element with TITLE or large font) */

@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { strengthenPrompt, detectIntent } from '@/lib/prompt-strengthener'
 import { getServerSession } from '@/lib/studio-auth'
+import { getBrandKit, serializeBrandForPrompt, FELIX_BRAND_KIT } from '@/lib/brand-kit'
 import { computeUserStyleProfile, selectExemplars, formatProfileForPrompt, formatExemplarsForPrompt } from '@/lib/studio-quality'
 import { getBlueprintEnrichment, selectBlueprints } from '@/lib/training-blueprints'
 import { getExemplarSlides, getAntiExemplarSlides } from '@/lib/studio-db'
@@ -767,15 +768,31 @@ interface GenerateBody {
   outline?: any
   /** Selection context for targeted document edits */
   selectionContext?: { sectionIndex: number; selectedText: string }
+  /** Template structure to guide slide generation */
+  templateStructure?: {
+    title: string
+    slideCount: number
+    sections: { type: string; title?: string; tone?: string }[]
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Helpers: build request payloads
 // ---------------------------------------------------------------------------
 
+function buildTemplateConstraint(template: GenerateBody['templateStructure']): string {
+  if (!template) return ''
+  const sectionList = template.sections
+    .map((s, i) => `  ${i + 1}. type: "${s.type}"${s.title ? ` — "${s.title}"` : ''}${s.tone ? ` (tone: ${s.tone})` : ''}`)
+    .join('\n')
+  return `\n\n## Template Structure (FOLLOW THIS STRUCTURE)\nGenerate exactly ${template.slideCount} slides following this structure:\n${sectionList}\n\nUse these slide types and ordering as your guide. Fill in content based on the user's prompt while preserving the template structure.`
+}
+
 function buildAnthropicPayload(body: GenerateBody) {
   // Skip prompt strengthening for edit requests — the prompt already has explicit instructions
-  const promptText = body.edit ? body.prompt : strengthenPrompt(body.prompt).strengthenedPrompt
+  let promptText = body.edit ? body.prompt : strengthenPrompt(body.prompt).strengthenedPrompt
+  // Append template structure constraint if provided
+  if (body.templateStructure) promptText += buildTemplateConstraint(body.templateStructure)
   const content: any[] = [{ type: 'text', text: promptText }]
 
   for (const file of body.files ?? []) {
@@ -828,7 +845,8 @@ function buildAnthropicPayload(body: GenerateBody) {
 }
 
 function buildOpenRouterPayload(body: GenerateBody) {
-  const promptText = body.edit ? body.prompt : strengthenPrompt(body.prompt).strengthenedPrompt
+  let promptText = body.edit ? body.prompt : strengthenPrompt(body.prompt).strengthenedPrompt
+  if (body.templateStructure) promptText += buildTemplateConstraint(body.templateStructure)
   const content: any[] = [{ type: 'text', text: promptText }]
 
   for (const file of body.files ?? []) {
@@ -1459,11 +1477,30 @@ async function cachedFetch<T>(key: string, fetcher: () => Promise<T>): Promise<T
 }
 
 async function runEnrichment(body: GenerateBody): Promise<void> {
-  // Enrich system prompt with user style profile + exemplars
+  // Enrich system prompt with user style profile + exemplars + brand kit
   try {
     const session = await getServerSession()
     if (session?.userId) {
       body.userId = session.userId
+
+      // Load brand kit — if user has a custom brand, replace the brand section of the system prompt
+      let basePrompt = SYSTEM_PROMPT
+      try {
+        const brandKit = await cachedFetch(`brandKit:${session.userId}`, () => getBrandKit(session.userId))
+        if (brandKit) {
+          // Replace the brand-specific section (lines before "### Design Principles") with the custom brand
+          const designPrinciplesIdx = SYSTEM_PROMPT.indexOf('### Design Principles')
+          if (designPrinciplesIdx > 0) {
+            const brandSection = serializeBrandForPrompt(brandKit)
+            const genericRules = SYSTEM_PROMPT.substring(designPrinciplesIdx)
+            basePrompt = `You are a world-class presentation designer for ${brandKit.name}, ${brandKit.description}. You create structured slide presentations following the brand's design system.\n\n${brandSection}\n${genericRules}`
+            console.log(`[studio/generate] Using custom brand kit: ${brandKit.name}`)
+          }
+        }
+      } catch (err) {
+        console.warn('[studio/generate] Brand kit load failed, using default:', err)
+      }
+
       const intentType = detectIntent(body.prompt)
       const [profile, exemplars] = await Promise.all([
         cachedFetch(`profile:${session.userId}`, () => computeUserStyleProfile(session.userId!)),
@@ -1480,8 +1517,10 @@ async function runEnrichment(body: GenerateBody): Promise<void> {
       }
 
       if (enrichment) {
-        body.enrichedSystemPrompt = SYSTEM_PROMPT + enrichment
+        body.enrichedSystemPrompt = basePrompt + enrichment
         console.log('[studio/generate] Enriched prompt with profile + exemplars')
+      } else if (basePrompt !== SYSTEM_PROMPT) {
+        body.enrichedSystemPrompt = basePrompt
       }
     }
   } catch (err) {

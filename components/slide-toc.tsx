@@ -627,6 +627,7 @@ export function SlideTocChrome({
   locale,
   onLocaleChange,
   onDownloadPdf,
+  onDownloadPptx,
   onShare,
   onEdit,
   editActive,
@@ -655,6 +656,7 @@ export function SlideTocChrome({
   locale?: Locale
   onLocaleChange?: (l: Locale) => void
   onDownloadPdf?: () => void
+  onDownloadPptx?: () => void
   onShare?: () => void
   /** Callback for edit toggle */
   onEdit?: () => void
@@ -742,6 +744,11 @@ export function SlideTocChrome({
                   ↓ PDF
                 </button>
               </>
+            )}
+            {onDownloadPptx && (
+              <button onClick={onDownloadPptx} type="button" className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors inline-flex items-center gap-1.5 ${effectivePillText} ${effectiveHover}`}>
+                ↓ PPTX
+              </button>
             )}
             {onToggleComments && !isDocOrOutline && (
               <>
@@ -834,6 +841,11 @@ export function SlideTocChrome({
                           ↓ PDF
                         </button>
                       </>
+                    )}
+                    {onDownloadPptx && (
+                      <button onClick={onDownloadPptx} type="button" className={`px-2 py-1 rounded-full text-xs font-medium transition-colors inline-flex items-center gap-1.5 ${pillText} hover:bg-white/10`}>
+                        ↓ PPTX
+                      </button>
                     )}
                   </div>
                 </div>

@@ -387,6 +387,11 @@
   }
 }
 
+/* Brand-aware slide backgrounds — use CSS custom properties from SlideRenderer */
+.slide-bg-dark { background-color: var(--brand-dark-bg, #082422); }
+.slide-bg-light { background-color: var(--brand-light-bg, #EFEBE7); }
+.slide-bg-brand { background-color: var(--brand-brand-bg, #2BF2F1); }
+
 /* Document panel prose — paragraph spacing, list styles, tables, headings */
 .doc-prose p { margin-bottom: 1em; }
 .doc-prose p:last-child { margin-bottom: 0; }

@@ -347,9 +347,17 @@ export default function CreatePage() {
               if (summary.errors > 0) console.warn(`[Slide Coach] ${summary.errors} errors, ${summary.warnings} warnings — score: ${summary.score}/100`)
               // Save presentation — keep the promise so document handler can await it
               savePromise = savePresentation(currentSlides)
-              // Lazy-load document in background
+              // Lazy-load document in background + auto-rate for quality loop
               savePromise.then(() => {
-                if (localSavedId) generateDocumentInBackground(localSavedId, currentSlides)
+                if (localSavedId) {
+                  generateDocumentInBackground(localSavedId, currentSlides)
+                  // Auto-rate slides for quality feedback loop (fire and forget)
+                  fetch('/api/studio/quality/auto-rate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ presId: localSavedId }),
+                  }).catch(() => {})
+                }
               })
             } else if (event.document) {
               // Capture document for document generation view

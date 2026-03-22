@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { strengthenPrompt, detectIntent } from '@/lib/prompt-strengthener'
 import { formatChartConstraint } from '@/lib/data-viz-intelligence'
+import { postProcessSlides } from '@/lib/slide-layout-engine'
 import { getServerSession } from '@/lib/studio-auth'
 import { getBrandKit, serializeBrandForPrompt, FELIX_BRAND_KIT } from '@/lib/brand-kit'
 import { computeUserStyleProfile, selectExemplars, formatProfileForPrompt, formatExemplarsForPrompt } from '@/lib/studio-quality'
@@ -1930,6 +1931,18 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
             }
           }),
         )
+
+        // #3.5: Post-process slides — enforce layout rules
+        const processed = postProcessSlides(allCompletedSlides.filter(s => s && s.type && s.title))
+        // Re-emit processed slides if layout engine made changes
+        for (let i = 0; i < processed.length; i++) {
+          if (JSON.stringify(processed[i]) !== JSON.stringify(allCompletedSlides[i])) {
+            allCompletedSlides[i] = processed[i]
+          }
+        }
+        if (processed.length > 0) {
+          emit({ batch: processed, startIndex: 0 }) // Send corrected slides
+        }
 
         // #4: Signal slides ready — client can present immediately
         emit({ slidesReady: true })

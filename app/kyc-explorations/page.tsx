@@ -361,7 +361,8 @@ function VariantF({ lang = 'es' }: { lang?: Lang }) {
       {/* Full-width mango banner */}
       <div className="px-6 py-4 flex items-start gap-3 mb-6" style={{ background: '#FFCD9C' }}>
         <Shield className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#7A4D15' }} />
-        <p className="text-[13px] leading-snug font-medium" style={{ color: '#7A4D15' }}>{s.bannerE}</p>
+        <p className="flex-1 text-[13px] leading-snug font-medium" style={{ color: '#7A4D15' }}>{s.bannerE}</p>
+        <ChevronRight className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#7A4D15' }} />
       </div>
       <div className="px-6 pb-6">
         <div className="space-y-4">

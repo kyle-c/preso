@@ -1976,8 +1976,8 @@ function CanvasDesktopCard({
             style={{ transform: `scale(${DESKTOP_SCALE})`, transformOrigin: 'top left', width: Math.round(DESKTOP_CARD_W / DESKTOP_SCALE), height: Math.round(DESKTOP_CARD_H / DESKTOP_SCALE) }}
           >
             <LangContext.Provider value={editableContent[language]}>
-              <div className="w-full h-full flex justify-center bg-white">
-                <div style={{ width: 480 }}>
+              <div className="w-full h-full flex justify-center items-start bg-white py-10">
+                <div className="rounded-2xl border border-border shadow-sm" style={{ width: 480, background: '#FAF8F5' }}>
                   {children}
                 </div>
               </div>

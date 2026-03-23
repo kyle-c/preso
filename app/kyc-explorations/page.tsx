@@ -181,22 +181,19 @@ function VariantA({ lang = 'es' }: { lang?: Lang }) {
   return (
     <PhoneFrame>
       <ScreenHeader />
-      <div className="px-6 pb-6">
+      <div className="px-6">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-5">{s.title}</h1>
-        <div className="rounded-2xl bg-cactus/10 border border-cactus/30 p-4 flex items-start gap-3 mb-6">
-          <Shield className="w-5 h-5 text-cactus shrink-0 mt-0.5" />
-          <div className="flex-1 flex items-start justify-between gap-2">
-            <p className="text-[13px] text-evergreen leading-snug font-medium">{s.bannerA}</p>
-            <ChevronRight className="w-4 h-4 text-cactus shrink-0 mt-0.5" />
-          </div>
-        </div>
+      </div>
+      <div className="px-6 py-4 flex items-start gap-3 mb-6 bg-cactus/10">
+        <Shield className="w-5 h-5 text-cactus shrink-0 mt-0.5" />
+        <p className="flex-1 text-[13px] text-evergreen leading-snug font-medium">{s.bannerA}</p>
+        <ChevronRight className="w-4 h-4 text-cactus shrink-0 mt-0.5" />
+      </div>
+      <div className="px-6 pb-6">
         <div className="space-y-4">
           <SharedFormFields lang={lang} />
           <FormInput label={s.apellidoMaterno} placeholder="ej. Martínez" />
-          <div className="flex items-start gap-2.5 rounded-2xl bg-cactus/8 p-3.5">
-            <Info className="w-4 h-4 text-cactus shrink-0 mt-0.5" />
-            <p className="text-[12px] text-evergreen leading-snug"><span className="font-semibold">Tip:</span> {s.tipA}</p>
-          </div>
+          <p className="text-[12px] text-mocha leading-snug px-1">{s.tipA}</p>
           <SharedFormBottom lang={lang} />
         </div>
       </div>

@@ -440,68 +440,33 @@ export default function PresentationViewerPage() {
   // Handle single-slide regeneration with feedback
   const handleSlideRegenerate = useCallback(async (slideIndex: number, feedback: string) => {
     if (!presentation || regeneratingSlide !== null) return
-    if (!apiKey) { console.warn('[slide-regenerate] No API key configured'); return }
     console.log(`[slide-regenerate] Regenerating slide ${slideIndex + 1}...`)
     setRegeneratingSlide(slideIndex)
     try {
-      // Use the generate API with edit mode — streams the response
-      const res = await fetch('/api/studio/generate', {
+      const slide = presentation.slides[slideIndex]
+      const res = await fetch('/api/studio/regenerate-slide', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: feedback,
-          provider,
-          apiKey,
-          model,
-          edit: true,
-          parallel: true,
+          feedback,
+          currentSlide: slide,
+          prevTitle: slideIndex > 0 ? presentation.slides[slideIndex - 1]?.title : undefined,
+          nextTitle: slideIndex < presentation.slides.length - 1 ? presentation.slides[slideIndex + 1]?.title : undefined,
         }),
       })
+
       if (!res.ok) {
-        console.error('[slide-regenerate] API returned', res.status)
+        const err = await res.json().catch(() => ({ error: 'Unknown error' }))
+        console.error('[slide-regenerate] API error:', err.error)
         setRegeneratingSlide(null)
         return
       }
 
-      const reader = res.body?.getReader()
-      if (!reader) { setRegeneratingSlide(null); return }
-
-      const decoder = new TextDecoder()
-      let newSlide: any = null
-
-      // Read the SSE stream and extract the first valid slide
-      let buffer = ''
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        buffer += decoder.decode(value, { stream: true })
-
-        // Process complete lines
-        const lines = buffer.split('\n')
-        buffer = lines.pop() || '' // Keep incomplete line in buffer
-        for (const line of lines) {
-          if (!line.startsWith('data: ') || line === 'data: [DONE]') continue
-          try {
-            const event = JSON.parse(line.slice(6))
-            if (event.keepalive) continue
-            if (event.outline && Array.isArray(event.outline) && event.outline[0]) {
-              // Outline skeleton — take first slide
-              if (!newSlide && event.outline[0].type) newSlide = event.outline[0]
-            }
-            if (event.batch && Array.isArray(event.batch)) {
-              // Batch of completed slides — take the first real one
-              const real = event.batch.find((s: any) => s && s.type && s.title && s.body)
-              if (real) newSlide = real
-            }
-            if (event.slidesReady) break
-          } catch {}
-        }
-      }
-
-      if (newSlide && newSlide.type && newSlide.title) {
-        console.log(`[slide-regenerate] Got new slide: ${newSlide.type} "${newSlide.title}"`)
+      const data = await res.json()
+      if (data.slide && data.slide.type && data.slide.title) {
+        console.log(`[slide-regenerate] Got new slide: ${data.slide.type} "${data.slide.title}"`)
         const newSlides = [...presentation.slides]
-        newSlides[slideIndex] = newSlide
+        newSlides[slideIndex] = data.slide
         setPresentation(prev => prev ? { ...prev, slides: newSlides } : prev)
         await fetch(`/api/studio/presentations/${id}`, {
           method: 'PATCH',
@@ -515,7 +480,7 @@ export default function PresentationViewerPage() {
       console.error('[slide-regenerate]', err)
     }
     setRegeneratingSlide(null)
-  }, [presentation, regeneratingSlide, provider, apiKey, model, id])
+  }, [presentation, regeneratingSlide, id])
 
   // Share modal
   const [showShareModal, setShowShareModal] = useState(false)

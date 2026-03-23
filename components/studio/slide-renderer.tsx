@@ -1378,6 +1378,7 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
     if (!v && hoverLockRef.current) return // Don't hide while a dropdown is open
     setHoverTopRaw(v)
   }, [])
+  const lockHover = useCallback((locked: boolean) => { hoverLockRef.current = locked; if (locked) setHoverTopRaw(true) }, [])
 
   /* ── Idle detection — hide arrows after 4s of inactivity ── */
   const [idle, setIdle] = useState(false)
@@ -1592,7 +1593,6 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
   const slide = slides[safeCurrent]
   const chrome = chromeColors(slide.bg)
   const SlideComponent = SLIDE_COMPONENTS[slide.type] ?? SlideContent
-  const lockHover = useCallback((locked: boolean) => { hoverLockRef.current = locked; if (locked) setHoverTopRaw(true) }, [])
   const chromeProps: ChromeColors = { btnCls: chrome.btnCls, btnIcon: chrome.btnIcon, pillBg: chrome.pillBg, pillText: chrome.pillText, hoverTop, lockHover }
 
   const topLeftContent = topLeftExtra

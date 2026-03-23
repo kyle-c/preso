@@ -858,7 +858,12 @@ export default function PresentationViewerPage() {
 
 
   const handleEditGenerate = useCallback(async (overrides?: { scope?: string; prompt?: string; slideIndex?: number }) => {
-    if (!presentation || !apiKey.trim()) return
+    if (!presentation) return
+    if (!apiKey.trim()) {
+      alert('API key not configured. Open Settings to add your API key.')
+      setShowSettings(true)
+      return
+    }
 
     // Snapshot slides before edit for analytics diff
     slidesBeforeEditRef.current = [...presentation.slides]

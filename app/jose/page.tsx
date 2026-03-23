@@ -378,7 +378,7 @@ function SlideTeam() {
 /* ── Slide 6: Your First 90 Days (Dark) ──────────────────────── */
 function SlideFirst90() {
   const phases = [
-    { phase: 'Days 1–30', title: 'Immerse', color: C.turquoise, items: ['Meet every PM, designer, and eng lead\u00A01:1', 'Audit existing user data, support tickets, and\u00A0analytics', 'Shadow customer calls and review past research (if\u00A0any)', 'Assess current research skills across PMs and\u00A0designers', 'Map knowledge gaps across product\u00A0lines'] },
+    { phase: 'Days 1–30', title: 'Immerse', color: C.turquoise, items: ['Meet PM Leads, Design team, and eng leads\u00A01:1', 'Audit existing user data, support tickets, and\u00A0analytics', 'Shadow customer calls and review past research (if\u00A0any)', 'Assess current research skills across PMs and\u00A0designers', 'Map knowledge gaps across product\u00A0lines'] },
     { phase: 'Days 31–60', title: 'Build', color: C.cactus, items: ['Stand up the research ops stack (Dovetail, recruitment,\u00A0templates)', 'Run your first foundational\u00A0study', 'Publish the Félix persona\u00A0framework', 'Create lightweight research toolkits for PMs and\u00A0designers', 'Propose the research roadmap to\u00A0leadership'] },
     { phase: 'Days 61–90', title: 'Scale', color: C.mango, items: ['Launch a regular research cadence with product\u00A0squads', 'Ship the company-wide insights\u00A0repository', 'Train PMs and designers on basic usability testing and\u00A0interviews', 'Present the case for growing the research\u00A0team', 'Deliver your first quarterly research\u00A0review'] },
   ]
@@ -703,7 +703,7 @@ export default function JoseOnboardingPage() {
 
   return (
     <div
-      className="h-screen w-screen overflow-hidden relative select-none"
+      className="h-screen w-screen overflow-hidden relative"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >

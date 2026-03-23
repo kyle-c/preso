@@ -388,80 +388,6 @@ export default function PresentationViewerPage() {
   const [showAnalytics, setShowAnalytics] = useState(false)
   const [regeneratingSlide, setRegeneratingSlide] = useState<number | null>(null)
 
-  // Handle single-slide regeneration with feedback
-  const handleSlideRegenerate = useCallback(async (slideIndex: number, feedback: string) => {
-    if (!presentation || regeneratingSlide !== null) return
-    setRegeneratingSlide(slideIndex)
-    try {
-      const res = await fetch('/api/studio/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: feedback,
-          provider,
-          apiKey,
-          model,
-          edit: true,
-          parallel: false,
-        }),
-      })
-      if (!res.ok) { setRegeneratingSlide(null); return }
-
-      const reader = res.body?.getReader()
-      if (!reader) { setRegeneratingSlide(null); return }
-
-      const decoder = new TextDecoder()
-      let accumulated = ''
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        accumulated += decoder.decode(value, { stream: true })
-      }
-
-      // Parse the streamed response to find slide JSON
-      let newSlide = null
-      for (const line of accumulated.split('\n')) {
-        if (!line.startsWith('data: ') || line === 'data: [DONE]') continue
-        try {
-          const event = JSON.parse(line.slice(6))
-          // Look for slide data in various response formats
-          if (event.slides && Array.isArray(event.slides) && event.slides[0]) {
-            newSlide = event.slides[0]
-          } else if (event.batch && Array.isArray(event.batch) && event.batch[0]) {
-            newSlide = event.batch[0]
-          } else if (event.type && event.title) {
-            newSlide = event // The event itself is a slide
-          }
-        } catch {}
-      }
-
-      // If we couldn't parse a structured slide, try parsing the raw accumulated text as JSON
-      if (!newSlide) {
-        try {
-          const jsonMatch = accumulated.match(/\{[\s\S]*"type"\s*:\s*"[^"]+[\s\S]*"title"\s*:\s*"[^"]+[\s\S]*\}/)
-          if (jsonMatch) newSlide = JSON.parse(jsonMatch[0])
-        } catch {}
-      }
-
-      if (newSlide && newSlide.type && newSlide.title) {
-        // Replace the slide in the presentation
-        const newSlides = [...presentation.slides]
-        newSlides[slideIndex] = newSlide
-        setPresentation(prev => prev ? { ...prev, slides: newSlides } : prev)
-
-        // Save to server
-        await fetch(`/api/studio/presentations/${id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slides: newSlides }),
-        })
-      }
-    } catch (err) {
-      console.error('[slide-regenerate]', err)
-    }
-    setRegeneratingSlide(null)
-  }, [presentation, regeneratingSlide, provider, apiKey, model, id])
-
   // Real-time presence
   const presence = usePresence(id, currentSlide)
 
@@ -510,6 +436,74 @@ export default function PresentationViewerPage() {
   const [googleWorkspaceConnected, setGoogleWorkspaceConnected] = useState(false)
   const [clickupConnected, setClickupConnected] = useState(false)
   useServerSettings(setProvider, setApiKey, setModel, setUserEmail, setNotionConnected, setAmplitudeConnected, setGoogleWorkspaceConnected, setClickupConnected)
+
+  // Handle single-slide regeneration with feedback
+  const handleSlideRegenerate = useCallback(async (slideIndex: number, feedback: string) => {
+    if (!presentation || regeneratingSlide !== null) return
+    setRegeneratingSlide(slideIndex)
+    try {
+      const res = await fetch('/api/studio/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: feedback,
+          provider,
+          apiKey,
+          model,
+          edit: true,
+          parallel: false,
+        }),
+      })
+      if (!res.ok) { setRegeneratingSlide(null); return }
+
+      const reader = res.body?.getReader()
+      if (!reader) { setRegeneratingSlide(null); return }
+
+      const decoder = new TextDecoder()
+      let accumulated = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        accumulated += decoder.decode(value, { stream: true })
+      }
+
+      let newSlide = null
+      for (const line of accumulated.split('\n')) {
+        if (!line.startsWith('data: ') || line === 'data: [DONE]') continue
+        try {
+          const event = JSON.parse(line.slice(6))
+          if (event.slides && Array.isArray(event.slides) && event.slides[0]) {
+            newSlide = event.slides[0]
+          } else if (event.batch && Array.isArray(event.batch) && event.batch[0]) {
+            newSlide = event.batch[0]
+          } else if (event.type && event.title) {
+            newSlide = event
+          }
+        } catch {}
+      }
+
+      if (!newSlide) {
+        try {
+          const jsonMatch = accumulated.match(/\{[\s\S]*"type"\s*:\s*"[^"]+[\s\S]*"title"\s*:\s*"[^"]+[\s\S]*\}/)
+          if (jsonMatch) newSlide = JSON.parse(jsonMatch[0])
+        } catch {}
+      }
+
+      if (newSlide && newSlide.type && newSlide.title) {
+        const newSlides = [...presentation.slides]
+        newSlides[slideIndex] = newSlide
+        setPresentation(prev => prev ? { ...prev, slides: newSlides } : prev)
+        await fetch(`/api/studio/presentations/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slides: newSlides }),
+        })
+      }
+    } catch (err) {
+      console.error('[slide-regenerate]', err)
+    }
+    setRegeneratingSlide(null)
+  }, [presentation, regeneratingSlide, provider, apiKey, model, id])
 
   // Share modal
   const [showShareModal, setShowShareModal] = useState(false)

@@ -845,6 +845,47 @@ export async function getAntiExemplarSlides(limit = 3): Promise<SlideRating[]> {
 }
 
 // ---------------------------------------------------------------------------
+// Revision History
+// ---------------------------------------------------------------------------
+
+export interface Revision {
+  id: string
+  prompt: string
+  scope: string
+  slideIndex?: number
+  timestamp: number
+  /** Snapshot of slides BEFORE this edit was applied */
+  slidesBefore: any[]
+}
+
+const revisionsKey = (presId: string) => `studio:revisions:${presId}`
+
+export async function addRevision(presId: string, revision: Revision): Promise<void> {
+  const key = revisionsKey(presId)
+  await redis.rpush(key, JSON.stringify(revision))
+  // Cap at 30 revisions per presentation
+  await redis.ltrim(key, -30, -1)
+}
+
+export async function getRevisions(presId: string): Promise<Revision[]> {
+  const raw = await redis.lrange<string>(revisionsKey(presId), 0, -1)
+  return raw.map(r => typeof r === 'string' ? JSON.parse(r) : r)
+}
+
+export async function clearRevisions(presId: string, afterTimestamp: number): Promise<void> {
+  // Remove revisions at or before the given timestamp (used when reverting)
+  const all = await getRevisions(presId)
+  const keep = all.filter(r => r.timestamp > afterTimestamp)
+  const key = revisionsKey(presId)
+  await redis.del(key)
+  if (keep.length > 0) {
+    const pipeline = redis.pipeline()
+    for (const r of keep) pipeline.rpush(key, JSON.stringify(r))
+    await pipeline.exec()
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Templates
 // ---------------------------------------------------------------------------
 

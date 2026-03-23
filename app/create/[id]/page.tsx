@@ -479,6 +479,26 @@ export default function PresentationViewerPage() {
   const [previewingId, setPreviewingId] = useState<string | null>(null)
   const previewSlidesRef = useRef<any[] | null>(null)
 
+  // Load revision history from server on mount
+  useEffect(() => {
+    if (!id) return
+    fetch(`/api/studio/revisions?presId=${id}`)
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.revisions?.length > 0) {
+          setEditHistory(data.revisions.map((r: any) => ({
+            id: r.id,
+            prompt: r.prompt,
+            scope: r.scope,
+            slideIndex: r.slideIndex,
+            timestamp: r.timestamp,
+            slidesBefore: r.slidesBefore,
+          })).reverse()) // newest first
+        }
+      })
+      .catch(() => {})
+  }, [id])
+
   // Real-time presence
   const presence = usePresence(id, currentSlide)
 
@@ -868,15 +888,22 @@ export default function PresentationViewerPage() {
     // Snapshot slides before edit for analytics diff
     slidesBeforeEditRef.current = [...presentation.slides]
 
-    // Record in edit history
-    setEditHistory(prev => [{
+    // Record in edit history (local state + server persistence)
+    const revisionEntry: EditHistoryEntry = {
       id: crypto.randomUUID(),
       prompt: activePrompt,
       scope: activeScope,
       slideIndex: activeScope === 'slide' ? activeSlideIndex : undefined,
       timestamp: Date.now(),
       slidesBefore: [...presentation.slides],
-    }, ...prev].slice(0, 20)) // Keep last 20 edits
+    }
+    setEditHistory(prev => [revisionEntry, ...prev].slice(0, 30))
+    // Persist to server (fire and forget)
+    fetch('/api/studio/revisions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ presId: id, action: 'add', revision: revisionEntry }),
+    }).catch(() => {})
 
     const activeScope = (overrides?.scope ?? editScope) as typeof editScope
     const activePrompt = overrides?.prompt ?? editPrompt
@@ -1752,13 +1779,13 @@ Do NOT wrap in {"slides": ...}. Do NOT return the full deck. Do NOT include a do
             setPresentation(prev => prev ? { ...prev, slides: entry.slidesBefore } : prev)
             previewSlidesRef.current = null
             setPreviewingId(null)
-            // Save to server
-            fetch(`/api/studio/presentations/${id}`, {
-              method: 'PATCH',
+            // Save slides + revert history on server
+            fetch('/api/studio/revisions', {
+              method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ slides: entry.slidesBefore }),
+              body: JSON.stringify({ presId: id, action: 'revert', revision: entry }),
             }).catch(() => {})
-            // Remove this entry and all entries before it from history
+            // Remove this entry and all older entries from local history
             setEditHistory(prev => prev.filter(e => e.timestamp > entry.timestamp))
           }}
         />

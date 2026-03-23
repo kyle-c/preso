@@ -76,6 +76,8 @@ const t = {
     accordionA: 'En muchos países de Latinoamérica se usan dos apellidos. Agregar ambos nos ayuda a verificar tu identidad correctamente.',
     bannerD: '¡Hola! Verifica tu identidad y desbloquea envíos sin límites. Es rápido y 100% seguro.',
     hintD: 'Si tienes apellido materno, agrégalo. Nos ayuda a que todo coincida con tu ID y tus envíos lleguen sin contratiempos.',
+    bannerE: 'Verifica tu identidad para enviar más rápido y sin límites. Solo toma un momento.',
+    hintE: 'Si tienes dos apellidos, agrégalos — así coinciden con tu ID.',
   },
   en: {
     badge: 'An authorized agent of intermex',
@@ -95,6 +97,8 @@ const t = {
     accordionA: 'In many Latin American countries, two last names are used. Adding both helps us verify your identity correctly.',
     bannerD: 'Hi! Verify your identity and unlock unlimited transfers. It\'s quick and 100% secure.',
     hintD: 'If you have a second last name, add it! It helps everything match your ID so your transfers arrive without issues.',
+    bannerE: 'Verify your identity to send faster and without limits. It only takes a moment.',
+    hintE: 'Have two last names? Add both — so they match your ID.',
   },
 }
 
@@ -314,6 +318,38 @@ function VariantD({ lang = 'es' }: { lang?: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  VARIANT E — Fresh & Concise                                        */
+/* ------------------------------------------------------------------ */
+
+function VariantE({ lang = 'es' }: { lang?: Lang }) {
+  const s = t[lang]
+  return (
+    <PhoneFrame>
+      <ScreenHeader />
+      <div className="px-6 pb-6">
+        <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-5">{s.title}</h1>
+
+        {/* Banner: mango/warm tone */}
+        <div className="rounded-2xl p-4 flex items-start gap-3 mb-6" style={{ background: '#F19D3818', border: '1px solid #F19D3840' }}>
+          <Zap className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#B87420' }} />
+          <p className="text-[13px] leading-snug font-medium" style={{ color: '#7A4D15' }}>{s.bannerE}</p>
+        </div>
+
+        <div className="space-y-4">
+          <SharedFormFields lang={lang} />
+          <FormInput label={s.apellidoMaterno} placeholder="ej. Martínez" />
+          <div className="flex items-start gap-2.5 px-1">
+            <Info className="w-4 h-4 text-mocha shrink-0 mt-0.5" />
+            <p className="text-[12px] text-mocha leading-snug">{s.hintE}</p>
+          </div>
+          <SharedFormBottom lang={lang} />
+        </div>
+      </div>
+    </PhoneFrame>
+  )
+}
+
+/* ------------------------------------------------------------------ */
 /*  Variant label                                                     */
 /* ------------------------------------------------------------------ */
 
@@ -361,6 +397,7 @@ export default function KycExplorationsPage() {
           { letter: 'B', name: 'Trust Builder', desc: 'Full-width evergreen strip with a turquoise-bordered callout', Component: VariantB },
           { letter: 'C', name: 'Benefit Cards', desc: 'Compact benefit chips with an expandable accordion for the hint', Component: VariantC },
           { letter: 'D', name: 'Conversational', desc: 'Speech-bubble style with Felix mascot and a casual italic aside', Component: VariantD },
+          { letter: 'E', name: 'Fresh & Concise', desc: 'Mango-toned banner with concise, non-italic helper text', Component: VariantE },
         ] as const).map(({ letter, name, desc, Component }) => (
           <div key={letter}>
             <div className="text-center mb-6">

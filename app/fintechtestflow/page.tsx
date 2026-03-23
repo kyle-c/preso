@@ -1858,6 +1858,10 @@ const CANVAS_SCALE = 0.32
 const CANVAS_W = Math.round(390 * CANVAS_SCALE) // 125px
 const CANVAS_H = Math.round(844 * CANVAS_SCALE) // 270px
 
+const DESKTOP_SCALE = 0.22
+const DESKTOP_CARD_W = Math.round(1280 * DESKTOP_SCALE) // ~282px
+const DESKTOP_CARD_H = Math.round(800 * DESKTOP_SCALE) // ~176px
+
 function CanvasMiniPhone({
   label,
   progress,
@@ -1922,6 +1926,100 @@ function CanvasMiniPhone({
           </span>
         )}
       </div>
+    </div>
+  )
+}
+
+function CanvasDesktopCard({
+  label,
+  progress,
+  children,
+  editableContent,
+  language,
+  uid,
+  selectedUid,
+  onSelect,
+  status,
+}: {
+  label: string
+  progress?: number
+  children: React.ReactNode
+  editableContent: Record<Language, ContentTokens>
+  language: Language
+  uid: string
+  selectedUid: string | null
+  onSelect: (uid: string) => void
+  status: ScreenStatus
+}) {
+  const isSelected = selectedUid === uid
+
+  return (
+    <div className="relative flex-shrink-0">
+      <div
+        className="flex flex-col items-center gap-3 cursor-pointer"
+        onClick={() => onSelect(isSelected ? '' : uid)}
+      >
+        <div
+          className="relative overflow-hidden shadow-2xl transition-all duration-150 bg-stone"
+          style={{
+            width: DESKTOP_CARD_W,
+            height: DESKTOP_CARD_H,
+            borderRadius: 8,
+            boxShadow: isSelected
+              ? '0 0 0 2px #60a5fa, 0 8px 40px rgba(0,0,0,0.6)'
+              : '0 8px 32px rgba(0,0,0,0.5)',
+          }}
+        >
+          {/* Centered phone content inside desktop card */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div
+              className="relative overflow-hidden pointer-events-none"
+              style={{
+                width: Math.round(390 * DESKTOP_SCALE),
+                height: Math.round(844 * DESKTOP_SCALE),
+                borderRadius: Math.round(52 * DESKTOP_SCALE),
+                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+              }}
+            >
+              <div
+                className="absolute top-0 left-0"
+                style={{ transform: `scale(${DESKTOP_SCALE})`, transformOrigin: 'top left', width: 390, height: 844 }}
+              >
+                <LangContext.Provider value={editableContent[language]}>
+                  <PhoneFrame progress={progress}>{children}</PhoneFrame>
+                </LangContext.Provider>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p className={`text-[10px] font-medium tracking-wide transition-colors ${isSelected ? 'text-white/70' : 'text-white/35'}`}>
+          {label} (Desktop)
+        </p>
+        {status === 'in-review' && (
+          <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[8px] font-semibold bg-amber-400/90 text-amber-950 px-2 py-0.5 rounded-full whitespace-nowrap">
+            In Review
+          </span>
+        )}
+        {status === 'done' && (
+          <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[8px] font-semibold bg-emerald-400/90 text-emerald-950 px-2 py-0.5 rounded-full whitespace-nowrap">
+            Done
+          </span>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function CanvasDesktopArrow() {
+  return (
+    <div
+      className="flex-shrink-0 flex items-center"
+      style={{ marginTop: DESKTOP_CARD_H / 2 - 6 + 3, marginLeft: 6, marginRight: 6, alignSelf: 'flex-start' }}
+    >
+      <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
+        <path d="M0 6H21" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M17 2L23 6L17 10" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     </div>
   )
 }
@@ -2188,7 +2286,7 @@ function FlowCanvasOverlay({
     const vw = el.clientWidth
     const vh = el.clientHeight
     const cw = 11 * CANVAS_W + 10 * 40 + 160
-    const ch = 3 * (CANVAS_H + 36 + 56) + 120
+    const ch = 7 * (CANVAS_H + DESKTOP_CARD_H + 36 + 56 + 80) + 120
     const zoom = Math.min((vw - 120) / cw, (vh - 100) / ch, 1.2)
     canvas.current = { zoom, ox: (vw - cw * zoom) / 2, oy: 60 }
     re()
@@ -2255,7 +2353,7 @@ function FlowCanvasOverlay({
     const vw = el.clientWidth
     const vh = el.clientHeight
     const cw = 11 * CANVAS_W + 10 * 40 + 160
-    const ch = 3 * (CANVAS_H + 36 + 56) + 120
+    const ch = 7 * (CANVAS_H + DESKTOP_CARD_H + 36 + 56 + 80) + 120
     const zoom = Math.min((vw - 120) / cw, (vh - 100) / ch, 1.2)
     canvas.current = { zoom, ox: (vw - cw * zoom) / 2, oy: 60 }
     repaint(n => n + 1)
@@ -2470,6 +2568,7 @@ function FlowCanvasOverlay({
             <div className="space-y-16">
               {flows.map(flow => (
                 <div key={flow.id}>
+                  {/* Mobile row */}
                   <div className="flex items-center gap-2 mb-8">
                     <div className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: flow.dot }} />
                     <p className="text-[11px] font-semibold text-white/22 uppercase tracking-widest">{flow.label}</p>
@@ -2494,6 +2593,34 @@ function FlowCanvasOverlay({
                         </CanvasMiniPhone>,
                       ]
                       if (i < flow.screens.length - 1) nodes.push(<CanvasArrow key={`arrow-${i}`} />)
+                      return nodes
+                    })}
+                  </div>
+                  {/* Desktop row */}
+                  <div className="flex items-center gap-2 mb-8 mt-12">
+                    <div className="h-1.5 w-1.5 rounded-full flex-shrink-0 border border-white/20" style={{ backgroundColor: 'transparent', borderColor: flow.dot }} />
+                    <p className="text-[11px] font-semibold text-white/22 uppercase tracking-widest">{flow.label} · Desktop</p>
+                    <div className="h-px w-32 bg-white/[0.05]" />
+                  </div>
+                  <div className="flex items-start">
+                    {flow.screens.flatMap((screen, i) => {
+                      const uid = `${flow.id}-${screen.sk}-desktop`
+                      const nodes: React.ReactNode[] = [
+                        <CanvasDesktopCard
+                          key={uid}
+                          label={screen.label}
+                          uid={uid}
+                          selectedUid={selectedUid}
+                          onSelect={setSelectedUid}
+                          progress={screen.progress}
+                          editableContent={editableContent}
+                          language={language}
+                          status={getStatus(uid)}
+                        >
+                          {screen.node}
+                        </CanvasDesktopCard>,
+                      ]
+                      if (i < flow.screens.length - 1) nodes.push(<CanvasDesktopArrow key={`darrow-${i}`} />)
                       return nodes
                     })}
                   </div>

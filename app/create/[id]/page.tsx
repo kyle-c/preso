@@ -440,8 +440,11 @@ export default function PresentationViewerPage() {
   // Handle single-slide regeneration with feedback
   const handleSlideRegenerate = useCallback(async (slideIndex: number, feedback: string) => {
     if (!presentation || regeneratingSlide !== null) return
+    if (!apiKey) { console.warn('[slide-regenerate] No API key configured'); return }
+    console.log(`[slide-regenerate] Regenerating slide ${slideIndex + 1}...`)
     setRegeneratingSlide(slideIndex)
     try {
+      // Use the generate API with edit mode — streams the response
       const res = await fetch('/api/studio/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -451,45 +454,52 @@ export default function PresentationViewerPage() {
           apiKey,
           model,
           edit: true,
-          parallel: false,
+          parallel: true,
         }),
       })
-      if (!res.ok) { setRegeneratingSlide(null); return }
+      if (!res.ok) {
+        console.error('[slide-regenerate] API returned', res.status)
+        setRegeneratingSlide(null)
+        return
+      }
 
       const reader = res.body?.getReader()
       if (!reader) { setRegeneratingSlide(null); return }
 
       const decoder = new TextDecoder()
-      let accumulated = ''
+      let newSlide: any = null
+
+      // Read the SSE stream and extract the first valid slide
+      let buffer = ''
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
-        accumulated += decoder.decode(value, { stream: true })
-      }
+        buffer += decoder.decode(value, { stream: true })
 
-      let newSlide = null
-      for (const line of accumulated.split('\n')) {
-        if (!line.startsWith('data: ') || line === 'data: [DONE]') continue
-        try {
-          const event = JSON.parse(line.slice(6))
-          if (event.slides && Array.isArray(event.slides) && event.slides[0]) {
-            newSlide = event.slides[0]
-          } else if (event.batch && Array.isArray(event.batch) && event.batch[0]) {
-            newSlide = event.batch[0]
-          } else if (event.type && event.title) {
-            newSlide = event
-          }
-        } catch {}
-      }
-
-      if (!newSlide) {
-        try {
-          const jsonMatch = accumulated.match(/\{[\s\S]*"type"\s*:\s*"[^"]+[\s\S]*"title"\s*:\s*"[^"]+[\s\S]*\}/)
-          if (jsonMatch) newSlide = JSON.parse(jsonMatch[0])
-        } catch {}
+        // Process complete lines
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || '' // Keep incomplete line in buffer
+        for (const line of lines) {
+          if (!line.startsWith('data: ') || line === 'data: [DONE]') continue
+          try {
+            const event = JSON.parse(line.slice(6))
+            if (event.keepalive) continue
+            if (event.outline && Array.isArray(event.outline) && event.outline[0]) {
+              // Outline skeleton — take first slide
+              if (!newSlide && event.outline[0].type) newSlide = event.outline[0]
+            }
+            if (event.batch && Array.isArray(event.batch)) {
+              // Batch of completed slides — take the first real one
+              const real = event.batch.find((s: any) => s && s.type && s.title && s.body)
+              if (real) newSlide = real
+            }
+            if (event.slidesReady) break
+          } catch {}
+        }
       }
 
       if (newSlide && newSlide.type && newSlide.title) {
+        console.log(`[slide-regenerate] Got new slide: ${newSlide.type} "${newSlide.title}"`)
         const newSlides = [...presentation.slides]
         newSlides[slideIndex] = newSlide
         setPresentation(prev => prev ? { ...prev, slides: newSlides } : prev)
@@ -498,6 +508,8 @@ export default function PresentationViewerPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ slides: newSlides }),
         })
+      } else {
+        console.warn('[slide-regenerate] No valid slide in response')
       }
     } catch (err) {
       console.error('[slide-regenerate]', err)

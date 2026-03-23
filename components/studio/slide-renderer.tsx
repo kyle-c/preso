@@ -12,6 +12,7 @@ import { SlidePdfOverlay } from '@/components/slide-pdf-overlay'
 import { useComments, SlideCommentLayer } from '@/components/slide-comments'
 import { SlideChartViz } from './slide-chart'
 import { SlideRating } from './slide-rating'
+import { SlideRegenerate } from './slide-regenerate'
 import { ViewModeToggle, OutlineView, DocumentView, DocumentSkeleton, type ViewMode, type OutlineEditPanelProps, type SectionFilesMap } from './deck-views'
 import type { UploadedFile } from './file-uploader'
 import type { PresentationDocument, PresentationOutline } from '@/lib/studio-db'
@@ -128,6 +129,10 @@ export interface SlideRendererProps {
   ratingSource?: string
   /** Permission level for shared viewers — gates edit/comment features */
   sharePermission?: 'viewer' | 'commenter' | 'editor'
+  /** Called when user requests regeneration of a single slide with feedback */
+  onSlideRegenerate?: (slideIndex: number, feedback: string) => void
+  /** Whether a slide is currently being regenerated */
+  regeneratingSlide?: number | null
   /** Edit panel props for the right-column edit panel in document view */
   documentEditPanel?: {
     editPrompt: string
@@ -1360,7 +1365,7 @@ const SLIDE_COMPONENTS: Record<SlideData['type'], React.FC<{ slide: SlideData; s
 /*                  MAIN SLIDE RENDERER                       */
 /* ═══════════════════════════════════════════════════════════ */
 
-export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, forceSlide, topRightExtra, topLeftExtra, hideCloseButton, document: rawDoc, outline, onViewModeChange, onShare, onEdit, editActive, onSlidesChange, onDocumentChange, onOutlineChange, onRebuild, initialViewMode, onViewModeChanged, shareToken, translations, onGenerateDocument, isGeneratingDocument, documentGenFailed, ratingSource, sharePermission, documentEditPanel, outlineEditPanel, onSelectionAIEdit, sectionFiles, onSectionFilesChange }: SlideRendererProps) {
+export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, forceSlide, topRightExtra, topLeftExtra, hideCloseButton, document: rawDoc, outline, onViewModeChange, onShare, onEdit, editActive, onSlidesChange, onDocumentChange, onOutlineChange, onRebuild, initialViewMode, onViewModeChanged, shareToken, translations, onGenerateDocument, isGeneratingDocument, documentGenFailed, ratingSource, sharePermission, onSlideRegenerate, regeneratingSlide, documentEditPanel, outlineEditPanel, onSelectionAIEdit, sectionFiles, onSectionFilesChange }: SlideRendererProps) {
   const [current, setCurrent] = useState(0)
   const [mounted, setMounted] = useState(false)
   const slideRef = useRef<HTMLDivElement>(null)
@@ -1775,18 +1780,33 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
           <SlideFooter num={safeCurrent + 1} total={total} bg={slide.bg} deckTitle={title} />
         </div>
 
-        {/* Slide rating (training) — bottom-right, hover-visible */}
-        {ratingSource && (
+        {/* Slide regenerate + rating — bottom-right, hover-visible */}
+        {(ratingSource || onSlideRegenerate) && (
           <div
-            className="absolute bottom-12 right-6 z-[60] transition-opacity duration-200"
+            className="absolute bottom-12 right-6 z-[60] transition-opacity duration-200 flex items-end gap-3"
             style={{ opacity: hoverTop ? 1 : 0, pointerEvents: hoverTop ? 'auto' : 'none' }}
+            onMouseEnter={() => setHoverTop(true)}
           >
-            <SlideRating
-              slide={slide}
-              slideIndex={safeCurrent}
-              source={ratingSource}
-              dark={slide.bg === 'dark'}
-            />
+            {onSlideRegenerate && !sharePermission && (
+              <SlideRegenerate
+                slideIndex={safeCurrent}
+                slideData={slide}
+                totalSlides={total}
+                prevSlide={safeCurrent > 0 ? slides[safeCurrent - 1] : undefined}
+                nextSlide={safeCurrent < total - 1 ? slides[safeCurrent + 1] : undefined}
+                onRegenerate={onSlideRegenerate}
+                generating={regeneratingSlide === safeCurrent}
+                dark={slide.bg === 'dark'}
+              />
+            )}
+            {ratingSource && (
+              <SlideRating
+                slide={slide}
+                slideIndex={safeCurrent}
+                source={ratingSource}
+                dark={slide.bg === 'dark'}
+              />
+            )}
           </div>
         )}
 

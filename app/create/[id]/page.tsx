@@ -1016,7 +1016,9 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
       }
 
       // Final update
+      console.log('[edit] Accumulated response length:', accumulated.length, 'first 200 chars:', accumulated.slice(0, 200))
       const finalParsed = parseIncrementalSlides(accumulated)
+      console.log('[edit] Parsed slides:', finalParsed.length)
       if (finalParsed.length > 0) {
         let finalSlides: typeof finalParsed
 

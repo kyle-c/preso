@@ -338,10 +338,7 @@ function VariantE({ lang = 'es' }: { lang?: Lang }) {
         <div className="space-y-4">
           <SharedFormFields lang={lang} />
           <FormInput label={s.apellidoMaterno} placeholder="ej. Martínez" />
-          <div className="flex items-start gap-2.5 px-1">
-            <Info className="w-4 h-4 text-mocha shrink-0 mt-0.5" />
-            <p className="text-[12px] text-mocha leading-snug">{s.hintE}</p>
-          </div>
+          <p className="text-[12px] text-mocha leading-snug px-1">{s.hintE}</p>
           <SharedFormBottom lang={lang} />
         </div>
       </div>
@@ -370,10 +367,7 @@ function VariantF({ lang = 'es' }: { lang?: Lang }) {
         <div className="space-y-4">
           <SharedFormFields lang={lang} />
           <FormInput label={s.apellidoMaterno} placeholder="ej. Martínez" />
-          <div className="flex items-start gap-2.5 px-1">
-            <Info className="w-4 h-4 text-mocha shrink-0 mt-0.5" />
-            <p className="text-[12px] text-mocha leading-snug">{s.hintE}</p>
-          </div>
+          <p className="text-[12px] text-mocha leading-snug px-1">{s.hintE}</p>
           <SharedFormBottom lang={lang} />
         </div>
       </div>

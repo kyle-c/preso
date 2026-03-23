@@ -218,6 +218,7 @@ function EditPanel({
   onRevert,
   onPreview,
   previewingId,
+  onInstantEdit,
 }: {
   scope: EditScope
   onScopeChange: (s: EditScope) => void
@@ -239,6 +240,8 @@ function EditPanel({
   onRevert: (entry: EditHistoryEntry) => void
   onPreview: (entry: EditHistoryEntry | null) => void
   previewingId: string | null
+  /** Apply an instant client-side transform to the current slide */
+  onInstantEdit?: (transform: (slide: any) => any) => void
 }) {
   const flaggedCount = flaggedIds.size
   const canGenerate = scope === 'comments'
@@ -351,6 +354,53 @@ function EditPanel({
                   </button>
                 ))}
               </div>
+            )}
+
+            {/* Instant text transforms — client-side, no API call */}
+            {scope === 'slide' && (
+              <div className="flex flex-wrap gap-1.5">
+                <p className="w-full text-[9px] uppercase tracking-widest text-white/25 mb-0.5">Instant fixes</p>
+                {[
+                  { label: 'Capitalize bullets', fn: (s: any) => {
+                    const cap = (t: string) => t.replace(/^(•\s*|[-*]\s*)?(\w)/, (_, prefix, char) => (prefix || '') + char.toUpperCase())
+                    if (s.bullets) s.bullets = s.bullets.map((b: any) => ({ ...b, text: cap(b.text) }))
+                    if (s.cards) s.cards = s.cards.map((c: any) => ({
+                      ...c, body: c.body.split('\n').map((line: string) => cap(line)).join('\n')
+                    }))
+                    if (s.columns) s.columns = s.columns.map((col: any) => ({
+                      ...col, bullets: col.bullets?.map((b: any) => ({ ...b, text: cap(b.text) }))
+                    }))
+                    return s
+                  }},
+                  { label: 'Remove bold markers', fn: (s: any) => {
+                    const strip = (t: string) => t.replace(/\*\*/g, '')
+                    if (s.title) s.title = strip(s.title)
+                    if (s.body) s.body = strip(s.body)
+                    if (s.bullets) s.bullets = s.bullets.map((b: any) => ({ ...b, text: strip(b.text) }))
+                    if (s.cards) s.cards = s.cards.map((c: any) => ({ ...c, title: strip(c.title), body: strip(c.body) }))
+                    return s
+                  }},
+                  { label: 'Remove asterisks', fn: (s: any) => {
+                    const strip = (t: string) => t.replace(/\*/g, '')
+                    if (s.title) s.title = strip(s.title)
+                    if (s.body) s.body = strip(s.body)
+                    if (s.bullets) s.bullets = s.bullets.map((b: any) => ({ ...b, text: strip(b.text) }))
+                    if (s.cards) s.cards = s.cards.map((c: any) => ({ ...c, title: strip(c.title), body: strip(c.body) }))
+                    return s
+                  }},
+                ].map((transform) => (
+                  <button
+                    key={transform.label}
+                    type="button"
+                    onClick={() => onInstantEdit?.(transform.fn)}
+                    disabled={generating}
+                    className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-turquoise/10 text-turquoise/70 hover:bg-turquoise/20 hover:text-turquoise transition-colors disabled:opacity-30 border border-turquoise/10"
+                  >
+                    {transform.label}
+                  </button>
+                ))}
+              </div>
+            )}
             )}
 
             <textarea
@@ -1799,6 +1849,21 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
           onToggleFlag={toggleEditFlag}
           history={editHistory}
           previewingId={previewingId}
+          onInstantEdit={(transform) => {
+            if (!presentation) return
+            const slide = { ...presentation.slides[currentSlide] }
+            const updated = transform(slide)
+            const newSlides = [...presentation.slides]
+            newSlides[currentSlide] = updated
+            setPresentation(prev => prev ? { ...prev, slides: newSlides } : prev)
+            // Save to server
+            fetch(`/api/studio/presentations/${id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ slides: newSlides }),
+            }).catch(() => {})
+            setHint(`Slide ${currentSlide + 1} updated`)
+          }}
           onPreview={(entry) => {
             if (!entry) {
               // Stop previewing — restore current slides

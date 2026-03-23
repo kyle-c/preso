@@ -350,6 +350,38 @@ function VariantE({ lang = 'es' }: { lang?: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  VARIANT F — Full-Width Warm Banner + Concise Hint                  */
+/* ------------------------------------------------------------------ */
+
+function VariantF({ lang = 'es' }: { lang?: Lang }) {
+  const s = t[lang]
+  return (
+    <PhoneFrame>
+      <ScreenHeader />
+      <div className="px-6">
+        <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-5">{s.title}</h1>
+      </div>
+      {/* Full-width mango banner */}
+      <div className="px-6 py-4 flex items-center gap-3 mb-6" style={{ background: '#F19D38' }}>
+        <Shield className="w-5 h-5 text-white shrink-0" />
+        <p className="text-[13px] text-white leading-snug font-medium">{s.bannerE}</p>
+      </div>
+      <div className="px-6 pb-6">
+        <div className="space-y-4">
+          <SharedFormFields lang={lang} />
+          <FormInput label={s.apellidoMaterno} placeholder="ej. Martínez" />
+          <div className="flex items-start gap-2.5 px-1">
+            <Info className="w-4 h-4 text-mocha shrink-0 mt-0.5" />
+            <p className="text-[12px] text-mocha leading-snug">{s.hintE}</p>
+          </div>
+          <SharedFormBottom lang={lang} />
+        </div>
+      </div>
+    </PhoneFrame>
+  )
+}
+
+/* ------------------------------------------------------------------ */
 /*  Variant label                                                     */
 /* ------------------------------------------------------------------ */
 
@@ -398,6 +430,7 @@ export default function KycExplorationsPage() {
           { letter: 'C', name: 'Benefit Cards', desc: 'Compact benefit chips with an expandable accordion for the hint', Component: VariantC },
           { letter: 'D', name: 'Conversational', desc: 'Speech-bubble style with Felix mascot and a casual italic aside', Component: VariantD },
           { letter: 'E', name: 'Fresh & Concise', desc: 'Mango-toned banner with concise, non-italic helper text', Component: VariantE },
+          { letter: 'F', name: 'Full-Width Warm', desc: 'Edge-to-edge mango banner with concise hint text', Component: VariantF },
         ] as const).map(({ letter, name, desc, Component }) => (
           <div key={letter}>
             <div className="text-center mb-6">

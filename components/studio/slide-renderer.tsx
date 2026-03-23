@@ -172,6 +172,12 @@ export interface SlideRendererProps {
 /*                     HELPER UTILITIES                       */
 /* ═══════════════════════════════════════════════════════════ */
 
+/** Tailwind text size → CSS px mapping for style tag injection */
+const TAILWIND_SIZES: Record<string, string> = {
+  'xs': '12px', 'sm': '14px', 'base': '16px', 'lg': '18px', 'xl': '20px',
+  '2xl': '24px', '3xl': '30px', '4xl': '36px', '5xl': '48px', '6xl': '60px', '7xl': '72px', '8xl': '96px',
+}
+
 /** Resolve a style override from the slide's style object, falling back to a default Tailwind class */
 function sz(slide: { style?: SlideData['style'] }, key: 'titleSize' | 'bodySize' | 'cardSize', fallback: string): string {
   const val = slide.style?.[key]
@@ -1806,6 +1812,10 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
 
       {/* Slide content */}
       <div ref={slideRef} className="h-full w-full relative" key={safeCurrent}>
+        {/* Style overrides for title sizing when slide.style is set */}
+        {slide.style?.titleSize && (
+          <style>{`[data-slide-field="title"] { font-size: ${TAILWIND_SIZES[slide.style.titleSize] || slide.style.titleSize} !important; }`}</style>
+        )}
         <div className="h-full w-full animate-in fade-in duration-300">
           <SlideComponent slide={slide} slideIndex={safeCurrent} />
           <SlideFooter num={safeCurrent + 1} total={total} bg={slide.bg} deckTitle={title} />

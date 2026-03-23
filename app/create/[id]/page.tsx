@@ -879,11 +879,6 @@ export default function PresentationViewerPage() {
 
   const handleEditGenerate = useCallback(async (overrides?: { scope?: string; prompt?: string; slideIndex?: number }) => {
     if (!presentation) return
-    if (!apiKey.trim()) {
-      alert('API key not configured. Open Settings to add your API key.')
-      setShowSettings(true)
-      return
-    }
 
     // Snapshot slides before edit for analytics diff
     slidesBeforeEditRef.current = [...presentation.slides]
@@ -990,15 +985,63 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
       }
     } else if (activeScope === 'slide') {
       if (!activePrompt.trim()) return
-      fullPrompt = `${EDIT_SCHEMA}\n\nHere is the CURRENT slide (slide ${activeSlideIndex + 1} of ${presentation.slides.length}):\n${JSON.stringify(presentation.slides[activeSlideIndex], null, 2)}\n\nUser's edit request: ${activePrompt.trim()}
 
-CRITICAL EDITING RULES:
-1. SURGICAL EDITS ONLY — Change ONLY the specific fields the user asked about. Copy every other field EXACTLY as-is from the current slide. Do NOT rewrite titles, body text, colors, or any field the user didn't mention.
-2. PRESERVE ALL UNCHANGED DATA — If the user says "remove asterisks from bullets", only modify the bullet text fields. Keep the same type, bg, badge, title, subtitle, titleColor, imageUrl, notes, and every other field identical.
-3. START FROM THE CURRENT STATE — The JSON above is the source of truth. Do not invent new content or revert to a previous version. The user may have already made edits to this slide.
-4. IF THE EDIT IS NOT POSSIBLE through the slide JSON schema (e.g. font sizes, spacing, padding, animations — these are controlled by the renderer, not the data), explain what's possible instead in a "notes" field addition like: "Note: Font sizing is controlled by the slide type and renderer. Consider changing the slide type for different sizing."
+      // Use the dedicated single-slide endpoint (direct API call, no streaming)
+      setShowEdit(false)
+      setEditGenerating(true)
+      setEditOverlay({ mode: 'slide', generating: true, done: false, affectedSlides: [activeSlideIndex] })
+      const controller = new AbortController()
+      editAbortRef.current = controller
 
-Return ONLY a JSON array containing exactly ONE updated slide object. Example: [{"type": "...", "bg": "...", "title": "...", ...}]
+      try {
+        const res = await fetch('/api/studio/regenerate-slide', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            feedback: activePrompt.trim(),
+            currentSlide: presentation.slides[activeSlideIndex],
+            prevTitle: activeSlideIndex > 0 ? presentation.slides[activeSlideIndex - 1]?.title : undefined,
+            nextTitle: activeSlideIndex < presentation.slides.length - 1 ? presentation.slides[activeSlideIndex + 1]?.title : undefined,
+          }),
+          signal: controller.signal,
+        })
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({ error: 'Edit failed' }))
+          alert(err.error || `Edit failed (${res.status})`)
+          setEditGenerating(false)
+          setEditOverlay(null)
+          return
+        }
+
+        const data = await res.json()
+        if (data.slide && data.slide.type && data.slide.title) {
+          const changed = detectChangedFields(presentation.slides[activeSlideIndex], data.slide)
+          setEditOverlay(prev => prev ? { ...prev, generating: false, done: true, changedFields: changed } : prev)
+
+          const finalSlides = [...presentation.slides]
+          finalSlides[activeSlideIndex] = data.slide
+          setPresentation(prev => prev ? { ...prev, slides: finalSlides } : prev)
+
+          await fetch(`/api/studio/presentations/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slides: finalSlides }),
+          })
+
+          setHint(`Slide ${activeSlideIndex + 1} updated`)
+        } else {
+          alert('Edit did not produce a valid slide. Try rephrasing your request.')
+        }
+      } catch (err: any) {
+        if (err?.name !== 'AbortError') {
+          console.error('[edit slide]', err)
+          alert('Edit failed. Please try again.')
+        }
+      }
+      setEditGenerating(false)
+      setEditPrompt('')
+      return // Skip the streaming path below
 Do NOT wrap in {"slides": ...}. Do NOT return the full deck. Do NOT include a document object.`
     } else {
       if (!activePrompt.trim()) return

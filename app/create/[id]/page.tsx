@@ -880,6 +880,10 @@ export default function PresentationViewerPage() {
   const handleEditGenerate = useCallback(async (overrides?: { scope?: string; prompt?: string; slideIndex?: number }) => {
     if (!presentation) return
 
+    const activeScope = (overrides?.scope ?? editScope) as typeof editScope
+    const activePrompt = overrides?.prompt ?? editPrompt
+    const activeSlideIndex = overrides?.slideIndex ?? currentSlide
+
     // Snapshot slides before edit for analytics diff
     slidesBeforeEditRef.current = [...presentation.slides]
 
@@ -893,16 +897,11 @@ export default function PresentationViewerPage() {
       slidesBefore: [...presentation.slides],
     }
     setEditHistory(prev => [revisionEntry, ...prev].slice(0, 30))
-    // Persist to server (fire and forget)
     fetch('/api/studio/revisions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ presId: id, action: 'add', revision: revisionEntry }),
     }).catch(() => {})
-
-    const activeScope = (overrides?.scope ?? editScope) as typeof editScope
-    const activePrompt = overrides?.prompt ?? editPrompt
-    const activeSlideIndex = overrides?.slideIndex ?? currentSlide
 
     // Build prompt based on scope
     let fullPrompt: string

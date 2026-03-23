@@ -188,6 +188,15 @@ function CommentsList({
 
 /* ─────────────────────── Edit Panel ─────────────────────── */
 
+interface EditHistoryEntry {
+  id: string
+  prompt: string
+  scope: string
+  slideIndex?: number
+  timestamp: number
+  slidesBefore: any[]
+}
+
 function EditPanel({
   scope,
   onScopeChange,
@@ -205,6 +214,10 @@ function EditPanel({
   commentsLoading,
   flaggedIds,
   onToggleFlag,
+  history,
+  onRevert,
+  onPreview,
+  previewingId,
 }: {
   scope: EditScope
   onScopeChange: (s: EditScope) => void
@@ -222,6 +235,10 @@ function EditPanel({
   commentsLoading: boolean
   flaggedIds: Set<string>
   onToggleFlag: (id: string) => void
+  history: EditHistoryEntry[]
+  onRevert: (entry: EditHistoryEntry) => void
+  onPreview: (entry: EditHistoryEntry | null) => void
+  previewingId: string | null
 }) {
   const flaggedCount = flaggedIds.size
   const canGenerate = scope === 'comments'
@@ -383,6 +400,53 @@ function EditPanel({
             </>
           )}
         </button>
+
+        {/* Change history */}
+        {history.length > 0 && (
+          <div className="mt-2 space-y-1">
+            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-2">Change History</p>
+            {history.map((entry) => {
+              const isPreviewing = previewingId === entry.id
+              const timeAgo = Math.round((Date.now() - entry.timestamp) / 60000)
+              const timeLabel = timeAgo < 1 ? 'just now' : timeAgo < 60 ? `${timeAgo}m ago` : `${Math.round(timeAgo / 60)}h ago`
+              return (
+                <div
+                  key={entry.id}
+                  className={`rounded-lg px-3 py-2 text-xs transition-colors ${
+                    isPreviewing ? 'bg-turquoise/10 border border-turquoise/30' : 'bg-white/5 hover:bg-white/10'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white/70 line-clamp-2">{entry.prompt}</p>
+                      <p className="text-[10px] text-white/30 mt-0.5">
+                        {entry.scope === 'slide' ? `Slide ${(entry.slideIndex ?? 0) + 1}` : entry.scope === 'comments' ? 'Comments' : 'Full deck'} · {timeLabel}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => onPreview(isPreviewing ? null : entry)}
+                        className={`px-2 py-1 rounded text-[10px] font-medium transition-colors ${
+                          isPreviewing ? 'bg-turquoise/20 text-turquoise' : 'text-white/40 hover:text-white/70 hover:bg-white/10'
+                        }`}
+                      >
+                        {isPreviewing ? 'Viewing' : 'Preview'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onRevert(entry)}
+                        className="px-2 py-1 rounded text-[10px] font-medium text-white/40 hover:text-papaya hover:bg-papaya/10 transition-colors"
+                      >
+                        Revert
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -411,6 +475,9 @@ export default function PresentationViewerPage() {
   const [presenterMode, setPresenterMode] = useState(false)
   const [showAnalytics, setShowAnalytics] = useState(false)
   const [regeneratingSlide, setRegeneratingSlide] = useState<number | null>(null)
+  const [editHistory, setEditHistory] = useState<EditHistoryEntry[]>([])
+  const [previewingId, setPreviewingId] = useState<string | null>(null)
+  const previewSlidesRef = useRef<any[] | null>(null)
 
   // Real-time presence
   const presence = usePresence(id, currentSlide)
@@ -795,6 +862,16 @@ export default function PresentationViewerPage() {
 
     // Snapshot slides before edit for analytics diff
     slidesBeforeEditRef.current = [...presentation.slides]
+
+    // Record in edit history
+    setEditHistory(prev => [{
+      id: crypto.randomUUID(),
+      prompt: activePrompt,
+      scope: activeScope,
+      slideIndex: activeScope === 'slide' ? activeSlideIndex : undefined,
+      timestamp: Date.now(),
+      slidesBefore: [...presentation.slides],
+    }, ...prev].slice(0, 20)) // Keep last 20 edits
 
     const activeScope = (overrides?.scope ?? editScope) as typeof editScope
     const activePrompt = overrides?.prompt ?? editPrompt
@@ -1613,6 +1690,39 @@ Do NOT wrap in {"slides": ...}. Do NOT return the full deck. Do NOT include a do
           commentsLoading={editCommentsLoading}
           flaggedIds={editFlaggedIds}
           onToggleFlag={toggleEditFlag}
+          history={editHistory}
+          previewingId={previewingId}
+          onPreview={(entry) => {
+            if (!entry) {
+              // Stop previewing — restore current slides
+              if (previewSlidesRef.current) {
+                setPresentation(prev => prev ? { ...prev, slides: previewSlidesRef.current! } : prev)
+                previewSlidesRef.current = null
+              }
+              setPreviewingId(null)
+            } else {
+              // Start previewing — save current slides and show the before state
+              if (!previewSlidesRef.current && presentation) {
+                previewSlidesRef.current = [...presentation.slides]
+              }
+              setPresentation(prev => prev ? { ...prev, slides: entry.slidesBefore } : prev)
+              setPreviewingId(entry.id)
+            }
+          }}
+          onRevert={(entry) => {
+            // Revert to the state before this edit
+            setPresentation(prev => prev ? { ...prev, slides: entry.slidesBefore } : prev)
+            previewSlidesRef.current = null
+            setPreviewingId(null)
+            // Save to server
+            fetch(`/api/studio/presentations/${id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ slides: entry.slidesBefore }),
+            }).catch(() => {})
+            // Remove this entry and all entries before it from history
+            setEditHistory(prev => prev.filter(e => e.timestamp > entry.timestamp))
+          }}
         />
       )}
 

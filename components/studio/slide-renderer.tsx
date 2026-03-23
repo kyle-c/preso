@@ -163,6 +163,7 @@ export interface SlideRendererProps {
 
 /** Parse **bold** markers and [text](url) / bare URLs into React nodes */
 function parseBold(text: string): React.ReactNode {
+  if (!text) return null
   const segments = parseInlineContent(text)
   if (segments.length === 1 && segments[0].type === 'text') return text
   return segments.map((seg, i) => {
@@ -174,6 +175,7 @@ function parseBold(text: string): React.ReactNode {
 
 /** Like parseBold, but renders **bold** segments in the accent color (turquoise on dark) */
 function parseBoldAccent(text: string, bg: SlideData['bg']): React.ReactNode {
+  if (!text) return null
   const accentCls = bg === 'dark' ? 'text-turquoise' : bg === 'brand' ? 'text-slate-950' : 'text-evergreen'
   const segments = parseInlineContent(text)
   if (segments.length === 1 && segments[0].type === 'text') return text

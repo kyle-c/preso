@@ -1767,7 +1767,7 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
     )}
 
     <div
-      className="h-screen w-screen overflow-hidden relative select-none"
+      className="h-screen w-screen overflow-hidden relative"
       style={{
         backgroundColor: brandColors.darkBg,
         '--brand-dark-bg': brandColors.darkBg,

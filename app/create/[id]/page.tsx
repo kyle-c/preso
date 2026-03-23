@@ -1014,6 +1014,7 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
         }
 
         const data = await res.json()
+        console.log('[edit slide] Response:', JSON.stringify(data.slide || data.error || data).substring(0, 500))
         if (data.slide && data.slide.type && data.slide.title) {
           const changed = detectChangedFields(presentation.slides[activeSlideIndex], data.slide)
           setEditOverlay(prev => prev ? { ...prev, generating: false, done: true, changedFields: changed } : prev)

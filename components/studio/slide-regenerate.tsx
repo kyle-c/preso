@@ -27,9 +27,11 @@ interface SlideRegenerateProps {
   onRegenerate: (slideIndex: number, feedback: string) => void
   generating?: boolean
   dark?: boolean
+  /** Lock the parent hover state while the popover is open */
+  onOpenChange?: (open: boolean) => void
 }
 
-export function SlideRegenerate({ slideIndex, slideData, totalSlides, prevSlide, nextSlide, onRegenerate, generating, dark }: SlideRegenerateProps) {
+export function SlideRegenerate({ slideIndex, slideData, totalSlides, prevSlide, nextSlide, onRegenerate, generating, dark, onOpenChange }: SlideRegenerateProps) {
   const [expanded, setExpanded] = useState(false)
   const [customFeedback, setCustomFeedback] = useState('')
 
@@ -46,6 +48,7 @@ Generate ONLY the replacement for this single slide. Keep the same bg color (${s
     onRegenerate(slideIndex, context)
     setExpanded(false)
     setCustomFeedback('')
+    onOpenChange?.(false)
   }, [slideIndex, slideData, totalSlides, prevSlide, nextSlide, onRegenerate])
 
   if (generating) {
@@ -64,7 +67,7 @@ Generate ONLY the replacement for this single slide. Keep the same bg color (${s
     <div className="flex flex-col items-end gap-1.5">
       <button
         type="button"
-        onClick={() => setExpanded(!expanded)}
+        onClick={() => { const next = !expanded; setExpanded(next); onOpenChange?.(next) }}
         className={cn(
           'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium transition-all',
           dark

@@ -1381,7 +1381,12 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
   const lockHover = useCallback((locked: boolean) => { hoverLockRef.current = locked; if (locked) setHoverTopRaw(true) }, [])
 
   /* ── Bottom hover zone (bottom 10% of viewport) — for regen/rating controls ── */
-  const [hoverBottom, setHoverBottom] = useState(false)
+  const [hoverBottom, setHoverBottomRaw] = useState(false)
+  const hoverBottomLockRef = useRef(false)
+  const setHoverBottom = useCallback((v: boolean) => {
+    if (!v && hoverBottomLockRef.current) return
+    setHoverBottomRaw(v)
+  }, [])
 
   /* ── Idle detection — hide arrows after 4s of inactivity ── */
   const [idle, setIdle] = useState(false)
@@ -1802,6 +1807,7 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
                 onRegenerate={onSlideRegenerate}
                 generating={regeneratingSlide === safeCurrent}
                 dark={slide.bg === 'dark'}
+                onOpenChange={(isOpen) => { hoverBottomLockRef.current = isOpen; if (isOpen) setHoverBottomRaw(true) }}
               />
             )}
             {ratingSource && (

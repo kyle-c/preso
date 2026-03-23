@@ -84,7 +84,7 @@ const t = {
     title: 'Tell us about yourself',
     nombre: 'First name', segundoNombre: 'Middle name', apellidoPaterno: 'Last name', apellidoMaterno: 'Second last name',
     fechaNac: 'Date of birth', mes: 'Month', dia: 'Day', ano: 'Year',
-    idHelper: 'Please enter your personal information exactly as it appears on your ID.',
+    idHelper: 'Enter your info exactly as it appears on your ID.',
     correo: 'Email address', correoHelper: 'This is where you\'ll receive your transfer receipts.',
     continuar: 'Continue',
     bannerA: 'Verifying your identity is quick and secure — and gives you access to more benefits',
@@ -359,8 +359,8 @@ function VariantF({ lang = 'es' }: { lang?: Lang }) {
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-5">{s.title}</h1>
       </div>
       {/* Full-width mango banner */}
-      <div className="px-6 py-4 flex items-center gap-3 mb-6" style={{ background: '#FFCD9C' }}>
-        <Shield className="w-5 h-5 shrink-0" style={{ color: '#7A4D15' }} />
+      <div className="px-6 py-4 flex items-start gap-3 mb-6" style={{ background: '#FFCD9C' }}>
+        <Shield className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#7A4D15' }} />
         <p className="text-[13px] leading-snug font-medium" style={{ color: '#7A4D15' }}>{s.bannerE}</p>
       </div>
       <div className="px-6 pb-6">

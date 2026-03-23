@@ -63,6 +63,17 @@ export interface SlideData {
   embedUrl?: string
   /** Google Drive video URL — rendered as embedded player. Use format: https://drive.google.com/file/d/{ID}/preview */
   videoUrl?: string
+  /** Optional style overrides — lets the AI control presentation-layer properties */
+  style?: {
+    /** Title font size: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' */
+    titleSize?: string
+    /** Body/content font size */
+    bodySize?: string
+    /** Card content font size */
+    cardSize?: string
+    /** Text alignment: 'left' | 'center' | 'right' */
+    textAlign?: string
+  }
 }
 
 /** Chrome color classes exposed to parent via render props */
@@ -1000,7 +1011,7 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
                         </>
                       ) : (
                         <h3
-                          className={cn('font-display font-extrabold text-lg leading-snug mb-3', c.text)}
+                          className={cn('font-display font-extrabold leading-snug mb-3', slide.style?.cardSize ? `text-${slide.style.cardSize}` : 'text-lg', c.text)}
                           style={card.titleColor ? { color: card.titleColor } : undefined}
                         >
                           {parseBold(card.title)}
@@ -1015,14 +1026,14 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
                                 strokeWidth={1.5}
                                 style={{ color: accentColor }}
                               />
-                              <span className={cn('text-base leading-snug', c.muted)}>
+                              <span className={cn('leading-snug', slide.style?.cardSize ? `text-${slide.style.cardSize}` : 'text-base', c.muted)}>
                                 {parseBold(item)}
                               </span>
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className={cn('text-sm leading-relaxed', c.muted)}>
+                        <p className={cn('leading-relaxed', slide.style?.cardSize ? `text-${slide.style.cardSize}` : 'text-sm', c.muted)}>
                           {parseBold(card.body)}
                         </p>
                       )}

@@ -821,6 +821,12 @@ export default function PresentationViewerPage() {
 - imageCaption: optional caption under image
 - chart: { chartType: "bar"|"horizontal-bar"|"stacked-bar"|"line"|"multi-line"|"area"|"donut"|"scatter"|"radar", data: [{...}], xKey, yKeys, colors?, xLabel?, yLabel? }
 - videoUrl: Google Drive video embed URL. Use the /preview format: "https://drive.google.com/file/d/{FILE_ID}/preview". Works on content, bullets, and two-column slide types. The video renders as a 16:9 embedded player beside the text content. When the user provides a Google Drive share link (e.g. /view?usp=sharing), convert it to /preview format.
+- style: Optional object to control presentation-layer sizing. Fields:
+  * titleSize: Tailwind text size for the title — "sm" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl"
+  * bodySize: Tailwind text size for body/content text
+  * cardSize: Tailwind text size for card titles and card body text (e.g. "xl" for larger card text, "base" for default)
+  * textAlign: "left" | "center" | "right"
+  Use style overrides when the user asks to change font sizes, make text bigger/smaller, or adjust text alignment.
 
 You have FULL creative freedom. You may:
 - Change the slide type entirely (e.g. bullets → cards, content → two-column)

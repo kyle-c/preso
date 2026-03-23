@@ -312,6 +312,30 @@ function EditPanel({
           </>
         ) : (
           <>
+            {/* Quick feedback pills — shown for "Current Slide" scope */}
+            {scope === 'slide' && (
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: 'Too text-heavy', prompt: 'Reduce the word count by 50%. Use bullet points instead of paragraphs.' },
+                  { label: 'More visual', prompt: 'Add an illustration and make the layout more visual. Less text, more impact.' },
+                  { label: 'Make it a chart', prompt: 'Convert the data/metrics on this slide into a chart visualization.' },
+                  { label: 'Simplify', prompt: 'Simplify this slide. One key message, fewer words, bigger type.' },
+                  { label: 'Split into 2', prompt: 'Split this slide into two focused slides, each with one clear idea.' },
+                  { label: 'More detail', prompt: 'Add more depth and detail to this slide. Include supporting data or examples.' },
+                ].map((fb) => (
+                  <button
+                    key={fb.label}
+                    type="button"
+                    onClick={() => { onPromptChange(fb.prompt); setTimeout(onGenerate, 100) }}
+                    disabled={generating}
+                    className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80 transition-colors disabled:opacity-30"
+                  >
+                    {fb.label}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <textarea
               ref={promptTextareaRef}
               value={editPrompt}
@@ -1377,8 +1401,6 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
         document={presentation.document}
         outline={presentation.outline}
         ratingSource={presentation.id}
-        onSlideRegenerate={handleSlideRegenerate}
-        regeneratingSlide={regeneratingSlide}
         topLeftExtra={(chrome: ChromeColors) => (
           <div
             className="transition-opacity duration-300"

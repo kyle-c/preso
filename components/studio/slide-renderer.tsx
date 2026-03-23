@@ -12,7 +12,7 @@ import { SlidePdfOverlay } from '@/components/slide-pdf-overlay'
 import { useComments, SlideCommentLayer } from '@/components/slide-comments'
 import { SlideChartViz } from './slide-chart'
 import { SlideRating } from './slide-rating'
-import { SlideRegenerate } from './slide-regenerate'
+// SlideRegenerate removed — functionality merged into the Edit panel
 import { ViewModeToggle, OutlineView, DocumentView, DocumentSkeleton, type ViewMode, type OutlineEditPanelProps, type SectionFilesMap } from './deck-views'
 import type { UploadedFile } from './file-uploader'
 import type { PresentationDocument, PresentationOutline } from '@/lib/studio-db'
@@ -1792,34 +1792,19 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
           <SlideFooter num={safeCurrent + 1} total={total} bg={slide.bg} deckTitle={title} />
         </div>
 
-        {/* Slide regenerate + rating — bottom-right, visible on bottom 10% hover */}
-        {(ratingSource || onSlideRegenerate) && (
+        {/* Slide rating — bottom-right, visible on bottom 10% hover */}
+        {ratingSource && (
           <div
-            className="absolute bottom-12 right-6 z-[60] transition-opacity duration-200 flex items-end gap-3"
+            className="absolute bottom-12 right-6 z-[60] transition-opacity duration-200"
             style={{ opacity: hoverBottom ? 1 : 0, pointerEvents: 'auto' }}
             onMouseEnter={() => setHoverBottom(true)}
           >
-            {onSlideRegenerate && !sharePermission && (
-              <SlideRegenerate
-                slideIndex={safeCurrent}
-                slideData={slide}
-                totalSlides={total}
-                prevSlide={safeCurrent > 0 ? slides[safeCurrent - 1] : undefined}
-                nextSlide={safeCurrent < total - 1 ? slides[safeCurrent + 1] : undefined}
-                onRegenerate={onSlideRegenerate}
-                generating={regeneratingSlide === safeCurrent}
-                dark={slide.bg === 'dark'}
-                onOpenChange={(isOpen) => { hoverBottomLockRef.current = isOpen; if (isOpen) setHoverBottomRaw(true) }}
-              />
-            )}
-            {ratingSource && (
-              <SlideRating
-                slide={slide}
-                slideIndex={safeCurrent}
-                source={ratingSource}
-                dark={slide.bg === 'dark'}
-              />
-            )}
+            <SlideRating
+              slide={slide}
+              slideIndex={safeCurrent}
+              source={ratingSource}
+              dark={slide.bg === 'dark'}
+            />
           </div>
         )}
 

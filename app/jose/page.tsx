@@ -421,8 +421,8 @@ function SlideFirst90() {
 function SlideTools() {
   const tools = [
     { name: 'Figma', desc: 'Design files, prototypes, and the design\u00A0system', category: 'Design' },
-    { name: 'Notion', desc: 'Research repos, meeting notes, and\u00A0documentation', category: 'Knowledge' },
-    { name: 'Slack', desc: '#design, #ux-research, #product-feedback', category: 'Communication' },
+    { name: 'Notion: UX Control Tower', desc: 'Research repos, meeting notes, and\u00A0documentation', category: 'Knowledge' },
+    { name: 'Slack', desc: '#design-crew, #ux-research, #product-feedback', category: 'Communication' },
     { name: 'ClickUp', desc: 'Project tracking and sprint\u00A0management', category: 'Project Management' },
     { name: 'Research Stack', desc: 'You tell us. What do we\u00A0need?', category: 'Research' },
   ]
@@ -614,10 +614,10 @@ function SlideLetsGo() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <span className="inline-flex items-center gap-2 rounded-full bg-turquoise/10 border border-turquoise/20 px-4 py-2 text-sm font-medium text-turquoise">
-              <Heart className="h-4 w-4" /> #design on Slack
+              <Heart className="h-4 w-4" /> #design-crew on Slack
             </span>
             <span className="inline-flex items-center gap-2 rounded-full bg-turquoise/10 border border-turquoise/20 px-4 py-2 text-sm font-medium text-turquoise">
-              <Users className="h-4 w-4" /> Maria Chen (manager)
+              <Users className="h-4 w-4" /> Kyle Cooney (manager)
             </span>
             <span className="inline-flex items-center gap-2 rounded-full bg-turquoise/10 border border-turquoise/20 px-4 py-2 text-sm font-medium text-turquoise">
               <BookOpen className="h-4 w-4" /> Notion: Research Hub

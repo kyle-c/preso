@@ -1109,8 +1109,41 @@ Do NOT wrap in {"slides": ...}. Do NOT return the full deck. Do NOT include a do
 
       // Final update
       console.log('[edit] Accumulated response length:', accumulated.length, 'first 200 chars:', accumulated.slice(0, 200))
-      const finalParsed = parseIncrementalSlides(accumulated)
+      let finalParsed = parseIncrementalSlides(accumulated)
       console.log('[edit] Parsed slides:', finalParsed.length)
+
+      // Fallback: if incremental parser failed, try direct JSON parse
+      if (finalParsed.length === 0 && accumulated.length > 10) {
+        console.log('[edit] Trying fallback parse...')
+        try {
+          // Strip markdown fences if present
+          const clean = accumulated.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim()
+          const parsed = JSON.parse(clean)
+          if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].type) {
+            finalParsed = parsed
+            console.log('[edit] Fallback parse succeeded:', finalParsed.length, 'slides')
+          } else if (parsed.type && parsed.title) {
+            finalParsed = [parsed]
+            console.log('[edit] Fallback parse found single slide')
+          }
+        } catch {
+          // Try finding JSON array in the text
+          const match = accumulated.match(/\[[\s\S]*\{[\s\S]*"type"[\s\S]*"title"[\s\S]*\}[\s\S]*\]/)
+          if (match) {
+            try {
+              const parsed = JSON.parse(match[0])
+              if (Array.isArray(parsed) && parsed[0]?.type) {
+                finalParsed = parsed
+                console.log('[edit] Regex fallback succeeded:', finalParsed.length, 'slides')
+              }
+            } catch {}
+          }
+        }
+        if (finalParsed.length === 0) {
+          console.warn('[edit] All parsers failed. Raw response:', accumulated.slice(0, 500))
+        }
+      }
+
       if (finalParsed.length > 0) {
         let finalSlides: typeof finalParsed
 

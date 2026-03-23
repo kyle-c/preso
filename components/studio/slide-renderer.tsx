@@ -1380,6 +1380,9 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
   }, [])
   const lockHover = useCallback((locked: boolean) => { hoverLockRef.current = locked; if (locked) setHoverTopRaw(true) }, [])
 
+  /* ── Bottom hover zone (bottom 10% of viewport) — for regen/rating controls ── */
+  const [hoverBottom, setHoverBottom] = useState(false)
+
   /* ── Idle detection — hide arrows after 4s of inactivity ── */
   const [idle, setIdle] = useState(false)
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -1751,8 +1754,10 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
       onMouseMove={(e) => {
         const inTop = e.clientY < window.innerHeight * 0.1
         if (inTop !== hoverTop) setHoverTop(inTop)
+        const inBottom = e.clientY > window.innerHeight * 0.9
+        if (inBottom !== hoverBottom) setHoverBottom(inBottom)
       }}
-      onMouseLeave={() => setHoverTop(false)}
+      onMouseLeave={() => { setHoverTop(false); setHoverBottom(false) }}
     >
       {/* Progress bar */}
       <div className={cn('absolute top-0 inset-x-0 h-1 z-50 transition-colors duration-500', chrome.trackBg)}>
@@ -1780,12 +1785,12 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
           <SlideFooter num={safeCurrent + 1} total={total} bg={slide.bg} deckTitle={title} />
         </div>
 
-        {/* Slide regenerate + rating — bottom-right, hover-visible */}
+        {/* Slide regenerate + rating — bottom-right, visible on bottom 10% hover */}
         {(ratingSource || onSlideRegenerate) && (
           <div
             className="absolute bottom-12 right-6 z-[60] transition-opacity duration-200 flex items-end gap-3"
-            style={{ opacity: hoverTop ? 1 : 0, pointerEvents: hoverTop ? 'auto' : 'none' }}
-            onMouseEnter={() => setHoverTop(true)}
+            style={{ opacity: hoverBottom ? 1 : 0, pointerEvents: 'auto' }}
+            onMouseEnter={() => setHoverBottom(true)}
           >
             {onSlideRegenerate && !sharePermission && (
               <SlideRegenerate

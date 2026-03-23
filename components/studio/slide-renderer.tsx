@@ -172,6 +172,14 @@ export interface SlideRendererProps {
 /*                     HELPER UTILITIES                       */
 /* ═══════════════════════════════════════════════════════════ */
 
+/** Resolve a style override from the slide's style object, falling back to a default Tailwind class */
+function sz(slide: { style?: SlideData['style'] }, key: 'titleSize' | 'bodySize' | 'cardSize', fallback: string): string {
+  const val = slide.style?.[key]
+  if (!val) return fallback
+  // Map the value to a Tailwind text-* class
+  return `text-${val}`
+}
+
 /** Parse **bold** markers and [text](url) / bare URLs into React nodes */
 function parseBold(text: string): React.ReactNode {
   if (!text) return null
@@ -420,7 +428,7 @@ function SlideTitle({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
             {parseBold(slide.title)}
           </h1>
           {slide.subtitle && (
-            <p data-slide-field="subtitle" className={cn('mt-5 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl', c.muted)}>
+            <p data-slide-field="subtitle" className={cn('mt-5 leading-relaxed max-w-2xl', sz(slide, 'bodySize', 'text-lg sm:text-xl lg:text-2xl'), c.muted)}>
               {parseBold(slide.subtitle)}
             </p>
           )}
@@ -443,7 +451,7 @@ function SlideSection({ slide, slideIndex }: { slide: SlideData; slideIndex: num
             {parseBold(slide.title)}
           </h1>
           {slide.subtitle && (
-            <p data-slide-field="subtitle" className={cn('mt-5 text-lg sm:text-xl lg:text-2xl leading-relaxed', c.muted)}>
+            <p data-slide-field="subtitle" className={cn('mt-5 leading-relaxed', sz(slide, 'bodySize', 'text-lg sm:text-xl lg:text-2xl'), c.muted)}>
               {parseBold(slide.subtitle)}
             </p>
           )}
@@ -470,7 +478,7 @@ function SlideContent({ slide, slideIndex }: { slide: SlideData; slideIndex: num
             {parseBold(slide.title)}
           </h1>
           {slide.body && (
-            <p data-slide-field="body" className={cn('leading-relaxed line-clamp-6', c.muted, hasSidebar ? 'text-base sm:text-lg lg:text-xl max-w-xl' : 'text-lg sm:text-xl lg:text-2xl max-w-3xl')}>
+            <p data-slide-field="body" className={cn('leading-relaxed line-clamp-6', c.muted, slide.style?.bodySize ? `text-${slide.style.bodySize} max-w-3xl` : hasSidebar ? 'text-base sm:text-lg lg:text-xl max-w-xl' : 'text-lg sm:text-xl lg:text-2xl max-w-3xl')}>
               {parseBold(slide.body)}
             </p>
           )}
@@ -967,7 +975,7 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
               {parseBold(slide.title)}
             </h1>
             {slide.subtitle && (
-              <p data-slide-field="subtitle" className={cn('text-base sm:text-lg leading-relaxed mb-8 -mt-4 text-center max-w-2xl mx-auto', c.muted)}>
+              <p data-slide-field="subtitle" className={cn('leading-relaxed mb-8 -mt-4 text-center max-w-2xl mx-auto', sz(slide, 'bodySize', 'text-base sm:text-lg'), c.muted)}>
                 {parseBold(slide.subtitle)}
               </p>
             )}
@@ -1062,7 +1070,7 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
           {parseBold(slide.title)}
         </h1>
         {slide.subtitle && (
-          <p data-slide-field="subtitle" className={cn('text-base sm:text-lg leading-relaxed mb-6 text-center max-w-2xl', c.muted)}>
+          <p data-slide-field="subtitle" className={cn('leading-relaxed mb-6 text-center max-w-2xl', sz(slide, 'bodySize', 'text-base sm:text-lg'), c.muted)}>
             {parseBold(slide.subtitle)}
           </p>
         )}
@@ -1275,7 +1283,7 @@ function SlideClosing({ slide, slideIndex }: { slide: SlideData; slideIndex: num
             {parseBold(slide.title)}
           </h1>
           {slide.body && (
-            <p data-slide-field="body" className={cn('mt-5 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl line-clamp-5', c.muted)}>
+            <p data-slide-field="body" className={cn('mt-5 leading-relaxed max-w-2xl line-clamp-5', sz(slide, 'bodySize', 'text-lg sm:text-xl lg:text-2xl'), c.muted)}>
               {parseBold(slide.body)}
             </p>
           )}
@@ -1326,7 +1334,7 @@ function SlideChart({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
           {parseBold(slide.title)}
         </h2>
         {slide.body && (
-          <p data-slide-field="body" className={cn('text-sm sm:text-base leading-relaxed line-clamp-4', c.muted)}>
+          <p data-slide-field="body" className={cn('leading-relaxed line-clamp-4', sz(slide, 'bodySize', 'text-sm sm:text-base'), c.muted)}>
             {parseBold(slide.body)}
           </p>
         )}

@@ -2095,7 +2095,7 @@ Guidelines:
             emit({ error: `${body.editTarget} edit failed` })
           }
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-          closeStream()
+          controller.close()
         },
       })
       return new Response(stream, {
@@ -2179,7 +2179,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
             emit({ error: 'Document generation failed' })
           }
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-          closeStream()
+          controller.close()
         },
       })
       return new Response(stream, {
@@ -2303,7 +2303,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
               emit({ error: `LLM call failed: ${err instanceof Error ? err.message : String(err)}` })
               clearInterval(keepalive)
               controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-              closeStream()
+              controller.close()
               return
             }
             let doc: any
@@ -2315,7 +2315,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
               emit({ error: 'Failed to parse LLM response as JSON' })
               clearInterval(keepalive)
               controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-              closeStream()
+              controller.close()
               return
             }
 
@@ -2383,7 +2383,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
             clearInterval(keepalive)
           }
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-          closeStream()
+          controller.close()
         },
       })
       return new Response(stream, {

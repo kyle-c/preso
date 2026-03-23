@@ -359,9 +359,9 @@ function VariantF({ lang = 'es' }: { lang?: Lang }) {
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-5">{s.title}</h1>
       </div>
       {/* Full-width mango banner */}
-      <div className="px-6 py-4 flex items-center gap-3 mb-6" style={{ background: '#F19D38' }}>
-        <Shield className="w-5 h-5 text-white shrink-0" />
-        <p className="text-[13px] text-white leading-snug font-medium">{s.bannerE}</p>
+      <div className="px-6 py-4 flex items-center gap-3 mb-6" style={{ background: '#FFCD9C' }}>
+        <Shield className="w-5 h-5 shrink-0" style={{ color: '#7A4D15' }} />
+        <p className="text-[13px] leading-snug font-medium" style={{ color: '#7A4D15' }}>{s.bannerE}</p>
       </div>
       <div className="px-6 pb-6">
         <div className="space-y-4">

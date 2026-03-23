@@ -1960,7 +1960,7 @@ function CanvasDesktopCard({
         onClick={() => onSelect(isSelected ? '' : uid)}
       >
         <div
-          className="relative overflow-hidden shadow-2xl transition-all duration-150 bg-stone"
+          className="relative overflow-hidden shadow-2xl transition-all duration-150 bg-white"
           style={{
             width: DESKTOP_CARD_W,
             height: DESKTOP_CARD_H,
@@ -1970,26 +1970,18 @@ function CanvasDesktopCard({
               : '0 8px 32px rgba(0,0,0,0.5)',
           }}
         >
-          {/* Centered phone content inside desktop card */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div
-              className="relative overflow-hidden pointer-events-none"
-              style={{
-                width: Math.round(390 * DESKTOP_SCALE),
-                height: Math.round(844 * DESKTOP_SCALE),
-                borderRadius: Math.round(52 * DESKTOP_SCALE),
-                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-              }}
-            >
-              <div
-                className="absolute top-0 left-0"
-                style={{ transform: `scale(${DESKTOP_SCALE})`, transformOrigin: 'top left', width: 390, height: 844 }}
-              >
-                <LangContext.Provider value={editableContent[language]}>
-                  <PhoneFrame progress={progress}>{children}</PhoneFrame>
-                </LangContext.Provider>
+          {/* Desktop-native layout — content rendered directly without phone frame */}
+          <div
+            className="absolute top-0 left-0 pointer-events-none"
+            style={{ transform: `scale(${DESKTOP_SCALE})`, transformOrigin: 'top left', width: Math.round(DESKTOP_CARD_W / DESKTOP_SCALE), height: Math.round(DESKTOP_CARD_H / DESKTOP_SCALE) }}
+          >
+            <LangContext.Provider value={editableContent[language]}>
+              <div className="w-full h-full flex justify-center bg-white">
+                <div style={{ width: 480 }}>
+                  {children}
+                </div>
               </div>
-            </div>
+            </LangContext.Provider>
           </div>
         </div>
         <p className={`text-[10px] font-medium tracking-wide transition-colors ${isSelected ? 'text-white/70' : 'text-white/35'}`}>

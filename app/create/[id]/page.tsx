@@ -1042,7 +1042,6 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
       setEditGenerating(false)
       setEditPrompt('')
       return // Skip the streaming path below
-Do NOT wrap in {"slides": ...}. Do NOT return the full deck. Do NOT include a document object.`
     } else {
       if (!activePrompt.trim()) return
       fullPrompt = `${EDIT_SCHEMA}\n\nHere is the current presentation:\n${JSON.stringify(presentation.slides, null, 2)}\n\n${activePrompt.trim()}\n\nReturn the updated full deck as a JSON array of slide objects. Do NOT wrap in {"slides": ...}. Do NOT include a document object.`

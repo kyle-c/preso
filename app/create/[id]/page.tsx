@@ -188,6 +188,95 @@ function CommentsList({
 
 /* ─────────────────────── Edit Panel ─────────────────────── */
 
+function ChangeHistory({ history, currentSlide, previewingId, onPreview, onRevert }: {
+  history: EditHistoryEntry[]
+  currentSlide: number
+  previewingId: string | null
+  onPreview: (entry: EditHistoryEntry | null) => void
+  onRevert: (entry: EditHistoryEntry) => void
+}) {
+  const [filter, setFilter] = useState<'slide' | 'all'>('slide')
+
+  const filtered = filter === 'slide'
+    ? history.filter(e => e.scope === 'slide' && e.slideIndex === currentSlide)
+    : history
+
+  return (
+    <div className="mt-2 space-y-1">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] uppercase tracking-widest text-white/30">Change History</p>
+        <div className="flex gap-0.5 p-0.5 bg-white/5 rounded-md">
+          <button
+            type="button"
+            onClick={() => setFilter('slide')}
+            className={`px-2 py-0.5 rounded text-[9px] font-medium transition-colors ${
+              filter === 'slide' ? 'bg-white/10 text-white/80' : 'text-white/30 hover:text-white/50'
+            }`}
+          >
+            This Slide
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilter('all')}
+            className={`px-2 py-0.5 rounded text-[9px] font-medium transition-colors ${
+              filter === 'all' ? 'bg-white/10 text-white/80' : 'text-white/30 hover:text-white/50'
+            }`}
+          >
+            All ({history.length})
+          </button>
+        </div>
+      </div>
+
+      {filtered.length === 0 ? (
+        <p className="text-[11px] text-white/20 text-center py-3">
+          {filter === 'slide' ? `No edits to slide ${currentSlide + 1} yet` : 'No edit history yet'}
+        </p>
+      ) : (
+        filtered.map((entry) => {
+          const isPreviewing = previewingId === entry.id
+          const timeAgo = Math.round((Date.now() - entry.timestamp) / 60000)
+          const timeLabel = timeAgo < 1 ? 'just now' : timeAgo < 60 ? `${timeAgo}m ago` : `${Math.round(timeAgo / 60)}h ago`
+          return (
+            <div
+              key={entry.id}
+              className={`rounded-lg px-3 py-2 text-xs transition-colors ${
+                isPreviewing ? 'bg-turquoise/10 border border-turquoise/30' : 'bg-white/5 hover:bg-white/10'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <p className="text-white/70 line-clamp-2">{entry.prompt}</p>
+                  <p className="text-[10px] text-white/30 mt-0.5">
+                    {entry.scope === 'slide' ? `Slide ${(entry.slideIndex ?? 0) + 1}` : entry.scope === 'comments' ? 'Comments' : 'Full deck'} · {timeLabel}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => onPreview(isPreviewing ? null : entry)}
+                    className={`px-2 py-1 rounded text-[10px] font-medium transition-colors ${
+                      isPreviewing ? 'bg-turquoise/20 text-turquoise' : 'text-white/40 hover:text-white/70 hover:bg-white/10'
+                    }`}
+                  >
+                    {isPreviewing ? 'Viewing' : 'Preview'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onRevert(entry)}
+                    className="px-2 py-1 rounded text-[10px] font-medium text-white/40 hover:text-papaya hover:bg-papaya/10 transition-colors"
+                  >
+                    Revert
+                  </button>
+                </div>
+              </div>
+            </div>
+          )
+        })
+      )}
+    </div>
+  )
+}
+
 interface EditHistoryEntry {
   id: string
   prompt: string
@@ -452,49 +541,13 @@ function EditPanel({
 
         {/* Change history */}
         {history.length > 0 && (
-          <div className="mt-2 space-y-1">
-            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-2">Change History</p>
-            {history.map((entry) => {
-              const isPreviewing = previewingId === entry.id
-              const timeAgo = Math.round((Date.now() - entry.timestamp) / 60000)
-              const timeLabel = timeAgo < 1 ? 'just now' : timeAgo < 60 ? `${timeAgo}m ago` : `${Math.round(timeAgo / 60)}h ago`
-              return (
-                <div
-                  key={entry.id}
-                  className={`rounded-lg px-3 py-2 text-xs transition-colors ${
-                    isPreviewing ? 'bg-turquoise/10 border border-turquoise/30' : 'bg-white/5 hover:bg-white/10'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-white/70 line-clamp-2">{entry.prompt}</p>
-                      <p className="text-[10px] text-white/30 mt-0.5">
-                        {entry.scope === 'slide' ? `Slide ${(entry.slideIndex ?? 0) + 1}` : entry.scope === 'comments' ? 'Comments' : 'Full deck'} · {timeLabel}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => onPreview(isPreviewing ? null : entry)}
-                        className={`px-2 py-1 rounded text-[10px] font-medium transition-colors ${
-                          isPreviewing ? 'bg-turquoise/20 text-turquoise' : 'text-white/40 hover:text-white/70 hover:bg-white/10'
-                        }`}
-                      >
-                        {isPreviewing ? 'Viewing' : 'Preview'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onRevert(entry)}
-                        className="px-2 py-1 rounded text-[10px] font-medium text-white/40 hover:text-papaya hover:bg-papaya/10 transition-colors"
-                      >
-                        Revert
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+          <ChangeHistory
+            history={history}
+            currentSlide={currentSlide}
+            previewingId={previewingId}
+            onPreview={onPreview}
+            onRevert={onRevert}
+          />
         )}
       </div>
     </div>

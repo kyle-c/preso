@@ -909,6 +909,281 @@ function SuccessScreen() {
   )
 }
 
+// ─── ACH Error screens ──────────────────────────────────────────────────────
+
+function AchErrorScreen({ variant }: { variant: 'identity' | 'bankAuth' | 'insufficient' }) {
+  const t = useT()
+  const titles = { identity: t.achError.identityTitle, bankAuth: t.achError.bankAuthTitle, insufficient: t.achError.insufficientTitle }
+  const bodies = { identity: t.achError.identityBody, bankAuth: t.achError.bankAuthBody, insufficient: t.achError.insufficientBody }
+  return (
+    <div className="flex flex-col h-full px-5 pb-8">
+      <ScreenHeader />
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <div className="flex justify-center py-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/illustrations/Error.svg" alt="" className="w-32 h-28 object-contain" />
+        </div>
+        <div className="text-center mb-8 px-2">
+          <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-3">
+            {titles[variant]}
+          </h1>
+          <p className="text-[14px] text-slate/60 leading-relaxed">{bodies[variant]}</p>
+        </div>
+      </div>
+      <Button size="lg" className="w-full text-[15px]">{t.achError.cta}</Button>
+    </div>
+  )
+}
+
+// ─── Paused Payments screens ─────────────────────────────────────────────────
+
+function PausedReviewScreen() {
+  const t = useT()
+  return (
+    <div className="flex flex-col h-full px-5 pb-8">
+      <ScreenHeader />
+      <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-2">
+        {t.pausedPayments.reviewTitle}
+      </h1>
+      <p className="text-[14px] text-mocha mb-5 leading-snug">{t.pausedPayments.reviewBody}</p>
+
+      <div className="bg-white rounded-2xl border border-slate/15 overflow-hidden divide-y divide-slate/10 mb-5">
+        <div className="px-4 py-3.5 flex items-center justify-between">
+          <span className="text-[13px] text-mocha">Tu envias</span>
+          <span className="font-bold text-[16px] text-slate">USD $30.00</span>
+        </div>
+        <div className="px-4 py-3.5 flex items-center justify-between">
+          <span className="text-[13px] text-mocha">Tu beneficiario recibe</span>
+          <span className="font-bold text-[16px] text-slate">MXN $500.00</span>
+        </div>
+        <div className="px-4 py-3.5 flex items-center justify-between">
+          <span className="text-[13px] text-mocha">Payment method</span>
+          <div className="flex items-center gap-2">
+            <CreditCard className="h-4 w-4 text-slate/40" />
+            <span className="font-semibold text-[14px] text-slate">**** 0010</span>
+            <span className="text-[13px] font-semibold text-mocha underline decoration-mocha underline-offset-4 ml-1">Cambiar</span>
+          </div>
+        </div>
+        <div className="px-4 py-3.5 flex items-center justify-between">
+          <span className="text-[13px] text-mocha">Monto + Comisiones</span>
+          <div className="flex items-center gap-1">
+            <span className="font-semibold text-[14px] text-slate">USD 102.99</span>
+            <ChevronDown className="h-4 w-4 text-slate/40" />
+          </div>
+        </div>
+      </div>
+
+      <Button size="lg" className="w-full text-[15px]">Enviar dinero</Button>
+    </div>
+  )
+}
+
+function PausedProcessingScreen() {
+  const t = useT()
+  return (
+    <div className="flex flex-col h-full px-5 pb-8">
+      <ScreenHeader />
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <div className="flex justify-center py-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/illustrations/Attention.svg" alt="" className="w-32 h-28 object-contain" />
+        </div>
+        <div className="text-center mb-8 px-2">
+          <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-3">
+            {t.pausedPayments.processingTitle}
+          </h1>
+          <p className="text-[14px] text-slate/60 leading-relaxed">
+            {t.pausedPayments.processingBody.split('no se ha hecho ningún cargo').length > 1 ? (
+              <>
+                {t.pausedPayments.processingBody.split('no se ha hecho ningún cargo')[0]}
+                <span className="font-bold">no se ha hecho ningún cargo</span>
+                {t.pausedPayments.processingBody.split('no se ha hecho ningún cargo')[1]}
+              </>
+            ) : (
+              t.pausedPayments.processingBody
+            )}
+          </p>
+        </div>
+      </div>
+      <Button size="lg" className="w-full text-[15px]">{t.pausedPayments.cta}</Button>
+    </div>
+  )
+}
+
+function PausedWhatsAppScreen({ variant }: { variant: 'declined' | 'approved' }) {
+  const t = useT()
+  return (
+    <div className="flex flex-col h-full">
+      {/* WhatsApp header */}
+      <div className="flex items-center gap-3 px-4 py-3 bg-[#075E54]" style={{ marginTop: 0 }}>
+        <svg className="h-5 w-5 text-white flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+        <div className="h-8 w-8 rounded-full bg-turquoise flex items-center justify-center flex-shrink-0">
+          <FelixLogo className="h-4 text-slate" />
+        </div>
+        <span className="text-[16px] font-semibold text-white">Felix</span>
+      </div>
+
+      {/* Chat area */}
+      <div className="flex-1 bg-[#ECE5DD] px-4 py-4 overflow-y-auto space-y-3">
+        {/* Felix message: link */}
+        <div className="max-w-[85%]">
+          <div className="bg-white rounded-xl rounded-tl-none px-3.5 py-2.5 shadow-sm">
+            <p className="text-[13px] text-slate leading-snug">{t.pausedPayments.whatsappValidating}</p>
+            <p className="text-[13px] text-blueberry font-semibold mt-1.5 underline underline-offset-2">Paga aqui</p>
+            <p className="text-[10px] text-mocha/50 text-right mt-1">10:30 AM</p>
+          </div>
+        </div>
+
+        {/* Felix message: in process */}
+        <div className="max-w-[85%]">
+          <div className="bg-white rounded-xl rounded-tl-none px-3.5 py-2.5 shadow-sm">
+            <p className="text-[13px] text-slate leading-snug">{t.pausedPayments.whatsappInProcess}</p>
+            <p className="text-[10px] text-mocha/50 text-right mt-1">10:35 AM</p>
+          </div>
+        </div>
+
+        {/* Felix message: result */}
+        <div className="max-w-[85%]">
+          <div className={`rounded-xl rounded-tl-none px-3.5 py-2.5 shadow-sm ${variant === 'declined' ? 'bg-white' : 'bg-[#DCF8C6]'}`}>
+            <p className="text-[13px] text-slate leading-snug">
+              {variant === 'declined' ? t.pausedPayments.whatsappDeclined : t.pausedPayments.whatsappApproved}
+            </p>
+            <p className="text-[10px] text-mocha/50 text-right mt-1">10:42 AM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Penny Test screens ──────────────────────────────────────────────────────
+
+function PennyCardDetailsScreen() {
+  const t = useT()
+  const fieldClass = '!rounded-2xl bg-white'
+  const labelClass = 'bg-white text-mocha'
+
+  return (
+    <div className="flex flex-col h-full">
+      <ScreenHeader />
+      <div className="flex-1 px-6 pb-6 overflow-y-auto">
+        <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-6">
+          {t.pennyTest.cardDetailsTitle}
+        </h1>
+        <div className="space-y-4">
+          <FloatingInput label="Nombre completo en la tarjeta *" className={fieldClass} labelClassName={labelClass} defaultValue="Patricia Caballero" />
+          <FloatingInput label="Numero de tarjeta *" className={fieldClass} labelClassName={labelClass} defaultValue="4242 4242 4242 4242" />
+          <div className="flex gap-3">
+            <FloatingInput label="MM / YY *" className={`${fieldClass} flex-1`} labelClassName={labelClass} defaultValue="12/28" />
+            <FloatingInput label="CVV *" className={`${fieldClass} w-24`} labelClassName={labelClass} defaultValue="123" />
+          </div>
+        </div>
+        <div className="pt-8">
+          <Button size="lg" className="w-full text-[15px]">{t.common.continue}</Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PennyVerifyIntroScreen() {
+  const t = useT()
+  return (
+    <div className="flex flex-col h-full">
+      <ScreenHeader />
+      <div className="flex-1 px-6 pb-6 overflow-y-auto">
+        <div className="flex justify-center py-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/illustrations/Hand - Card 1.svg" alt="" className="w-32 h-28 object-contain" />
+        </div>
+        <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-4 text-center">
+          {t.pennyTest.verifyIntroTitle}
+        </h1>
+        <div className="space-y-4 mb-5">
+          <div className="flex gap-3 items-start">
+            <div className="h-6 w-6 rounded-full bg-turquoise/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-[11px] font-bold text-slate">1</span>
+            </div>
+            <p className="text-[14px] text-mocha leading-snug">{t.pennyTest.verifyIntroStep1}</p>
+          </div>
+          <div className="flex gap-3 items-start">
+            <div className="h-6 w-6 rounded-full bg-turquoise/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-[11px] font-bold text-slate">2</span>
+            </div>
+            <p className="text-[14px] text-mocha leading-snug">{t.pennyTest.verifyIntroStep2}</p>
+          </div>
+        </div>
+        <div className="rounded-xl border border-blueberry/20 bg-blueberry/5 px-3.5 py-3 flex gap-2.5 items-start mb-6">
+          <Info className="h-4 w-4 text-blueberry/50 mt-0.5 flex-shrink-0" />
+          <p className="text-[13px] text-blueberry/70 leading-snug">{t.pennyTest.verifyIntroNote}</p>
+        </div>
+        <div className="space-y-2.5">
+          <Button size="lg" className="w-full text-[15px]">{t.common.continue}</Button>
+          <Button variant="outline" size="lg" className="w-full text-[15px]">{t.pennyTest.verifyIntroSkip}</Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PennyVerifyAmountScreen({ variant }: { variant: 'normal' | 'error' }) {
+  const t = useT()
+  return (
+    <div className="flex flex-col h-full">
+      <ScreenHeader />
+      <div className="flex-1 px-6 pb-6 overflow-y-auto">
+        <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-2">
+          {t.pennyTest.verifyAmountTitle}
+        </h1>
+        <p className="text-[14px] text-mocha mb-6 leading-snug">{t.pennyTest.verifyAmountBody}</p>
+
+        <div className="mb-2">
+          <div className={`h-14 w-full rounded-2xl border bg-white px-4 flex items-center text-base ${
+            variant === 'error' ? 'border-destructive ring-[3px] ring-destructive/20' : 'border-slate/15'
+          }`}>
+            <span className="text-mocha/40 mr-2">$</span>
+            <span className="text-slate">0.23</span>
+          </div>
+          {variant === 'error' && (
+            <p className="text-[12px] text-destructive mt-1.5 px-1">{t.pennyTest.verifyAmountRetry}</p>
+          )}
+        </div>
+
+        <div className="flex gap-2.5 items-start mt-4 mb-6">
+          <Info className="h-4 w-4 text-mocha/40 mt-0.5 flex-shrink-0" />
+          <p className="text-[12px] text-mocha leading-snug">{t.pennyTest.verifyAmountHint}</p>
+        </div>
+
+        <Button size="lg" className="w-full text-[15px]">{t.pennyTest.verifyCta}</Button>
+      </div>
+    </div>
+  )
+}
+
+function PennyErrorScreen({ variant }: { variant: 'identity' | 'bank' | 'funds' }) {
+  const t = useT()
+  const titles = { identity: t.pennyTest.errorIdentityTitle, bank: t.pennyTest.errorBankTitle, funds: t.pennyTest.errorFundsTitle }
+  const bodies = { identity: t.pennyTest.errorIdentityBody, bank: t.pennyTest.errorBankBody, funds: t.pennyTest.errorFundsBody }
+  return (
+    <div className="flex flex-col h-full px-5 pb-8">
+      <ScreenHeader />
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <div className="flex justify-center py-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/illustrations/Error.svg" alt="" className="w-32 h-28 object-contain" />
+        </div>
+        <div className="text-center mb-8 px-2">
+          <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-3">
+            {titles[variant]}
+          </h1>
+          <p className="text-[14px] text-slate/60 leading-relaxed">{bodies[variant]}</p>
+        </div>
+      </div>
+      <Button size="lg" className="w-full text-[15px]">{t.pennyTest.errorCta}</Button>
+    </div>
+  )
+}
+
 // ─── Bank flow screens ───────────────────────────────────────────────────────
 
 function BankConsentScreen({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
@@ -2061,6 +2336,35 @@ function FlowCanvasOverlay({
         mp('Review (Bank)', 'reviewBank', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="bank" selectedStore="" />),
         mp('Review (Cash)', 'reviewCash', 100, <ReviewScreen onNext={() => {}} onBack={() => {}} onChangeContextual={() => {}} onChangePaymentMethod={() => {}} paymentMethod="cash" selectedStore="walgreens" />),
         mp('Success', 'success', 100, <SuccessScreen />),
+      ],
+    },
+    {
+      id: 'achErrors', label: 'ACH Error States', dot: '#f87171',
+      screens: [
+        mp('Identity Error', 'achIdentity', 33, <AchErrorScreen variant="identity" />),
+        mp('Bank Auth Error', 'achBankAuth', 66, <AchErrorScreen variant="bankAuth" />),
+        mp('Insufficient Funds', 'achInsufficient', 100, <AchErrorScreen variant="insufficient" />),
+      ],
+    },
+    {
+      id: 'pausedPayments', label: 'Paused Payments', dot: '#fb923c',
+      screens: [
+        mp('Review', 'pausedReview', 20, <PausedReviewScreen />),
+        mp('Processing', 'pausedProcessing', 40, <PausedProcessingScreen />),
+        mp('WhatsApp (Declined)', 'pausedDeclined', 70, <PausedWhatsAppScreen variant="declined" />),
+        mp('WhatsApp (Approved)', 'pausedApproved', 100, <PausedWhatsAppScreen variant="approved" />),
+      ],
+    },
+    {
+      id: 'pennyTest', label: 'Penny Test', dot: '#c084fc',
+      screens: [
+        mp('Card Details', 'pennyCard', 14, <PennyCardDetailsScreen />),
+        mp('Verify Intro', 'pennyIntro', 28, <PennyVerifyIntroScreen />),
+        mp('Enter Amount', 'pennyAmount', 42, <PennyVerifyAmountScreen variant="normal" />),
+        mp('Amount Error', 'pennyAmountError', 56, <PennyVerifyAmountScreen variant="error" />),
+        mp('Identity Error', 'pennyErrIdentity', 70, <PennyErrorScreen variant="identity" />),
+        mp('Bank Error', 'pennyErrBank', 85, <PennyErrorScreen variant="bank" />),
+        mp('Funds Error', 'pennyErrFunds', 100, <PennyErrorScreen variant="funds" />),
       ],
     },
   ]

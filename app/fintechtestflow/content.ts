@@ -124,6 +124,46 @@ export interface ContentTokens {
     shareWhatsApp: string
     backToWhatsApp: string
   }
+  achError: {
+    identityTitle: string
+    identityBody: string
+    bankAuthTitle: string
+    bankAuthBody: string
+    insufficientTitle: string
+    insufficientBody: string
+    cta: string
+  }
+  pausedPayments: {
+    reviewTitle: string
+    reviewBody: string
+    processingTitle: string
+    processingBody: string
+    whatsappValidating: string
+    whatsappInProcess: string
+    whatsappDeclined: string
+    whatsappApproved: string
+    cta: string
+  }
+  pennyTest: {
+    cardDetailsTitle: string
+    verifyIntroTitle: string
+    verifyIntroStep1: string
+    verifyIntroStep2: string
+    verifyIntroNote: string
+    verifyIntroSkip: string
+    verifyAmountTitle: string
+    verifyAmountBody: string
+    verifyAmountHint: string
+    verifyAmountRetry: string
+    verifyCta: string
+    errorIdentityTitle: string
+    errorIdentityBody: string
+    errorBankTitle: string
+    errorBankBody: string
+    errorFundsTitle: string
+    errorFundsBody: string
+    errorCta: string
+  }
   bankConsent: {
     title: string
     body: string
@@ -253,6 +293,46 @@ const enContent: ContentTokens = {
     referralBody: 'Earn $20 USD for each friend who makes their first transfer',
     shareWhatsApp: 'Share on WhatsApp',
     backToWhatsApp: 'Back to WhatsApp',
+  },
+  achError: {
+    identityTitle: 'We couldn\'t complete your payment',
+    identityBody: 'There seems to be a problem with the payment. Verify your identity to try again.',
+    bankAuthTitle: 'We couldn\'t complete your payment',
+    bankAuthBody: 'Try again or use another account. If the problem persists, contact your bank to authorize payments to Félix Pago.',
+    insufficientTitle: 'We couldn\'t complete your payment',
+    insufficientBody: 'Your account doesn\'t have sufficient funds. Check your balance or choose another account to continue.',
+    cta: 'Back to WhatsApp',
+  },
+  pausedPayments: {
+    reviewTitle: 'Review your transfer details',
+    reviewBody: 'Review the details of your transfer to Daniela Moreno',
+    processingTitle: 'Processing your transaction',
+    processingBody: 'We are validating your transaction, no charges have been made. In a moment, an agent will contact you via WhatsApp to continue.',
+    whatsappValidating: 'Please enter this secure link to make your payment',
+    whatsappInProcess: 'Your transfer is in process. We are reviewing your information and have not made any charges. Don\'t worry, we\'ll let you know when everything is ready.',
+    whatsappDeclined: 'Your transaction cannot be processed at this time. We apologize for the inconvenience.',
+    whatsappApproved: 'Great news! We are ready to process your payment.',
+    cta: 'Back to WhatsApp',
+  },
+  pennyTest: {
+    cardDetailsTitle: 'Enter your card details',
+    verifyIntroTitle: 'Let\'s verify your card',
+    verifyIntroStep1: 'Step 1: We\'ll make a charge of less than $1 which will be reversed once verification is complete.',
+    verifyIntroStep2: 'Step 2: Check the amount we charged and enter the exact amount to verify.',
+    verifyIntroNote: 'The charge will be reversed within a maximum of 14 business days.',
+    verifyIntroSkip: 'Verify later',
+    verifyAmountTitle: 'Verify your card',
+    verifyAmountBody: 'Enter the amount of the charge we made to your card, remember it is less than $1.',
+    verifyAmountHint: 'The charge may take a few minutes to appear, check your bank app or notifications.',
+    verifyAmountRetry: 'Amount doesn\'t match. You have 2 attempts left.',
+    verifyCta: 'Verify',
+    errorIdentityTitle: 'We couldn\'t verify your card',
+    errorIdentityBody: 'There seems to be a problem with the verification. Try with another card to continue.',
+    errorBankTitle: 'We couldn\'t verify your card',
+    errorBankBody: 'Try again or use another card. If the problem persists, contact your bank to authorize payments to Félix Pago.',
+    errorFundsTitle: 'We couldn\'t verify your card',
+    errorFundsBody: 'Your card doesn\'t have sufficient funds. Check your balance or choose another card to continue.',
+    errorCta: 'Continue',
   },
   bankConsent: {
     title: 'Consent for bank charges',
@@ -384,6 +464,46 @@ const esMxContent: ContentTokens = {
     shareWhatsApp: 'Compartir en WhatsApp',
     backToWhatsApp: 'Volver a WhatsApp',
   },
+  achError: {
+    identityTitle: 'No pudimos completar tu pago',
+    identityBody: 'Parece que hubo un problema con el pago. Verifica tu identidad para intentarlo de nuevo.',
+    bankAuthTitle: 'No pudimos completar tu pago',
+    bankAuthBody: 'Intenta de nuevo o usa otra cuenta. Si persiste, contacta tu banco para autorizar pagos a Félix Pago.',
+    insufficientTitle: 'No pudimos completar tu pago',
+    insufficientBody: 'Tu cuenta no tiene fondos suficientes. Revisa tu saldo o elige otra cuenta para continuar.',
+    cta: 'Volver a WhatsApp',
+  },
+  pausedPayments: {
+    reviewTitle: 'Revisa los detalles de tu envío',
+    reviewBody: 'Revisa los detalles de tu envío para Daniela Moreno',
+    processingTitle: 'Procesando tu transacción',
+    processingBody: 'Estamos validando tu transacción, no se ha hecho ningún cargo. En un momento, un agente te contactará por WhatsApp para continuar.',
+    whatsappValidating: 'Por favor entra a esta liga segura para realizar tu pago',
+    whatsappInProcess: 'Tu envío está en proceso. Estamos revisando tu información y aún no hemos hecho ningún cargo. No te preocupes, te avisaremos cuando todo esté listo.',
+    whatsappDeclined: 'Tu transacción no puede ser procesada en este momento. Lamentamos el inconveniente.',
+    whatsappApproved: '¡Buenas noticias! Estamos listos para procesar tu pago.',
+    cta: 'Volver a WhatsApp',
+  },
+  pennyTest: {
+    cardDetailsTitle: 'Ingresa los datos de tu tarjeta',
+    verifyIntroTitle: 'Verifiquemos tu tarjeta',
+    verifyIntroStep1: 'Paso 1: Te haremos un cargo de menos de $1 el cual será reversible una vez finalizada la verificación.',
+    verifyIntroStep2: 'Paso 2: Revisa el monto que tomamos e ingresa el monto exacto para poder verificarlo.',
+    verifyIntroNote: 'El cargo será reversado en un lapso máximo de 14 días naturales.',
+    verifyIntroSkip: 'Verificar después',
+    verifyAmountTitle: 'Verifica tu tarjeta',
+    verifyAmountBody: 'Ingresa el monto del cargo que realizamos en tu tarjeta, recuerda que es menor a $1.',
+    verifyAmountHint: 'El cargo puede tardar unos minutos en reflejarse, revisa tu app de banco o tus notificaciones.',
+    verifyAmountRetry: 'El monto no coincide. Te quedan 2 intentos.',
+    verifyCta: 'Verificar',
+    errorIdentityTitle: 'No pudimos verificar tu tarjeta',
+    errorIdentityBody: 'Parece que hubo un problema con la verificación. Intenta con otra tarjeta para continuar.',
+    errorBankTitle: 'No pudimos verificar tu tarjeta',
+    errorBankBody: 'Intenta de nuevo o usa otra tarjeta. Si persiste, contacta a tu banco para autorizar pagos a Félix Pago.',
+    errorFundsTitle: 'No pudimos verificar tu tarjeta',
+    errorFundsBody: 'Tu tarjeta no tiene fondos suficientes. Revisa tu saldo o elige otra tarjeta para continuar.',
+    errorCta: 'Continuar',
+  },
   bankConsent: {
     title: 'Consentimiento para cargos bancarios',
     body: 'Al hacer clic en Estoy de acuerdo, usted autoriza a Félix Pago a cargar en la cuenta bancaria especificada anteriormente cualquier importe adeudado por los gastos derivados del uso de los servicios de Félix Pago y/o la compra de productos de Félix Pago, de conformidad con el sitio web y los términos de Félix Pago, hasta que se revoque esta autorización. Puede modificar o cancelar esta autorización en cualquier momento notificándolo a Félix Pago.',
@@ -513,6 +633,46 @@ const ptBrContent: ContentTokens = {
     referralBody: 'Ganhe $20 USD por cada amigo que fizer sua primeira transferência',
     shareWhatsApp: 'Compartilhar no WhatsApp',
     backToWhatsApp: 'Voltar ao WhatsApp',
+  },
+  achError: {
+    identityTitle: 'Não conseguimos completar seu pagamento',
+    identityBody: 'Parece que houve um problema com o pagamento. Verifique sua identidade para tentar novamente.',
+    bankAuthTitle: 'Não conseguimos completar seu pagamento',
+    bankAuthBody: 'Tente novamente ou use outra conta. Se persistir, entre em contato com seu banco para autorizar pagamentos ao Félix Pago.',
+    insufficientTitle: 'Não conseguimos completar seu pagamento',
+    insufficientBody: 'Sua conta não tem fundos suficientes. Verifique seu saldo ou escolha outra conta para continuar.',
+    cta: 'Voltar ao WhatsApp',
+  },
+  pausedPayments: {
+    reviewTitle: 'Revise os detalhes da sua transferência',
+    reviewBody: 'Revise os detalhes da sua transferência para Daniela Moreno',
+    processingTitle: 'Processando sua transação',
+    processingBody: 'Estamos validando sua transação, nenhuma cobrança foi feita. Em um momento, um agente entrará em contato via WhatsApp para continuar.',
+    whatsappValidating: 'Por favor entre neste link seguro para realizar seu pagamento',
+    whatsappInProcess: 'Sua transferência está em processo. Estamos revisando suas informações e ainda não fizemos nenhuma cobrança. Não se preocupe, avisaremos quando tudo estiver pronto.',
+    whatsappDeclined: 'Sua transação não pode ser processada neste momento. Lamentamos o inconveniente.',
+    whatsappApproved: 'Boas notícias! Estamos prontos para processar seu pagamento.',
+    cta: 'Voltar ao WhatsApp',
+  },
+  pennyTest: {
+    cardDetailsTitle: 'Insira os dados do seu cartão',
+    verifyIntroTitle: 'Vamos verificar seu cartão',
+    verifyIntroStep1: 'Passo 1: Faremos uma cobrança de menos de $1 que será revertida após a verificação.',
+    verifyIntroStep2: 'Passo 2: Verifique o valor cobrado e insira o valor exato para verificar.',
+    verifyIntroNote: 'A cobrança será revertida em no máximo 14 dias úteis.',
+    verifyIntroSkip: 'Verificar depois',
+    verifyAmountTitle: 'Verifique seu cartão',
+    verifyAmountBody: 'Insira o valor da cobrança que fizemos no seu cartão, lembre-se que é menor que $1.',
+    verifyAmountHint: 'A cobrança pode levar alguns minutos para aparecer, verifique seu app do banco ou notificações.',
+    verifyAmountRetry: 'O valor não confere. Você tem 2 tentativas restantes.',
+    verifyCta: 'Verificar',
+    errorIdentityTitle: 'Não conseguimos verificar seu cartão',
+    errorIdentityBody: 'Parece que houve um problema com a verificação. Tente com outro cartão para continuar.',
+    errorBankTitle: 'Não conseguimos verificar seu cartão',
+    errorBankBody: 'Tente novamente ou use outro cartão. Se persistir, entre em contato com seu banco para autorizar pagamentos ao Félix Pago.',
+    errorFundsTitle: 'Não conseguimos verificar seu cartão',
+    errorFundsBody: 'Seu cartão não tem fundos suficientes. Verifique seu saldo ou escolha outro cartão para continuar.',
+    errorCta: 'Continuar',
   },
   bankConsent: {
     title: 'Consentimento para cobranças bancárias',

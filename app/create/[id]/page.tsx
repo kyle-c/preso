@@ -401,7 +401,6 @@ function EditPanel({
                 ))}
               </div>
             )}
-            )}
 
             <textarea
               ref={promptTextareaRef}

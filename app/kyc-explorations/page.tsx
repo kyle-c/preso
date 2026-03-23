@@ -420,16 +420,21 @@ export default function KycExplorationsPage() {
       {/* Variants — each row shows ES + EN side by side */}
       <div className="max-w-[1680px] mx-auto px-6 pb-16 space-y-16">
         {([
-          { letter: 'A', name: 'Warm Nudge', desc: 'Soft card with cactus/sage tones and an inline tip below the field', Component: VariantA },
+          { letter: 'A', name: 'Full-Width Warm', desc: 'Edge-to-edge lychee banner with concise hint text', Component: VariantF, recommended: true },
           { letter: 'B', name: 'Trust Builder', desc: 'Full-width evergreen strip with a turquoise-bordered callout', Component: VariantB },
           { letter: 'C', name: 'Benefit Cards', desc: 'Compact benefit chips with an expandable accordion for the hint', Component: VariantC },
           { letter: 'D', name: 'Conversational', desc: 'Speech-bubble style with Felix mascot and a casual italic aside', Component: VariantD },
           { letter: 'E', name: 'Fresh & Concise', desc: 'Mango-toned banner with concise, non-italic helper text', Component: VariantE },
-          { letter: 'F', name: 'Full-Width Warm', desc: 'Edge-to-edge mango banner with concise hint text', Component: VariantF },
-        ] as const).map(({ letter, name, desc, Component }) => (
+          { letter: 'F', name: 'Warm Nudge', desc: 'Soft card with cactus/sage tones and an inline tip below the field', Component: VariantA },
+        ] as const).map(({ letter, name, desc, Component, ...rest }) => {
+          const recommended = 'recommended' in rest && rest.recommended
+          return (
           <div key={letter}>
             <div className="text-center mb-6">
-              <p className="font-display font-extrabold text-xl text-slate">{letter} &middot; {name}</p>
+              <div className="flex items-center justify-center gap-2">
+                <p className="font-display font-extrabold text-xl text-slate">{letter} &middot; {name}</p>
+                {recommended && <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-cactus/20 text-evergreen">Recommended</span>}
+              </div>
               <p className="text-sm text-mocha mt-0.5">{desc}</p>
             </div>
             <div className="flex justify-center gap-8 flex-wrap">
@@ -447,7 +452,7 @@ export default function KycExplorationsPage() {
               </div>
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </div>
   )

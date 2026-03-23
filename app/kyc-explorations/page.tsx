@@ -77,7 +77,7 @@ const t = {
     bannerD: '¡Hola! Verifica tu identidad y desbloquea envíos sin límites. Es rápido y 100% seguro.',
     hintD: 'Si tienes apellido materno, agrégalo. Nos ayuda a que todo coincida con tu ID y tus envíos lleguen sin contratiempos.',
     bannerE: 'Verifica tu identidad para enviar más rápido y sin límites. Solo toma un momento.',
-    hintE: 'Si tienes dos apellidos, agrégalos — así coinciden con tu ID.',
+    hintE: 'Si tienes dos apellidos, agrégalos. Ayuda a que tus envíos se procesen sin problemas.',
   },
   en: {
     badge: 'An authorized agent of intermex',
@@ -98,7 +98,7 @@ const t = {
     bannerD: 'Hi! Verify your identity and unlock unlimited transfers. It\'s quick and 100% secure.',
     hintD: 'If you have a second last name, add it! It helps everything match your ID so your transfers arrive without issues.',
     bannerE: 'Verify your identity to send faster and without limits. It only takes a moment.',
-    hintE: 'Have two last names? Add both — so they match your ID.',
+    hintE: 'Have two last names? Adding both helps your transfers go through smoothly.',
   },
 }
 

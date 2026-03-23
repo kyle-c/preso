@@ -135,8 +135,8 @@ export const translateSchema = z.object({
 export const createCommentSchema = z.object({
   deckId: z.string().min(1).max(200),
   slideIndex: z.number().int().min(0).max(500),
-  x: z.number().min(0).max(1),
-  y: z.number().min(0).max(1),
+  x: z.number().min(0).max(100),
+  y: z.number().min(0).max(100),
   name: z.string().min(1).max(100),
   email: z.string().email().max(254).optional(),
   text: z.string().min(1).max(5000),

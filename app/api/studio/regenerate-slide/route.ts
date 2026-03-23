@@ -31,15 +31,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No API key configured' }, { status: 400 })
     }
 
-    const userPrompt = `Current slide:
+    const userPrompt = `CURRENT SLIDE (source of truth — preserve all unchanged fields):
 ${JSON.stringify(currentSlide, null, 2)}
 
 ${prevTitle ? `Previous slide title: "${prevTitle}"` : ''}
 ${nextTitle ? `Next slide title: "${nextTitle}"` : ''}
 
-Feedback: ${feedback}
+User's edit request: ${feedback}
 
-Generate a replacement slide. Keep bg: "${currentSlide.bg}"${currentSlide.badge ? ` and badge: "${currentSlide.badge}"` : ''}. Include a "notes" field with 2-3 sentences of speaker notes.`
+RULES:
+1. SURGICAL EDIT — Only change what the user asked for. Copy every other field exactly as-is.
+2. The JSON above is the current state. Do not revert, rewrite, or reimagine fields the user didn't mention.
+3. If the request involves styling that the JSON schema can't control (font size, spacing, etc.), add a note explaining what's possible instead.
+4. Always include a "notes" field.`
 
     // Direct Anthropic API call
     const res = await fetch('https://api.anthropic.com/v1/messages', {

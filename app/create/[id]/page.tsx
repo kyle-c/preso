@@ -875,7 +875,16 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
       }
     } else if (activeScope === 'slide') {
       if (!activePrompt.trim()) return
-      fullPrompt = `${EDIT_SCHEMA}\n\nHere is the current slide (slide ${activeSlideIndex + 1} of ${presentation.slides.length}):\n${JSON.stringify(presentation.slides[activeSlideIndex], null, 2)}\n\nApply this change: ${activePrompt.trim()}\n\nReturn ONLY a JSON array containing exactly ONE updated slide object. Example: [{"type": "...", "bg": "...", "title": "...", ...}]\nDo NOT wrap in {"slides": ...}. Do NOT return the full deck. Do NOT include a document object.`
+      fullPrompt = `${EDIT_SCHEMA}\n\nHere is the CURRENT slide (slide ${activeSlideIndex + 1} of ${presentation.slides.length}):\n${JSON.stringify(presentation.slides[activeSlideIndex], null, 2)}\n\nUser's edit request: ${activePrompt.trim()}
+
+CRITICAL EDITING RULES:
+1. SURGICAL EDITS ONLY — Change ONLY the specific fields the user asked about. Copy every other field EXACTLY as-is from the current slide. Do NOT rewrite titles, body text, colors, or any field the user didn't mention.
+2. PRESERVE ALL UNCHANGED DATA — If the user says "remove asterisks from bullets", only modify the bullet text fields. Keep the same type, bg, badge, title, subtitle, titleColor, imageUrl, notes, and every other field identical.
+3. START FROM THE CURRENT STATE — The JSON above is the source of truth. Do not invent new content or revert to a previous version. The user may have already made edits to this slide.
+4. IF THE EDIT IS NOT POSSIBLE through the slide JSON schema (e.g. font sizes, spacing, padding, animations — these are controlled by the renderer, not the data), explain what's possible instead in a "notes" field addition like: "Note: Font sizing is controlled by the slide type and renderer. Consider changing the slide type for different sizing."
+
+Return ONLY a JSON array containing exactly ONE updated slide object. Example: [{"type": "...", "bg": "...", "title": "...", ...}]
+Do NOT wrap in {"slides": ...}. Do NOT return the full deck. Do NOT include a document object.`
     } else {
       if (!activePrompt.trim()) return
       fullPrompt = `${EDIT_SCHEMA}\n\nHere is the current presentation:\n${JSON.stringify(presentation.slides, null, 2)}\n\n${activePrompt.trim()}\n\nReturn the updated full deck as a JSON array of slide objects. Do NOT wrap in {"slides": ...}. Do NOT include a document object.`

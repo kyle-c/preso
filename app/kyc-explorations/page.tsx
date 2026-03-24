@@ -422,6 +422,7 @@ export default function KycExplorationsPage() {
         {([
           { letter: 'A', name: 'Full-Width Warm', desc: 'Edge-to-edge lychee banner with concise hint text', Component: VariantF, recommended: true },
           { letter: 'B', name: 'Trust Builder', desc: 'Full-width sky banner with concise hint text', Component: VariantB },
+          { letter: 'C', name: 'Warm Nudge', desc: 'Full-width cactus banner with plain mocha hint text', Component: VariantA },
         ] as const).map(({ letter, name, desc, Component, ...rest }) => {
           const recommended = 'recommended' in rest && rest.recommended
           return (

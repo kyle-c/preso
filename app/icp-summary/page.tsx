@@ -1,11 +1,18 @@
 'use client'
 
+import {
+  UserCircle, ChatDots, Lightning, Clipboard, Rocket,
+} from '@/components-next/phosphor-icons'
+
 const C = { turquoise: '#2BF2F1', slate: '#082422', evergreen: '#35605F', cactus: '#60D06F', mango: '#F19D38', papaya: '#F26629', sage: '#7BA882', sky: '#8DFDFA', stone: '#EFEBE7', concrete: '#CFCABF', mocha: '#877867', lychee: '#FFCD9C', blueberry: '#6060BF' }
 
-function Section({ title, color, children, className = '' }: { title: string; color: string; children: React.ReactNode; className?: string }) {
+function Section({ title, color, icon, children, className = '' }: { title: string; color: string; icon: React.ReactNode; children: React.ReactNode; className?: string }) {
   return (
     <div className={`bg-white rounded-2xl border border-slate/10 shadow-sm overflow-hidden ${className}`}>
-      <div className="px-5 py-3 border-b border-slate/10" style={{ borderLeftWidth: 4, borderLeftColor: color }}>
+      <div className="px-5 py-3 border-b border-slate/10 flex items-center gap-3" style={{ borderLeftWidth: 4, borderLeftColor: color }}>
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${color}20` }}>
+          {icon}
+        </div>
         <h3 className="font-display font-extrabold text-[17px] text-slate">{title}</h3>
       </div>
       <div className="px-5 py-4 text-[15px] text-slate leading-relaxed">
@@ -31,7 +38,7 @@ export default function ICPSummaryPage() {
         </div>
 
         {/* Row 1: Who is the user */}
-        <Section title="Who is the user?" color={C.turquoise} className="mb-4">
+        <Section title="Who is the user?" color={C.turquoise} icon={<UserCircle size={20} style={{ color: C.evergreen }} />} className="mb-4">
           <p className="mb-2">Blue-collar migrants from Latin America to the US. Two primary archetypes:</p>
           <ul className="space-y-1 ml-1">
             <Li><strong>Distrustful Experimenter (&gt;60% of base)</strong> — Tests small amounts, adopts if fast + no SSN required. Former brick-and-mortar user (Western Union, cash). Peer trust &gt; ads.</Li>
@@ -41,7 +48,7 @@ export default function ICPSummaryPage() {
         </Section>
 
         {/* Row 2: Category habits */}
-        <Section title="Category pre-conceptions & habits" color={C.blueberry} className="mb-4">
+        <Section title="Category pre-conceptions & habits" color={C.blueberry} icon={<ChatDots size={20} style={{ color: C.blueberry }} />} className="mb-4">
           <ul className="space-y-1 ml-1">
             <Li><strong>Type A:</strong> Price compares across apps and switches accordingly. Analytical, rate-sensitive.</Li>
             <Li><strong>Type B:</strong> Finds apps complicated. Prefers simplicity. Former cash/in-person user.</Li>
@@ -51,7 +58,7 @@ export default function ICPSummaryPage() {
 
         {/* Row 3: Two columns — Top Issues + Jobs to be Done */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <Section title="Top issues (qualitative & quantitative)" color={C.papaya}>
+          <Section title="Top issues (qualitative & quantitative)" color={C.papaya} icon={<Lightning size={20} style={{ color: C.papaya }} />}>
             <ul className="space-y-1 ml-1">
               <Li>Website-to-WhatsApp transition confuses (tech limitations, flow breaks)</Li>
               <Li>FX rate display turns off users (contextual timing)</Li>
@@ -63,7 +70,7 @@ export default function ICPSummaryPage() {
             </ul>
           </Section>
 
-          <Section title="Jobs to be done" color={C.cactus}>
+          <Section title="Jobs to be done" color={C.cactus} icon={<Clipboard size={20} style={{ color: C.evergreen }} />}>
             <ul className="space-y-1.5 ml-1">
               <Li><strong>Test with small amount</strong> — to confirm "I can trust this" ($100 first send)</Li>
               <Li><strong>Send money home:</strong>
@@ -82,7 +89,7 @@ export default function ICPSummaryPage() {
         </div>
 
         {/* Row 4: Company vision / strategic choices */}
-        <Section title="Company vision / strategic choices" color={C.slate}>
+        <Section title="Company vision / strategic choices" color={C.slate} icon={<Rocket size={20} style={{ color: C.slate }} />}>
           <ul className="space-y-1 ml-1">
             <Li><strong>Magical experience</strong> — No errors, low friction, fast, easy. Conversational as primary mode (WhatsApp), testing hybrid with practical elements (photo, WA flow, buttons)</Li>
             <Li><strong>Community as distribution</strong> — 51% organic/referral acquisition. Word-of-mouth is the cultural default. One person on a crew → the whole crew.</Li>

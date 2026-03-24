@@ -32,6 +32,7 @@ const PUBLIC_ROUTES = new Set([
   '/design-roadmap',
   '/design-roadmap-v2',
   '/fintechtestflow',
+  '/fintech/tokens',
   '/multisurface',
   '/qbr-cord',
   '/md',

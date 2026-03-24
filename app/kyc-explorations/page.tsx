@@ -213,12 +213,12 @@ function VariantB({ lang = 'es' }: { lang?: Lang }) {
       <div className="px-6">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-5">{s.title}</h1>
       </div>
-      {/* Full-width lychee banner — same layout as Option A */}
-      <div className="px-6 py-4 flex items-start gap-3 mb-6" style={{ background: '#FFCD9C' }}>
-        <Shield className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#7A4D15' }} />
-        <p className="flex-1 text-[13px] leading-snug font-medium" style={{ color: '#7A4D15' }}>{s.bannerB}</p>
-        <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style={{ background: '#7A4D1520' }}>
-          <ChevronRight className="w-3.5 h-3.5" style={{ color: '#7A4D15' }} />
+      {/* Full-width sky banner */}
+      <div className="px-6 py-4 flex items-start gap-3 mb-6" style={{ background: '#8DFDFA40' }}>
+        <Shield className="w-5 h-5 shrink-0 mt-0.5 text-evergreen" />
+        <p className="flex-1 text-[13px] leading-snug font-medium text-evergreen">{s.bannerB}</p>
+        <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-evergreen/10">
+          <ChevronRight className="w-3.5 h-3.5 text-evergreen" />
         </div>
       </div>
       <div className="px-6 pb-6">

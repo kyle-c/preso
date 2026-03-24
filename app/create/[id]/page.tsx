@@ -315,7 +315,7 @@ function EditPanel({
   onPromptChange: (p: string) => void
   files: UploadedFile[]
   onFilesChange: (files: UploadedFile[]) => void
-  onGenerate: () => void
+  onGenerate: (overrides?: { prompt?: string }) => void
   onClose: () => void
   generating: boolean
   currentSlide: number
@@ -435,7 +435,7 @@ function EditPanel({
                   <button
                     key={fb.label}
                     type="button"
-                    onClick={() => { onPromptChange(fb.prompt) }}
+                    onClick={() => { onPromptChange(fb.prompt); onGenerate({ prompt: fb.prompt }) }}
                     disabled={generating}
                     className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80 transition-colors disabled:opacity-30"
                   >

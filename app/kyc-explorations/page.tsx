@@ -213,18 +213,19 @@ function VariantB({ lang = 'es' }: { lang?: Lang }) {
       <div className="px-6">
         <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-slate mb-5">{s.title}</h1>
       </div>
-      <div className="bg-evergreen px-6 py-4 flex items-center gap-3 mb-6">
-        <Shield className="w-5 h-5 text-white shrink-0" />
-        <p className="text-[13px] text-white leading-snug font-medium">{s.bannerB}</p>
+      {/* Full-width lychee banner — same layout as Option A */}
+      <div className="px-6 py-4 flex items-start gap-3 mb-6" style={{ background: '#FFCD9C' }}>
+        <Shield className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#7A4D15' }} />
+        <p className="flex-1 text-[13px] leading-snug font-medium" style={{ color: '#7A4D15' }}>{s.bannerB}</p>
+        <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style={{ background: '#7A4D1520' }}>
+          <ChevronRight className="w-3.5 h-3.5" style={{ color: '#7A4D15' }} />
+        </div>
       </div>
       <div className="px-6 pb-6">
         <div className="space-y-4">
           <SharedFormFields lang={lang} />
           <FormInput label={s.apellidoMaterno} placeholder="ej. Martínez" />
-          <div className="rounded-2xl border border-slate/20 border-l-[3px] border-l-turquoise p-3.5 flex items-start gap-2.5">
-            <Info className="w-4 h-4 text-evergreen shrink-0 mt-0.5" />
-            <p className="text-[12px] text-evergreen leading-snug">{s.hintB}</p>
-          </div>
+          <p className="text-[12px] text-mocha leading-snug px-1">{s.hintE}</p>
           <SharedFormBottom lang={lang} />
         </div>
       </div>
@@ -359,7 +360,9 @@ function VariantF({ lang = 'es' }: { lang?: Lang }) {
       <div className="px-6 py-4 flex items-start gap-3 mb-6" style={{ background: '#FFCD9C' }}>
         <Shield className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#7A4D15' }} />
         <p className="flex-1 text-[13px] leading-snug font-medium" style={{ color: '#7A4D15' }}>{s.bannerE}</p>
-        <ChevronRight className="w-4 h-4 shrink-0 mt-0.5" style={{ color: '#7A4D15' }} />
+        <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style={{ background: '#7A4D1520' }}>
+          <ChevronRight className="w-3.5 h-3.5" style={{ color: '#7A4D15' }} />
+        </div>
       </div>
       <div className="px-6 pb-6">
         <div className="space-y-4">

@@ -1085,8 +1085,12 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
         }).catch(() => {})
       }
     } else if (activeScope === 'slide') {
-      if (!activePrompt.trim()) return
+      if (!activePrompt.trim()) {
+        console.log('[edit slide] Empty prompt, returning')
+        return
+      }
 
+      console.log('[edit slide] Starting edit for slide', activeSlideIndex + 1, 'prompt:', activePrompt.substring(0, 60))
       // Use the dedicated single-slide endpoint (direct API call, no streaming)
       setShowEdit(false)
       setEditGenerating(true)

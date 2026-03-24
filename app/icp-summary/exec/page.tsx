@@ -105,10 +105,10 @@ function V2() {
     <>
       {/* Top stat cards row — core brand palette */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-        <DashCard title="Distrustful Experimenters" value="60%+" subtitle="of the user base" bg={C.stone} color={C.slate} icon={<UserCircle size={18} style={{ color: C.slate }} />} />
-        <DashCard title="Annual Income" value="$30–40k" subtitle="Blue-collar LatAm migrants" bg={C.stone} color={C.slate} icon={<Clipboard size={18} style={{ color: C.slate }} />} />
-        <DashCard title="Fintech Adoption" value="92%" subtitle="Among Hispanic consumers" bg={C.slate} color={C.turquoise} icon={<Rocket size={18} style={{ color: C.turquoise }} />} dark />
-        <DashCard title="Organic Acquisition" value="51%" subtitle="Referral / word-of-mouth" bg={C.slate} color={C.turquoise} icon={<ChatDots size={18} style={{ color: C.turquoise }} />} dark />
+        <DashCard title="Distrustful Experimenters" value="60%+" subtitle="of the user base" bg="white" color={C.slate} icon={<UserCircle size={18} style={{ color: C.slate }} />} />
+        <DashCard title="Annual Income" value="$30–40k" subtitle="Blue-collar LatAm migrants" bg="white" color={C.slate} icon={<Clipboard size={18} style={{ color: C.slate }} />} />
+        <DashCard title="Fintech Adoption" value="92%" subtitle="Among Hispanic consumers" bg="white" color={C.slate} icon={<Rocket size={18} style={{ color: C.slate }} />} />
+        <DashCard title="Organic Acquisition" value="51%" subtitle="Referral / word-of-mouth" bg="white" color={C.slate} icon={<ChatDots size={18} style={{ color: C.slate }} />} />
       </div>
 
       {/* Two-column: Behavior + Blockers */}
@@ -121,11 +121,11 @@ function V2() {
             <h3 className="font-display font-extrabold text-[20px] text-slate">How they behave</h3>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="rounded-xl p-4 bg-stone">
+            <div className="rounded-xl p-4 bg-stone/50">
               <p className="font-display font-black text-[28px] text-slate leading-none">4.78</p>
               <p className="text-[13px] text-slate/50 mt-1">Tx/month (top 20%)</p>
             </div>
-            <div className="rounded-xl p-4 bg-stone">
+            <div className="rounded-xl p-4 bg-stone/50">
               <p className="font-display font-black text-[28px] text-slate leading-none">$100</p>
               <p className="text-[13px] text-slate/50 mt-1">First test send</p>
             </div>
@@ -144,9 +144,9 @@ function V2() {
             </div>
             <h3 className="font-display font-extrabold text-[20px] text-slate">Key blockers</h3>
           </div>
-          <div className="rounded-xl p-4 mb-4 text-center bg-slate">
-            <p className="font-display font-black text-[40px] text-turquoise leading-none">84%</p>
-            <p className="text-[14px] text-white/60 mt-1.5">of drop-offs actively tried to send</p>
+          <div className="rounded-xl p-4 mb-4 text-center bg-stone/50">
+            <p className="font-display font-black text-[40px] text-slate leading-none">84%</p>
+            <p className="text-[14px] text-slate/50 mt-1.5">of drop-offs actively tried to send</p>
           </div>
           <ul className="space-y-1.5 text-[15px] text-slate">
             <Li>First-tx errors permanently destroy retention</Li>
@@ -166,19 +166,19 @@ function V2() {
           <h3 className="font-display font-extrabold text-[20px] text-slate">Core jobs & retention</h3>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-          <div className="rounded-xl p-4 text-center bg-slate">
-            <p className="font-display font-black text-[32px] text-turquoise leading-none">84%</p>
-            <p className="text-[13px] text-white/50 mt-1">6-mo retention w/ credit</p>
+          <div className="rounded-xl p-4 text-center bg-stone/50">
+            <p className="font-display font-black text-[32px] text-slate leading-none">84%</p>
+            <p className="text-[13px] text-slate/50 mt-1">6-mo retention w/ credit</p>
           </div>
-          <div className="rounded-xl p-4 text-center bg-stone">
+          <div className="rounded-xl p-4 text-center bg-stone/50">
             <p className="font-display font-black text-[32px] text-slate leading-none">36%</p>
             <p className="text-[13px] text-slate/50 mt-1">Without credit</p>
           </div>
-          <div className="rounded-xl p-4 text-center bg-stone">
+          <div className="rounded-xl p-4 text-center bg-stone/50">
             <p className="font-display font-black text-[32px] text-slate leading-none">18.4</p>
             <p className="text-[13px] text-slate/50 mt-1">Month avg tenure</p>
           </div>
-          <div className="rounded-xl p-4 text-center bg-stone">
+          <div className="rounded-xl p-4 text-center bg-stone/50">
             <p className="font-display font-black text-[32px] text-slate leading-none">27%</p>
             <p className="text-[13px] text-slate/50 mt-1">Volume to home investments</p>
           </div>

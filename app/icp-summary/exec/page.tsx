@@ -31,54 +31,105 @@ function Li({ children }: { children: React.ReactNode }) {
 function V1() {
   return (
     <>
-      <Section title="Who is the user?" color={C.turquoise} icon={<UserCircle size={20} style={{ color: C.evergreen }} />} className="mb-4">
-        <p className="font-semibold mb-2">Blue-collar LatAm migrants in the US. $30–40k income. 92% fintech-ready.</p>
-        <ul className="space-y-1 ml-1">
-          <Li><strong>60%+ are "Distrustful Experimenters"</strong> — test small, adopt if fast, no SSN needed. Trust comes from peers, not ads.</Li>
-          <Li><strong>The rest are price hunters</strong> — compare rates, switch apps. More analytical but equally mobile-first.</Li>
-        </ul>
-      </Section>
-
-      <Section title="How they think about money" color={C.blueberry} icon={<ChatDots size={20} style={{ color: C.blueberry }} />} className="mb-4">
-        <ul className="space-y-1 ml-1">
-          <Li><strong>WhatsApp is home base.</strong> Not email. Not an app store download. WhatsApp.</Li>
-          <Li><strong>"If I can't touch it, it's not mine."</strong> Digital money causes anxiety. Confirmation must be felt, not just seen.</Li>
-          <Li><strong>Trust travels through people.</strong> One person on a crew adopts → the whole crew considers it.</Li>
-        </ul>
-      </Section>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <Section title="Biggest friction points" color={C.papaya} icon={<Lightning size={20} style={{ color: C.papaya }} />}>
-          <ul className="space-y-1 ml-1">
-            <Li><strong>First-transaction errors kill retention</strong> — permanently</Li>
-            <Li><strong>84% of drop-offs tried to send</strong> — blocked by missing info at the moment of attempt</Li>
-            <Li><strong>Frozen screens = "my money disappeared"</strong> — trust emergency, not UX bug</Li>
-            <Li><strong>Name entry causes 70% Colombia abandonment</strong> (16/23 users)</Li>
-            <Li><strong>Web-to-WhatsApp handoff confuses</strong> — flow breaks destroy momentum</Li>
-          </ul>
-        </Section>
-
-        <Section title="Jobs to be done" color={C.cactus} icon={<Clipboard size={20} style={{ color: C.evergreen }} />}>
-          <ul className="space-y-1 ml-1">
-            <Li><strong>Test</strong> — Send $100 to prove "this works"</Li>
-            <Li><strong>Send</strong> — Weekly, fast, best rate, from the job site in 2 min</Li>
-            <Li><strong>Confirm</strong> — Check it arrived. Peace of mind is the product.</Li>
-            <Li><strong>Refer</strong> — 51% organic/referral. Community IS distribution.</Li>
-            <Li><strong>Repeat</strong> — Top 20%: 4.78 tx/month, 18-month tenure</Li>
-            <Li><strong>Borrow</strong> — Credit = 84% retention at 6mo (vs 36% without)</Li>
-          </ul>
-        </Section>
+      {/* Hero stat row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
+          <p className="text-[14px] font-semibold text-slate/50 mb-2">Primary archetype</p>
+          <p className="font-display font-black text-[36px] text-slate leading-none mb-2">60%+</p>
+          <p className="text-[15px] text-slate"><strong>"Distrustful Experimenters"</strong> — test small, adopt if fast, no SSN needed</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
+          <p className="text-[14px] font-semibold text-slate/50 mb-2">Secondary archetype</p>
+          <p className="font-display font-black text-[36px] text-slate leading-none mb-2">~40%</p>
+          <p className="text-[15px] text-slate"><strong>Price hunters</strong> — compare rates, switch apps. Analytical but equally mobile-first.</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
+          <p className="text-[14px] font-semibold text-slate/50 mb-2">Market readiness</p>
+          <p className="font-display font-black text-[36px] text-slate leading-none mb-2">92%</p>
+          <p className="text-[15px] text-slate">Fintech adoption rate among Hispanic consumers. $30–40k income.</p>
+        </div>
       </div>
 
-      <Section title="Strategic bets" color={C.slate} icon={<Rocket size={20} style={{ color: C.slate }} />}>
-        <ul className="space-y-1 ml-1">
-          <Li><strong>Zero-friction WhatsApp experience</strong> — conversational first, hybrid with practical UI</Li>
-          <Li><strong>Community-powered growth</strong> — 51% organic. One believer seeds an entire network.</Li>
-          <Li><strong>Multiproduct moat</strong> — Remittances → Credit → Wallet. Credit doubles retention.</Li>
-          <Li><strong>Human support as brand</strong> — A real person picks up. Trust isn't recovered — it's cemented.</Li>
-          <Li><strong>Retention over acquisition</strong> — Top 20% LTV: $175/tx avg, 18-month tenure</Li>
-        </ul>
-      </Section>
+      {/* Mental model */}
+      <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6 mb-4">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone"><ChatDots size={20} style={{ color: C.slate }} /></div>
+          <h3 className="font-display font-extrabold text-[20px] text-slate">How they think about money</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="rounded-xl bg-stone/50 p-4">
+            <p className="font-display font-extrabold text-[16px] text-slate mb-1">WhatsApp is home base</p>
+            <p className="text-[14px] text-slate/70">Not email. Not an app store. WhatsApp.</p>
+          </div>
+          <div className="rounded-xl bg-stone/50 p-4">
+            <p className="font-display font-extrabold text-[16px] text-slate mb-1">"Can't touch it, not mine"</p>
+            <p className="text-[14px] text-slate/70">Digital money causes anxiety. Confirmation must be felt.</p>
+          </div>
+          <div className="rounded-xl bg-stone/50 p-4">
+            <p className="font-display font-extrabold text-[16px] text-slate mb-1">Trust travels through people</p>
+            <p className="text-[14px] text-slate/70">One crew member adopts, the whole crew follows.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Friction + Jobs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone"><Lightning size={20} style={{ color: C.slate }} /></div>
+            <h3 className="font-display font-extrabold text-[20px] text-slate">Biggest friction points</h3>
+          </div>
+          <div className="rounded-xl bg-stone/50 p-4 mb-4 text-center">
+            <p className="font-display font-black text-[36px] text-slate leading-none">84%</p>
+            <p className="text-[13px] text-slate/50 mt-1">of drop-offs actively tried to send</p>
+          </div>
+          <ul className="space-y-1.5 text-[15px] text-slate">
+            <Li><strong>First-tx errors kill retention</strong> — permanently</Li>
+            <Li><strong>Frozen screens</strong> = trust emergency</Li>
+            <Li><strong>70% Colombia abandonment</strong> at name entry</Li>
+            <Li><strong>Web → WhatsApp handoff</strong> breaks flow</Li>
+          </ul>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone"><Clipboard size={20} style={{ color: C.slate }} /></div>
+            <h3 className="font-display font-extrabold text-[20px] text-slate">Jobs to be done</h3>
+          </div>
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            {['Test', 'Send', 'Confirm', 'Refer', 'Repeat', 'Borrow'].map(j => (
+              <div key={j} className="rounded-lg bg-stone/50 px-3 py-2 text-center">
+                <p className="font-display font-extrabold text-[14px] text-slate">{j}</p>
+              </div>
+            ))}
+          </div>
+          <ul className="space-y-1.5 text-[15px] text-slate">
+            <Li>$100 first send to prove "this works"</Li>
+            <Li>Weekly, best rate, 2 min from job site</Li>
+            <Li>51% organic/referral acquisition</Li>
+            <Li>Credit = 84% retention (vs 36%)</Li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Strategic bets — slate cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="rounded-2xl p-6 shadow-sm bg-slate">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/10"><ChatDots size={20} style={{ color: C.turquoise }} /></div>
+          <p className="font-display font-extrabold text-[18px] text-white mb-2">WhatsApp-native</p>
+          <p className="text-[15px] text-white/60">Conversational first. Hybrid with practical UI. Lives where users already are.</p>
+        </div>
+        <div className="rounded-2xl p-6 shadow-sm bg-slate">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/10"><UserCircle size={20} style={{ color: C.turquoise }} /></div>
+          <p className="font-display font-extrabold text-[18px] text-white mb-2">Community growth</p>
+          <p className="text-[15px] text-white/60">51% organic. One believer seeds an entire crew. Human support cements trust.</p>
+        </div>
+        <div className="rounded-2xl p-6 shadow-sm bg-slate">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/10"><Rocket size={20} style={{ color: C.turquoise }} /></div>
+          <p className="font-display font-extrabold text-[18px] text-white mb-2">Multiproduct moat</p>
+          <p className="text-[15px] text-white/60">Remittances → Credit → Wallet. Credit doubles retention. Certainty over speed.</p>
+        </div>
+      </div>
     </>
   )
 }
@@ -120,14 +171,16 @@ function V2() {
             </div>
             <h3 className="font-display font-extrabold text-[20px] text-slate">How they behave</h3>
           </div>
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="rounded-xl p-4 bg-stone/50">
-              <p className="font-display font-black text-[28px] text-slate leading-none">4.78</p>
-              <p className="text-[13px] text-slate/50 mt-1">Tx/month (top 20%)</p>
-            </div>
-            <div className="rounded-xl p-4 bg-stone/50">
-              <p className="font-display font-black text-[28px] text-slate leading-none">$100</p>
-              <p className="text-[13px] text-slate/50 mt-1">First test send</p>
+          <div className="rounded-xl p-4 mb-4 text-center bg-stone/50">
+            <div className="flex items-center justify-center divide-x divide-slate/10">
+              <div className="flex-1 px-4">
+                <p className="font-display font-black text-[40px] text-slate leading-none">4.78</p>
+                <p className="text-[13px] text-slate/50 mt-1.5">Tx/month (top 20%)</p>
+              </div>
+              <div className="flex-1 px-4">
+                <p className="font-display font-black text-[40px] text-slate leading-none">$100</p>
+                <p className="text-[13px] text-slate/50 mt-1.5">First test send</p>
+              </div>
             </div>
           </div>
           <ul className="space-y-1.5 text-[15px] text-slate">
@@ -218,27 +271,78 @@ function V2() {
 function V3() {
   return (
     <>
-      <Section title="The user" color={C.turquoise} icon={<UserCircle size={22} style={{ color: C.evergreen }} />} className="mb-4">
-        <p className="text-[17px] leading-relaxed"><strong>LatAm blue-collar migrants in the US.</strong> $30–40k income. 92% fintech-ready. 60%+ test small before committing. Trust comes from peers — not marketing. WhatsApp is their only stable digital address.</p>
-      </Section>
-
-      <Section title="Behavior patterns" color={C.blueberry} icon={<ChatDots size={22} style={{ color: C.blueberry }} />} className="mb-4">
-        <p className="text-[17px] leading-relaxed"><strong>Price-compare or simplicity-seek — but both live on WhatsApp.</strong> "If I can't touch it, it's not mine." Trust is earned through trial and peer proof. One adopter on a crew converts the whole crew. 51% acquisition is organic.</p>
-      </Section>
-
+      {/* Two-column hero */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <Section title="What breaks" color={C.papaya} icon={<Lightning size={22} style={{ color: C.papaya }} />}>
-          <p className="text-[17px] leading-relaxed"><strong>84% of drop-offs tried to send.</strong> They weren't disinterested — they got stuck. First-tx errors kill retention permanently. Frozen screens feel like lost money. Name entry causes 70% Colombia abandonment. Web-to-WhatsApp handoff confuses.</p>
-        </Section>
-
-        <Section title="What they need" color={C.cactus} icon={<Clipboard size={22} style={{ color: C.evergreen }} />}>
-          <p className="text-[17px] leading-relaxed"><strong>Test → Send → Confirm → Refer → Repeat → Borrow.</strong> Weekly ritual, 2 min from the job site, best rate. Top 20% do 4.78 tx/month over 18 months. Credit doubles retention to 84%. 27% of volume is home-country investment.</p>
-        </Section>
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone"><UserCircle size={20} style={{ color: C.slate }} /></div>
+            <h3 className="font-display font-extrabold text-[20px] text-slate">The user</h3>
+          </div>
+          <p className="text-[16px] text-slate leading-relaxed"><strong>LatAm blue-collar migrants in the US.</strong> $30–40k income. 92% fintech-ready. 60%+ test small before committing. Trust comes from peers, not marketing. WhatsApp is their only stable digital address.</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone"><ChatDots size={20} style={{ color: C.slate }} /></div>
+            <h3 className="font-display font-extrabold text-[20px] text-slate">Behavior</h3>
+          </div>
+          <p className="text-[16px] text-slate leading-relaxed"><strong>Both types live on WhatsApp.</strong> "If I can't touch it, it's not mine." Trust is earned by trial and peer proof. One adopter on a crew converts the whole crew. 51% acquisition is organic.</p>
+        </div>
       </div>
 
-      <Section title="How we win" color={C.slate} icon={<Rocket size={22} style={{ color: C.slate }} />}>
-        <p className="text-[17px] leading-relaxed"><strong>WhatsApp-native, community-distributed, multiproduct.</strong> Zero friction. Human support when it breaks. Credit as retention moat. Pricing competitive but certainty over speed. Retention is the north star — not acquisition.</p>
-      </Section>
+      {/* Key numbers strip */}
+      <div className="bg-white rounded-2xl border border-concrete shadow-sm p-5 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[
+            { v: '84%', l: 'tried to send but got stuck' },
+            { v: '70%', l: 'CO abandonment at name entry' },
+            { v: '84%', l: '6-mo retention w/ credit' },
+            { v: '4.78', l: 'tx/month (top 20%)' },
+            { v: '51%', l: 'organic acquisition' },
+          ].map((s, i) => (
+            <div key={i} className="text-center rounded-xl bg-stone/50 p-3">
+              <p className="font-display font-black text-[28px] text-slate leading-none">{s.v}</p>
+              <p className="text-[12px] text-slate/50 mt-1">{s.l}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Friction + Jobs condensed */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone"><Lightning size={20} style={{ color: C.slate }} /></div>
+            <h3 className="font-display font-extrabold text-[20px] text-slate">What breaks</h3>
+          </div>
+          <p className="text-[16px] text-slate leading-relaxed">First-tx errors kill retention permanently. Frozen screens feel like lost money. Name entry and web-to-WhatsApp handoff are the biggest flow killers.</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone"><Clipboard size={20} style={{ color: C.slate }} /></div>
+            <h3 className="font-display font-extrabold text-[20px] text-slate">What they need</h3>
+          </div>
+          <p className="text-[16px] text-slate leading-relaxed"><strong>Test → Send → Confirm → Refer → Repeat → Borrow.</strong> Weekly ritual, 2 min from the job site, best rate. Credit is the retention moat.</p>
+        </div>
+      </div>
+
+      {/* Strategic bets — slate cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="rounded-2xl p-6 shadow-sm bg-slate">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/10"><ChatDots size={20} style={{ color: C.turquoise }} /></div>
+          <p className="font-display font-extrabold text-[18px] text-white mb-2">WhatsApp-native</p>
+          <p className="text-[15px] text-white/60">Conversational first. Lives where users already are.</p>
+        </div>
+        <div className="rounded-2xl p-6 shadow-sm bg-slate">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/10"><UserCircle size={20} style={{ color: C.turquoise }} /></div>
+          <p className="font-display font-extrabold text-[18px] text-white mb-2">Community growth</p>
+          <p className="text-[15px] text-white/60">51% organic. Human support cements trust.</p>
+        </div>
+        <div className="rounded-2xl p-6 shadow-sm bg-slate">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/10"><Rocket size={20} style={{ color: C.turquoise }} /></div>
+          <p className="font-display font-extrabold text-[18px] text-white mb-2">Multiproduct moat</p>
+          <p className="text-[15px] text-white/60">Remittances → Credit → Wallet. Credit = retention.</p>
+        </div>
+      </div>
     </>
   )
 }

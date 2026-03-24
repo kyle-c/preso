@@ -37,7 +37,7 @@ export default function ICPSummaryPage() {
             <Li><strong>Distrustful Experimenter (&gt;60% of base)</strong> — Tests small amounts, adopts if fast + no SSN required. Former brick-and-mortar user (Western Union, cash). Peer trust &gt; ads.</Li>
             <Li><strong>Determined Experimenter</strong> — More established, compares rates across services, uses credit for leverage. Analytical adoption, hunts for the best price.</Li>
           </ul>
-          <p className="mt-2 text-[13px] text-slate/60">Demographics: Mexico 39.9%, Guatemala 25.1%, Honduras 21.6%, Colombia 4.5%. Income $30k–$40k/yr. 92% fintech adoption rate among Hispanic consumers.</p>
+          <p className="mt-2 text-[14px] text-slate">Demographics: Mexico 39.9%, Guatemala 25.1%, Honduras 21.6%, Colombia 4.5%. Income $30k–$40k/yr. 92% fintech adoption rate among Hispanic consumers.</p>
         </Section>
 
         {/* Row 2: Category habits */}

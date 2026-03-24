@@ -267,8 +267,30 @@ export default function ICPExecPage() {
   const { Component } = versions.find(v => v.id === active) ?? versions[0]
 
   return (
-    <div className="min-h-screen bg-stone p-6 md:p-10">
-      <div className="max-w-[1400px] mx-auto">
+    <div className="min-h-screen bg-stone p-6 md:p-10 relative overflow-hidden">
+      {/* Floating illustrations */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-[5%] left-[2%] w-[160px] lg:w-[220px] opacity-[0.06] -rotate-12" style={{ animation: 'ds-float 8s ease-in-out infinite' }}>
+          <object type="image/svg+xml" data="/illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        <div className="absolute top-[12%] right-[3%] w-[120px] lg:w-[170px] opacity-[0.05] rotate-6" style={{ animation: 'ds-drift 9s ease-in-out infinite 1s' }}>
+          <object type="image/svg+xml" data="/illustrations/Hand%20-%20Stars.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        <div className="absolute bottom-[15%] left-[5%] w-[130px] lg:w-[180px] opacity-[0.05] rotate-3" style={{ animation: 'ds-drift 10s ease-in-out infinite 2s' }}>
+          <object type="image/svg+xml" data="/illustrations/Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        <div className="absolute bottom-[8%] right-[4%] w-[100px] lg:w-[140px] opacity-[0.06] -rotate-6" style={{ animation: 'ds-float 7s ease-in-out infinite 0.5s' }}>
+          <object type="image/svg+xml" data="/illustrations/Paper%20Airplane%20%2B%20Coin%20-%20Turquoise.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        <div className="absolute top-[45%] right-[1%] w-[90px] lg:w-[120px] opacity-[0.04] rotate-12" style={{ animation: 'ds-float 9s ease-in-out infinite 3s' }}>
+          <object type="image/svg+xml" data="/illustrations/Heart%20-F%C3%A9lix.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+        <div className="absolute top-[60%] left-[1%] w-[80px] lg:w-[110px] opacity-[0.05] -rotate-3" style={{ animation: 'ds-drift 8s ease-in-out infinite 1.5s' }}>
+          <object type="image/svg+xml" data="/illustrations/3%20Paper%20Airplanes%20%2B%20Coins.svg" className="w-full h-auto" style={{ pointerEvents: 'none' }} />
+        </div>
+      </div>
+
+      <div className="max-w-[1400px] mx-auto relative z-10">
         {/* Header */}
         <div className="mb-6 text-center">
           <span className="inline-block rounded-full bg-turquoise px-4 py-1 text-[12px] font-semibold text-slate uppercase tracking-wider mb-3">Executive Summary</span>

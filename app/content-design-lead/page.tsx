@@ -735,7 +735,6 @@ export default function ContentDesignLeadOnboardingPage() {
   const btnIcon = isBrand ? 'text-slate/70' : isDark ? 'text-white/70' : 'text-foreground'
 
   return (
-    <PresentationPassword>
     <div
       className="h-screen w-screen overflow-hidden relative select-none"
       onTouchStart={handleTouchStart}
@@ -848,6 +847,5 @@ export default function ContentDesignLeadOnboardingPage() {
       <SlidePreTranslator slides={slides} locale={locale} />
         <SlidePdfOverlay progress={pdfProgress} onCancel={cancelPdf} />
     </div>
-    </PresentationPassword>
   )
 }

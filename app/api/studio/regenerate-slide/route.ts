@@ -12,6 +12,11 @@ The slide must follow the Félix design system:
 - bg: "dark" | "light" | "brand"
 - Required fields: type, bg, title
 - Optional: subtitle, body, badge, bullets, cards, columns, quote, imageUrl, chart, notes
+- style: Optional object for presentation-layer overrides:
+  * titleSize: Tailwind size ("sm" to "7xl")
+  * bodySize: Tailwind size for body/subtitle text
+  * cardSize: Tailwind size for card content
+  * columnRatio: "50:50" | "40:60" | "60:40" | "30:70" | "70:30" for two-column layouts
 
 Return ONLY a valid JSON object. No markdown fences, no commentary.`
 

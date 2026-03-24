@@ -73,6 +73,8 @@ export interface SlideData {
     cardSize?: string
     /** Text alignment: 'left' | 'center' | 'right' */
     textAlign?: string
+    /** Column ratio for two-column slides: '50:50' | '40:60' | '60:40' | '30:70' | '70:30' */
+    columnRatio?: string
   }
 }
 
@@ -624,9 +626,15 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
         </div>
       )}
       <div className="flex-1 flex items-center px-10 sm:px-14 lg:px-20 py-10 relative z-10">
-        <div data-slide-field="columns" className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 w-full max-w-[1400px] mx-auto items-center">
+        <div data-slide-field="columns" className={cn('grid grid-cols-1 gap-8 lg:gap-14 w-full max-w-[1400px] mx-auto items-center',
+          slide.style?.columnRatio === '40:60' ? 'lg:grid-cols-[2fr_3fr]' :
+          slide.style?.columnRatio === '30:70' ? 'lg:grid-cols-[1fr_2.3fr]' :
+          slide.style?.columnRatio === '60:40' ? 'lg:grid-cols-[3fr_2fr]' :
+          slide.style?.columnRatio === '70:30' ? 'lg:grid-cols-[2.3fr_1fr]' :
+          'lg:grid-cols-2'
+        )}>
           {/* Left column — title area with inline illustration */}
-          <div className="flex flex-col overflow-hidden">
+          <div className="flex flex-col overflow-hidden max-h-[calc(100vh-120px)]">
             {slide.imageUrl && !slide.columns?.[0]?.body && !slide.body && !slide.quote && (
               <div className="mb-4 lg:mb-6 w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] lg:w-[140px] lg:h-[140px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}

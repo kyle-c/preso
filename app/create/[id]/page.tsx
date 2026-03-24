@@ -1031,7 +1031,8 @@ export default function PresentationViewerPage() {
   * bodySize: Tailwind text size for body/content text
   * cardSize: Tailwind text size for card titles and card body text (e.g. "xl" for larger card text, "base" for default)
   * textAlign: "left" | "center" | "right"
-  Use style overrides when the user asks to change font sizes, make text bigger/smaller, or adjust text alignment.
+  * columnRatio: Column width ratio for two-column slides — "50:50" (default) | "40:60" | "60:40" | "30:70" | "70:30"
+  Use style overrides when the user asks to change font sizes, make text bigger/smaller, adjust text alignment, or change column proportions.
 
 You have FULL creative freedom. You may:
 - Change the slide type entirely (e.g. bullets → cards, content → two-column)

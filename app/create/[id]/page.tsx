@@ -1090,7 +1090,16 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
         return
       }
 
-      console.log('[edit slide] Starting edit for slide', activeSlideIndex + 1, 'prompt:', activePrompt.substring(0, 60))
+      console.log('[edit slide] Starting edit for slide', activeSlideIndex + 1, 'prompt:', activePrompt.substring(0, 60), 'files:', editFiles.length)
+
+      // If files are attached, fall through to the streaming pipeline below
+      // (the regenerate-slide endpoint can't handle file uploads)
+      if (editFiles.length > 0) {
+        console.log('[edit slide] Files attached — using streaming pipeline instead')
+        // Build the fullPrompt for the streaming path
+        fullPrompt = `${EDIT_SCHEMA}\n\nHere is the CURRENT slide (slide ${activeSlideIndex + 1} of ${presentation.slides.length}):\n${JSON.stringify(presentation.slides[activeSlideIndex], null, 2)}\n\nUser's edit request: ${activePrompt.trim()}\n\nThe user has also uploaded reference files. Use them to inform the edit.\n\nCRITICAL: SURGICAL EDITS ONLY — Change ONLY what was asked. Preserve all unchanged fields.\n\nReturn ONLY a JSON array containing exactly ONE updated slide object.`
+        // Don't return — fall through to the streaming path
+      } else {
       // Use the dedicated single-slide endpoint (direct API call, no streaming)
       setShowEdit(false)
       setEditGenerating(true)
@@ -1148,6 +1157,7 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
       setEditGenerating(false)
       setEditPrompt('')
       return // Skip the streaming path below
+      } // end of no-files else block
     } else {
       if (!activePrompt.trim()) return
       fullPrompt = `${EDIT_SCHEMA}\n\nHere is the current presentation:\n${JSON.stringify(presentation.slides, null, 2)}\n\n${activePrompt.trim()}\n\nReturn the updated full deck as a JSON array of slide objects. Do NOT wrap in {"slides": ...}. Do NOT include a document object.`

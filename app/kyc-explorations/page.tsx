@@ -76,7 +76,7 @@ const t = {
     accordionA: 'En muchos países de Latinoamérica se usan dos apellidos. Agregar ambos nos ayuda a verificar tu identidad correctamente.',
     bannerD: '¡Hola! Verifica tu identidad y desbloquea envíos sin límites. Es rápido y 100% seguro.',
     hintD: 'Si tienes apellido materno, agrégalo. Nos ayuda a que todo coincida con tu ID y tus envíos lleguen sin contratiempos.',
-    bannerE: 'Verifica tu identidad para enviar más rápido y sin límites. Solo toma un momento.',
+    bannerE: 'Verifica tu identidad para desbloquear límites más altos y transferencias más rápidas.',
     hintE: 'Si tienes dos apellidos, agrégalos. Ayuda a que tus envíos se procesen sin problemas.',
   },
   en: {
@@ -97,7 +97,7 @@ const t = {
     accordionA: 'In many Latin American countries, two last names are used. Adding both helps us verify your identity correctly.',
     bannerD: 'Hi! Verify your identity and unlock unlimited transfers. It\'s quick and 100% secure.',
     hintD: 'If you have a second last name, add it! It helps everything match your ID so your transfers arrive without issues.',
-    bannerE: 'Verify your identity to send faster and without limits. It only takes a moment.',
+    bannerE: 'Verify your identity to unlock higher limits and faster transfers.',
     hintE: 'Have two last names? Adding both helps your transfers go through smoothly.',
   },
 }

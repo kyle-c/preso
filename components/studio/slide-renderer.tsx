@@ -1585,7 +1585,11 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
   }, [forceSlide, total])
 
   useEffect(() => {
-    if (mounted) window.history.replaceState(null, '', `#slide-${current}`)
+    if (mounted) {
+      window.history.replaceState(null, '', `#slide-${current}`)
+      // Dispatch hashchange so parent components can track the current slide
+      window.dispatchEvent(new HashChangeEvent('hashchange'))
+    }
   }, [current, mounted])
 
   const next = useCallback(() => setCurrent((p) => Math.min(p + 1, total - 1)), [total])

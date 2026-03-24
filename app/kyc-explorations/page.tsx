@@ -421,11 +421,7 @@ export default function KycExplorationsPage() {
       <div className="max-w-[1680px] mx-auto px-6 pb-16 space-y-16">
         {([
           { letter: 'A', name: 'Full-Width Warm', desc: 'Edge-to-edge lychee banner with concise hint text', Component: VariantF, recommended: true },
-          { letter: 'B', name: 'Trust Builder', desc: 'Full-width evergreen strip with a turquoise-bordered callout', Component: VariantB },
-          { letter: 'C', name: 'Benefit Cards', desc: 'Compact benefit chips with an expandable accordion for the hint', Component: VariantC },
-          { letter: 'D', name: 'Conversational', desc: 'Speech-bubble style with Felix mascot and a casual italic aside', Component: VariantD },
-          { letter: 'E', name: 'Fresh & Concise', desc: 'Mango-toned banner with concise, non-italic helper text', Component: VariantE },
-          { letter: 'F', name: 'Warm Nudge', desc: 'Soft card with cactus/sage tones and an inline tip below the field', Component: VariantA },
+          { letter: 'B', name: 'Trust Builder', desc: 'Full-width sky banner with concise hint text', Component: VariantB },
         ] as const).map(({ letter, name, desc, Component, ...rest }) => {
           const recommended = 'recommended' in rest && rest.recommended
           return (

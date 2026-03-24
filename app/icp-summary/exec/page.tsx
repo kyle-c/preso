@@ -84,30 +84,52 @@ function V1() {
 }
 
 /* ── Version 2: Stat-Led ──────────────────────────────────── */
+function StatBlock({ value, label, color }: { value: string; label: string; color: string }) {
+  return (
+    <div className="flex-1 text-center py-1">
+      <p className="font-display font-black text-[36px] leading-none tracking-tight" style={{ color }}>{value}</p>
+      <p className="text-[14px] text-slate/70 font-medium mt-1.5">{label}</p>
+    </div>
+  )
+}
+
+function StatRow({ stats, color }: { stats: { value: string; label: string }[]; color: string }) {
+  return (
+    <div className="flex items-center divide-x divide-slate/10 mb-4">
+      {stats.map((s, i) => (
+        <StatBlock key={i} value={s.value} label={s.label} color={color} />
+      ))}
+    </div>
+  )
+}
+
 function V2() {
   return (
     <>
       <Section title="Who is the user?" color={C.turquoise} icon={<UserCircle size={20} style={{ color: C.evergreen }} />} className="mb-4">
-        <div className="flex flex-wrap gap-x-8 gap-y-2 mb-3">
-          <div><span className="font-display font-black text-[28px] text-evergreen">60%+</span><span className="text-[13px] text-mocha ml-1.5">Distrustful Experimenters</span></div>
-          <div><span className="font-display font-black text-[28px] text-evergreen">$30–40k</span><span className="text-[13px] text-mocha ml-1.5">annual income</span></div>
-          <div><span className="font-display font-black text-[28px] text-evergreen">92%</span><span className="text-[13px] text-mocha ml-1.5">fintech adoption rate</span></div>
-        </div>
+        <StatRow color={C.evergreen} stats={[
+          { value: '60%+', label: 'Distrustful Experimenters' },
+          { value: '$30–40k', label: 'Annual income' },
+          { value: '92%', label: 'Fintech adoption rate' },
+        ]} />
         <p>LatAm migrants in the US. Test with small amounts, adopt through peer trust. Former Western Union / cash users looking for something faster and cheaper.</p>
       </Section>
 
       <Section title="How they behave" color={C.blueberry} icon={<ChatDots size={20} style={{ color: C.blueberry }} />} className="mb-4">
-        <div className="flex flex-wrap gap-x-8 gap-y-2 mb-3">
-          <div><span className="font-display font-black text-[28px] text-blueberry">51%</span><span className="text-[13px] text-mocha ml-1.5">organic / referral</span></div>
-          <div><span className="font-display font-black text-[28px] text-blueberry">4.78</span><span className="text-[13px] text-mocha ml-1.5">tx/month (top 20%)</span></div>
-          <div><span className="font-display font-black text-[28px] text-blueberry">$100</span><span className="text-[13px] text-mocha ml-1.5">typical first test send</span></div>
-        </div>
+        <StatRow color={C.blueberry} stats={[
+          { value: '51%', label: 'Organic / referral' },
+          { value: '4.78', label: 'Tx/month (top 20%)' },
+          { value: '$100', label: 'Typical first test send' },
+        ]} />
         <p>WhatsApp is home base. Trust is earned by trial + peer proof. Price-sensitive but values certainty over speed. Weekly sending ritual.</p>
       </Section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <Section title="Key blockers" color={C.papaya} icon={<Lightning size={20} style={{ color: C.papaya }} />}>
-          <div className="mb-3"><span className="font-display font-black text-[28px] text-papaya">84%</span><span className="text-[13px] text-mocha ml-1.5">of drop-offs actively tried to send</span></div>
+          <div className="text-center mb-4">
+            <p className="font-display font-black text-[36px] leading-none tracking-tight text-papaya">84%</p>
+            <p className="text-[14px] text-slate/70 font-medium mt-1.5">of drop-offs actively tried to send</p>
+          </div>
           <ul className="space-y-1 ml-1">
             <Li>First-tx errors permanently destroy retention</Li>
             <Li>Frozen screens trigger trust emergencies</Li>
@@ -117,21 +139,24 @@ function V2() {
         </Section>
 
         <Section title="Core jobs" color={C.cactus} icon={<Clipboard size={20} style={{ color: C.evergreen }} />}>
-          <div className="mb-3"><span className="font-display font-black text-[28px] text-cactus">84%</span><span className="text-[13px] text-mocha ml-1.5">6-mo retention with credit</span></div>
+          <div className="flex items-center divide-x divide-slate/10 mb-4">
+            <StatBlock value="84%" label="6-mo retention w/ credit" color={C.evergreen} />
+            <StatBlock value="36%" label="Without credit" color={C.mocha} />
+          </div>
           <ul className="space-y-1 ml-1">
             <Li>Test → Send → Confirm → Refer → Repeat</Li>
             <Li>Send fast, at best rate, with minimal effort</Li>
-            <Li>Credit adoption doubles retention (84% vs 36%)</Li>
+            <Li>Credit adoption doubles retention</Li>
             <Li>27% of volume = home-country investments</Li>
           </ul>
         </Section>
       </div>
 
       <Section title="Strategic bets" color={C.slate} icon={<Rocket size={20} style={{ color: C.slate }} />}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div><p className="font-display font-extrabold text-[17px] text-slate mb-1">WhatsApp-native</p><p className="text-[15px] text-mocha">Conversational first. Hybrid with practical UI elements.</p></div>
-          <div><p className="font-display font-extrabold text-[17px] text-slate mb-1">Community growth</p><p className="text-[15px] text-mocha">51% organic. One believer seeds an entire crew.</p></div>
-          <div><p className="font-display font-extrabold text-[17px] text-slate mb-1">Multiproduct moat</p><p className="text-[15px] text-mocha">Remittances → Credit → Wallet. Credit = retention.</p></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-x divide-slate/10">
+          <div className="px-4 first:pl-0 last:pr-0"><p className="font-display font-extrabold text-[17px] text-slate mb-1">WhatsApp-native</p><p className="text-[15px] text-slate/70">Conversational first. Hybrid with practical UI elements.</p></div>
+          <div className="px-4"><p className="font-display font-extrabold text-[17px] text-slate mb-1">Community growth</p><p className="text-[15px] text-slate/70">51% organic. One believer seeds an entire crew.</p></div>
+          <div className="px-4 first:pl-0 last:pr-0"><p className="font-display font-extrabold text-[17px] text-slate mb-1">Multiproduct moat</p><p className="text-[15px] text-slate/70">Remittances → Credit → Wallet. Credit = retention.</p></div>
         </div>
       </Section>
     </>

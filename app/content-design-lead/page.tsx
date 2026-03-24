@@ -736,7 +736,7 @@ export default function ContentDesignLeadOnboardingPage() {
 
   return (
     <div
-      className="h-screen w-screen overflow-hidden relative select-none"
+      className="h-screen w-screen overflow-hidden relative"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >

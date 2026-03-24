@@ -1102,7 +1102,7 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
         // Don't return — fall through to the streaming path
       } else {
       // Use the dedicated single-slide endpoint (direct API call, no streaming)
-      setShowEdit(false)
+      // Keep the edit panel open so user can make more edits
       setEditGenerating(true)
       setEditOverlay({ mode: 'slide', generating: true, done: false, affectedSlides: [activeSlideIndex] })
       const controller = new AbortController()

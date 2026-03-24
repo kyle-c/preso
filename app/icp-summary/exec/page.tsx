@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   UserCircle, ChatDots, Lightning, Clipboard, Rocket,
 } from '@/components-next/phosphor-icons'
@@ -175,6 +175,19 @@ const versions = [
 
 export default function ICPExecPage() {
   const [active, setActive] = useState('v1')
+
+  // Sync with URL hash on mount
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '')
+    if (versions.some(v => v.id === hash)) setActive(hash)
+  }, [])
+
+  // Update hash when tab changes
+  function switchTab(id: string) {
+    setActive(id)
+    window.history.replaceState(null, '', `#${id}`)
+  }
+
   const { Component } = versions.find(v => v.id === active) ?? versions[0]
 
   return (
@@ -192,7 +205,7 @@ export default function ICPExecPage() {
           {versions.map(v => (
             <button
               key={v.id}
-              onClick={() => setActive(v.id)}
+              onClick={() => switchTab(v.id)}
               className={`px-4 py-2 rounded-full text-[13px] font-semibold transition-all ${
                 active === v.id
                   ? 'bg-slate text-white'

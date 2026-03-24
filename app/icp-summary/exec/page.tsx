@@ -83,22 +83,20 @@ function V1() {
   )
 }
 
-/* ── Version 2: Stat-Led ──────────────────────────────────── */
-function StatBlock({ value, label, color }: { value: string; label: string; color: string }) {
-  return (
-    <div className="flex-1 text-center py-1">
-      <p className="font-display font-black text-[36px] leading-none tracking-tight" style={{ color }}>{value}</p>
-      <p className="text-[14px] text-slate/70 font-medium mt-1.5">{label}</p>
-    </div>
-  )
-}
+/* ── Version 2: Dashboard ─────────────────────────────────── */
 
-function StatRow({ stats, color }: { stats: { value: string; label: string }[]; color: string }) {
+function DashCard({ title, value, subtitle, bg, color, icon, children }: {
+  title: string; value: string; subtitle?: string; bg: string; color: string; icon: React.ReactNode; children?: React.ReactNode
+}) {
   return (
-    <div className="flex items-center divide-x divide-slate/10 mb-4">
-      {stats.map((s, i) => (
-        <StatBlock key={i} value={s.value} label={s.label} color={color} />
-      ))}
+    <div className="rounded-2xl p-6 shadow-sm" style={{ background: bg }}>
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[15px] font-semibold" style={{ color }}>{title}</p>
+        <div className="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center">{icon}</div>
+      </div>
+      <p className="font-display font-black text-[44px] leading-none tracking-tight text-slate">{value}</p>
+      {subtitle && <p className="text-[14px] text-slate/60 mt-2">{subtitle}</p>}
+      {children && <div className="mt-4 text-[14px] text-slate/80 leading-relaxed">{children}</div>}
     </div>
   )
 }
@@ -106,59 +104,113 @@ function StatRow({ stats, color }: { stats: { value: string; label: string }[]; 
 function V2() {
   return (
     <>
-      <Section title="Who is the user?" color={C.turquoise} icon={<UserCircle size={20} style={{ color: C.evergreen }} />} className="mb-4">
-        <StatRow color={C.evergreen} stats={[
-          { value: '60%+', label: 'Distrustful Experimenters' },
-          { value: '$30–40k', label: 'Annual income' },
-          { value: '92%', label: 'Fintech adoption rate' },
-        ]} />
-        <p>LatAm migrants in the US. Test with small amounts, adopt through peer trust. Former Western Union / cash users looking for something faster and cheaper.</p>
-      </Section>
-
-      <Section title="How they behave" color={C.blueberry} icon={<ChatDots size={20} style={{ color: C.blueberry }} />} className="mb-4">
-        <StatRow color={C.blueberry} stats={[
-          { value: '51%', label: 'Organic / referral' },
-          { value: '4.78', label: 'Tx/month (top 20%)' },
-          { value: '$100', label: 'Typical first test send' },
-        ]} />
-        <p>WhatsApp is home base. Trust is earned by trial + peer proof. Price-sensitive but values certainty over speed. Weekly sending ritual.</p>
-      </Section>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <Section title="Key blockers" color={C.papaya} icon={<Lightning size={20} style={{ color: C.papaya }} />}>
-          <div className="text-center mb-4">
-            <p className="font-display font-black text-[36px] leading-none tracking-tight text-papaya">84%</p>
-            <p className="text-[14px] text-slate/70 font-medium mt-1.5">of drop-offs actively tried to send</p>
-          </div>
-          <ul className="space-y-1 ml-1">
-            <Li>First-tx errors permanently destroy retention</Li>
-            <Li>Frozen screens trigger trust emergencies</Li>
-            <Li>Name entry abandonment: 70% in Colombia</Li>
-            <Li>Web → WhatsApp handoff breaks flow</Li>
-          </ul>
-        </Section>
-
-        <Section title="Core jobs" color={C.cactus} icon={<Clipboard size={20} style={{ color: C.evergreen }} />}>
-          <div className="flex items-center divide-x divide-slate/10 mb-4">
-            <StatBlock value="84%" label="6-mo retention w/ credit" color={C.evergreen} />
-            <StatBlock value="36%" label="Without credit" color={C.mocha} />
-          </div>
-          <ul className="space-y-1 ml-1">
-            <Li>Test → Send → Confirm → Refer → Repeat</Li>
-            <Li>Send fast, at best rate, with minimal effort</Li>
-            <Li>Credit adoption doubles retention</Li>
-            <Li>27% of volume = home-country investments</Li>
-          </ul>
-        </Section>
+      {/* Top stat cards row */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <DashCard title="Distrustful Experimenters" value="60%+" subtitle="of the user base" bg={`${C.turquoise}18`} color={C.evergreen} icon={<UserCircle size={18} style={{ color: C.evergreen }} />} />
+        <DashCard title="Annual Income" value="$30–40k" subtitle="Blue-collar LatAm migrants" bg={`${C.cactus}18`} color={C.evergreen} icon={<Clipboard size={18} style={{ color: C.evergreen }} />} />
+        <DashCard title="Fintech Adoption" value="92%" subtitle="Among Hispanic consumers" bg={`${C.blueberry}18`} color={C.blueberry} icon={<Rocket size={18} style={{ color: C.blueberry }} />} />
+        <DashCard title="Organic Acquisition" value="51%" subtitle="Referral / word-of-mouth" bg={`${C.mango}18`} color="#7A4D15" icon={<ChatDots size={18} style={{ color: '#7A4D15' }} />} />
       </div>
 
-      <Section title="Strategic bets" color={C.slate} icon={<Rocket size={20} style={{ color: C.slate }} />}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-x divide-slate/10">
-          <div className="px-4 first:pl-0 last:pr-0"><p className="font-display font-extrabold text-[17px] text-slate mb-1">WhatsApp-native</p><p className="text-[15px] text-slate/70">Conversational first. Hybrid with practical UI elements.</p></div>
-          <div className="px-4"><p className="font-display font-extrabold text-[17px] text-slate mb-1">Community growth</p><p className="text-[15px] text-slate/70">51% organic. One believer seeds an entire crew.</p></div>
-          <div className="px-4 first:pl-0 last:pr-0"><p className="font-display font-extrabold text-[17px] text-slate mb-1">Multiproduct moat</p><p className="text-[15px] text-slate/70">Remittances → Credit → Wallet. Credit = retention.</p></div>
+      {/* Two-column: Behavior + Blockers */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="bg-white rounded-2xl border border-slate/10 shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${C.blueberry}20` }}>
+              <ChatDots size={20} style={{ color: C.blueberry }} />
+            </div>
+            <h3 className="font-display font-extrabold text-[20px] text-slate">How they behave</h3>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="rounded-xl p-4" style={{ background: `${C.blueberry}10` }}>
+              <p className="font-display font-black text-[28px] text-blueberry leading-none">4.78</p>
+              <p className="text-[13px] text-slate/60 mt-1">Tx/month (top 20%)</p>
+            </div>
+            <div className="rounded-xl p-4" style={{ background: `${C.turquoise}10` }}>
+              <p className="font-display font-black text-[28px] text-evergreen leading-none">$100</p>
+              <p className="text-[13px] text-slate/60 mt-1">First test send</p>
+            </div>
+          </div>
+          <ul className="space-y-1.5 text-[15px] text-slate">
+            <Li><strong>WhatsApp is home base.</strong> Not email, not app stores.</Li>
+            <Li><strong>"If I can't touch it, it's not mine."</strong></Li>
+            <Li>Trust through peer proof. One crew member adopts, the rest follow.</Li>
+          </ul>
         </div>
-      </Section>
+
+        <div className="bg-white rounded-2xl border border-slate/10 shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${C.papaya}20` }}>
+              <Lightning size={20} style={{ color: C.papaya }} />
+            </div>
+            <h3 className="font-display font-extrabold text-[20px] text-slate">Key blockers</h3>
+          </div>
+          <div className="rounded-xl p-4 mb-4 text-center" style={{ background: `${C.papaya}10` }}>
+            <p className="font-display font-black text-[40px] text-papaya leading-none">84%</p>
+            <p className="text-[14px] text-slate/60 mt-1.5">of drop-offs actively tried to send</p>
+          </div>
+          <ul className="space-y-1.5 text-[15px] text-slate">
+            <Li>First-tx errors permanently destroy retention</Li>
+            <Li>Frozen screens = "my money disappeared"</Li>
+            <Li>Name entry: 70% Colombia abandonment</Li>
+            <Li>Web → WhatsApp handoff breaks flow</Li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Core jobs + Retention */}
+      <div className="bg-white rounded-2xl border border-slate/10 shadow-sm p-6 mb-4">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${C.cactus}20` }}>
+            <Clipboard size={20} style={{ color: C.evergreen }} />
+          </div>
+          <h3 className="font-display font-extrabold text-[20px] text-slate">Core jobs & retention</h3>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          <div className="rounded-xl p-4 text-center" style={{ background: `${C.cactus}10` }}>
+            <p className="font-display font-black text-[32px] text-evergreen leading-none">84%</p>
+            <p className="text-[13px] text-slate/60 mt-1">6-mo retention w/ credit</p>
+          </div>
+          <div className="rounded-xl p-4 text-center" style={{ background: `${C.stone}` }}>
+            <p className="font-display font-black text-[32px] text-mocha leading-none">36%</p>
+            <p className="text-[13px] text-slate/60 mt-1">Without credit</p>
+          </div>
+          <div className="rounded-xl p-4 text-center" style={{ background: `${C.mango}10` }}>
+            <p className="font-display font-black text-[32px] leading-none" style={{ color: '#7A4D15' }}>18.4</p>
+            <p className="text-[13px] text-slate/60 mt-1">Month avg tenure</p>
+          </div>
+          <div className="rounded-xl p-4 text-center" style={{ background: `${C.blueberry}10` }}>
+            <p className="font-display font-black text-[32px] text-blueberry leading-none">27%</p>
+            <p className="text-[13px] text-slate/60 mt-1">Volume to home investments</p>
+          </div>
+        </div>
+        <p className="text-[15px] text-slate"><strong>Test → Send → Confirm → Refer → Repeat → Borrow.</strong> Weekly ritual, 2 min from the job site, best rate. Credit is the retention moat.</p>
+      </div>
+
+      {/* Strategic bets */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="rounded-2xl p-6 shadow-sm" style={{ background: `${C.turquoise}12` }}>
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3" style={{ background: `${C.turquoise}25` }}>
+            <ChatDots size={20} style={{ color: C.evergreen }} />
+          </div>
+          <p className="font-display font-extrabold text-[18px] text-slate mb-2">WhatsApp-native</p>
+          <p className="text-[15px] text-slate/70">Conversational first. Hybrid with practical UI elements. Lives where users already are.</p>
+        </div>
+        <div className="rounded-2xl p-6 shadow-sm" style={{ background: `${C.cactus}12` }}>
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3" style={{ background: `${C.cactus}25` }}>
+            <UserCircle size={20} style={{ color: C.evergreen }} />
+          </div>
+          <p className="font-display font-extrabold text-[18px] text-slate mb-2">Community growth</p>
+          <p className="text-[15px] text-slate/70">51% organic. One believer seeds an entire crew. Human support cements trust permanently.</p>
+        </div>
+        <div className="rounded-2xl p-6 shadow-sm" style={{ background: `${C.blueberry}12` }}>
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3" style={{ background: `${C.blueberry}25` }}>
+            <Rocket size={20} style={{ color: C.blueberry }} />
+          </div>
+          <p className="font-display font-extrabold text-[18px] text-slate mb-2">Multiproduct moat</p>
+          <p className="text-[15px] text-slate/70">Remittances → Credit → Wallet. Credit doubles retention. Pricing competitive, certainty over speed.</p>
+        </div>
+      </div>
     </>
   )
 }

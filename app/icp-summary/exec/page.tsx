@@ -85,18 +85,17 @@ function V1() {
 
 /* ── Version 2: Dashboard ─────────────────────────────────── */
 
-function DashCard({ title, value, subtitle, bg, color, icon, children }: {
-  title: string; value: string; subtitle?: string; bg: string; color: string; icon: React.ReactNode; children?: React.ReactNode
+function DashCard({ title, value, subtitle, bg, color, icon, dark }: {
+  title: string; value: string; subtitle?: string; bg: string; color: string; icon: React.ReactNode; dark?: boolean; children?: React.ReactNode
 }) {
   return (
     <div className="rounded-2xl p-6 shadow-sm" style={{ background: bg }}>
       <div className="flex items-center justify-between mb-4">
         <p className="text-[15px] font-semibold" style={{ color }}>{title}</p>
-        <div className="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center">{icon}</div>
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${dark ? 'bg-white/10' : 'bg-white/60'}`}>{icon}</div>
       </div>
-      <p className="font-display font-black text-[44px] leading-none tracking-tight text-slate">{value}</p>
-      {subtitle && <p className="text-[14px] text-slate/60 mt-2">{subtitle}</p>}
-      {children && <div className="mt-4 text-[14px] text-slate/80 leading-relaxed">{children}</div>}
+      <p className={`font-display font-black text-[44px] leading-none tracking-tight ${dark ? 'text-white' : 'text-slate'}`}>{value}</p>
+      {subtitle && <p className={`text-[14px] mt-2 ${dark ? 'text-white/50' : 'text-slate/50'}`}>{subtitle}</p>}
     </div>
   )
 }
@@ -104,31 +103,31 @@ function DashCard({ title, value, subtitle, bg, color, icon, children }: {
 function V2() {
   return (
     <>
-      {/* Top stat cards row */}
+      {/* Top stat cards row — core brand palette */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-        <DashCard title="Distrustful Experimenters" value="60%+" subtitle="of the user base" bg={`${C.turquoise}18`} color={C.evergreen} icon={<UserCircle size={18} style={{ color: C.evergreen }} />} />
-        <DashCard title="Annual Income" value="$30–40k" subtitle="Blue-collar LatAm migrants" bg={`${C.cactus}18`} color={C.evergreen} icon={<Clipboard size={18} style={{ color: C.evergreen }} />} />
-        <DashCard title="Fintech Adoption" value="92%" subtitle="Among Hispanic consumers" bg={`${C.blueberry}18`} color={C.blueberry} icon={<Rocket size={18} style={{ color: C.blueberry }} />} />
-        <DashCard title="Organic Acquisition" value="51%" subtitle="Referral / word-of-mouth" bg={`${C.mango}18`} color="#7A4D15" icon={<ChatDots size={18} style={{ color: '#7A4D15' }} />} />
+        <DashCard title="Distrustful Experimenters" value="60%+" subtitle="of the user base" bg={C.stone} color={C.slate} icon={<UserCircle size={18} style={{ color: C.slate }} />} />
+        <DashCard title="Annual Income" value="$30–40k" subtitle="Blue-collar LatAm migrants" bg={C.stone} color={C.slate} icon={<Clipboard size={18} style={{ color: C.slate }} />} />
+        <DashCard title="Fintech Adoption" value="92%" subtitle="Among Hispanic consumers" bg={C.slate} color={C.turquoise} icon={<Rocket size={18} style={{ color: C.turquoise }} />} dark />
+        <DashCard title="Organic Acquisition" value="51%" subtitle="Referral / word-of-mouth" bg={C.slate} color={C.turquoise} icon={<ChatDots size={18} style={{ color: C.turquoise }} />} dark />
       </div>
 
       {/* Two-column: Behavior + Blockers */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div className="bg-white rounded-2xl border border-slate/10 shadow-sm p-6">
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${C.blueberry}20` }}>
-              <ChatDots size={20} style={{ color: C.blueberry }} />
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone">
+              <ChatDots size={20} style={{ color: C.slate }} />
             </div>
             <h3 className="font-display font-extrabold text-[20px] text-slate">How they behave</h3>
           </div>
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="rounded-xl p-4" style={{ background: `${C.blueberry}10` }}>
-              <p className="font-display font-black text-[28px] text-blueberry leading-none">4.78</p>
-              <p className="text-[13px] text-slate/60 mt-1">Tx/month (top 20%)</p>
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="rounded-xl p-4 bg-stone">
+              <p className="font-display font-black text-[28px] text-slate leading-none">4.78</p>
+              <p className="text-[13px] text-slate/50 mt-1">Tx/month (top 20%)</p>
             </div>
-            <div className="rounded-xl p-4" style={{ background: `${C.turquoise}10` }}>
-              <p className="font-display font-black text-[28px] text-evergreen leading-none">$100</p>
-              <p className="text-[13px] text-slate/60 mt-1">First test send</p>
+            <div className="rounded-xl p-4 bg-stone">
+              <p className="font-display font-black text-[28px] text-slate leading-none">$100</p>
+              <p className="text-[13px] text-slate/50 mt-1">First test send</p>
             </div>
           </div>
           <ul className="space-y-1.5 text-[15px] text-slate">
@@ -138,16 +137,16 @@ function V2() {
           </ul>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate/10 shadow-sm p-6">
+        <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${C.papaya}20` }}>
-              <Lightning size={20} style={{ color: C.papaya }} />
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone">
+              <Lightning size={20} style={{ color: C.slate }} />
             </div>
             <h3 className="font-display font-extrabold text-[20px] text-slate">Key blockers</h3>
           </div>
-          <div className="rounded-xl p-4 mb-4 text-center" style={{ background: `${C.papaya}10` }}>
-            <p className="font-display font-black text-[40px] text-papaya leading-none">84%</p>
-            <p className="text-[14px] text-slate/60 mt-1.5">of drop-offs actively tried to send</p>
+          <div className="rounded-xl p-4 mb-4 text-center bg-slate">
+            <p className="font-display font-black text-[40px] text-turquoise leading-none">84%</p>
+            <p className="text-[14px] text-white/60 mt-1.5">of drop-offs actively tried to send</p>
           </div>
           <ul className="space-y-1.5 text-[15px] text-slate">
             <Li>First-tx errors permanently destroy retention</Li>
@@ -159,29 +158,29 @@ function V2() {
       </div>
 
       {/* Core jobs + Retention */}
-      <div className="bg-white rounded-2xl border border-slate/10 shadow-sm p-6 mb-4">
+      <div className="bg-white rounded-2xl border border-concrete shadow-sm p-6 mb-4">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${C.cactus}20` }}>
-            <Clipboard size={20} style={{ color: C.evergreen }} />
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-stone">
+            <Clipboard size={20} style={{ color: C.slate }} />
           </div>
           <h3 className="font-display font-extrabold text-[20px] text-slate">Core jobs & retention</h3>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-          <div className="rounded-xl p-4 text-center" style={{ background: `${C.cactus}10` }}>
-            <p className="font-display font-black text-[32px] text-evergreen leading-none">84%</p>
-            <p className="text-[13px] text-slate/60 mt-1">6-mo retention w/ credit</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+          <div className="rounded-xl p-4 text-center bg-slate">
+            <p className="font-display font-black text-[32px] text-turquoise leading-none">84%</p>
+            <p className="text-[13px] text-white/50 mt-1">6-mo retention w/ credit</p>
           </div>
-          <div className="rounded-xl p-4 text-center" style={{ background: `${C.stone}` }}>
-            <p className="font-display font-black text-[32px] text-mocha leading-none">36%</p>
-            <p className="text-[13px] text-slate/60 mt-1">Without credit</p>
+          <div className="rounded-xl p-4 text-center bg-stone">
+            <p className="font-display font-black text-[32px] text-slate leading-none">36%</p>
+            <p className="text-[13px] text-slate/50 mt-1">Without credit</p>
           </div>
-          <div className="rounded-xl p-4 text-center" style={{ background: `${C.mango}10` }}>
-            <p className="font-display font-black text-[32px] leading-none" style={{ color: '#7A4D15' }}>18.4</p>
-            <p className="text-[13px] text-slate/60 mt-1">Month avg tenure</p>
+          <div className="rounded-xl p-4 text-center bg-stone">
+            <p className="font-display font-black text-[32px] text-slate leading-none">18.4</p>
+            <p className="text-[13px] text-slate/50 mt-1">Month avg tenure</p>
           </div>
-          <div className="rounded-xl p-4 text-center" style={{ background: `${C.blueberry}10` }}>
-            <p className="font-display font-black text-[32px] text-blueberry leading-none">27%</p>
-            <p className="text-[13px] text-slate/60 mt-1">Volume to home investments</p>
+          <div className="rounded-xl p-4 text-center bg-stone">
+            <p className="font-display font-black text-[32px] text-slate leading-none">27%</p>
+            <p className="text-[13px] text-slate/50 mt-1">Volume to home investments</p>
           </div>
         </div>
         <p className="text-[15px] text-slate"><strong>Test → Send → Confirm → Refer → Repeat → Borrow.</strong> Weekly ritual, 2 min from the job site, best rate. Credit is the retention moat.</p>
@@ -189,26 +188,26 @@ function V2() {
 
       {/* Strategic bets */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="rounded-2xl p-6 shadow-sm" style={{ background: `${C.turquoise}12` }}>
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3" style={{ background: `${C.turquoise}25` }}>
-            <ChatDots size={20} style={{ color: C.evergreen }} />
+        <div className="rounded-2xl p-6 shadow-sm bg-slate">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/10">
+            <ChatDots size={20} style={{ color: C.turquoise }} />
           </div>
-          <p className="font-display font-extrabold text-[18px] text-slate mb-2">WhatsApp-native</p>
-          <p className="text-[15px] text-slate/70">Conversational first. Hybrid with practical UI elements. Lives where users already are.</p>
+          <p className="font-display font-extrabold text-[18px] text-white mb-2">WhatsApp-native</p>
+          <p className="text-[15px] text-white/60">Conversational first. Hybrid with practical UI elements. Lives where users already are.</p>
         </div>
-        <div className="rounded-2xl p-6 shadow-sm" style={{ background: `${C.cactus}12` }}>
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3" style={{ background: `${C.cactus}25` }}>
-            <UserCircle size={20} style={{ color: C.evergreen }} />
+        <div className="rounded-2xl p-6 shadow-sm bg-slate">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/10">
+            <UserCircle size={20} style={{ color: C.turquoise }} />
           </div>
-          <p className="font-display font-extrabold text-[18px] text-slate mb-2">Community growth</p>
-          <p className="text-[15px] text-slate/70">51% organic. One believer seeds an entire crew. Human support cements trust permanently.</p>
+          <p className="font-display font-extrabold text-[18px] text-white mb-2">Community growth</p>
+          <p className="text-[15px] text-white/60">51% organic. One believer seeds an entire crew. Human support cements trust permanently.</p>
         </div>
-        <div className="rounded-2xl p-6 shadow-sm" style={{ background: `${C.blueberry}12` }}>
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3" style={{ background: `${C.blueberry}25` }}>
-            <Rocket size={20} style={{ color: C.blueberry }} />
+        <div className="rounded-2xl p-6 shadow-sm bg-slate">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/10">
+            <Rocket size={20} style={{ color: C.turquoise }} />
           </div>
-          <p className="font-display font-extrabold text-[18px] text-slate mb-2">Multiproduct moat</p>
-          <p className="text-[15px] text-slate/70">Remittances → Credit → Wallet. Credit doubles retention. Pricing competitive, certainty over speed.</p>
+          <p className="font-display font-extrabold text-[18px] text-white mb-2">Multiproduct moat</p>
+          <p className="text-[15px] text-white/60">Remittances → Credit → Wallet. Credit doubles retention. Pricing competitive, certainty over speed.</p>
         </div>
       </div>
     </>
@@ -274,7 +273,6 @@ export default function ICPExecPage() {
         <div className="mb-6 text-center">
           <span className="inline-block rounded-full bg-turquoise px-4 py-1 text-[12px] font-semibold text-slate uppercase tracking-wider mb-3">Executive Summary</span>
           <h1 className="font-display font-black text-3xl md:text-4xl text-slate tracking-tight">Félix ICP — At a Glance</h1>
-          <p className="text-mocha text-base mt-1">Three versions optimized for executive scanning</p>
         </div>
 
         {/* Version Tabs */}
@@ -293,11 +291,6 @@ export default function ICPExecPage() {
             </button>
           ))}
         </div>
-
-        {/* Active description */}
-        <p className="text-center text-[13px] text-mocha mb-6">
-          {versions.find(v => v.id === active)?.desc}
-        </p>
 
         <Component />
       </div>

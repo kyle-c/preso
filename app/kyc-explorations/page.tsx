@@ -420,8 +420,8 @@ export default function KycExplorationsPage() {
       {/* Variants — each row shows ES + EN side by side */}
       <div className="max-w-[1680px] mx-auto px-6 pb-16 space-y-16">
         {([
-          { letter: 'A', name: 'Full-Width Warm', desc: 'Edge-to-edge lychee banner with concise hint text', Component: VariantF, recommended: true },
-          { letter: 'B', name: 'Trust Builder', desc: 'Full-width sky banner with concise hint text', Component: VariantB },
+          { letter: 'A', name: 'Trust Builder', desc: 'Full-width sky banner with concise hint text', Component: VariantB, recommended: true },
+          { letter: 'B', name: 'Full-Width Warm', desc: 'Edge-to-edge lychee banner with concise hint text', Component: VariantF },
           { letter: 'C', name: 'Warm Nudge', desc: 'Full-width cactus banner with plain mocha hint text', Component: VariantA },
         ] as const).map(({ letter, name, desc, Component, ...rest }) => {
           const recommended = 'recommended' in rest && rest.recommended

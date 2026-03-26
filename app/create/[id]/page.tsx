@@ -671,6 +671,7 @@ export default function PresentationViewerPage() {
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: 'Unknown error' }))
         console.error('[slide-regenerate] API error:', err.error)
+        alert(err.error || 'Slide regeneration failed. Please try again.')
         setRegeneratingSlide(null)
         return
       }
@@ -691,6 +692,7 @@ export default function PresentationViewerPage() {
       }
     } catch (err) {
       console.error('[slide-regenerate]', err)
+      alert('Slide edit failed. Please try again.')
     }
     setRegeneratingSlide(null)
   }, [presentation, regeneratingSlide, id])

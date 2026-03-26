@@ -10,21 +10,7 @@
 /*  Returns a cleaned version of the slides array.             */
 /* ═══════════════════════════════════════════════════════════ */
 
-interface SlideData {
-  type: string
-  bg: string
-  title: string
-  subtitle?: string
-  body?: string
-  badge?: string
-  bullets?: { text: string; icon?: string }[]
-  cards?: { title: string; titleColor?: string; body: string }[]
-  columns?: any[]
-  imageUrl?: string
-  chart?: any
-  notes?: string
-  [key: string]: any
-}
+import type { SlideData } from './slide-types'
 
 /**
  * Post-process slides to enforce layout rules.

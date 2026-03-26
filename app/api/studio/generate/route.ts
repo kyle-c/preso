@@ -2300,7 +2300,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
               docText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, docPrompt, 16000, true, docTimeout)
             } catch (err) {
               console.error('[studio/generate] Reverse-engineer document LLM call failed:', err)
-              emit({ error: `LLM call failed: ${err instanceof Error ? err.message : String(err)}` })
+              emit({ error: 'Document generation failed. Please try again.' })
               clearInterval(keepalive)
               controller.enqueue(encoder.encode('data: [DONE]\n\n'))
               controller.close()
@@ -2547,7 +2547,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
       }
 
       return new Response(
-        JSON.stringify({ error: `Provider error (${upstreamResponse.status}): ${detail}` }),
+        JSON.stringify({ error: 'Generation failed. Please check your API key and try again.' }),
         { status: upstreamResponse.status, headers: { 'Content-Type': 'application/json' } },
       )
     }

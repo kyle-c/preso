@@ -1,6 +1,7 @@
 import { Redis } from '@upstash/redis'
 import crypto from 'crypto'
 import { encryptField, decryptField, SENSITIVE_FIELDS } from './studio-encrypt'
+import type { SlideData } from './slide-types'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -53,7 +54,7 @@ export interface Presentation {
   userId: string
   title: string
   prompt: string
-  slides: any[]
+  slides: SlideData[]
   document: PresentationDocument | null
   outline: PresentationOutline | null
   translations: Record<string, Record<string, string>> | null
@@ -258,7 +259,7 @@ export async function createPresentation(
   userId: string,
   title: string,
   prompt: string,
-  slides: any[],
+  slides: SlideData[],
   provider: string,
   model: string,
   document?: PresentationDocument | null,

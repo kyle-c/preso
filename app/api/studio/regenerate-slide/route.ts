@@ -69,7 +69,7 @@ RULES:
     if (!res.ok) {
       const err = await res.text()
       console.error('[regenerate-slide] Anthropic error:', res.status, err.slice(0, 200))
-      return NextResponse.json({ error: `LLM call failed (${res.status})` }, { status: 502 })
+      return NextResponse.json({ error: 'Slide generation failed. Please try again.' }, { status: 502 })
     }
 
     const data = await res.json()

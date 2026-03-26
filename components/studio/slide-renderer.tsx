@@ -1640,6 +1640,9 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
   const slide = slides[safeCurrent]
   const chrome = chromeColors(slide.bg)
   const SlideComponent = SLIDE_COMPONENTS[slide.type] ?? SlideContent
+  if (!SLIDE_COMPONENTS[slide.type]) {
+    console.warn(`[SlideRenderer] Unknown slide type "${slide.type}" — falling back to content layout`)
+  }
   const chromeProps: ChromeColors = { btnCls: chrome.btnCls, btnIcon: chrome.btnIcon, pillBg: chrome.pillBg, pillText: chrome.pillText, hoverTop, lockHover }
 
   const topLeftContent = topLeftExtra

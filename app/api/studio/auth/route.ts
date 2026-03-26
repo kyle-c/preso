@@ -14,18 +14,14 @@ export const runtime = 'nodejs'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const ALLOWED_EMAILS = new Set([
-  'mcarignan@gmail.com',
-  'al.cooney@gmail.com',
-  'jphillips@opthumb.com',
-  'benyaco@gmail.com',
-])
+const ALLOWED_EMAILS = new Set(
+  (process.env.ALLOWED_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean)
+)
 
 /** Emails that can log in with any password (passwordless access) */
-const PASSWORDLESS_EMAILS = new Set([
-  'jphillips@opthumb.com',
-  'benyaco@gmail.com',
-])
+const PASSWORDLESS_EMAILS = new Set(
+  (process.env.PASSWORDLESS_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean)
+)
 
 export async function POST(req: NextRequest) {
   try {

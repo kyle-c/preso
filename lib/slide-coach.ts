@@ -157,6 +157,23 @@ export function analyzeSlides(slides: SlideInput[]): CoachSuggestion[] {
       })
     }
 
+    // ── Thin content ──
+    if (!['title', 'section', 'closing', 'image', 'quote', 'chart'].includes(slide.type)) {
+      if (wordCount < 20) {
+        suggestions.push({
+          slideIndex: i, severity: 'error', rule: 'thin-content',
+          message: `Only ${wordCount} words — this slide needs more substance.`,
+          fix: 'Add specific details, data points, examples, or actionable items. Every content slide should have at least 30 words.',
+        })
+      } else if (wordCount < 30) {
+        suggestions.push({
+          slideIndex: i, severity: 'warning', rule: 'thin-content',
+          message: `Only ${wordCount} words — could use more detail.`,
+          fix: 'Add supporting details or context to make this slide more valuable.',
+        })
+      }
+    }
+
     // ── Bullet count ──
     if (slide.bullets && slide.bullets.length > 7) {
       suggestions.push({

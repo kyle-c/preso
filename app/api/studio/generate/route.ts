@@ -119,8 +119,8 @@ Follow these rules strictly to ensure all content meets WCAG 2.1 AA contrast req
 - When a slide contains 2+ metrics or stats, NEVER bury them in a prose paragraph. Break them out as visual elements: cards (each stat as title), bullets (bold number leading), or two-column stat callouts. Dense paragraphs with embedded bold numbers are hard to scan in a live presentation.
 - Section divider slides (type "section") MUST include a subtitle with a 1-sentence preview of what's coming. Never leave a section slide with just a title — it wastes the audience's attention.
 - Content slides (type "content") MUST have 40-80 words of body text MAX. This is a hard limit. If you have more than 80 words, you MUST either: (a) convert to bullet points, (b) split into two slides, or (c) use a two-column or cards layout instead. A presentation is NOT a document — every word must earn its place.
-- Every slide must have substantive content. No slide should show just a title with empty space below it.
-- Body text: MAX 2-3 SHORT sentences. Each sentence should be under 20 words. No paragraphs longer than 3 lines when displayed at 16px on a 1280px wide viewport. Long-form content belongs in the "notes" field and in the document view — NOT on the slide face.
+- MINIMUM CONTENT RULE: Every content/bullets/cards/two-column slide MUST have at least 30 words of visible content (title + subtitle + body + bullets + cards combined). A slide with just a title and nothing else is NEVER acceptable for content slides. Fill the space with substance — specific details, data, examples, or actionable items. Err on the side of MORE content, not less. An audience that reads is better than an audience that sees empty slides.
+- Body text: 2-3 SHORT sentences, each under 20 words. Long-form content belongs in "notes" — NOT on the slide face. But the slide must still say something meaningful.
 - CRITICAL: When a slide has numbers, metrics, KPIs, or financial data — NEVER write them as prose. Always use one of these formats:
   * "cards" type with each metric as a card title (e.g. title: "$18", body: "Blended CAC")
   * "chart" type with a ChartSpec for visual representation

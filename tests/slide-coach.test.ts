@@ -105,6 +105,34 @@ describe('analyzeSlides', () => {
     expect(suggestions.some(s => s.rule === 'missing-notes')).toBe(false)
   })
 
+  it('flags thin content slides with fewer than 20 words', () => {
+    const slides = [makeSlide({ body: 'Just a few words' })]
+    const suggestions = analyzeSlides(slides as any)
+    const thin = suggestions.find(s => s.rule === 'thin-content')
+    expect(thin?.severity).toBe('error')
+  })
+
+  it('warns on slides with 20-29 words', () => {
+    const body = Array(25).fill('word').join(' ')
+    const slides = [makeSlide({ body })]
+    const suggestions = analyzeSlides(slides as any)
+    const thin = suggestions.find(s => s.rule === 'thin-content')
+    expect(thin?.severity).toBe('warning')
+  })
+
+  it('does not flag thin content on title/section/closing slides', () => {
+    const slides = [makeSlide({ type: 'title', body: 'Short' })]
+    const suggestions = analyzeSlides(slides as any)
+    expect(suggestions.some(s => s.rule === 'thin-content')).toBe(false)
+  })
+
+  it('does not flag content slides with 30+ words', () => {
+    const body = Array(35).fill('word').join(' ')
+    const slides = [makeSlide({ body })]
+    const suggestions = analyzeSlides(slides as any)
+    expect(suggestions.some(s => s.rule === 'thin-content')).toBe(false)
+  })
+
   it('flags data-as-text when 3+ numbers in text', () => {
     const slides = [makeSlide({ body: 'Revenue grew 45% to $2.3M with 150 new customers' })]
     const suggestions = analyzeSlides(slides as any)

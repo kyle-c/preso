@@ -997,7 +997,7 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
               <div data-slide-field="cards" className={cn('grid grid-cols-1 gap-4', gridCols)}>
                 {slide.cards.map((card, i) => {
                   // Detect phase-style titles like "Days 1-30: Immerse"
-                  const phaseMatch = card.title.match(/^(Days?\s+\d[\d\s–—-]*\d*)\s*[:–—-]\s*(.+)$/i)
+                  const phaseMatch = card.title?.match(/^(Days?\s+\d[\d\s–—-]*\d*)\s*[:–—-]\s*(.+)$/i)
                   const accentColor = card.titleColor || BRAND_COLORS[i % BRAND_COLORS.length]
 
                   // Parse body into list items if it contains bullets or newline-separated items

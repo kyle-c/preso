@@ -30,3 +30,4 @@ next-env.d.ts
 .DS_Store
 .env*.local
 uxguidelines/node_modules/
+.gstack/

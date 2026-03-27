@@ -41,6 +41,8 @@ const PUBLIC_ROUTES = new Set([
   '/icp-summary',
   '/icp-summary/exec',
   '/cd-summary',
+  '/omnipresent',
+  '/wallet',
 ])
 
 const STATIC_EXT = /\.(png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|otf|eot|css|js|json|map|txt|xml|webmanifest)$/i

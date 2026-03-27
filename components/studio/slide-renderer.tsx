@@ -1959,14 +1959,14 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
         onToggleComments={(!sharePermission || sharePermission !== 'viewer') ? () => { if (!commentMode && tocOpen) setTocOpen(false); setCommentMode(!commentMode) } : undefined}
         locale={locale}
         onLocaleChange={setLocale}
-        onDownloadPdf={() => {
+        onDownloadPdf={isGeneratingDocument ? undefined : () => {
           if (viewMode === 'outline' || viewMode === 'document') {
             downloadViewPdf({ viewMode })
           } else {
             downloadPdf({ slideRef, total, currentSlide: current, goToSlide: setCurrent })
           }
         }}
-        onDownloadPptx={async () => {
+        onDownloadPptx={isGeneratingDocument ? undefined : async () => {
           try {
             const res = await fetch('/api/studio/export/pptx', {
               method: 'POST',

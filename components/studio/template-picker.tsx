@@ -208,6 +208,10 @@ export function SaveAsTemplateButton({ slides, presId, presTitle, className }: S
 
   const handleSave = useCallback(async () => {
     if (saving || saved) return
+    if (!slides || slides.length === 0) {
+      alert('Cannot save template — presentation has no slides.')
+      return
+    }
     setSaving(true)
     try {
       const sections = slides.map(s => ({

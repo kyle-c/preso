@@ -581,6 +581,13 @@ export default function PresentationViewerPage() {
   const [previewingId, setPreviewingId] = useState<string | null>(null)
   const previewSlidesRef = useRef<any[] | null>(null)
 
+  // Cleanup abort controller on unmount
+  useEffect(() => {
+    return () => {
+      editAbortRef.current?.abort()
+    }
+  }, [])
+
   // Load revision history from server on mount
   useEffect(() => {
     if (!id) return
@@ -982,7 +989,7 @@ export default function PresentationViewerPage() {
 
 
   const handleEditGenerate = useCallback(async (overrides?: { scope?: string; prompt?: string; slideIndex?: number }) => {
-    if (!presentation) return
+    if (!presentation || editGenerating) return
 
     const activeScope = (overrides?.scope ?? editScope) as typeof editScope
     const activePrompt = overrides?.prompt ?? editPrompt

@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { strengthenPrompt, detectIntent } from '@/lib/prompt-strengthener'
 import { formatChartConstraint } from '@/lib/data-viz-intelligence'
 import { postProcessSlides } from '@/lib/slide-layout-engine'
+import { analyzeSlides, totalSlideWords } from '@/lib/slide-coach'
 import { getServerSession } from '@/lib/studio-auth'
 import { getBrandKit, serializeBrandForPrompt, FELIX_BRAND_KIT } from '@/lib/brand-kit'
 import { computeUserStyleProfile, selectExemplars, formatProfileForPrompt, formatExemplarsForPrompt } from '@/lib/studio-quality'
@@ -115,12 +116,12 @@ Follow these rules strictly to ensure all content meets WCAG 2.1 AA contrast req
 - NEVER leave widows or orphans — no single word should sit alone on the last line of a title, subtitle, body paragraph, bullet point, or card description. Rewrite to pull at least two words onto the final line, or tighten the copy so the last line merges with the previous one. This applies to all slide types, outline text, and document sections equally.
 - NEVER use emoji icons on bullet items unless the user explicitly requests them. Use "✓" or "→" for functional indicators only. Omit the icon field by default. Emoji-heavy slides look unprofessional.
 - Card counts MUST be 2, 3, 4, or 6. NEVER use 5 or 7 cards — they create orphaned bottom rows. 4 cards renders as a 2×2 grid, 6 as a 3×2 grid. If you have 5 items, combine two into one card or split into two slides.
-- Card body format: Use STRUCTURED format, not dense paragraphs. Each card: 1 bold lead sentence + 2-3 short bullet points (• prefix). Total 20-40 words per card. NEVER write 5+ sentences in a card body.
+- Card body format: Use STRUCTURED format, not dense paragraphs. Each card: 1 bold lead sentence + 2-3 bullet points (• prefix). Target 25-50 words per card for substance. NEVER write 5+ sentences in a card body.
 - When a slide contains 2+ metrics or stats, NEVER bury them in a prose paragraph. Break them out as visual elements: cards (each stat as title), bullets (bold number leading), or two-column stat callouts. Dense paragraphs with embedded bold numbers are hard to scan in a live presentation.
 - Section divider slides (type "section") MUST include a subtitle with a 1-sentence preview of what's coming. Never leave a section slide with just a title — it wastes the audience's attention.
-- Content slides (type "content") MUST have 40-80 words of body text MAX. This is a hard limit. If you have more than 80 words, you MUST either: (a) convert to bullet points, (b) split into two slides, or (c) use a two-column or cards layout instead. A presentation is NOT a document — every word must earn its place.
-- MINIMUM CONTENT RULE: Every content/bullets/cards/two-column slide MUST have at least 30 words of visible content (title + subtitle + body + bullets + cards combined). A slide with just a title and nothing else is NEVER acceptable for content slides. Fill the space with substance — specific details, data, examples, or actionable items. Err on the side of MORE content, not less. An audience that reads is better than an audience that sees empty slides.
-- Body text: 2-3 SHORT sentences, each under 20 words. Long-form content belongs in "notes" — NOT on the slide face. But the slide must still say something meaningful.
+- Content slides (type "content") should have 40-100 words of body text. If you exceed 100 words, consider converting to bullet points or splitting into two slides. Every word should earn its place — but substance is more important than brevity.
+- MINIMUM CONTENT RULE: Every content/bullets/cards/two-column slide MUST have at least 50 words of visible content (title + subtitle + body + bullets + cards combined). A slide with just a title and nothing else is NEVER acceptable. Fill the space with substance — specific details, data, examples, or actionable items. Err on the side of MORE content, not less. Per-field minimums: Each bullet MUST be 8+ words (a complete thought, not a label). Card body MUST be 20+ words (bold lead + supporting detail). Body text MUST be 20+ words minimum. Column content MUST be 15+ words each. EVERY slide needs subtitle + body + type-specific fields (bullets/cards/columns/chart). Never leave a slide with just a title.
+- Body text: 2-4 sentences with specific details. Long-form content can go in "notes", but the slide face must have substantive, insight-driven copy — not placeholder text.
 - CRITICAL: When a slide has numbers, metrics, KPIs, or financial data — NEVER write them as prose. Always use one of these formats:
   * "cards" type with each metric as a card title (e.g. title: "$18", body: "Blended CAC")
   * "chart" type with a ChartSpec for visual representation
@@ -1158,39 +1159,51 @@ const FAST_OUTLINE_MODELS: Record<string, string> = {
   openrouter: 'google/gemini-2.5-flash',
 }
 
+// Normalize model IDs — fix short aliases and legacy stored preferences
+const MODEL_ALIASES: Record<string, string> = {
+  'claude-opus-4-6': 'claude-opus-4-6-20250627',
+  'claude-sonnet-4-6': 'claude-sonnet-4-6-20250627',
+  'claude-opus-4': 'claude-opus-4-20250514',
+  'claude-sonnet-4': 'claude-sonnet-4-20250514',
+}
+
+function normalizeModel(model: string): string {
+  return MODEL_ALIASES[model] ?? model
+}
+
 // #6: Pre-built onboarding template outline (skips the outline API call entirely)
 const ONBOARDING_OUTLINE = [
-  { type: 'title', bg: 'light', badge: 'Welcome to Félix', title: 'Bienvenido!' },
-  { type: 'two-column', bg: 'light', badge: 'About Félix', title: 'Who We Are' },
-  { type: 'cards', bg: 'light', badge: '', title: 'Our Values' },
-  { type: 'two-column', bg: 'dark', badge: 'Your Role', title: 'Your Role' },
-  { type: 'cards', bg: 'light', badge: 'Your People', title: 'Meet the Team' },
-  { type: 'cards', bg: 'dark', badge: 'Your Roadmap', title: 'First 90 Days' },
-  { type: 'cards', bg: 'light', badge: 'Getting Set Up', title: 'Your Toolkit' },
-  { type: 'two-column', bg: 'brand', badge: "Who You'll Serve", title: 'Our Users' },
-  { type: 'bullets', bg: 'light', badge: 'Getting Started', title: 'Your First Week' },
-  { type: 'closing', bg: 'dark', badge: '', title: 'Welcome aboard' },
+  { type: 'title', bg: 'light', badge: 'Welcome to Félix', title: 'Bienvenido!', notes: 'Warm welcome slide. Include the new hire\'s name if available, the team they\'re joining, and their start date. Set an excited, inclusive tone.' },
+  { type: 'two-column', bg: 'light', badge: 'About Félix', title: 'Who We Are', notes: 'Left column: Félix Pago\'s mission to empower Latinos in the US with accessible financial services. Right column: Key company stats — founding year, team size, users served, funding raised. Make it concrete with numbers.' },
+  { type: 'cards', bg: 'light', badge: '', title: 'Our Values', notes: 'Present 3-4 core company values as cards. Each card: bold value name + 2-3 sentences explaining what it means in practice with a specific example. Values should feel actionable, not corporate platitudes.' },
+  { type: 'two-column', bg: 'dark', badge: 'Your Role', title: 'Your Role', notes: 'Left column: Role title, team, reporting structure, key responsibilities (4-5 specific items). Right column: What success looks like in 30/60/90 days — concrete deliverables, not vague goals.' },
+  { type: 'cards', bg: 'light', badge: 'Your People', title: 'Meet the Team', notes: 'Cards for 4-6 key teammates. Each card: name, role, fun fact or expertise area, and how they\'ll interact with the new hire. Include direct manager and cross-functional partners.' },
+  { type: 'cards', bg: 'dark', badge: 'Your Roadmap', title: 'First 90 Days', notes: 'Three cards for 30/60/90 day milestones. Each card: specific goals, key projects, skills to develop, people to meet. Be concrete — "Ship first PR" not "Get oriented."' },
+  { type: 'cards', bg: 'light', badge: 'Getting Set Up', title: 'Your Toolkit', notes: 'Cards for essential tools: Slack channels to join, GitHub repos to clone, Figma files to bookmark, key docs to read. Include specific links or names where possible.' },
+  { type: 'two-column', bg: 'brand', badge: "Who You'll Serve", title: 'Our Users', notes: 'Left column: User demographics — 62M Latinos in the US, pain points (high remittance fees, limited banking access, language barriers). Right column: User stories or personas with specific details about how they use Félix.' },
+  { type: 'bullets', bg: 'light', badge: 'Getting Started', title: 'Your First Week', notes: 'Day-by-day checklist for week one: Day 1 (laptop setup, team lunch, HR paperwork), Day 2 (codebase tour, dev environment), Day 3 (shadow a teammate), Day 4 (first small task), Day 5 (1:1 with manager, week 1 retro). Be specific and actionable.' },
+  { type: 'closing', bg: 'dark', badge: '', title: 'Welcome aboard', notes: 'Encouraging closing message. Include who to reach out to with questions (manager name, buddy name), link to the team Slack channel, and a motivating note about the impact they\'ll make.' },
 ]
 
 const OUTLINE_SYSTEM_PROMPT = `You are a presentation architect for Félix Pago, a fintech empowering Latinos in the US.
 
-Given a brief, output a JSON array of 12-18 slide OUTLINES. Each outline is a minimal object:
+Given a brief, output a JSON array of 12-18 slide outlines. Each outline:
 {"type": "...", "bg": "dark"|"light"|"brand", "badge": "...", "title": "..."}
 
-Available types: title, section, content, bullets, two-column, cards, quote, image, checklist, chart, closing.
+Types: title, section, content, bullets, two-column, cards, quote, image, checklist, chart, closing.
 
 Rules:
-- Start with type "title" (bg "brand"), end with type "closing"
-- The title slide must be SHORT and punchy — title max 6 words, subtitle max 8 words (e.g. "Charting Our Future" + "UX · Q2 2025"). Think billboard headline, not description
-- Alternate bg colors — never two consecutive slides with same bg
-- Use "brand" bg sparingly (title, closing, one accent slide max)
-- Use at least 6 different slide types — include at least 1 chart, 1 cards, and 1 two-column
-- Titles should be insight-driven, not generic (e.g. "Revenue grew 22% through organic channels" not "Revenue Overview")
-- Badge text should categorize sections (e.g. "Overview", "Key Insight", "Your Role")
-- For onboarding/welcome prompts: EXACTLY 10 slides with bg pattern: light, light, light, dark, light, dark, light, brand, light, dark
-- Prefer 14-16 slides for strategy/investor/launch decks — these topics need room to breathe
+- Start with "title" (bg "brand"), end with "closing"
+- Title slide: max 6 words title, max 8 words subtitle
+- Alternate bg — never two consecutive same bg
+- "brand" sparingly (title, closing, one accent)
+- At least 6 types — include 1+ chart, 1+ cards, 1+ two-column
+- Insight-driven titles: "Revenue grew 22% organically" not "Revenue Overview"
+- Badge categorizes sections: "Overview", "Key Insight", "Your Role"
+- 14-16 slides for strategy/investor/launch decks
+- Onboarding: EXACTLY 10 slides, bg: light, light, light, dark, light, dark, light, brand, light, dark
 
-Return ONLY the JSON array. No markdown fences, no commentary.`
+Return ONLY the JSON array.`
 
 function buildBatchPrompt(outline: any[], batchIndices: number[], userPrompt?: string, hasFiles = false, intent?: string): string {
   const outlineStr = JSON.stringify(outline, null, 2)
@@ -1229,41 +1242,60 @@ function buildBatchPrompt(outline: any[], batchIndices: number[], userPrompt?: s
 Replace [bracketed placeholders] with content derived from the user's prompt. If the prompt doesn't specify certain details (team members, tools, responsibilities), use plausible defaults for a Félix employee in the specified role.\n`
     : ''
 
-  return `You are completing slides for a Félix Pago presentation.
+  const otherIndices = outline.map((_: any, i: number) => i).filter((i: number) => !batchIndices.includes(i))
+  const contextHint = otherIndices.length > 0
+    ? `\nNote: Slides at indices [${otherIndices.join(', ')}] are being generated in parallel. Ensure your slides complement the full narrative — avoid repeating content from other slides' outlines.\n`
+    : ''
 
+  const userContext = userPrompt
+    ? `\nUSER'S ORIGINAL BRIEF:\n${userPrompt}\n\nUse this context to generate rich, specific content that directly addresses the user's intent. Every slide should reflect the subject matter, domain expertise, and goals described above.\n`
+    : ''
+
+  return `You are completing slides for a Félix Pago presentation.
+${userContext}
 Here is the FULL presentation outline (${outline.length} slides):
 ${outlineStr}
-${fileHint}${onboardingHint}
+${fileHint}${onboardingHint}${contextHint}
 Generate FULL content for slides at indices [${indices}] ONLY.
 
-For each slide, start from the outline (keep its type, bg, badge, title) and add ALL relevant fields. Every slide MUST use multiple fields working together — never just a title and a few thin bullets.
+You must produce COMPLETE, PRESENTATION-READY slides — not outlines or placeholders. The user's brief above is your source material. Use it to generate specific, substantive content for every slide. Each slide must feel like it was written by a domain expert for a live presentation.
 
-REQUIRED FIELDS per slide type:
-- bullets: body + bullets (4-6 items, each a complete thought with specifics)
-- cards: body + cards (2-4 cards, each with structured body: **bold lead** + 2-3 bullets using • prefix. NEVER dense prose paragraphs). Use varied titleColor from: #6060BF, #60D06F, #F19D38, #F26629, #7BA882, #35605F, #2BF2F1
-- two-column: body + columns (each column with heading + 3-6 bullets or substantive body text). Both columns MUST be fully populated.
-- chart: body (key insight) + chart (ChartSpec with 5-8 data points) + bullets (3-4 supporting metrics)
-- content: body (2-3 paragraphs)
-- quote: quote + body (context around the quote)
+For each slide, keep its type, bg, badge, and title from the outline, then ADD all content fields:
 
-ADDITIONAL FIELDS (add to any type):
-- subtitle, imageUrl, imageCaption, badge, notes (3-5 sentence speaker notes)
-- imageUrl: use EXACT paths from Félix illustration library (URL-encoded):
-  /illustrations/Party%20Popper.svg, /illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg,
-  /illustrations/F%C3%A9lix%20Illo%201.svg, /illustrations/Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg,
-  /illustrations/Dollar%20bills%20%2B%20Coins%20A.svg, /illustrations/Flying%20Dollar%20Bills%20-%20Turquoise.svg,
-  /illustrations/Speech%20Bubbles%20%2B%20Hearts.svg, /illustrations/Hand%20-%20Stars.svg,
-  /illustrations/Fast.svg, /illustrations/Magnifying%20Glass.svg, /illustrations/Survey.svg,
-  /illustrations/Lock.svg, /illustrations/Heart%20-F%C3%A9lix.svg, /illustrations/ray.svg
+## WHAT EVERY SLIDE MUST HAVE:
+- subtitle: 1 sentence summarizing the slide's key insight (with data)
+- body: 2-3 sentences of substantive context (15-40 words)
+- notes: 3-5 sentence speaker notes for the presenter
+- imageUrl: pick ONE from the illustration library below
 
-CONTENT DENSITY EXAMPLES:
-- Bad bullet: "Market growth" — too thin, no specifics
-- Good bullet: "TAM: $161B — Total LatAm remittances per year, growing 4% annually"
-- Bad card body: "We have regulatory support." — one vague sentence
-- Good card body: "Open banking maturing. Real-time payment infrastructure (FedNow) live. Stablecoin regulation creating clarity for Circle/USDC at enterprise scale."
+## CONTENT FIELDS BY SLIDE TYPE — ALL are required, NO EXCEPTIONS:
+- **title**: subtitle (punchy 5-8 word tagline)
+- **section**: subtitle (1 substantive sentence with specific details, NOT just a topic label. Example: "Exploring how 62M underserved Latinos represent a $2.3T market opportunity" NOT "Market overview")
+- **content**: body (40-100 words, 2-3 substantive paragraphs with specific data)
+- **bullets**: body (1-2 intro sentences) + bullets [{text: "..."}] — 4-6 items, each 8-15 words. Example: "TAM: $161B — Total LatAm remittances per year, growing 4% annually"
+- **cards**: body (1-2 intro sentences) + cards [{title, body, titleColor}] — 2-4 cards. Each card body: 1 bold lead sentence + 2-3 bullet points (• prefix), 20-40 words. Use titleColors: #6060BF, #60D06F, #F19D38, #F26629, #7BA882, #35605F, #2BF2F1
+- **two-column**: body (1-2 intro sentences) + columns [{heading, body, bullets: [{text}]}] — BOTH columns with heading + 3-5 substantive bullets each
+- **chart**: body (key insight sentence) + chart {type: "bar"|"line"|"area"|"pie"|"doughnut", title: "...", data: [{label, value}]} — 5-8 realistic data points
+- **quote**: quote {text, attribution} + body (2-3 sentences of context)
+- **checklist**: body (1-2 intro sentences) + bullets [{text: "..."}] — 5-8 actionable items, each 8-12 words
+- **closing**: subtitle (inspiring tagline) + body (2-3 closing sentences with specific call-to-action or next steps)
+
+CRITICAL: Section slides are NOT empty dividers — they must have a rich, data-specific subtitle that previews the upcoming content. Every slide type above MUST have its listed fields populated.
+
+## ILLUSTRATION LIBRARY (use EXACT paths):
+/illustrations/Party%20Popper.svg, /illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg, /illustrations/F%C3%A9lix%20Illo%201.svg, /illustrations/Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg, /illustrations/Dollar%20bills%20%2B%20Coins%20A.svg, /illustrations/Flying%20Dollar%20Bills%20-%20Turquoise.svg, /illustrations/Speech%20Bubbles%20%2B%20Hearts.svg, /illustrations/Hand%20-%20Stars.svg, /illustrations/Fast.svg, /illustrations/Magnifying%20Glass.svg, /illustrations/Survey.svg, /illustrations/Lock.svg, /illustrations/Heart%20-F%C3%A9lix.svg, /illustrations/ray.svg
+
+## WHAT "GOOD" LOOKS LIKE:
+Bad bullet: "Market growth" — REJECTED, too thin
+Good bullet: "**$96B annually** — US-to-LatAm remittance market growing 8% YoY, driven by 62M Latino residents"
+
+Bad card body: "We have regulatory support." — REJECTED, one vague sentence
+Good card body: "**Real-time rails live.** FedNow enables instant settlement. Open banking APIs mature. Stablecoin regulation (MiCA, US framework) creates enterprise-grade USDC rails."
+
+Bad chart: 3 data points with round numbers — REJECTED
+Good chart: 6+ data points with realistic values: [{label: "Q1 2024", value: 2.1}, {label: "Q2 2024", value: 2.8}, ...]
 ${blueprintHint}
-Quality: Write like a senior strategy consultant. Insight-driven titles. Substantive content with specific numbers, names, dates, and comparisons. Every slide should feel like it was crafted by a domain expert, not a template filler.
-NEVER leave widows or orphans — no single word alone on the last line of any title, subtitle, body, bullet, or card description. Rewrite copy so the final line has at least two words.
+Write like a senior strategy consultant who knows this domain deeply. Use specific numbers, names, dates, and comparisons throughout. Every slide must have 50+ words of visible content.
 
 Return ONLY a JSON array of the completed slides (same order as requested). No markdown fences.`
 }
@@ -1620,7 +1652,14 @@ IMPORTANT: Never leave widows or orphans — no single word alone on the last li
 Return ONLY the JSON object. No markdown fences.`
 
     const docTimeout = body.model.includes('opus') ? 180000 : 90000
-    const docText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, docPrompt, 8000, true, docTimeout)
+    let docText: string
+    try {
+      docText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, docPrompt, 8000, true, docTimeout)
+    } catch (modelErr) {
+      console.warn('[studio/generate] Doc generation failed with user model, retrying with fallback:', modelErr)
+      const fallbackBody = { ...body, model: 'claude-sonnet-4-20250514' }
+      docText = await makeNonStreamingCall(fallbackBody, body.enrichedSystemPrompt || SYSTEM_PROMPT, docPrompt, 8000, true, 90000)
+    }
     const doc = parseJSONResponse(docText)
     if (doc && doc.title) {
       emit({ document: doc })
@@ -1651,7 +1690,13 @@ Return a JSON object:
 
 Section titles should be descriptive and specific. Include numbers and conclusions in subsection details. Return ONLY the JSON object.`
 
-        const outlineText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, outlinePrompt, 6000, true, 60000)
+        let outlineText: string
+        try {
+          outlineText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, outlinePrompt, 6000, true, 60000)
+        } catch {
+          const fb = { ...body, model: 'claude-sonnet-4-20250514' }
+          outlineText = await makeNonStreamingCall(fb, body.enrichedSystemPrompt || SYSTEM_PROMPT, outlinePrompt, 6000, true, 60000)
+        }
         const docOutline = parseJSONResponse(outlineText)
         if (docOutline && docOutline.title) {
           emit({ outline: docOutline })
@@ -1722,13 +1767,10 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
           console.log('[studio/generate] Onboarding detected (no files) — using template outline')
           outline = ONBOARDING_OUTLINE
         } else {
-          // #2: Use fast/cheap model for outline (structure doesn't need premium)
+          // Use fast model for outline (structure only — content comes from batch step)
           console.log('[studio/generate] Parallel Phase 1: getting outline...')
           const fastModel = FAST_OUTLINE_MODELS[body.provider]
-          const outlineBody: GenerateBody = {
-            ...body,
-            model: fastModel ?? body.model,
-          }
+          const outlineBody: GenerateBody = { ...body, model: fastModel ?? body.model }
 
           // When files are attached, enhance the outline prompt and use the user's
           // full model (not the fast model) so it can process PDFs/images
@@ -1842,16 +1884,43 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
 
         console.log(`[studio/generate] Outline: ${outline.length} slides`)
 
-        // Emit outline immediately so client shows slide shells
+        // Sanitize outline — fix malformed bullets/cards from LLM
+        for (const slide of outline) {
+          if (slide.bullets) {
+            slide.bullets = slide.bullets
+              .map((b: any) => typeof b === 'string' ? { text: b } : b)
+              .filter((b: any) => b && b.text)
+          }
+          if (slide.cards) {
+            slide.cards = slide.cards.filter((c: any) => c && c.title)
+          }
+          if (slide.columns) {
+            for (const col of slide.columns) {
+              if (col.bullets) {
+                col.bullets = col.bullets
+                  .map((b: any) => typeof b === 'string' ? { text: b } : b)
+                  .filter((b: any) => b && b.text)
+              }
+            }
+          }
+        }
+
+        // Emit outline immediately so client shows slide content
         emit({ outline })
 
         // Wait for enrichment to complete before batch generation (runs concurrently with outline)
         await enrichmentPromise
 
-        // #10: Dynamic batch sizing based on slide count
+        // Track completed slides for document generation
+        const allCompletedSlides: any[] = new Array(outline.length).fill(null)
+        let completedSlideCount = 0
+
+        // #10: Dynamic batch sizing — ALL slides get content generation
+        // The outline provides structure + hints; content step produces the full slide
+        const allIndices = outline.map((_: any, i: number) => i)
         const batchCount = isMerge
           ? Math.min(6, Math.max(4, Math.ceil(outline.length / 5)))
-          : outline.length <= 6 ? 2 : outline.length <= 14 ? 3 : 4
+          : outline.length <= 8 ? 1 : outline.length <= 16 ? 2 : 3
         const batchSize = Math.ceil(outline.length / batchCount)
         const batches: { indices: number[] }[] = []
         for (let i = 0; i < outline.length; i += batchSize) {
@@ -1861,10 +1930,6 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         }
 
         console.log(`[studio/generate] Parallel Phase 2: ${batches.length} batches (${outline.length} slides)${isMerge ? ' [MERGE]' : ''}`)
-
-        // Track completed slides for document generation
-        const allCompletedSlides: any[] = new Array(outline.length).fill(null)
-        let completedSlideCount = 0
         const docThreshold = Math.ceil(outline.length * 0.8)
         let docGenStarted = false
         let docGenPromise: Promise<void> | null = null
@@ -1881,16 +1946,17 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         const mergeSuffix = isMerge && body.merge
           ? `\n\nSource material from ${body.merge.sourceIds.length} decks:\n${body.merge.sourceMaterial}`
           : ''
+        const batchUserPrompt = body.prompt + mergeSuffix
 
         await Promise.all(
           batches.map(async (batch) => {
+            // Declare outside try so catch can access for retry
+            const batchPrompt = buildBatchPrompt(outline, batch.indices, batchUserPrompt, hasFiles, intent)
+            const tokensPerSlide = isMerge ? 3000 : 3000
+            const maxTokens = Math.min(batch.indices.length * tokensPerSlide, 20000)
+            const isOpus = body.model.includes('opus')
+            const batchTimeout = isMerge ? 180000 : isOpus ? 180000 : hasFiles ? 120000 : 90000
             try {
-              const batchPrompt = buildBatchPrompt(outline, batch.indices, body.prompt + mergeSuffix, hasFiles, intent)
-              // #10: Dynamic max_tokens proportional to batch size (higher for merge)
-              const tokensPerSlide = isMerge ? 3000 : 2500
-              const maxTokens = Math.min(batch.indices.length * tokensPerSlide, isMerge ? 20000 : 16000)
-              const isOpus = body.model.includes('opus')
-              const batchTimeout = isMerge ? 180000 : isOpus ? 180000 : hasFiles ? 120000 : 90000
               const responseText = await makeNonStreamingCall(
                 body,
                 body.enrichedSystemPrompt || SYSTEM_PROMPT,
@@ -1902,14 +1968,15 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
               )
 
               const slides = parseJSONResponse(responseText)
-              if (Array.isArray(slides)) {
+              if (Array.isArray(slides) && slides.length > 0) {
                 for (let i = 0; i < slides.length; i++) {
                   allCompletedSlides[batch.indices[i]] = slides[i]
                 }
                 completedSlideCount += slides.length
-                // #1: Emit immediately — don't wait for in-order completion
                 emit({ batch: slides, startIndex: batch.indices[0] })
               } else {
+                console.error(`[studio/generate] Batch parse failed. isArray=${Array.isArray(slides)}, length=${slides?.length}, response first 300 chars:`, responseText?.slice(0, 300))
+                emit({ hint: `Content batch returned invalid response (got ${typeof slides}). Falling back to outline.` })
                 const fallback = batch.indices.map(i => outline[i])
                 for (let i = 0; i < fallback.length; i++) {
                   allCompletedSlides[batch.indices[i]] = fallback[i]
@@ -1919,8 +1986,34 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
               }
               // Check if we can start doc gen early
               maybeStartDocGen()
-            } catch (err) {
+            } catch (err: any) {
               console.error(`[studio/generate] Batch at ${batch.indices[0]} failed:`, err)
+              emit({ hint: `Content batch ${batch.indices[0]} failed: ${err?.message?.slice(0, 100) || 'unknown error'}. Retrying with fallback model...` })
+              // Retry once with a known-good model before falling back to outline
+              try {
+                const fallbackBody = { ...body, model: 'claude-sonnet-4-20250514' }
+                const retryText = await makeNonStreamingCall(
+                  fallbackBody,
+                  body.enrichedSystemPrompt || SYSTEM_PROMPT,
+                  batchPrompt,
+                  maxTokens,
+                  true,
+                  90000,
+                )
+                const retrySlides = parseJSONResponse(retryText)
+                if (Array.isArray(retrySlides) && retrySlides.length > 0) {
+                  for (let i = 0; i < retrySlides.length; i++) {
+                    allCompletedSlides[batch.indices[i]] = retrySlides[i]
+                  }
+                  completedSlideCount += retrySlides.length
+                  emit({ batch: retrySlides, startIndex: batch.indices[0] })
+                  emit({ hint: 'Recovered with fallback model' })
+                  maybeStartDocGen()
+                  return
+                }
+              } catch (retryErr) {
+                console.error(`[studio/generate] Fallback retry also failed:`, retryErr)
+              }
               const fallback = batch.indices.map(i => outline[i])
               for (let i = 0; i < fallback.length; i++) {
                 allCompletedSlides[batch.indices[i]] = fallback[i]
@@ -1942,6 +2035,54 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         }
         if (processed.length > 0) {
           emit({ batch: processed, startIndex: 0 }) // Send corrected slides
+        }
+
+        // ── Thin-slide retry (max 1 attempt) ──
+        const validSlides = allCompletedSlides.filter(Boolean)
+        const coachResults = analyzeSlides(validSlides)
+        const thinIndices = coachResults
+          .filter(s => s.rule === 'thin-content' && s.severity === 'error')
+          .map(s => s.slideIndex)
+
+        if (thinIndices.length > 0 && thinIndices.length <= 6) {
+          console.log(`[studio/generate] Thin-slide retry: ${thinIndices.length} slides at [${thinIndices.join(', ')}]`)
+          try {
+            const thinSlidesInfo = thinIndices.map(i => {
+              const s = allCompletedSlides[i]
+              return `Slide ${i} (${s?.type}): "${s?.title}" — currently ${totalSlideWords(s)} words`
+            }).join('\n')
+
+            const retryPrompt = `These slides are too thin on content. Regenerate with SIGNIFICANTLY MORE content — each must have 50+ words of visible content.
+
+Thin slides to fix:
+${thinSlidesInfo}
+
+${buildBatchPrompt(outline, thinIndices, batchUserPrompt, hasFiles, intent)}
+
+CRITICAL: These slides were flagged for having too little content. You MUST add substantially more detail — specific examples, data points, actionable items, context. Do NOT return thin content again.`
+
+            const retryTokens = Math.min(thinIndices.length * 3000, 20000)
+            const retryText = await makeNonStreamingCall(
+              body,
+              body.enrichedSystemPrompt || SYSTEM_PROMPT,
+              retryPrompt,
+              retryTokens,
+              true,
+              90000,
+            )
+
+            const retrySlides = parseJSONResponse(retryText)
+            if (Array.isArray(retrySlides) && retrySlides.length === thinIndices.length) {
+              for (let i = 0; i < retrySlides.length; i++) {
+                allCompletedSlides[thinIndices[i]] = retrySlides[i]
+              }
+              const reprocessed = postProcessSlides(allCompletedSlides.filter(s => s && s.type && s.title))
+              emit({ batch: reprocessed, startIndex: 0 })
+              console.log(`[studio/generate] Thin-slide retry succeeded: replaced ${thinIndices.length} slides`)
+            }
+          } catch (err) {
+            console.warn('[studio/generate] Thin-slide retry failed:', err)
+          }
         }
 
         // #4: Signal slides ready — client can present immediately
@@ -1987,6 +2128,8 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as GenerateBody
+    // Normalize model ID — fix short aliases and legacy stored preferences
+    body.model = normalizeModel(body.model)
 
     if (!body.prompt && !body.reverseEngineer) {
       return new Response(JSON.stringify({ error: 'Prompt is required' }), {

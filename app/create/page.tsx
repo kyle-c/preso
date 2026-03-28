@@ -115,6 +115,8 @@ export default function CreatePage() {
   const [hint, setHint] = useState<string | null>(null)
   const [done, setDone] = useState(false)
   const [coachResults, setCoachResults] = useState<{ suggestions: CoachSuggestion[]; score: number } | null>(null)
+  const [showQualityWarning, setShowQualityWarning] = useState(false)
+  const pendingSaveRef = useRef<(() => void) | null>(null)
   const [showCanvas, setShowCanvas] = useState(false)
   const [savedId, setSavedId] = useState<string | null>(null)
   const [predictedCount, setPredictedCount] = useState(12)
@@ -310,10 +312,10 @@ export default function CreatePage() {
 
             // Parallel mode events
             if (event.outline && Array.isArray(event.outline)) {
-              // Parallel skeleton: array of slide placeholders
+              // Parallel skeleton: track outline internally but don't show thin shells
               isParallelMode = true
               parallelSlides = event.outline as SlideData[]
-              setSlides([...parallelSlides])
+              // Don't setSlides yet — wait for content batches to fill in
             } else if (event.outline && !Array.isArray(event.outline)) {
               // Structured outline object (post-generation)
               setGeneratedOutline(event.outline)
@@ -346,20 +348,28 @@ export default function CreatePage() {
               const summary = coachSummary(suggestions)
               setCoachResults({ suggestions, score: summary.score })
               if (summary.errors > 0) console.warn(`[Slide Coach] ${summary.errors} errors, ${summary.warnings} warnings — score: ${summary.score}/100`)
-              // Save presentation — keep the promise so document handler can await it
-              savePromise = savePresentation(currentSlides)
-              // Lazy-load document in background + auto-rate for quality loop
-              savePromise.then(() => {
-                if (localSavedId) {
-                  generateDocumentInBackground(localSavedId, currentSlides)
-                  // Auto-rate slides for quality feedback loop (fire and forget)
-                  fetch('/api/studio/quality/auto-rate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ presId: localSavedId }),
-                  }).catch(() => {})
-                }
-              })
+
+              const doSave = (slidesToSave: SlideData[]) => {
+                savePromise = savePresentation(slidesToSave)
+                savePromise.then(() => {
+                  if (localSavedId) {
+                    generateDocumentInBackground(localSavedId, slidesToSave)
+                    fetch('/api/studio/quality/auto-rate', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ presId: localSavedId }),
+                    }).catch(() => {})
+                  }
+                })
+              }
+
+              // Gate save on quality errors
+              if (summary.errors > 0) {
+                pendingSaveRef.current = () => doSave(currentSlides)
+                setShowQualityWarning(true)
+              } else {
+                doSave(currentSlides)
+              }
             } else if (event.document) {
               // Capture document for document generation view
               setGeneratedDocument(event.document)
@@ -710,14 +720,14 @@ export default function CreatePage() {
             if (event.outline) {
               isParallelMode = true
               parallelSlides = event.outline as SlideData[]
-              setSlides([...parallelSlides])
+              // Don't reveal thin outline — wait for content
             } else if (event.batch && typeof event.startIndex === 'number') {
               isParallelMode = true
               const batch = event.batch as SlideData[]
               for (let i = 0; i < batch.length; i++) {
                 parallelSlides[event.startIndex + i] = batch[i]
               }
-              setSlides([...parallelSlides])
+              // Track internally — reveal all at once when ready
             } else if (event.slidesReady && isParallelMode && !slidesFinalized) {
               slidesFinalized = true
               const currentSlides = parallelSlides.filter((s) => s && s.type && s.title)
@@ -1064,25 +1074,70 @@ export default function CreatePage() {
         />
         {/* Coach score badge — shown after generation completes */}
         {done && coachResults && (
-          <div className="fixed top-20 right-6 z-[200] animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="fixed top-20 right-6 z-[200] animate-in fade-in slide-in-from-right-4 duration-500 max-w-sm">
             <div className={cn(
-              'px-4 py-2.5 rounded-xl backdrop-blur-md border shadow-lg flex items-center gap-3',
+              'px-4 py-2.5 rounded-xl backdrop-blur-md border shadow-lg',
               coachResults.score >= 80 ? 'bg-green-950/80 border-green-500/20 text-green-400' :
               coachResults.score >= 50 ? 'bg-amber-950/80 border-amber-500/20 text-amber-400' :
               'bg-red-950/80 border-red-500/20 text-red-400',
             )}>
-              <div className="text-center">
-                <p className="text-lg font-black tabular-nums">{coachResults.score}</p>
-                <p className="text-[8px] uppercase tracking-widest opacity-60">Score</p>
+              <div className="flex items-center gap-3">
+                <div className="text-center">
+                  <p className="text-lg font-black tabular-nums">{coachResults.score}</p>
+                  <p className="text-[8px] uppercase tracking-widest opacity-60">Score</p>
+                </div>
+                <div className="text-[11px] opacity-80">
+                  {coachResults.suggestions.filter(s => s.severity === 'error').length > 0 && (
+                    <p className="font-semibold">{coachResults.suggestions.filter(s => s.severity === 'error').length} slides need more content</p>
+                  )}
+                  {coachResults.suggestions.filter(s => s.severity === 'warning').length > 0 && (
+                    <p>{coachResults.suggestions.filter(s => s.severity === 'warning').length} warnings</p>
+                  )}
+                  {coachResults.score >= 80 && <p>Looking good!</p>}
+                </div>
               </div>
-              <div className="text-[11px] opacity-80">
-                {coachResults.suggestions.filter(s => s.severity === 'error').length > 0 && (
-                  <p>{coachResults.suggestions.filter(s => s.severity === 'error').length} issues</p>
-                )}
-                {coachResults.suggestions.filter(s => s.severity === 'warning').length > 0 && (
-                  <p>{coachResults.suggestions.filter(s => s.severity === 'warning').length} warnings</p>
-                )}
-                {coachResults.score >= 80 && <p>Looking good!</p>}
+              {coachResults.suggestions.filter(s => s.severity === 'error' && s.rule === 'thin-content').length > 0 && (
+                <ul className="mt-2 pt-2 border-t border-white/10 text-[10px] opacity-70 space-y-0.5">
+                  {coachResults.suggestions
+                    .filter(s => s.severity === 'error' && s.rule === 'thin-content')
+                    .slice(0, 5)
+                    .map((s, idx) => (
+                      <li key={idx}>Slide {s.slideIndex + 1}: {s.message}</li>
+                    ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        )}
+        {/* Quality warning dialog — gates save when coach finds errors */}
+        {showQualityWarning && coachResults && (
+          <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+            <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 max-w-md shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+              <h3 className="text-lg font-bold text-white mb-2">Quality Issues Detected</h3>
+              <p className="text-sm text-white/60 mb-4">
+                {coachResults.suggestions.filter(s => s.severity === 'error').length} quality {coachResults.suggestions.filter(s => s.severity === 'error').length === 1 ? 'issue' : 'issues'} found.
+                Some slides may not have enough content for an effective presentation.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => {
+                    setShowQualityWarning(false)
+                    pendingSaveRef.current = null
+                  }}
+                  className="px-4 py-2 text-sm rounded-lg border border-white/10 text-white/60 hover:text-white transition-colors"
+                >
+                  Go back
+                </button>
+                <button
+                  onClick={() => {
+                    setShowQualityWarning(false)
+                    pendingSaveRef.current?.()
+                    pendingSaveRef.current = null
+                  }}
+                  className="px-4 py-2 text-sm rounded-lg bg-red-600 hover:bg-red-500 text-white font-medium transition-colors"
+                >
+                  Save anyway
+                </button>
               </div>
             </div>
           </div>

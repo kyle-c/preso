@@ -54,8 +54,8 @@ export function validateSlides(slides: any[]): ValidationResult {
           issues.push({
             slideIndex: i,
             field: `cards[${j}].body`,
-            severity: 'warning',
-            message: `Card "${card.title}" body is only ${wc} words (min 10). Content may feel thin.`,
+            severity: 'error',
+            message: `Card "${card.title}" body is only ${wc} words (min 15). Cards need substantive content.`,
           })
         }
         if (wc > 60) {
@@ -107,6 +107,31 @@ export function validateSlides(slides: any[]): ValidationResult {
           })
         }
       }
+
+      // Average bullet density
+      const bulletWords = slide.bullets.map((b: any) => wordCount(b.text || ''))
+      const avgBulletWords = bulletWords.reduce((a: number, b: number) => a + b, 0) / bulletWords.length
+      if (avgBulletWords < 6) {
+        issues.push({
+          slideIndex: i,
+          field: 'bullets',
+          severity: 'error',
+          message: `Average bullet length is ${Math.round(avgBulletWords)} words (min 6). Bullets need more substance.`,
+        })
+      }
+    }
+
+    // ── Body density on content slides ──
+    if (['content', 'bullets', 'cards', 'two-column'].includes(slide.type) && slide.body) {
+      const bodyWc = wordCount(slide.body)
+      if (bodyWc < 15) {
+        issues.push({
+          slideIndex: i,
+          field: 'body',
+          severity: 'error',
+          message: `Body is only ${bodyWc} words (min 15). Content slides need substantive body text.`,
+        })
+      }
     }
 
     // ── Two-column balance ──
@@ -130,6 +155,13 @@ export function validateSlides(slides: any[]): ValidationResult {
           field: 'columns',
           severity: 'error',
           message: `One column is empty. Both must be populated.`,
+        })
+      } else if (w0 < 10 || w1 < 10) {
+        issues.push({
+          slideIndex: i,
+          field: 'columns',
+          severity: 'error',
+          message: `Column has only ${Math.min(w0, w1)} words (min 10). Both columns need substance.`,
         })
       }
     }

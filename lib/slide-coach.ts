@@ -37,7 +37,7 @@ function countWords(text: string | undefined): number {
   return text.split(/\s+/).filter(Boolean).length
 }
 
-function totalSlideWords(slide: SlideInput): number {
+export function totalSlideWords(slide: SlideInput): number {
   let count = countWords(slide.title) + countWords(slide.subtitle) + countWords(slide.body)
   for (const b of slide.bullets || []) count += countWords(b.text)
   for (const c of slide.cards || []) count += countWords(c.title) + countWords(c.body)
@@ -72,13 +72,13 @@ export function analyzeSlides(slides: SlideInput[]): CoachSuggestion[] {
 
     // ── Word density ──
     const wordCount = totalSlideWords(slide)
-    if (wordCount > 100) {
+    if (wordCount > 150) {
       suggestions.push({
         slideIndex: i, severity: 'error', rule: 'word-density',
-        message: `This slide has ${wordCount} words — way too dense for a presentation.`,
+        message: `This slide has ${wordCount} words — too dense for a presentation.`,
         fix: 'Split into two slides, or convert dense text to bullet points or a chart.',
       })
-    } else if (wordCount > 70) {
+    } else if (wordCount > 120) {
       suggestions.push({
         slideIndex: i, severity: 'warning', rule: 'word-density',
         message: `${wordCount} words on this slide — consider reducing for clarity.`,
@@ -159,17 +159,17 @@ export function analyzeSlides(slides: SlideInput[]): CoachSuggestion[] {
 
     // ── Thin content ──
     if (!['title', 'section', 'closing', 'image', 'quote', 'chart'].includes(slide.type)) {
-      if (wordCount < 20) {
+      if (wordCount < 30) {
         suggestions.push({
           slideIndex: i, severity: 'error', rule: 'thin-content',
           message: `Only ${wordCount} words — this slide needs more substance.`,
-          fix: 'Add specific details, data points, examples, or actionable items. Every content slide should have at least 30 words.',
+          fix: 'Add specific details, data points, examples, or actionable items. Every content slide should have at least 50 words.',
         })
-      } else if (wordCount < 30) {
+      } else if (wordCount < 50) {
         suggestions.push({
           slideIndex: i, severity: 'warning', rule: 'thin-content',
           message: `Only ${wordCount} words — could use more detail.`,
-          fix: 'Add supporting details or context to make this slide more valuable.',
+          fix: 'Add supporting details or context. Aim for at least 50 words of visible content.',
         })
       }
     }

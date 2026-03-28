@@ -18,8 +18,8 @@ const ANTHROPIC_MODELS: ModelEntry[] = [
   { id: 'claude-haiku-4-5-20251001', label: 'Haiku 4.5', cost: '~$0.01', note: 'Fast & cheap', tier: 'budget' },
   { id: 'claude-sonnet-4-20250514', label: 'Sonnet 4', cost: '~$0.03', note: 'Best value', tier: 'value' },
   { id: 'claude-sonnet-4-5-20250514', label: 'Sonnet 4.5', cost: '~$0.03', note: 'Extended thinking', tier: 'value' },
-  { id: 'claude-sonnet-4-6', label: 'Sonnet 4.6', cost: '~$0.03', note: 'Latest', tier: 'value' },
-  { id: 'claude-opus-4-6', label: 'Opus 4.6', cost: '~$0.15', note: 'Most capable', tier: 'premium' },
+  { id: 'claude-sonnet-4-6-20250627', label: 'Sonnet 4.6', cost: '~$0.03', note: 'Latest', tier: 'value' },
+  { id: 'claude-opus-4-6-20250627', label: 'Opus 4.6', cost: '~$0.15', note: 'Most capable', tier: 'premium' },
 ]
 
 const OPENROUTER_MODELS: ModelEntry[] = [

@@ -83,7 +83,7 @@ function fixTextDensity(slides: SlideData[]): SlideData[] {
     if (!slide.body) return slide
 
     const words = slide.body.split(/\s+/)
-    if (words.length > 80) {
+    if (words.length > 120) {
       // Truncate to ~80 words at a sentence boundary
       const truncated = words.slice(0, 80).join(' ')
       const lastPeriod = truncated.lastIndexOf('.')

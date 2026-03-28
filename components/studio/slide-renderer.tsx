@@ -1150,7 +1150,7 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
                   </h3>
 
                   <div className="relative z-10 flex-1 flex flex-col gap-2.5">
-                    {card.body.split(/\\n|\n/).map((line, li) => (
+                    {(card.body ?? '').split(/\\n|\n/).map((line, li) => (
                       <p key={li} className="text-sm leading-snug" style={{ color: mutedColor }}>
                         {parseBold(line)}
                       </p>

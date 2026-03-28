@@ -1258,45 +1258,12 @@ ${outlineStr}
 ${fileHint}${onboardingHint}${contextHint}
 Generate FULL content for slides at indices [${indices}] ONLY.
 
-You must produce COMPLETE, PRESENTATION-READY slides — not outlines or placeholders. The user's brief above is your source material. Use it to generate specific, substantive content for every slide. Each slide must feel like it was written by a domain expert for a live presentation.
+Produce COMPLETE, PRESENTATION-READY slides. The user's brief above is your source material. Use it to generate specific, substantive content with real data, names, and numbers.
 
-For each slide, keep its type, bg, badge, and title from the outline, then ADD all content fields:
+For each slide, keep its type, bg, badge, and title from the outline, then populate ALL content fields per the system prompt rules. Every slide MUST have subtitle + body + type-specific fields (bullets/cards/columns/chart/quote). Section slides need a data-specific subtitle, not a topic label.
 
-## WHAT EVERY SLIDE MUST HAVE:
-- subtitle: 1 sentence summarizing the slide's key insight (with data)
-- body: 2-3 sentences of substantive context (15-40 words)
-- notes: 3-5 sentence speaker notes for the presenter
-- imageUrl: pick ONE from the illustration library below
-
-## CONTENT FIELDS BY SLIDE TYPE — ALL are required, NO EXCEPTIONS:
-- **title**: subtitle (punchy 5-8 word tagline)
-- **section**: subtitle (1 substantive sentence with specific details, NOT just a topic label. Example: "Exploring how 62M underserved Latinos represent a $2.3T market opportunity" NOT "Market overview")
-- **content**: body (40-100 words, 2-3 substantive paragraphs with specific data)
-- **bullets**: body (1-2 intro sentences) + bullets [{text: "..."}] — 4-6 items, each 8-15 words. Example: "TAM: $161B — Total LatAm remittances per year, growing 4% annually"
-- **cards**: body (1-2 intro sentences) + cards [{title, body, titleColor}] — 2-4 cards. Each card body: 1 bold lead sentence + 2-3 bullet points (• prefix), 20-40 words. Use titleColors: #6060BF, #60D06F, #F19D38, #F26629, #7BA882, #35605F, #2BF2F1
-- **two-column**: body (1-2 intro sentences) + columns [{heading, body, bullets: [{text}]}] — BOTH columns with heading + 3-5 substantive bullets each
-- **chart**: body (key insight sentence) + chart {type: "bar"|"line"|"area"|"pie"|"doughnut", title: "...", data: [{label, value}]} — 5-8 realistic data points
-- **quote**: quote {text, attribution} + body (2-3 sentences of context)
-- **checklist**: body (1-2 intro sentences) + bullets [{text: "..."}] — 5-8 actionable items, each 8-12 words
-- **closing**: subtitle (inspiring tagline) + body (2-3 closing sentences with specific call-to-action or next steps)
-
-CRITICAL: Section slides are NOT empty dividers — they must have a rich, data-specific subtitle that previews the upcoming content. Every slide type above MUST have its listed fields populated.
-
-## ILLUSTRATION LIBRARY (use EXACT paths):
-/illustrations/Party%20Popper.svg, /illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg, /illustrations/F%C3%A9lix%20Illo%201.svg, /illustrations/Hands%20-%202%20Cell%20Phones%20-%20Juntos%20we%20Succeed.svg, /illustrations/Dollar%20bills%20%2B%20Coins%20A.svg, /illustrations/Flying%20Dollar%20Bills%20-%20Turquoise.svg, /illustrations/Speech%20Bubbles%20%2B%20Hearts.svg, /illustrations/Hand%20-%20Stars.svg, /illustrations/Fast.svg, /illustrations/Magnifying%20Glass.svg, /illustrations/Survey.svg, /illustrations/Lock.svg, /illustrations/Heart%20-F%C3%A9lix.svg, /illustrations/ray.svg
-
-## WHAT "GOOD" LOOKS LIKE:
-Bad bullet: "Market growth" — REJECTED, too thin
-Good bullet: "**$96B annually** — US-to-LatAm remittance market growing 8% YoY, driven by 62M Latino residents"
-
-Bad card body: "We have regulatory support." — REJECTED, one vague sentence
-Good card body: "**Real-time rails live.** FedNow enables instant settlement. Open banking APIs mature. Stablecoin regulation (MiCA, US framework) creates enterprise-grade USDC rails."
-
-Bad chart: 3 data points with round numbers — REJECTED
-Good chart: 6+ data points with realistic values: [{label: "Q1 2024", value: 2.1}, {label: "Q2 2024", value: 2.8}, ...]
+Add to every content slide: notes (3-5 sentence speaker notes) and imageUrl (pick from: /illustrations/Party%20Popper.svg, /illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg, /illustrations/F%C3%A9lix%20Illo%201.svg, /illustrations/Dollar%20bills%20%2B%20Coins%20A.svg, /illustrations/Flying%20Dollar%20Bills%20-%20Turquoise.svg, /illustrations/Speech%20Bubbles%20%2B%20Hearts.svg, /illustrations/Hand%20-%20Stars.svg, /illustrations/Fast.svg, /illustrations/Magnifying%20Glass.svg, /illustrations/Survey.svg, /illustrations/Lock.svg, /illustrations/ray.svg).
 ${blueprintHint}
-Write like a senior strategy consultant who knows this domain deeply. Use specific numbers, names, dates, and comparisons throughout. Every slide must have 50+ words of visible content.
-
 Return ONLY a JSON array of the completed slides (same order as requested). No markdown fences.`
 }
 
@@ -1707,6 +1674,7 @@ Section titles should be descriptive and specific. Include numbers and conclusio
     }
   } catch (err) {
     console.error('[studio/generate] Document generation failed:', err)
+    emit({ hint: 'Document generation failed — you can retry from the Document tab.' })
   }
 }
 
@@ -1975,14 +1943,29 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
                 completedSlideCount += slides.length
                 emit({ batch: slides, startIndex: batch.indices[0] })
               } else {
-                console.error(`[studio/generate] Batch parse failed. isArray=${Array.isArray(slides)}, length=${slides?.length}, response first 300 chars:`, responseText?.slice(0, 300))
-                emit({ hint: `Content batch returned invalid response (got ${typeof slides}). Falling back to outline.` })
-                const fallback = batch.indices.map(i => outline[i])
-                for (let i = 0; i < fallback.length; i++) {
-                  allCompletedSlides[batch.indices[i]] = fallback[i]
+                console.error(`[studio/generate] Batch parse failed. Retrying with fallback model...`, responseText?.slice(0, 300))
+                emit({ hint: 'Content batch returned invalid JSON. Retrying...' })
+                try {
+                  const fallbackBody = { ...body, model: 'claude-sonnet-4-20250514' }
+                  const retryText = await makeNonStreamingCall(fallbackBody, body.enrichedSystemPrompt || SYSTEM_PROMPT, batchPrompt, maxTokens, true, batchTimeout)
+                  const retrySlides = parseJSONResponse(retryText)
+                  if (Array.isArray(retrySlides) && retrySlides.length > 0) {
+                    for (let i = 0; i < retrySlides.length; i++) {
+                      allCompletedSlides[batch.indices[i]] = retrySlides[i]
+                    }
+                    completedSlideCount += retrySlides.length
+                    emit({ batch: retrySlides, startIndex: batch.indices[0] })
+                  } else {
+                    throw new Error('Retry also returned invalid JSON')
+                  }
+                } catch {
+                  const fallback = batch.indices.map(i => outline[i])
+                  for (let i = 0; i < fallback.length; i++) {
+                    allCompletedSlides[batch.indices[i]] = fallback[i]
+                  }
+                  completedSlideCount += fallback.length
+                  emit({ batch: fallback, startIndex: batch.indices[0] })
                 }
-                completedSlideCount += fallback.length
-                emit({ batch: fallback, startIndex: batch.indices[0] })
               }
               // Check if we can start doc gen early
               maybeStartDocGen()
@@ -1998,7 +1981,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
                   batchPrompt,
                   maxTokens,
                   true,
-                  90000,
+                  batchTimeout,
                 )
                 const retrySlides = parseJSONResponse(retryText)
                 if (Array.isArray(retrySlides) && retrySlides.length > 0) {

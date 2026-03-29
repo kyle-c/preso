@@ -31,16 +31,16 @@ describe('analyzeSlides', () => {
     expect(suggestions.some(s => s.rule === 'title-length')).toBe(true)
   })
 
-  it('flags slides with more than 100 words as errors', () => {
-    const body = Array(101).fill('word').join(' ')
+  it('flags slides with more than 150 words as errors', () => {
+    const body = Array(151).fill('word').join(' ')
     const slides = [makeSlide({ body })]
     const suggestions = analyzeSlides(slides as any)
     const densitySuggestion = suggestions.find(s => s.rule === 'word-density')
     expect(densitySuggestion?.severity).toBe('error')
   })
 
-  it('flags slides with 70-100 words as warnings', () => {
-    const body = Array(75).fill('word').join(' ')
+  it('flags slides with 121-150 words as warnings', () => {
+    const body = Array(130).fill('word').join(' ')
     const slides = [makeSlide({ body })]
     const suggestions = analyzeSlides(slides as any)
     const densitySuggestion = suggestions.find(s => s.rule === 'word-density')
@@ -105,15 +105,15 @@ describe('analyzeSlides', () => {
     expect(suggestions.some(s => s.rule === 'missing-notes')).toBe(false)
   })
 
-  it('flags thin content slides with fewer than 20 words', () => {
+  it('flags thin content slides with fewer than 30 words as errors', () => {
     const slides = [makeSlide({ body: 'Just a few words' })]
     const suggestions = analyzeSlides(slides as any)
     const thin = suggestions.find(s => s.rule === 'thin-content')
     expect(thin?.severity).toBe('error')
   })
 
-  it('warns on slides with 20-29 words', () => {
-    const body = Array(25).fill('word').join(' ')
+  it('warns on slides with 30-49 words', () => {
+    const body = Array(35).fill('word').join(' ')
     const slides = [makeSlide({ body })]
     const suggestions = analyzeSlides(slides as any)
     const thin = suggestions.find(s => s.rule === 'thin-content')
@@ -126,8 +126,8 @@ describe('analyzeSlides', () => {
     expect(suggestions.some(s => s.rule === 'thin-content')).toBe(false)
   })
 
-  it('does not flag content slides with 30+ words', () => {
-    const body = Array(35).fill('word').join(' ')
+  it('does not flag content slides with 50+ words', () => {
+    const body = Array(55).fill('word').join(' ')
     const slides = [makeSlide({ body })]
     const suggestions = analyzeSlides(slides as any)
     expect(suggestions.some(s => s.rule === 'thin-content')).toBe(false)

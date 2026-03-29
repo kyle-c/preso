@@ -143,10 +143,21 @@ const DOCUMENT_GUIDANCE: Record<DocumentType, string> = {
 }
 
 export function detectIntent(prompt: string): DocumentType {
+  // Weighted scoring: count all keyword matches per intent, pick highest
+  let bestType: DocumentType = 'general'
+  let bestScore = 0
+
   for (const { type, keywords } of INTENT_PATTERNS) {
-    if (keywords.test(prompt)) return type
+    // Count all matches (global flag needed)
+    const globalRegex = new RegExp(keywords.source, 'gi')
+    const matches = prompt.match(globalRegex)
+    if (matches && matches.length > bestScore) {
+      bestScore = matches.length
+      bestType = type
+    }
   }
-  return 'general'
+
+  return bestType
 }
 
 // ---------------------------------------------------------------------------

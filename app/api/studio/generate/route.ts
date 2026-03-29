@@ -8,6 +8,21 @@ import { getBrandKit, serializeBrandForPrompt, FELIX_BRAND_KIT } from '@/lib/bra
 import { computeUserStyleProfile, selectExemplars, formatProfileForPrompt, formatExemplarsForPrompt } from '@/lib/studio-quality'
 import { getBlueprintEnrichment, selectBlueprints } from '@/lib/training-blueprints'
 import { getExemplarSlides, getAntiExemplarSlides } from '@/lib/studio-db'
+import { parseJSONResponse } from '@/lib/json-parser'
+import { FAST_OUTLINE_MODELS, OUTLINE_SYSTEM_PROMPT, ONBOARDING_OUTLINE } from '@/lib/prompt-builder'
+import {
+  normalizeModel,
+  FALLBACK_MODEL,
+  guessImageMediaType,
+  modelSupportsVision,
+  describeImagesWithVision,
+  buildVisionHint,
+  fetchWithTimeout,
+  buildUserContent,
+  makeNonStreamingCall as makeNonStreamingCallAdapter,
+  type FileAttachment as FileAttachmentType,
+  type ProviderConfig,
+} from '@/lib/provider-adapter'
 
 export const runtime = 'nodejs'
 export const maxDuration = 300
@@ -898,139 +913,15 @@ function buildOpenRouterPayload(body: GenerateBody) {
   }
 }
 
-function guessImageMediaType(filename: string): string {
-  const ext = filename.split('.').pop()?.toLowerCase()
-  switch (ext) {
-    case 'png': return 'image/png'
-    case 'gif': return 'image/gif'
-    case 'webp': return 'image/webp'
-    case 'svg': return 'image/svg+xml'
-    default: return 'image/jpeg'
-  }
-}
+// guessImageMediaType imported from @/lib/provider-adapter
 
 // ---------------------------------------------------------------------------
 // Vision pre-processing — describe images via a cheap vision-capable model
 // ---------------------------------------------------------------------------
 
-/** Known models that do NOT support image/vision input */
-const NON_VISION_MODELS = new Set([
-  'deepseek/deepseek-r1-0528',
-  'deepseek/deepseek-r1',
-  'openai/o3',
-  'openai/o4-mini',
-])
+// modelSupportsVision imported from @/lib/provider-adapter
 
-function modelSupportsVision(model: string): boolean {
-  return !NON_VISION_MODELS.has(model)
-}
-
-/**
- * Use a cheap vision-capable model to describe uploaded images in detail.
- * Returns a text description suitable for injecting into a text-only prompt.
- */
-async function describeImagesWithVision(
-  images: FileAttachment[],
-  body: GenerateBody,
-): Promise<string> {
-  if (images.length === 0) return ''
-
-  const describePrompt = `Describe each image in detail. For each image, include:
-- What type of content it shows (screenshot, photo, diagram, chart, mockup, etc.)
-- Layout, structure, and visual hierarchy
-- All visible text (transcribe exactly)
-- Colors, typography, and design details
-- Data points, numbers, or metrics if present
-- Any branding or logo elements
-
-Be thorough — your description will be used to recreate or reference this content in a presentation.`
-
-  try {
-    if (body.provider === 'anthropic') {
-      // Use Claude Haiku for cheap, fast vision
-      const content: any[] = [{ type: 'text', text: describePrompt }]
-      for (const img of images) {
-        const mediaType = guessImageMediaType(img.name)
-        const base64 = img.data.includes(',') ? img.data.split(',')[1] : img.data
-        content.push({
-          type: 'image',
-          source: { type: 'base64', media_type: mediaType, data: base64 },
-        })
-      }
-
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': body.apiKey,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 4000,
-          messages: [{ role: 'user', content }],
-        }),
-      })
-
-      if (!res.ok) throw new Error(`Anthropic vision error: ${res.status}`)
-      const data = await res.json()
-      return data.content?.filter((b: any) => b.type === 'text').map((b: any) => b.text).join('') ?? ''
-
-    } else {
-      // OpenRouter / Google — use a cheap vision-capable model
-      const visionModel = body.provider === 'google'
-        ? 'gemini-2.5-flash'
-        : 'google/gemini-2.5-flash-lite'
-
-      const content: any[] = [{ type: 'text', text: describePrompt }]
-      for (const img of images) {
-        const mediaType = guessImageMediaType(img.name)
-        const dataUrl = img.data.startsWith('data:') ? img.data : `data:${mediaType};base64,${img.data}`
-        content.push({ type: 'image_url', image_url: { url: dataUrl } })
-      }
-
-      const url = body.provider === 'google'
-        ? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
-        : 'https://openrouter.ai/api/v1/chat/completions'
-
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${body.apiKey}`,
-      }
-      if (body.provider === 'openrouter') headers['HTTP-Referer'] = 'https://felix.pago'
-
-      const res = await fetch(url, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          model: visionModel,
-          max_tokens: 4000,
-          temperature: 0.3,
-          messages: [{ role: 'user', content }],
-        }),
-      })
-
-      if (!res.ok) throw new Error(`Vision model error: ${res.status}`)
-      const data = await res.json()
-      return data.choices?.[0]?.message?.content ?? ''
-    }
-  } catch (err) {
-    console.warn('[studio/generate] Vision pre-processing failed:', err)
-    return ''
-  }
-}
-
-/** Build a user-facing hint about vision model support */
-function buildVisionHint(currentModel: string, provider: string): string {
-  const visionModels: Record<string, string[]> = {
-    anthropic: ['Claude Sonnet 4.6', 'Claude Opus 4.6', 'Claude Haiku 4.5'],
-    google: ['Gemini 2.5 Flash', 'Gemini 2.5 Pro', 'Gemini 3 Flash', 'Gemini 3 Pro'],
-    openrouter: ['Claude Sonnet 4.6', 'Gemini 2.5 Flash', 'GPT-4.1', 'Gemini 2.5 Pro'],
-  }
-  const suggestions = visionModels[provider] ?? visionModels.openrouter
-  const modelLabel = currentModel.split('/').pop()?.replace(/-/g, ' ') ?? currentModel
-  return `Your model (${modelLabel}) doesn't support image input directly. We described your image via a vision model and passed the description along. For native image understanding, try: ${suggestions.join(', ')}.`
-}
+// describeImagesWithVision, buildVisionHint imported from @/lib/provider-adapter
 
 /** Wrap a stream with a leading hint SSE event */
 function prependHintToStream(
@@ -1153,57 +1044,10 @@ function createSSEStream(
 // Parallel generation: outline → 3 concurrent batch content calls
 // ---------------------------------------------------------------------------
 
-// #2: Fast models for outline phase (cheap + fast, quality doesn't matter for structure)
-const FAST_OUTLINE_MODELS: Record<string, string> = {
-  anthropic: 'claude-haiku-4-5-20251001',
-  openrouter: 'google/gemini-2.5-flash',
-}
+// FAST_OUTLINE_MODELS imported from @/lib/prompt-builder
+// normalizeModel imported from @/lib/provider-adapter
 
-// Normalize model IDs — fix short aliases and legacy stored preferences
-const MODEL_ALIASES: Record<string, string> = {
-  'claude-opus-4-6': 'claude-opus-4-6-20250627',
-  'claude-sonnet-4-6': 'claude-sonnet-4-6-20250627',
-  'claude-opus-4': 'claude-opus-4-20250514',
-  'claude-sonnet-4': 'claude-sonnet-4-20250514',
-}
-
-function normalizeModel(model: string): string {
-  return MODEL_ALIASES[model] ?? model
-}
-
-// #6: Pre-built onboarding template outline (skips the outline API call entirely)
-const ONBOARDING_OUTLINE = [
-  { type: 'title', bg: 'light', badge: 'Welcome to Félix', title: 'Bienvenido!', notes: 'Warm welcome slide. Include the new hire\'s name if available, the team they\'re joining, and their start date. Set an excited, inclusive tone.' },
-  { type: 'two-column', bg: 'light', badge: 'About Félix', title: 'Who We Are', notes: 'Left column: Félix Pago\'s mission to empower Latinos in the US with accessible financial services. Right column: Key company stats — founding year, team size, users served, funding raised. Make it concrete with numbers.' },
-  { type: 'cards', bg: 'light', badge: '', title: 'Our Values', notes: 'Present 3-4 core company values as cards. Each card: bold value name + 2-3 sentences explaining what it means in practice with a specific example. Values should feel actionable, not corporate platitudes.' },
-  { type: 'two-column', bg: 'dark', badge: 'Your Role', title: 'Your Role', notes: 'Left column: Role title, team, reporting structure, key responsibilities (4-5 specific items). Right column: What success looks like in 30/60/90 days — concrete deliverables, not vague goals.' },
-  { type: 'cards', bg: 'light', badge: 'Your People', title: 'Meet the Team', notes: 'Cards for 4-6 key teammates. Each card: name, role, fun fact or expertise area, and how they\'ll interact with the new hire. Include direct manager and cross-functional partners.' },
-  { type: 'cards', bg: 'dark', badge: 'Your Roadmap', title: 'First 90 Days', notes: 'Three cards for 30/60/90 day milestones. Each card: specific goals, key projects, skills to develop, people to meet. Be concrete — "Ship first PR" not "Get oriented."' },
-  { type: 'cards', bg: 'light', badge: 'Getting Set Up', title: 'Your Toolkit', notes: 'Cards for essential tools: Slack channels to join, GitHub repos to clone, Figma files to bookmark, key docs to read. Include specific links or names where possible.' },
-  { type: 'two-column', bg: 'brand', badge: "Who You'll Serve", title: 'Our Users', notes: 'Left column: User demographics — 62M Latinos in the US, pain points (high remittance fees, limited banking access, language barriers). Right column: User stories or personas with specific details about how they use Félix.' },
-  { type: 'bullets', bg: 'light', badge: 'Getting Started', title: 'Your First Week', notes: 'Day-by-day checklist for week one: Day 1 (laptop setup, team lunch, HR paperwork), Day 2 (codebase tour, dev environment), Day 3 (shadow a teammate), Day 4 (first small task), Day 5 (1:1 with manager, week 1 retro). Be specific and actionable.' },
-  { type: 'closing', bg: 'dark', badge: '', title: 'Welcome aboard', notes: 'Encouraging closing message. Include who to reach out to with questions (manager name, buddy name), link to the team Slack channel, and a motivating note about the impact they\'ll make.' },
-]
-
-const OUTLINE_SYSTEM_PROMPT = `You are a presentation architect for Félix Pago, a fintech empowering Latinos in the US.
-
-Given a brief, output a JSON array of 12-18 slide outlines. Each outline:
-{"type": "...", "bg": "dark"|"light"|"brand", "badge": "...", "title": "..."}
-
-Types: title, section, content, bullets, two-column, cards, quote, image, checklist, chart, closing.
-
-Rules:
-- Start with "title" (bg "brand"), end with "closing"
-- Title slide: max 6 words title, max 8 words subtitle
-- Alternate bg — never two consecutive same bg
-- "brand" sparingly (title, closing, one accent)
-- At least 6 types — include 1+ chart, 1+ cards, 1+ two-column
-- Insight-driven titles: "Revenue grew 22% organically" not "Revenue Overview"
-- Badge categorizes sections: "Overview", "Key Insight", "Your Role"
-- 14-16 slides for strategy/investor/launch decks
-- Onboarding: EXACTLY 10 slides, bg: light, light, light, dark, light, dark, light, brand, light, dark
-
-Return ONLY the JSON array.`
+// ONBOARDING_OUTLINE, OUTLINE_SYSTEM_PROMPT imported from @/lib/prompt-builder
 
 function buildBatchPrompt(outline: any[], batchIndices: number[], userPrompt?: string, hasFiles = false, intent?: string): string {
   const outlineStr = JSON.stringify(outline, null, 2)
@@ -1267,67 +1111,10 @@ ${blueprintHint}
 Return ONLY a JSON array of the completed slides (same order as requested). No markdown fences.`
 }
 
-/** Fetch with a timeout — rejects if the request takes too long */
-async function fetchWithTimeout(
-  url: string,
-  init: RequestInit,
-  timeoutMs: number,
-): Promise<Response> {
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
-  try {
-    const res = await fetch(url, { ...init, signal: controller.signal })
-    clearTimeout(timeoutId)
-    return res
-  } catch (err: any) {
-    clearTimeout(timeoutId)
-    if (err?.name === 'AbortError') {
-      throw new Error(`Request timed out after ${Math.round(timeoutMs / 1000)}s`)
-    }
-    throw err
-  }
-}
+// fetchWithTimeout imported from @/lib/provider-adapter
 
-/** Make a non-streaming API call and return the text response.
- *  @param enableCache — #9: Use Anthropic prompt caching for the system prompt
- *  @param timeoutMs — request timeout (default 60s) */
-/** Build multimodal user content array from text + optional file attachments */
-function buildUserContent(
-  userMessage: string,
-  files: FileAttachment[] | undefined,
-  provider: 'anthropic' | 'openrouter' | 'google',
-): any {
-  if (!files || files.length === 0) return userMessage
-
-  if (provider === 'anthropic') {
-    const content: any[] = [{ type: 'text', text: userMessage }]
-    for (const file of files) {
-      if (file.type === 'image') {
-        const mediaType = guessImageMediaType(file.name)
-        const base64 = file.data.includes(',') ? file.data.split(',')[1] : file.data
-        content.push({ type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } })
-      } else if (file.type === 'pdf') {
-        const base64 = file.data.includes(',') ? file.data.split(',')[1] : file.data
-        content.push({ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64 } })
-      } else if (file.type === 'data') {
-        content.push({ type: 'text', text: `\n\n--- Data file: ${file.name} ---\n${file.data}\n--- End of ${file.name} ---` })
-      }
-    }
-    return content
-  }
-
-  // OpenRouter / Google: inline data files as text, images as data URLs
-  let text = userMessage
-  for (const file of files) {
-    if (file.type === 'data') {
-      text += `\n\n--- Data file: ${file.name} ---\n${file.data}\n--- End of ${file.name} ---`
-    } else if (file.type === 'pdf') {
-      text += `\n\n[PDF attached: ${file.name} — analyze its content to recreate this presentation]`
-    }
-  }
-  return text
-}
-
+// buildUserContent, makeNonStreamingCall imported from @/lib/provider-adapter
+// Local shim preserves the old call signature used throughout this file
 async function makeNonStreamingCall(
   body: GenerateBody,
   systemPrompt: string,
@@ -1337,144 +1124,18 @@ async function makeNonStreamingCall(
   timeoutMs = 60000,
   files?: FileAttachment[],
 ): Promise<string> {
-  const isExtendedThinking = body.model.includes('sonnet-4-5')
-  const userContent = buildUserContent(userMessage, files, body.provider)
-
-  if (body.provider === 'anthropic') {
-    // #9: Prompt caching — wrap system prompt with cache_control
-    const systemContent = enableCache
-      ? [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }]
-      : systemPrompt
-
-    const payload: any = {
-      model: body.model,
-      max_tokens: isExtendedThinking ? 16000 : maxTokens,
-      stream: false,
-      system: systemContent,
-      messages: [{ role: 'user', content: userContent }],
-    }
-    if (!isExtendedThinking) payload.temperature = 0.7
-    if (isExtendedThinking) {
-      payload.thinking = { type: 'enabled', budget_tokens: 5000 }
-    }
-
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      'x-api-key': body.apiKey,
-      'anthropic-version': '2023-06-01',
-    }
-    // Build anthropic-beta header with all needed features
-    const betaFeatures: string[] = []
-    if (isExtendedThinking) betaFeatures.push('interleaved-thinking-2025-05-14')
-    if (enableCache) betaFeatures.push('prompt-caching-2024-07-31')
-    if (betaFeatures.length > 0) headers['anthropic-beta'] = betaFeatures.join(',')
-
-    const res = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(payload),
-    }, timeoutMs)
-
-    if (!res.ok) {
-      const err = await res.text()
-      throw new Error(`Anthropic error (${res.status}): ${err}`)
-    }
-
-    const data = await res.json()
-    // Extract text from content blocks (skip thinking blocks)
-    return data.content
-      .filter((b: any) => b.type === 'text')
-      .map((b: any) => b.text)
-      .join('')
-  } else if (body.provider === 'google') {
-    // Google Gemini API (OpenAI-compatible endpoint)
-    const res = await fetchWithTimeout(`https://generativelanguage.googleapis.com/v1beta/openai/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${body.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: body.model,
-        max_tokens: maxTokens,
-        temperature: 0.7,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userContent },
-        ],
-      }),
-    }, timeoutMs)
-
-    if (!res.ok) {
-      const err = await res.text()
-      throw new Error(`Google Gemini error (${res.status}): ${err}`)
-    }
-
-    const data = await res.json()
-    return data.choices?.[0]?.message?.content ?? ''
-  } else {
-    const res = await fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${body.apiKey}`,
-        'HTTP-Referer': 'https://felix.pago',
-      },
-      body: JSON.stringify({
-        model: body.model,
-        max_tokens: maxTokens,
-        temperature: 0.7,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userContent },
-        ],
-      }),
-    }, timeoutMs)
-
-    if (!res.ok) {
-      const err = await res.text()
-      throw new Error(`OpenRouter error (${res.status}): ${err}`)
-    }
-
-    const data = await res.json()
-    return data.choices?.[0]?.message?.content ?? ''
-  }
+  return makeNonStreamingCallAdapter({
+    config: { provider: body.provider, apiKey: body.apiKey, model: body.model },
+    systemPrompt,
+    userMessage,
+    maxTokens,
+    enableCache,
+    timeoutMs,
+    files,
+  })
 }
 
-/** Parse JSON from LLM response (handles markdown fences) */
-function parseJSONResponse(text: string): any {
-  const clean = text.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '').trim()
-
-  // Try direct parse first
-  try { return JSON.parse(clean) } catch (_e) { /* fall through */ }
-
-  // Find the first { or [ and extract the JSON object/array
-  const startObj = clean.indexOf('{')
-  const startArr = clean.indexOf('[')
-  const start = startObj >= 0 && (startArr < 0 || startObj < startArr) ? startObj : startArr
-  if (start < 0) throw new Error('No JSON found in response')
-
-  const openChar = clean[start]
-  const closeChar = openChar === '{' ? '}' : ']'
-  let depth = 0; let inStr = false; let esc = false
-
-  for (let i = start; i < clean.length; i++) {
-    const ch = clean[i]
-    if (esc) { esc = false; continue }
-    if (ch === '\\') { esc = true; continue }
-    if (ch === '"') { inStr = !inStr; continue }
-    if (inStr) continue
-    if (ch === openChar) depth++
-    else if (ch === closeChar) {
-      depth--
-      if (depth === 0) {
-        return JSON.parse(clean.slice(start, i + 1))
-      }
-    }
-  }
-
-  throw new Error('Incomplete JSON in response')
-}
+// parseJSONResponse imported from @/lib/json-parser
 
 // In-memory cache with TTL for expensive enrichment queries
 const enrichmentCache = new Map<string, { data: any; expiry: number }>()
@@ -1624,7 +1285,7 @@ Return ONLY the JSON object. No markdown fences.`
       docText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, docPrompt, 8000, true, docTimeout)
     } catch (modelErr) {
       console.warn('[studio/generate] Doc generation failed with user model, retrying with fallback:', modelErr)
-      const fallbackBody = { ...body, model: 'claude-sonnet-4-20250514' }
+      const fallbackBody = { ...body, model: FALLBACK_MODEL }
       docText = await makeNonStreamingCall(fallbackBody, body.enrichedSystemPrompt || SYSTEM_PROMPT, docPrompt, 8000, true, 90000)
     }
     const doc = parseJSONResponse(docText)
@@ -1661,7 +1322,7 @@ Section titles should be descriptive and specific. Include numbers and conclusio
         try {
           outlineText = await makeNonStreamingCall(body, body.enrichedSystemPrompt || SYSTEM_PROMPT, outlinePrompt, 6000, true, 60000)
         } catch {
-          const fb = { ...body, model: 'claude-sonnet-4-20250514' }
+          const fb = { ...body, model: FALLBACK_MODEL }
           outlineText = await makeNonStreamingCall(fb, body.enrichedSystemPrompt || SYSTEM_PROMPT, outlinePrompt, 6000, true, 60000)
         }
         const docOutline = parseJSONResponse(outlineText)
@@ -1696,7 +1357,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         if (streamClosed) return
         streamClosed = true
         try {
-          closeStream()
+          controller.close()
         } catch { /* already closed */ }
       }
 
@@ -1812,6 +1473,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
                 ? 'Authentication failed. Check your API key in Settings.'
                 : `Could not generate outline: ${msg.slice(0, 100)}`
               emit({ error: hint })
+              clearInterval(keepalive)
               closeStream()
               return
             }
@@ -1844,6 +1506,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
             } catch (retryErr: any) {
               console.error('[studio/generate] Outline retry also failed:', retryErr?.message)
               emit({ error: 'Failed to generate outline. The model returned an unexpected response — please try again.' })
+              clearInterval(keepalive)
               closeStream()
               return
             }
@@ -1946,7 +1609,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
                 console.error(`[studio/generate] Batch parse failed. Retrying with fallback model...`, responseText?.slice(0, 300))
                 emit({ hint: 'Content batch returned invalid JSON. Retrying...' })
                 try {
-                  const fallbackBody = { ...body, model: 'claude-sonnet-4-20250514' }
+                  const fallbackBody = { ...body, model: FALLBACK_MODEL }
                   const retryText = await makeNonStreamingCall(fallbackBody, body.enrichedSystemPrompt || SYSTEM_PROMPT, batchPrompt, maxTokens, true, batchTimeout)
                   const retrySlides = parseJSONResponse(retryText)
                   if (Array.isArray(retrySlides) && retrySlides.length > 0) {
@@ -1974,7 +1637,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
               emit({ hint: `Content batch ${batch.indices[0]} failed: ${err?.message?.slice(0, 100) || 'unknown error'}. Retrying with fallback model...` })
               // Retry once with a known-good model before falling back to outline
               try {
-                const fallbackBody = { ...body, model: 'claude-sonnet-4-20250514' }
+                const fallbackBody = { ...body, model: FALLBACK_MODEL }
                 const retryText = await makeNonStreamingCall(
                   fallbackBody,
                   body.enrichedSystemPrompt || SYSTEM_PROMPT,
@@ -2542,7 +2205,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
     if (preImageFiles.length > 0 && !modelSupportsVision(body.model)) {
       console.log(`[studio/generate] Model ${body.model} lacks vision — pre-processing ${preImageFiles.length} image(s)`)
       visionHint = buildVisionHint(body.model, body.provider)
-      const description = await describeImagesWithVision(preImageFiles, body)
+      const description = await describeImagesWithVision(preImageFiles, { provider: body.provider, apiKey: body.apiKey, model: body.model })
       if (description) {
         body.prompt = `${body.prompt}\n\n--- Image description (from uploaded file${preImageFiles.length > 1 ? 's' : ''}) ---\n${description}\n--- End of image description ---`
       }
@@ -2617,7 +2280,7 @@ Return ONLY the JSON object. No markdown fences, no commentary.`
       const isImageError = detail.toLowerCase().includes('image input') || detail.toLowerCase().includes('image_url')
       if (imageFiles.length > 0 && isImageError) {
         console.log('[studio/generate] Model does not support images — describing via vision model and retrying')
-        const description = await describeImagesWithVision(imageFiles, body)
+        const description = await describeImagesWithVision(imageFiles, { provider: body.provider, apiKey: body.apiKey, model: body.model })
 
         // Build a new body: strip image files, inject description into prompt
         const retryBody: GenerateBody = {

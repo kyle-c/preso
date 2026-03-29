@@ -57,17 +57,17 @@ describe('postProcessSlides', () => {
     expect(result[0].notes).toContain('Card 7')
   })
 
-  it('truncates body text over 80 words', () => {
-    const body = Array(100).fill('word').join(' ')
+  it('truncates body text over 120 words', () => {
+    const body = Array(150).fill('word').join(' ')
     const slides = [makeSlide({ body })] as any
     const result = postProcessSlides(slides)
     const resultWords = result[0].body.split(/\s+/).length
-    expect(resultWords).toBeLessThanOrEqual(81) // 80 + possible trailing "..."
+    expect(resultWords).toBeLessThanOrEqual(81) // 80 target + possible trailing "..."
     expect(result[0].notes).toContain('Full text:')
   })
 
-  it('does not truncate body text under 80 words', () => {
-    const body = Array(50).fill('word').join(' ')
+  it('does not truncate body text under 120 words', () => {
+    const body = Array(100).fill('word').join(' ')
     const slides = [makeSlide({ body })] as any
     const result = postProcessSlides(slides)
     expect(result[0].body).toBe(body)
@@ -129,8 +129,8 @@ describe('validateLayout', () => {
     expect(issues.some(i => i.includes('5 cards'))).toBe(true)
   })
 
-  it('flags body text over 100 words', () => {
-    const body = Array(105).fill('word').join(' ')
+  it('flags body text over 120 words', () => {
+    const body = Array(130).fill('word').join(' ')
     const slides = [makeSlide({ body })] as any
     const { issues } = validateLayout(slides)
     expect(issues.some(i => i.includes('words'))).toBe(true)

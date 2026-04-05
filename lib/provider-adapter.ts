@@ -38,11 +38,12 @@ const MODEL_ALIASES: Record<string, string> = {
   // Short-form 4.x aliases → dated IDs (API requires date suffix for 4.0 models)
   'claude-opus-4': 'claude-opus-4-20250514',
   'claude-sonnet-4': 'claude-sonnet-4-20250514',
-  // Legacy dated IDs with wrong dates → short form (API accepts short form for 4.6)
-  'claude-opus-4-6-20250627': 'claude-opus-4-6',
-  'claude-sonnet-4-6-20250627': 'claude-sonnet-4-6',
-  'claude-opus-4-6-20250514': 'claude-opus-4-6',
-  'claude-sonnet-4-6-20250514': 'claude-sonnet-4-6',
+  // Short-form 4.6 → dated IDs (safety: ensure API always gets a dated ID)
+  'claude-opus-4-6': 'claude-opus-4-6-20250627',
+  'claude-sonnet-4-6': 'claude-sonnet-4-6-20250627',
+  // Legacy dated IDs with wrong dates → canonical dated form
+  'claude-opus-4-6-20250514': 'claude-opus-4-6-20250627',
+  'claude-sonnet-4-6-20250514': 'claude-sonnet-4-6-20250627',
 }
 
 export function normalizeModel(model: string): string {

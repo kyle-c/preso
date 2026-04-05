@@ -4,11 +4,10 @@
 
 ### P1 — High Priority
 
-- [ ] **Split generate/route.ts (2,699 lines)**
-  Extract to: `lib/json-parser.ts`, `lib/provider-adapter.ts`, `lib/prompt-builder.ts`, `lib/stream-orchestrator.ts`, `lib/document-generator.ts`. Also create `lib/slide-utils.ts` (shared countWords) and `lib/quality-thresholds.ts` (shared density constants).
-  **Why:** Single largest file, mixes HTTP handling with prompt engineering and streaming. Untestable as-is. Three separate word-count implementations, inconsistent thresholds across coach/validator/layout engine.
-  **Includes:** Fix closeStream() recursive bug (line 1699 calls itself instead of controller.close()), fix keepalive interval leak on early-return paths, consolidate FALLBACK_MODEL constant (4+ hardcoded occurrences of claude-sonnet-4-20250514), fix intent detection first-match bias (weighted scoring).
-  **Effort:** L (human: ~1 week / CC: ~30 min)
+- [x] **Split generate/route.ts — Phase 1 (2,699 → 1,620 lines)**
+  Extracted: `lib/json-parser.ts`, `lib/provider-adapter.ts`, `lib/prompt-builder.ts` (incl. SYSTEM_PROMPT), `lib/slide-utils.ts`, `lib/quality-thresholds.ts`. Fixed: closeStream() recursion, keepalive leak, model ID normalization, intent detection first-match bias, index misalignment in thin-slide retry.
+  **Remaining:** Extract `lib/stream-orchestrator.ts` (createSSEStream, createParallelSSEStream) and `lib/document-generator.ts`. Unify makeNonStreamingCall calling convention (positional shim vs options adapter).
+  **Effort remaining:** M (human: ~3 days / CC: ~20 min)
 
 - [ ] **Split create/[id]/page.tsx (2,107 lines, 40+ state vars)**
   Extract: `<CommentsPanel>`, `<EditPanel>`, `<SidebarPanel>`, and move state to `useReducer` or Zustand.
@@ -52,6 +51,17 @@
   **Why:** Phase 1 adds try/catch + toast for Redis errors, but the app still crashes on write operations. Graceful degradation would let users at least view existing presentations during outages.
   **Depends on:** Phase 1 Redis error handling (try/catch + toast)
   **Effort:** M (human: ~3 days / CC: ~20 min)
+
+- [ ] **enrichmentCache key scoping**
+  `enrichmentCache` in route.ts uses global keys like `'exemplarSlides'` and `'antiExemplarSlides'` without user scope. All users share the same cached anti-exemplars. Should be keyed by userId.
+  **Why:** Correctness bug — user A's exemplars could be served to user B.
+  **Effort:** S (human: ~1 hour / CC: ~5 min)
+
+- [ ] **Unify makeNonStreamingCall calling convention**
+  route.ts has a local shim `makeNonStreamingCall(body, systemPrompt, userMessage, ...)` with positional args that wraps the extracted adapter `makeNonStreamingCallAdapter({ config, systemPrompt, userMessage, ... })`. All 19+ callsites use the shim. Should migrate callsites to use the adapter directly.
+  **Why:** Two calling conventions for the same function. Tests cover the adapter but production uses the shim.
+  **Depends on:** route.ts split Phase 1 (done)
+  **Effort:** S (human: ~2 hours / CC: ~10 min)
 
 - [ ] **Slide re-emit sends ALL slides at startIndex:0 after post-processing**
   Both the layout pass (route.ts:2020) and thin-slide retry (route.ts:2063) re-emit the entire processed array at startIndex:0. If the client isn't perfectly idempotent about index-based replacement, this creates duplicate slides.

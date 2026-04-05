@@ -11,6 +11,7 @@
 /* ═══════════════════════════════════════════════════════════ */
 
 import type { SlideData } from './slide-types'
+import { MAX_BODY_WORDS_TRUNCATE, BODY_TRUNCATE_TARGET } from './quality-thresholds'
 
 /**
  * Post-process slides to enforce layout rules.
@@ -83,9 +84,9 @@ function fixTextDensity(slides: SlideData[]): SlideData[] {
     if (!slide.body) return slide
 
     const words = slide.body.split(/\s+/)
-    if (words.length > 120) {
-      // Truncate to ~80 words at a sentence boundary
-      const truncated = words.slice(0, 80).join(' ')
+    if (words.length > MAX_BODY_WORDS_TRUNCATE) {
+      // Truncate to target words at a sentence boundary
+      const truncated = words.slice(0, BODY_TRUNCATE_TARGET).join(' ')
       const lastPeriod = truncated.lastIndexOf('.')
       const cleanBody = lastPeriod > truncated.length * 0.5
         ? truncated.substring(0, lastPeriod + 1)
@@ -160,8 +161,8 @@ export function validateLayout(slides: SlideData[]): { valid: boolean; issues: s
   for (let i = 0; i < slides.length; i++) {
     if (slides[i].body) {
       const wordCount = slides[i].body!.split(/\s+/).length
-      if (wordCount > 100) {
-        issues.push(`Slide ${i + 1} has ${wordCount} words (max 80)`)
+      if (wordCount > MAX_BODY_WORDS_TRUNCATE) {
+        issues.push(`Slide ${i + 1} has ${wordCount} words (max ${MAX_BODY_WORDS_TRUNCATE})`)
       }
     }
   }

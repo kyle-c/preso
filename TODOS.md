@@ -4,10 +4,10 @@
 
 ### P1 — High Priority
 
-- [ ] **Split generate/route.ts (2,573 lines)**
-  Extract to: `lib/prompt-builder.ts`, `lib/provider-adapter.ts`, `lib/stream-orchestrator.ts`, `lib/vision-preprocessor.ts`.
-  **Why:** Single largest file, mixes HTTP handling with prompt engineering and streaming. Untestable as-is.
-  **Effort:** L (human: ~1 week / CC: ~30 min)
+- [x] **Split generate/route.ts — Phase 1 (2,699 → 1,620 lines)**
+  Extracted: `lib/json-parser.ts`, `lib/provider-adapter.ts`, `lib/prompt-builder.ts` (incl. SYSTEM_PROMPT), `lib/slide-utils.ts`, `lib/quality-thresholds.ts`. Fixed: closeStream() recursion, keepalive leak, model ID normalization, intent detection first-match bias, index misalignment in thin-slide retry.
+  **Remaining:** Extract `lib/stream-orchestrator.ts` (createSSEStream, createParallelSSEStream) and `lib/document-generator.ts`. Unify makeNonStreamingCall calling convention (positional shim vs options adapter).
+  **Effort remaining:** M (human: ~3 days / CC: ~20 min)
 
 - [ ] **Split create/[id]/page.tsx (2,107 lines, 40+ state vars)**
   Extract: `<CommentsPanel>`, `<EditPanel>`, `<SidebarPanel>`, and move state to `useReducer` or Zustand.
@@ -51,6 +51,35 @@
   **Why:** Phase 1 adds try/catch + toast for Redis errors, but the app still crashes on write operations. Graceful degradation would let users at least view existing presentations during outages.
   **Depends on:** Phase 1 Redis error handling (try/catch + toast)
   **Effort:** M (human: ~3 days / CC: ~20 min)
+
+- [ ] **enrichmentCache key scoping**
+  `enrichmentCache` in route.ts uses global keys like `'exemplarSlides'` and `'antiExemplarSlides'` without user scope. All users share the same cached anti-exemplars. Should be keyed by userId.
+  **Why:** Correctness bug — user A's exemplars could be served to user B.
+  **Effort:** S (human: ~1 hour / CC: ~5 min)
+
+- [ ] **Unify makeNonStreamingCall calling convention**
+  route.ts has a local shim `makeNonStreamingCall(body, systemPrompt, userMessage, ...)` with positional args that wraps the extracted adapter `makeNonStreamingCallAdapter({ config, systemPrompt, userMessage, ... })`. All 19+ callsites use the shim. Should migrate callsites to use the adapter directly.
+  **Why:** Two calling conventions for the same function. Tests cover the adapter but production uses the shim.
+  **Depends on:** route.ts split Phase 1 (done)
+  **Effort:** S (human: ~2 hours / CC: ~10 min)
+
+- [ ] **Slide re-emit sends ALL slides at startIndex:0 after post-processing**
+  Both the layout pass (route.ts:2020) and thin-slide retry (route.ts:2063) re-emit the entire processed array at startIndex:0. If the client isn't perfectly idempotent about index-based replacement, this creates duplicate slides.
+  **Why:** Fragile client-server contract. Currently works because the client replaces by index, but any change to the slide insertion logic could break.
+  **Depends on:** route.ts split (stream-orchestrator extraction)
+  **Effort:** S (human: ~2 hours / CC: ~10 min)
+
+- [ ] **Wire validateSlides into parallel generation path**
+  `validateSlides()` in slide-validator.ts only runs via incremental-parser.ts, which the parallel path never calls. The primary generation mode skips server-side structural validation entirely.
+  **Why:** Dead code in the hot path. Either wire it into stream-orchestrator or remove to avoid confusion.
+  **Depends on:** route.ts split
+  **Effort:** S (human: ~1 hour / CC: ~5 min)
+
+- [ ] **Audit createSSEStream (legacy streaming path)**
+  `createSSEStream()` is the legacy non-parallel SSE forwarder. The parallel path (`createParallelSSEStream`) shares almost no code with it. Check if any codepath still uses the legacy path. If dead, remove.
+  **Why:** Dead code adds confusion and maintenance burden.
+  **Depends on:** route.ts split
+  **Effort:** S (human: ~1 hour / CC: ~5 min)
 
 ### P3 — Lower Priority
 

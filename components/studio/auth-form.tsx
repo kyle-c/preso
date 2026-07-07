@@ -178,8 +178,8 @@ export function AuthForm() {
 
                 <div className="mb-5 rounded-xl border border-turquoise/15 bg-turquoise/[0.06] px-4 py-3">
                   <p className="text-xs leading-relaxed text-white/50">
-                    Studio access is limited to Felix teammates and invited collaborators.
-                    Sign up with your @felixpago.com email or an approved invite.
+                    Use any valid email to create a Studio account.
+                    External collaborators may need to verify their email before signing in.
                   </p>
                 </div>
 
@@ -207,13 +207,13 @@ export function AuthForm() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@felixpago.com"
+                      placeholder="you@company.com"
                       required
                       className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-turquoise/40 focus:border-turquoise/40 transition-colors"
                     />
                     {mode === 'signup' && (
                       <p className="text-xs text-white/30 mt-1.5">
-                        Use your @felixpago.com email or an invited email to sign up
+                        Any valid email works. Felix emails and approved collaborators skip verification.
                       </p>
                     )}
                   </div>

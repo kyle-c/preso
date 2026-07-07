@@ -102,8 +102,8 @@ export function AccessDenied({ reason }: AccessDeniedProps) {
             Sign in to view
           </h1>
           <p className="text-sm text-white/40 leading-relaxed">
-            This presentation is shared with Félix Pago team members.
-            Sign in with your @felixpago.com account to view it.
+            This presentation is shared with a limited audience.
+            Sign in with the email address that was invited to view it.
           </p>
         </div>
 
@@ -129,7 +129,7 @@ export function AccessDenied({ reason }: AccessDeniedProps) {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-turquoise/50 focus:ring-1 focus:ring-turquoise/25 transition-colors"
-              placeholder="you@felixpago.com"
+              placeholder="you@company.com"
             />
           </div>
 
@@ -141,7 +141,7 @@ export function AccessDenied({ reason }: AccessDeniedProps) {
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-turquoise/50 focus:ring-1 focus:ring-turquoise/25 transition-colors"
-              placeholder={mode === 'signup' ? 'At least 8 characters' : 'Your password'}
+              placeholder={mode === 'signup' ? 'At least 12 characters' : 'Your password'}
             />
           </div>
 

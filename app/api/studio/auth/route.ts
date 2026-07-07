@@ -23,6 +23,15 @@ const PASSWORDLESS_EMAILS = new Set(
   (process.env.PASSWORDLESS_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean)
 )
 
+function isTrustedEmail(email: string) {
+  const normalized = email.toLowerCase()
+  return normalized.endsWith('@felixpago.com') || ALLOWED_EMAILS.has(normalized)
+}
+
+function canSendVerificationEmail() {
+  return Boolean(process.env.RESEND_API_KEY)
+}
+
 export async function POST(req: NextRequest) {
   try {
     // Rate limit by IP
@@ -58,13 +67,6 @@ export async function POST(req: NextRequest) {
         )
       }
 
-      if (!email.endsWith('@felixpago.com') && !ALLOWED_EMAILS.has(email.toLowerCase())) {
-        return NextResponse.json(
-          { error: 'Only @felixpago.com email addresses can sign up' },
-          { status: 403 },
-        )
-      }
-
       if (password.length < 12) {
         return NextResponse.json(
           { error: 'Password must be at least 12 characters' },
@@ -91,9 +93,8 @@ export async function POST(req: NextRequest) {
       const user = await createUser(email, name || email.split('@')[0], passwordHash)
       await auditLog('auth.signup', { userId: user.id, email, ip })
 
-      // Auto-verify allowlisted and @felixpago.com users (skip email verification)
-      if (ALLOWED_EMAILS.has(email.toLowerCase()) || email.endsWith('@felixpago.com')) {
-        // Mark as verified and log them in directly
+      // Trusted users skip verification. Preview/dev can also proceed without an email provider.
+      if (isTrustedEmail(email) || !canSendVerificationEmail()) {
         const { verifyUser } = await import('@/lib/studio-db')
         await verifyUser(user.id)
         const token = await createToken(user.id)
@@ -153,8 +154,8 @@ export async function POST(req: NextRequest) {
       }
 
       if (!user.verified) {
-        // Auto-verify allowlisted and @felixpago.com users
-        if (ALLOWED_EMAILS.has(email.toLowerCase()) || email.endsWith('@felixpago.com')) {
+        // Trusted users skip verification. Preview/dev can also proceed without an email provider.
+        if (isTrustedEmail(email) || !canSendVerificationEmail()) {
           const { verifyUser } = await import('@/lib/studio-db')
           await verifyUser(user.id)
         } else {

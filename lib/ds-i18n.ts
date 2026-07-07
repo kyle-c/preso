@@ -87,6 +87,7 @@ export interface DSStrings {
       principles:   { title: string; desc: string }
       colors:       { title: string; desc: string }
       typography:   { title: string; desc: string }
+      iconography:  { title: string; desc: string }
       components:   { title: string; desc: string }
       tokens:       { title: string; desc: string }
       illustrations: { title: string; desc: string }
@@ -195,6 +196,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
         principles:    { title: 'Principles', desc: 'Core design principles that guide how we build experiences at Felix Pago.' },
         colors:        { title: 'Colors', desc: 'Primary and secondary color palettes with WCAG-compliant colorways.' },
         typography:    { title: 'Typography', desc: 'Font families, weights, and type scale for consistent text styling.' },
+        iconography:   { title: 'Iconography', desc: 'Duotone icon styles and usage guidance for consistent product symbols.' },
         components:    { title: 'Components', desc: 'Pre-built UI components following the Felix Pago design language.' },
         tokens:        { title: 'Tokens', desc: 'Design tokens mapped to shadcn/ui naming conventions.' },
         illustrations: { title: 'Illustrations', desc: 'The full illustration library with SVG and PNG downloads for every asset.' },
@@ -302,6 +304,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
         principles:    { title: 'Principios', desc: 'Principios fundamentales de diseño que guían cómo creamos experiencias en Felix Pago.' },
         colors:        { title: 'Colores', desc: 'Paletas de colores primaria y secundaria con combinaciones de color compatibles con WCAG.' },
         typography:    { title: 'Tipografía', desc: 'Familias de fuentes, pesos y escala tipográfica para un estilo de texto consistente.' },
+        iconography:   { title: 'Iconografía', desc: 'Estilos de iconos duotono y guías de uso para símbolos de producto consistentes.' },
         components:    { title: 'Componentes', desc: 'Componentes de interfaz prediseñados siguiendo el lenguaje de diseño de Felix Pago.' },
         tokens:        { title: 'Tokens', desc: 'Tokens de diseño mapeados a las convenciones de nomenclatura de shadcn/ui.' },
         illustrations: { title: 'Ilustraciones', desc: 'La biblioteca completa de ilustraciones con descargas de SVG y PNG para cada recurso.' },
@@ -409,6 +412,7 @@ export const dsStrings: Record<DSLang, DSStrings> = {
         principles:    { title: 'Princípios', desc: 'Princípios fundamentais de design que guiam como construímos experiências no Felix Pago.' },
         colors:        { title: 'Cores', desc: 'Paletas de cores primária e secundária com combinações compatíveis com WCAG.' },
         typography:    { title: 'Tipografia', desc: 'Famílias de fontes, pesos e escala tipográfica para estilização de texto consistente.' },
+        iconography:   { title: 'Iconografia', desc: 'Estilos de ícones duotone e orientação de uso para símbolos de produto consistentes.' },
         components:    { title: 'Componentes', desc: 'Componentes de interface pré-construídos seguindo a linguagem de design do Felix Pago.' },
         tokens:        { title: 'Tokens', desc: 'Design tokens mapeados às convenções de nomenclatura do shadcn/ui.' },
         illustrations: { title: 'Ilustrações', desc: 'A biblioteca completa de ilustrações com downloads SVG e PNG para cada ativo.' },

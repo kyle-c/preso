@@ -11,7 +11,64 @@
 /* ═══════════════════════════════════════════════════════════ */
 
 import type { SlideData } from './slide-types'
-import { MAX_BODY_WORDS_TRUNCATE, BODY_TRUNCATE_TARGET } from './quality-thresholds'
+import {
+  MAX_BODY_WORDS_TRUNCATE,
+  BODY_TRUNCATE_TARGET,
+  MAX_CARD_BODY_WORDS,
+  SLOT_LIMITS,
+  DEFAULT_SLOT_LIMITS,
+  type SlotLimits,
+} from './quality-thresholds'
+
+// ── Helpers ──
+
+function wordCount(text: string | undefined | null): number {
+  if (!text) return 0
+  return text.trim().split(/\s+/).filter(Boolean).length
+}
+
+/** Truncate text to maxWords at a natural boundary. Returns [truncated, overflow]. */
+function truncateText(text: string, maxWords: number): [string, string] {
+  const words = text.split(/\s+/)
+  if (words.length <= maxWords) return [text, '']
+
+  const kept = words.slice(0, maxWords).join(' ')
+
+  // Try to find a clean break point (period > semicolon > dash > comma)
+  // Only look in the back half so we don't cut too aggressively
+  const minPos = Math.floor(kept.length * 0.4)
+  const breakPoints = [
+    kept.lastIndexOf('.'),
+    kept.lastIndexOf(';'),
+    kept.lastIndexOf(' —'),
+    kept.lastIndexOf(' -'),
+  ].filter(p => p > minPos)
+
+  if (breakPoints.length > 0) {
+    const best = Math.max(...breakPoints)
+    const char = kept[best]
+    // Include the period/semicolon, exclude dashes
+    const end = (char === '.' || char === ';') ? best + 1 : best
+    return [kept.substring(0, end).trim(), text]
+  }
+
+  // No clean break — try comma as last resort
+  const lastComma = kept.lastIndexOf(',')
+  if (lastComma > minPos) {
+    return [kept.substring(0, lastComma + 1).trim(), text]
+  }
+
+  // No break at all — hard cut, no "..." (looks cleaner than dangling ellipsis)
+  return [kept.trim(), text]
+}
+
+/** Append overflow content to notes field */
+function appendToNotes(existing: string | undefined, label: string, overflow: string): string {
+  const entry = `${label}: ${overflow}`
+  return existing ? `${existing}\n\n${entry}` : entry
+}
+
+// ── Pipeline ──
 
 /**
  * Post-process slides to enforce layout rules.
@@ -22,7 +79,7 @@ export function postProcessSlides(slides: SlideData[]): SlideData[] {
 
   result = fixBgAlternation(result)
   result = fixCardCounts(result)
-  result = fixTextDensity(result)
+  result = enforceSlotLimits(result)
   result = fixEmptySections(result)
   result = fixConsecutiveTypes(result)
 
@@ -31,12 +88,9 @@ export function postProcessSlides(slides: SlideData[]): SlideData[] {
 
 /** Fix consecutive slides with the same background color */
 function fixBgAlternation(slides: SlideData[]): SlideData[] {
-  const bgCycle = ['dark', 'light'] // alternating pattern
   for (let i = 1; i < slides.length; i++) {
     if (slides[i].bg === slides[i - 1].bg) {
-      // Skip brand slides — they're intentional accents
       if (slides[i].bg === 'brand') continue
-      // Flip to the opposite
       slides[i] = { ...slides[i], bg: slides[i].bg === 'dark' ? 'light' : 'dark' }
     }
   }
@@ -50,7 +104,6 @@ function fixCardCounts(slides: SlideData[]): SlideData[] {
     const count = slide.cards.length
 
     if (count === 5) {
-      // Merge last two cards into one
       const merged = [...slide.cards.slice(0, 3)]
       const last = slide.cards[3]
       const lastLast = slide.cards[4]
@@ -63,7 +116,6 @@ function fixCardCounts(slides: SlideData[]): SlideData[] {
     }
 
     if (count === 7) {
-      // Keep first 6, move 7th content into body/notes
       const kept = slide.cards.slice(0, 6)
       const extra = slide.cards[6]
       const extraNote = `Additional: ${extra.title} — ${extra.body}`
@@ -78,32 +130,122 @@ function fixCardCounts(slides: SlideData[]): SlideData[] {
   })
 }
 
-/** Truncate body text that exceeds density limits */
-function fixTextDensity(slides: SlideData[]): SlideData[] {
+/**
+ * Enforce per-slide-type content slot limits.
+ * Truncates all content fields to their hard caps and moves overflow to notes.
+ * This is the core "slides-grab-like" enforcement layer.
+ */
+function enforceSlotLimits(slides: SlideData[]): SlideData[] {
   return slides.map(slide => {
-    if (!slide.body) return slide
+    const limits = SLOT_LIMITS[slide.type] || DEFAULT_SLOT_LIMITS
+    let s = { ...slide }
+    let notes = s.notes || ''
 
-    const words = slide.body.split(/\s+/)
-    if (words.length > MAX_BODY_WORDS_TRUNCATE) {
-      // Truncate to target words at a sentence boundary
-      const truncated = words.slice(0, BODY_TRUNCATE_TARGET).join(' ')
-      const lastPeriod = truncated.lastIndexOf('.')
-      const cleanBody = lastPeriod > truncated.length * 0.5
-        ? truncated.substring(0, lastPeriod + 1)
-        : truncated + '...'
-
-      // Move full text to notes
-      const fullText = slide.body
-      return {
-        ...slide,
-        body: cleanBody,
-        notes: slide.notes
-          ? `${slide.notes}\n\nFull text: ${fullText}`
-          : `Full text: ${fullText}`,
-      }
+    // ── Body truncation ──
+    if (s.body && limits.maxBodyWords > 0 && wordCount(s.body) > limits.maxBodyWords) {
+      const [clean, overflow] = truncateText(s.body, limits.maxBodyWords)
+      s.body = clean
+      if (overflow) notes = appendToNotes(notes, 'Full body text', overflow)
+    } else if (s.body && limits.maxBodyWords === 0) {
+      // Slide type doesn't support body — move it all to notes
+      notes = appendToNotes(notes, 'Body text', s.body)
+      s.body = undefined
     }
 
-    return slide
+    // ── Bullet truncation ──
+    if (s.bullets && s.bullets.length > 0) {
+      let bullets = [...s.bullets]
+
+      // Cap bullet count
+      if (limits.maxBullets > 0 && bullets.length > limits.maxBullets) {
+        const overflow = bullets.slice(limits.maxBullets)
+        bullets = bullets.slice(0, limits.maxBullets)
+        const overflowText = overflow.map(b => `• ${b.text}`).join('\n')
+        notes = appendToNotes(notes, 'Additional bullets', overflowText)
+      }
+
+      // Cap per-bullet word count
+      if (limits.maxBulletWords > 0) {
+        bullets = bullets.map(b => {
+          if (wordCount(b.text) <= limits.maxBulletWords) return b
+          const [clean] = truncateText(b.text, limits.maxBulletWords)
+          return { ...b, text: clean }
+        })
+      }
+
+      s.bullets = bullets
+    }
+
+    // ── Card truncation ──
+    if (s.cards && s.cards.length > 0) {
+      let cards = [...s.cards]
+
+      // Cap card count
+      if (limits.maxCards > 0 && cards.length > limits.maxCards) {
+        const overflow = cards.slice(limits.maxCards)
+        cards = cards.slice(0, limits.maxCards)
+        const overflowText = overflow.map(c => `${c.title}: ${c.body || ''}`).join('\n')
+        notes = appendToNotes(notes, 'Additional cards', overflowText)
+      }
+
+      // Cap per-card body word count
+      if (limits.maxCardBodyWords > 0) {
+        cards = cards.map(card => {
+          if (!card.body || wordCount(card.body) <= limits.maxCardBodyWords) return card
+          const [clean] = truncateText(card.body, limits.maxCardBodyWords)
+          return { ...card, body: clean }
+        })
+      }
+
+      s.cards = cards
+    }
+
+    // ── Column truncation ──
+    if (s.columns && s.columns.length > 0 && limits.maxColumnWords > 0) {
+      s.columns = s.columns.map(col => {
+        let c = { ...col }
+
+        // Truncate column body
+        if (c.body && wordCount(c.body) > limits.maxColumnWords) {
+          const [clean, overflow] = truncateText(c.body, limits.maxColumnWords)
+          c.body = clean
+          if (overflow) notes = appendToNotes(notes, `Column "${c.heading || 'content'}"`, overflow)
+        }
+
+        // Cap column bullets
+        if (c.bullets && limits.maxBullets > 0 && c.bullets.length > limits.maxBullets) {
+          const overflow = c.bullets.slice(limits.maxBullets)
+          c.bullets = c.bullets.slice(0, limits.maxBullets)
+          const overflowText = overflow.map(b => `• ${b.text}`).join('\n')
+          notes = appendToNotes(notes, `Column "${c.heading || 'content'}" bullets`, overflowText)
+        }
+
+        // Cap per-bullet words in columns
+        if (c.bullets && limits.maxBulletWords > 0) {
+          c.bullets = c.bullets.map(b => {
+            if (wordCount(b.text) <= limits.maxBulletWords) return b
+            const [clean] = truncateText(b.text, limits.maxBulletWords)
+            return { ...b, text: clean }
+          })
+        }
+
+        return c
+      })
+    }
+
+    // ── Quote truncation ──
+    if (s.quote && limits.maxQuoteWords > 0 && wordCount(s.quote.text) > limits.maxQuoteWords) {
+      const [clean, overflow] = truncateText(s.quote.text, limits.maxQuoteWords)
+      s.quote = { ...s.quote, text: clean }
+      if (overflow) notes = appendToNotes(notes, 'Full quote', overflow)
+    }
+
+    // Write notes back
+    if (notes !== (slide.notes || '')) {
+      s.notes = notes
+    }
+
+    return s
   })
 }
 
@@ -113,7 +255,6 @@ function fixEmptySections(slides: SlideData[]): SlideData[] {
     if (slide.type !== 'section') return slide
     if (slide.subtitle) return slide
 
-    // Try to derive a subtitle from the next slide's content
     const next = slides[i + 1]
     if (next) {
       const preview = next.title
@@ -128,8 +269,6 @@ function fixEmptySections(slides: SlideData[]): SlideData[] {
 
 /** Break up 3+ consecutive slides of the same type */
 function fixConsecutiveTypes(slides: SlideData[]): SlideData[] {
-  // This is informational only — we don't change slide types as that would
-  // require regenerating content. Instead, we log it for the coach.
   return slides
 }
 
@@ -140,14 +279,12 @@ function fixConsecutiveTypes(slides: SlideData[]): SlideData[] {
 export function validateLayout(slides: SlideData[]): { valid: boolean; issues: string[] } {
   const issues: string[] = []
 
-  // Check bg alternation
   for (let i = 1; i < slides.length; i++) {
     if (slides[i].bg === slides[i - 1].bg && slides[i].bg !== 'brand') {
       issues.push(`Slides ${i} and ${i + 1} have the same background (${slides[i].bg})`)
     }
   }
 
-  // Check card counts
   for (let i = 0; i < slides.length; i++) {
     if (slides[i].cards) {
       const count = slides[i].cards!.length
@@ -157,17 +294,15 @@ export function validateLayout(slides: SlideData[]): { valid: boolean; issues: s
     }
   }
 
-  // Check text density
   for (let i = 0; i < slides.length; i++) {
     if (slides[i].body) {
-      const wordCount = slides[i].body!.split(/\s+/).length
-      if (wordCount > MAX_BODY_WORDS_TRUNCATE) {
-        issues.push(`Slide ${i + 1} has ${wordCount} words (max ${MAX_BODY_WORDS_TRUNCATE})`)
+      const wc = slides[i].body!.split(/\s+/).length
+      if (wc > MAX_BODY_WORDS_TRUNCATE) {
+        issues.push(`Slide ${i + 1} has ${wc} words (max ${MAX_BODY_WORDS_TRUNCATE})`)
       }
     }
   }
 
-  // Check first/last slide types
   if (slides.length > 0 && slides[0].type !== 'title') {
     issues.push('First slide should be type "title"')
   }

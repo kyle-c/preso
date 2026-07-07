@@ -297,6 +297,7 @@ export async function createPresentation(
     prompt,
     slides,
     document: document ?? null,
+    outline: null,
     translations: null,
     shareToken: null,
     isPublic: false,

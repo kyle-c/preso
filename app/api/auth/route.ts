@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const PASSWORD = process.env.SITE_PASSWORD || 'felix2026andbeyond!'
+const PASSWORD = process.env.SITE_PASSWORD
 const COOKIE_NAME = 'site-auth'
 
 export async function POST(req: NextRequest) {
+  if (!PASSWORD) {
+    return NextResponse.json({ error: 'SITE_PASSWORD is not configured' }, { status: 500 })
+  }
+
   const { password } = await req.json()
 
   if (password !== PASSWORD) {

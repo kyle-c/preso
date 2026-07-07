@@ -125,10 +125,11 @@ export async function POST(req: NextRequest) {
       // Auto-create passwordless users on first login
       if (!user && isPasswordless) {
         const placeholderHash = await bcrypt.hash(crypto.randomUUID(), 10)
-        user = await createUser(email, email.split('@')[0], placeholderHash)
+        const createdUser = await createUser(email, email.split('@')[0], placeholderHash)
         const { verifyUser } = await import('@/lib/studio-db')
-        await verifyUser(user.id)
-        await auditLog('auth.auto_create', { userId: user.id, email, ip })
+        await verifyUser(createdUser.id)
+        user = await getUserByEmail(email)
+        await auditLog('auth.auto_create', { userId: createdUser.id, email, ip })
       }
 
       if (!user) {

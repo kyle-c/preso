@@ -90,6 +90,13 @@ describe('strengthenPrompt', () => {
     expect(result.strengthenedPrompt).toContain('Problem → Solution → Impact')
   })
 
+  it('includes deck-type playbook guidance for specific deck families', () => {
+    const result = strengthenPrompt('product roadmap for Q2 with sequencing and dependencies')
+    expect(result.strengthenedPrompt).toContain('DECK INTELLIGENCE CONTRACT')
+    expect(result.strengthenedPrompt).toContain('Product roadmap / portfolio plan')
+    expect(result.strengthenedPrompt).toContain('Show now/next/later')
+  })
+
   it('returns general type for unrecognized prompts', () => {
     const result = strengthenPrompt('make slides about dogs')
     expect(result.type).toBe('general')
@@ -155,6 +162,7 @@ describe('preprocessIntent', () => {
   it('builds enriched context for typed intents', () => {
     const result = preprocessIntent('Q2 quarterly review with KPI results')
     expect(result.enrichedContext).toContain('DETECTED INTENT: Business Review')
+    expect(result.enrichedContext).toContain('DETECTED DECK FAMILY: Business review / QBR')
     expect(result.enrichedContext).toContain('KEY TOPICS')
     expect(result.enrichedContext).toContain('REVIEW GENERATION NOTES')
   })

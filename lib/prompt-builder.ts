@@ -109,12 +109,24 @@ Follow these rules strictly to ensure all content meets WCAG 2.1 AA contrast req
 - NEVER leave widows or orphans — no single word should sit alone on the last line of a title, subtitle, body paragraph, bullet point, or card description. Rewrite to pull at least two words onto the final line, or tighten the copy so the last line merges with the previous one. This applies to all slide types, outline text, and document sections equally.
 - NEVER use emoji icons on bullet items unless the user explicitly requests them. Use "✓" or "→" for functional indicators only. Omit the icon field by default. Emoji-heavy slides look unprofessional.
 - Card counts MUST be 2, 3, 4, or 6. NEVER use 5 or 7 cards — they create orphaned bottom rows. 4 cards renders as a 2×2 grid, 6 as a 3×2 grid. If you have 5 items, combine two into one card or split into two slides.
-- Card body format: Use STRUCTURED format, not dense paragraphs. Each card: 1 bold lead sentence + 2-3 bullet points (• prefix). Target 25-50 words per card for substance. NEVER write 5+ sentences in a card body.
-- When a slide contains 2+ metrics or stats, NEVER bury them in a prose paragraph. Break them out as visual elements: cards (each stat as title), bullets (bold number leading), or two-column stat callouts. Dense paragraphs with embedded bold numbers are hard to scan in a live presentation.
-- Section divider slides (type "section") MUST include a subtitle with a 1-sentence preview of what's coming. Never leave a section slide with just a title — it wastes the audience's attention.
-- Content slides (type "content") should have 40-100 words of body text. If you exceed 100 words, consider converting to bullet points or splitting into two slides. Every word should earn its place — but substance is more important than brevity.
-- MINIMUM CONTENT RULE: Every content/bullets/cards/two-column slide MUST have at least 50 words of visible content (title + subtitle + body + bullets + cards combined). A slide with just a title and nothing else is NEVER acceptable. Fill the space with substance — specific details, data, examples, or actionable items. Err on the side of MORE content, not less. Per-field minimums: Each bullet MUST be 8+ words (a complete thought, not a label). Card body MUST be 20+ words (bold lead + supporting detail). Body text MUST be 20+ words minimum. Column content MUST be 15+ words each. EVERY slide needs subtitle + body + type-specific fields (bullets/cards/columns/chart). Never leave a slide with just a title.
-- Body text: 2-4 sentences with specific details. Long-form content can go in "notes", but the slide face must have substantive, insight-driven copy — not placeholder text.
+- DENSITY RULE — LESS IS MORE: Slides are visual aids, not documents. The audience reads the slide in 3-5 seconds, then listens to you. Every slide should have ONE clear takeaway, not a wall of text. Err on the side of FEWER words, not more. Put detail in speaker notes, not on the slide face.
+- WORD BUDGETS (hard caps enforced by the renderer — content beyond these limits is automatically cut):
+  * title/closing: 25-30 words max total
+  * section: 15 words max (title + subtitle only)
+  * quote: 20 words max in the quote text
+  * chart: 30 words max (title + 1 sentence — the chart IS the content)
+  * content: 50 words max (title + 1-2 short sentences)
+  * bullets: 65 words max, 5 bullets, each bullet ≤ 12 words
+  * cards: 70 words max, 4 cards, each card body ≤ 15 words (one sentence per card)
+  * two-column: 65 words max, each column ≤ 30 words, max 3 bullets per column at ≤ 12 words each
+  Write to these budgets. Content that exceeds them will be truncated at the nearest sentence boundary and moved to speaker notes. Write complete, self-contained thoughts within the budget — never write a sentence you know will be cut off.
+- Card body format: 1 bold lead sentence OR 2-3 short bullet points (• prefix). Target 15-25 words per card. Max 3 bullets per card. NEVER write full paragraphs in cards. NEVER list more than 3 items in a single card — split into multiple cards or move detail to notes.
+- Bullet format: Each bullet is ONE concise line, 8-15 words. Bold the key phrase. No bullet should wrap to 3+ lines on screen.
+- Quote slides: Max 25 words in the quote. A quote is a single punchy sentence, not a paragraph.
+- When a slide contains 2+ metrics or stats, NEVER bury them in a prose paragraph. Break them out as visual elements: cards (each stat as title), bullets (bold number leading), or two-column stat callouts.
+- Section divider slides (type "section") MUST include a subtitle with a 1-sentence preview of what's coming.
+- Content slides (type "content") should have 1-2 sentences of body text (30-60 words). If you need more, split into two slides.
+- Body text: 1-2 sentences. Long-form content belongs in "notes", not on the slide face.
 - CRITICAL: When a slide has numbers, metrics, KPIs, or financial data — NEVER write them as prose. Always use one of these formats:
   * "cards" type with each metric as a card title (e.g. title: "$18", body: "Blended CAC")
   * "chart" type with a ChartSpec for visual representation
@@ -723,7 +735,7 @@ All text fields (body, bullets, cards, notes, document sections) support markdow
 - Slide titles should be insight-driven, not generic (e.g. "Revenue grew 22% through organic channels" not "Revenue Overview")
 - Body text should tell a story, not just list facts — connect insights to implications. Every chart, cards, bullets, and two-column slide MUST have a body field.
 - Bullet points should be substantive: each bullet is a COMPLETE THOUGHT with context and specifics, not a fragment. Bad: "Market growth". Good: "TAM: $161B — Total LatAm remittances per year, growing 4% annually"
-- Cards should have rich body text (2-3 sentences minimum) explaining the "so what" — never a single sentence. Bad: "Regulatory changes." Good: "Open banking maturing. Real-time payment infrastructure (FedNow) live. Stablecoin regulation creating clarity for Circle/USDC at enterprise scale."
+- Cards should have concise body text (1-2 sentences). Bad: "Regulatory changes." Good: "Open banking maturing. Real-time payments (FedNow) live." Keep cards scannable — detail goes in notes.
 - Use specific numbers, percentages, names, dates, and comparisons whenever possible — vague statements weaken credibility
 - Every slide should use 2-3 fields working together: body + bullets, body + chart + bullets, body + columns, cards + body. A slide with only one content field is too thin.
 - The document sections should read as a cohesive narrative, not as a loose collection of slide notes

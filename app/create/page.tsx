@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ArrowUp, Paperclip, X, Settings, FileText, FileSpreadsheet, ChevronDown, Search, Layers, Sparkles, Loader2, ListOrdered, Palette } from 'lucide-react'
+import { ArrowLeft, ArrowUp, Paperclip, X, Settings, FileText, FileSpreadsheet, ChevronDown, Search, Layers, Sparkles, Loader2, ListOrdered, Palette, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { loadModelDefaults, useServerSettings } from '@/components/studio/model-selector'
@@ -15,17 +15,30 @@ import { BrandKitEditor } from '@/components/studio/brand-kit-editor'
 import type { TemplateSectionSkeleton } from '@/lib/studio-db'
 import { GenerationCanvas } from '@/components/studio/generation-canvas'
 import { OutlineGenerationView, DocumentGenerationView } from '@/components/studio/generation-mode-views'
-import { parseIncrementalSlides, parseFinalResult } from '@/lib/incremental-parser'
-import { detectIntent } from '@/lib/prompt-strengthener'
+import { CreateStarterActions } from '@/components/studio/create-starter-actions'
+import { SaveStatusPill } from '@/components/studio/save-status-pill'
+import { consumeGenerationStream } from '@/lib/studio-generation-stream'
 import { useIntentPreprocessor } from '@/lib/use-intent-preprocessor'
 import { analyzeSlides, coachSummary, type CoachSuggestion } from '@/lib/slide-coach'
 import type { PresentationDocument } from '@/lib/studio-db'
-
-// #5: Predicted slide counts by intent for speculative layout
-const INTENT_SLIDE_COUNTS: Record<string, number> = {
-  onboarding: 10, prd: 14, launch: 12, review: 14,
-  research: 14, proposal: 12, strategy: 12, general: 12,
-}
+import {
+  buildCreateGenerationPayload,
+  buildMergeGenerationPayload,
+  createDeckTitle,
+  filterPresentationLibrary,
+  getErrorMessage,
+  getSelectedDecksForMerge,
+  predictCreateSlideCount,
+  predictMergeSlideCount,
+  presentationFetchFailure,
+  readResponseError,
+  type GenerateMode,
+  type MergeSourceDeck,
+  type PresentationSortKey,
+  type PresentationListStatus,
+  type SaveStatus,
+  type TabKey,
+} from '@/lib/studio-create-controller'
 
 /* ─────────────────────── Component ─────────────────────── */
 
@@ -102,7 +115,6 @@ export default function CreatePage() {
   const clickupInputRef = useRef<HTMLInputElement>(null)
 
   // Generation mode: what output format to generate
-  type GenerateMode = 'presentation' | 'outline' | 'document'
   const [generateMode, setGenerateMode] = useState<GenerateMode>('presentation')
   const [showModeDropdown, setShowModeDropdown] = useState(false)
 
@@ -119,10 +131,31 @@ export default function CreatePage() {
   const pendingSaveRef = useRef<(() => void) | null>(null)
   const [showCanvas, setShowCanvas] = useState(false)
   const [savedId, setSavedId] = useState<string | null>(null)
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
+  const [saveError, setSaveError] = useState('')
+  const [saveRetryAvailable, setSaveRetryAvailable] = useState(false)
+  const saveRetryRef = useRef<(() => Promise<void>) | null>(null)
   const [predictedCount, setPredictedCount] = useState(12)
   const abortRef = useRef<AbortController | null>(null)
   const promptRef = useRef<HTMLTextAreaElement>(null)
+  const composerRef = useRef<HTMLDivElement>(null)
   const modeDropdownRef = useRef<HTMLDivElement>(null)
+  const [starterMorphing, setStarterMorphing] = useState(false)
+  const [starterComposerArriving, setStarterComposerArriving] = useState(false)
+  const [starterPromptLabel, setStarterPromptLabel] = useState<string | null>(null)
+  const [starterPromptRevealing, setStarterPromptRevealing] = useState(false)
+  const [starterPromptResetting, setStarterPromptResetting] = useState(false)
+  const starterComposerArriveRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const starterPromptFxEndRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const starterResetRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (starterComposerArriveRef.current) clearTimeout(starterComposerArriveRef.current)
+      if (starterPromptFxEndRef.current) clearTimeout(starterPromptFxEndRef.current)
+      if (starterResetRef.current) clearTimeout(starterResetRef.current)
+    }
+  }, [])
 
   // Close mode dropdown on outside click
   useEffect(() => {
@@ -144,9 +177,194 @@ export default function CreatePage() {
     el.style.height = el.scrollHeight + 'px'
   }, [prompt])
 
+  useEffect(() => {
+    if (!prompt.trim() && starterPromptLabel) {
+      setStarterPromptLabel(null)
+    }
+  }, [prompt, starterPromptLabel])
+
+  const clearSaveRetry = useCallback(() => {
+    saveRetryRef.current = null
+    setSaveRetryAvailable(false)
+  }, [])
+
+  const resetSaveState = useCallback(() => {
+    setSaveStatus('idle')
+    setSaveError('')
+    clearSaveRetry()
+  }, [clearSaveRetry])
+
+  const getStarterMorphTargetRect = useCallback(() => (
+    composerRef.current?.getBoundingClientRect() ?? null
+  ), [])
+
+  const handleStarterActionStart = useCallback(() => {
+    if (starterComposerArriveRef.current) clearTimeout(starterComposerArriveRef.current)
+    setStarterComposerArriving(false)
+    setStarterPromptResetting(false)
+    setStarterMorphing(true)
+  }, [])
+
+  const handleStarterActionEnd = useCallback(() => {
+    setStarterMorphing(false)
+    setStarterComposerArriving(true)
+    starterComposerArriveRef.current = setTimeout(() => {
+      setStarterComposerArriving(false)
+    }, 520)
+  }, [])
+
+  const selectStarterPrompt = useCallback((nextPrompt: string, label: string) => {
+    if (starterPromptFxEndRef.current) clearTimeout(starterPromptFxEndRef.current)
+    if (starterResetRef.current) clearTimeout(starterResetRef.current)
+    setStarterMorphing(false)
+    setStarterPromptLabel(label)
+    setStarterPromptResetting(false)
+    setStarterPromptRevealing(true)
+    setPrompt(nextPrompt)
+    starterPromptFxEndRef.current = setTimeout(() => setStarterPromptRevealing(false), 820)
+    requestAnimationFrame(() => promptRef.current?.focus())
+  }, [])
+
+  const resetStarterPrompt = useCallback(() => {
+    if (starterPromptFxEndRef.current) clearTimeout(starterPromptFxEndRef.current)
+    if (starterResetRef.current) clearTimeout(starterResetRef.current)
+    setError('')
+    setHint(null)
+    setStarterMorphing(false)
+    setStarterComposerArriving(false)
+    setStarterPromptRevealing(false)
+    setStarterPromptResetting(true)
+    starterResetRef.current = setTimeout(() => {
+      setPrompt('')
+      setStarterPromptLabel(null)
+      setStarterPromptResetting(false)
+      requestAnimationFrame(() => promptRef.current?.focus())
+    }, 240)
+  }, [])
+
+  const recordSaveFailure = useCallback((message: string, retry?: () => Promise<void>) => {
+    setSaveStatus('error')
+    setSaveError(message)
+    saveRetryRef.current = retry ?? null
+    setSaveRetryAvailable(Boolean(retry))
+  }, [])
+
+  const savePresentationToLibrary = useCallback(async ({
+    title,
+    promptText,
+    slides: slidesToSave,
+    document = null,
+  }: {
+    title: string
+    promptText: string
+    slides: SlideData[]
+    document?: unknown | null
+  }) => {
+    const runSave = async () => {
+      setSaveStatus('saving')
+      setSaveError('')
+      const saveRes = await fetch('/api/studio/presentations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          prompt: promptText,
+          slides: slidesToSave,
+          document,
+          provider,
+          model,
+        }),
+      })
+
+      if (!saveRes.ok) {
+        throw new Error(await readResponseError(saveRes, 'Save failed'))
+      }
+
+      const saveData = await saveRes.json().catch(() => null)
+      const presentationId = saveData?.presentation?.id
+      if (!presentationId) {
+        throw new Error('Save response did not include a presentation id.')
+      }
+
+      setSavedId(presentationId)
+      setSaveStatus('saved')
+      setSaveError('')
+      clearSaveRetry()
+      return presentationId as string
+    }
+
+    try {
+      return await runSave()
+    } catch (err) {
+      recordSaveFailure(getErrorMessage(err, 'Save failed. Please try again.'))
+      return null
+    }
+  }, [clearSaveRetry, model, provider, recordSaveFailure])
+
+  const patchSavedPresentation = useCallback(async (
+    presentationId: string,
+    payload: Record<string, unknown>,
+    label: string,
+  ) => {
+    const runPatch = async () => {
+      setSaveStatus('syncing')
+      setSaveError('')
+      const patchRes = await fetch(`/api/studio/presentations/${presentationId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!patchRes.ok) {
+        throw new Error(await readResponseError(patchRes, `${label} sync failed`))
+      }
+
+      setSaveStatus('saved')
+      setSaveError('')
+      clearSaveRetry()
+    }
+
+    try {
+      await runPatch()
+      return true
+    } catch (err) {
+      recordSaveFailure(
+        `Saved, but ${label} did not sync. ${getErrorMessage(err, 'Please retry the sync.')}`,
+        runPatch,
+      )
+      return false
+    }
+  }, [clearSaveRetry, recordSaveFailure])
+
+  const runPostSaveJobs = useCallback((presentationId: string, includeQualityRating = false) => {
+    fetch(`/api/studio/presentations/${presentationId}/post-save`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        translations: true,
+        qualityRating: includeQualityRating,
+      }),
+    }).then((res) => {
+      if (!res.ok) throw new Error(`Post-save jobs failed (${res.status})`)
+    }).catch((err) => {
+      console.warn('[Studio] Post-save jobs failed', err)
+    })
+  }, [])
+
+  const retrySave = useCallback(async () => {
+    const retry = saveRetryRef.current
+    if (!retry) return
+    try {
+      await retry()
+    } catch (err) {
+      recordSaveFailure(getErrorMessage(err, 'Retry failed. Please try again.'), retry)
+    }
+  }, [recordSaveFailure])
+
   // Lazy-load document generation in background after slides are saved
   const generateDocumentInBackground = useCallback(async (presId: string, slides: SlideData[]) => {
     try {
+      setSaveStatus('syncing')
       const res = await fetch('/api/studio/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -155,9 +373,13 @@ export default function CreatePage() {
           reverseEngineer: true, slides,
         }),
       })
-      if (!res.ok) return
+      if (!res.ok) {
+        throw new Error(await readResponseError(res, 'Document generation failed'))
+      }
       const reader = res.body?.getReader()
-      if (!reader) return
+      if (!reader) {
+        throw new Error('Document generation did not return a stream.')
+      }
       const decoder = new TextDecoder()
       while (true) {
         const { done, value } = await reader.read()
@@ -171,17 +393,21 @@ export default function CreatePage() {
             const event = JSON.parse(payload)
             if (event.document) {
               setGeneratedDocument(event.document)
-              fetch(`/api/studio/presentations/${presId}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ document: event.document }),
-              }).catch(() => {})
+              await patchSavedPresentation(presId, { document: event.document }, 'document')
             }
           } catch { /* ignore */ }
         }
       }
-    } catch { /* background doc gen is non-critical */ }
-  }, [provider, apiKey, model])
+      setSaveStatus('saved')
+    } catch (err) {
+      recordSaveFailure(
+        getErrorMessage(err, 'Saved, but Studio could not generate the document view.'),
+        async () => {
+          await generateDocumentInBackground(presId, slides)
+        },
+      )
+    }
+  }, [apiKey, model, patchSavedPresentation, provider, recordSaveFailure])
 
   const handleGenerate = useCallback(async () => {
     if (!prompt.trim()) return
@@ -200,9 +426,10 @@ export default function CreatePage() {
     setDone(false)
     setShowCanvas(true)
     setSavedId(null)
+    resetSaveState()
 
-    // #5: Speculative layout — predict slide count from intent
-    const predicted = INTENT_SLIDE_COUNTS[detectIntent(prompt.trim())] ?? 12
+    // Speculative layout — predict slide count from intent
+    const predicted = predictCreateSlideCount(prompt.trim())
     setPredictedCount(predicted)
 
     const controller = new AbortController()
@@ -212,27 +439,16 @@ export default function CreatePage() {
     const clientTimeout = setTimeout(() => controller.abort(), 300000)
 
     try {
-      const useParallel = true // Enable parallel generation for speed
       const res = await fetch('/api/studio/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: preprocessed?.enrichedContext
-            ? preprocessed.enrichedContext + prompt.trim()
-            : prompt.trim(),
-          files: files.map((f) => ({ name: f.name, type: f.type, data: f.data })),
-          provider,
-          apiKey,
-          model,
-          parallel: useParallel,
-          ...(selectedTemplate && {
-            templateStructure: {
-              title: selectedTemplate.title,
-              slideCount: selectedTemplate.slideCount,
-              sections: selectedTemplate.sections,
-            },
-          }),
-        }),
+        body: JSON.stringify(buildCreateGenerationPayload({
+          prompt,
+          enrichedContext: preprocessed?.enrichedContext,
+          files,
+          settings: { provider, apiKey, model },
+          selectedTemplate,
+        })),
         signal: controller.signal,
       })
 
@@ -244,205 +460,119 @@ export default function CreatePage() {
         return
       }
 
-      const reader = res.body?.getReader()
-      if (!reader) {
-        setError('No response stream')
-        setGenerating(false)
-        setShowCanvas(false)
-        return
-      }
-
-      const decoder = new TextDecoder()
-      let accumulated = ''
-      let isParallelMode = false
-      let parallelSlides: SlideData[] = []
       let localSavedId: string | null = null
-      let slidesFinalized = false
       let savePromise: Promise<void> | null = null
       let pendingDocument: any = null
+      let pendingOutline: any = null
 
-      // Helper: save presentation (non-blocking)
-      const savePresentation = async (slides: SlideData[], doc: any = null) => {
-        const title = slides[0]?.title || prompt.trim().slice(0, 60) || 'Untitled'
-        try {
-          const saveRes = await fetch('/api/studio/presentations', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              title, prompt: prompt.trim(),
-              slides, document: doc, provider, model,
-            }),
-          })
-          if (saveRes.ok) {
-            const saveData = await saveRes.json()
-            localSavedId = saveData.presentation.id
-            setSavedId(localSavedId)
-            // If a document arrived while we were saving, patch it now
-            if (pendingDocument) {
-              fetch(`/api/studio/presentations/${localSavedId}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ document: pendingDocument }),
-              }).catch(() => {})
-              pendingDocument = null
-            }
-            // Trigger async translation (fire-and-forget)
-            fetch('/api/studio/translate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ presentationId: localSavedId }),
-            }).catch(() => {})
-          }
-        } catch { /* save failure is non-critical */ }
-      }
+      const persistSlides = async (slidesToSave: SlideData[], doc: any = null) => {
+        const documentFromStream = pendingDocument
+        const outlineFromStream = pendingOutline
+        const title = createDeckTitle(slidesToSave, prompt, 'Untitled')
 
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
+        const presentationId = await savePresentationToLibrary({
+          title,
+          promptText: prompt.trim(),
+          slides: slidesToSave,
+          document: doc,
+        })
 
-        const chunk = decoder.decode(value, { stream: true })
-        for (const line of chunk.split('\n')) {
-          if (!line.startsWith('data: ')) continue
-          const payload = line.slice(6)
-          if (payload === '[DONE]') continue
-          try {
-            const event = JSON.parse(payload)
-
-            if (event.hint) { setHint(event.hint); continue }
-
-            // Parallel mode events
-            if (event.outline && Array.isArray(event.outline)) {
-              // Parallel skeleton: track outline internally but don't show thin shells
-              isParallelMode = true
-              parallelSlides = event.outline as SlideData[]
-              // Don't setSlides yet — wait for content batches to fill in
-            } else if (event.outline && !Array.isArray(event.outline)) {
-              // Structured outline object (post-generation)
-              setGeneratedOutline(event.outline)
-              const patchOutline = async () => {
-                if (savePromise) await savePromise
-                if (localSavedId) {
-                  fetch(`/api/studio/presentations/${localSavedId}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ outline: event.outline }),
-                  }).catch(() => {})
-                }
-              }
-              patchOutline()
-            } else if (event.batch && typeof event.startIndex === 'number') {
-              isParallelMode = true
-              const batch = event.batch as SlideData[]
-              for (let i = 0; i < batch.length; i++) {
-                parallelSlides[event.startIndex + i] = batch[i]
-              }
-              setSlides([...parallelSlides])
-            } else if (event.slidesReady && isParallelMode && !slidesFinalized) {
-              slidesFinalized = true
-              const currentSlides = parallelSlides.filter((s) => s && s.type && s.title)
-              setSlides(currentSlides)
-              setGenerating(false)
-              setDone(true)
-              // Run Slide Coach validation
-              const suggestions = analyzeSlides(currentSlides)
-              const summary = coachSummary(suggestions)
-              setCoachResults({ suggestions, score: summary.score })
-              if (summary.errors > 0) console.warn(`[Slide Coach] ${summary.errors} errors, ${summary.warnings} warnings — score: ${summary.score}/100`)
-
-              const doSave = (slidesToSave: SlideData[]) => {
-                savePromise = savePresentation(slidesToSave)
-                savePromise.then(() => {
-                  if (localSavedId) {
-                    generateDocumentInBackground(localSavedId, slidesToSave)
-                    fetch('/api/studio/quality/auto-rate', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ presId: localSavedId }),
-                    }).catch(() => {})
-                  }
-                })
-              }
-
-              // Gate save on quality errors
-              if (summary.errors > 0) {
-                pendingSaveRef.current = () => doSave(currentSlides)
-                setShowQualityWarning(true)
-              } else {
-                doSave(currentSlides)
-              }
-            } else if (event.document) {
-              // Capture document for document generation view
-              setGeneratedDocument(event.document)
-              // Document arrived async — wait for save to finish, then patch
-              const patchDocument = async () => {
-                if (savePromise) await savePromise
-                if (localSavedId) {
-                  fetch(`/api/studio/presentations/${localSavedId}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ document: event.document }),
-                  }).catch(() => {})
-                } else {
-                  // Save hasn't started yet — store for when it completes
-                  pendingDocument = event.document
-                }
-              }
-              patchDocument()
-            } else if (event.error) {
-              // Error — close the canvas and show the error
-              setError(event.error)
-              setGenerating(false)
-              setShowCanvas(false)
-              return
-            } else if (event.text) {
-              accumulated += event.text
-            } else if (event.content) {
-              accumulated += event.content
-            }
-          } catch {
-            accumulated += payload
-          }
+        if (!presentationId) {
+          saveRetryRef.current = async () => { await persistSlides(slidesToSave, doc) }
+          setSaveRetryAvailable(true)
+          return
         }
 
-        // Sequential mode: parse incrementally
-        if (!isParallelMode && accumulated) {
-          const parsed = parseIncrementalSlides(accumulated)
-          if (parsed.length > 0) setSlides(parsed)
+        localSavedId = presentationId
+        if (documentFromStream && !doc) {
+          await patchSavedPresentation(presentationId, { document: documentFromStream }, 'document')
+        }
+        pendingDocument = null
+
+        if (outlineFromStream) {
+          await patchSavedPresentation(presentationId, { outline: outlineFromStream }, 'outline')
+        }
+        pendingOutline = null
+
+        if (!doc && !documentFromStream) {
+          generateDocumentInBackground(presentationId, slidesToSave)
+        }
+        runPostSaveJobs(presentationId, true)
+      }
+
+      const patchDocument = async (doc: any) => {
+        setGeneratedDocument(doc)
+        if (savePromise) await savePromise
+        if (localSavedId) {
+          await patchSavedPresentation(localSavedId, { document: doc }, 'document')
+        } else {
+          pendingDocument = doc
         }
       }
 
-      // Finalization — handle cases where stream ended
-      if (isParallelMode && !slidesFinalized) {
-        // slidesReady never arrived — finalize from whatever we have
-        const currentSlides = parallelSlides.filter((s) => s && s.type && s.title)
-        if (currentSlides.length > 0) {
-          setSlides(currentSlides)
-          setGenerating(false)
-          setDone(true)
-          savePresentation(currentSlides)
+      const patchOutline = async (outline: any) => {
+        setGeneratedOutline(outline)
+        if (savePromise) await savePromise
+        if (localSavedId) {
+          await patchSavedPresentation(localSavedId, { outline }, 'outline')
         } else {
-          setError('Generation did not produce slides. Please try again.')
-          setGenerating(false)
-          setShowCanvas(false)
+          pendingOutline = outline
         }
-      } else if (!isParallelMode) {
-        // Sequential mode finalization
-        const result = parseFinalResult(accumulated)
-        if (result.slides.length > 0) {
-          setSlides(result.slides)
-          setGenerating(false)
-          setDone(true)
-          // Save slides first (no document yet)
-          await savePresentation(result.slides, result.document)
-          // Lazy-load: generate document + outline in background after slides are saved
-          if (!result.document && localSavedId) {
-            generateDocumentInBackground(localSavedId, result.slides)
+      }
+
+      const finishSlides = (currentSlides: SlideData[], document?: any) => {
+        setSlides(currentSlides)
+        if (document) setGeneratedDocument(document)
+        setGenerating(false)
+        setDone(true)
+
+        const suggestions = analyzeSlides(currentSlides)
+        const summary = coachSummary(suggestions)
+        setCoachResults({ suggestions, score: summary.score })
+        if (summary.errors > 0) console.warn(`[Slide Coach] ${summary.errors} errors, ${summary.warnings} warnings — score: ${summary.score}/100`)
+
+        const doSave = (slidesToSave: SlideData[]) => {
+          savePromise = persistSlides(slidesToSave, document ?? null)
+        }
+
+        if (summary.errors > 0) {
+          setSaveStatus('pending-quality')
+          pendingSaveRef.current = () => doSave(currentSlides)
+          setShowQualityWarning(true)
+        } else {
+          doSave(currentSlides)
+        }
+      }
+
+      const result = await consumeGenerationStream(res, {
+        onHint: setHint,
+        onDeckQuality: (quality: any) => {
+          if (typeof quality?.score !== 'number') return
+          const deckType = quality.deckType ? ` ${quality.deckType}` : ' deck'
+          if (quality.repaired) {
+            setHint(`Deck intelligence polished this${deckType} to ${quality.score}/100.`)
+          } else if (!quality.passed) {
+            setHint(`Deck intelligence is checking this${deckType}: ${quality.score}/100.`)
           }
-        } else {
-          setError('Could not parse slides from the response. Please try again.')
+        },
+        onSlides: (nextSlides) => setSlides(nextSlides as SlideData[]),
+        onOutline: patchOutline,
+        onDocument: patchDocument,
+        onReady: ({ slides: readySlides, document }) => finishSlides(readySlides as SlideData[], document),
+        onError: (message) => {
+          setError(message)
           setGenerating(false)
           setShowCanvas(false)
-        }
+        },
+        onEmpty: (message) => {
+          setError(message)
+          setGenerating(false)
+          setShowCanvas(false)
+        },
+      })
+
+      if (!result.ok) {
+        return
       }
     } catch (err: any) {
       if (err?.name === 'AbortError') {
@@ -458,7 +588,7 @@ export default function CreatePage() {
     } finally {
       clearTimeout(clientTimeout)
     }
-  }, [prompt, files, provider, apiKey, model])
+  }, [prompt, files, provider, apiKey, model, preprocessed?.enrichedContext, selectedTemplate, generateDocumentInBackground, patchSavedPresentation, resetSaveState, runPostSaveJobs, savePresentationToLibrary])
 
   // Auto-trigger generation from audience adaptation
   const adaptTriggered = useRef(false)
@@ -487,15 +617,15 @@ export default function CreatePage() {
   const [showPresentations, setShowPresentations] = useState(false)
   const [presentations, setPresentations] = useState<any[]>([])
   const [presentationsLoading, setPresentationsLoading] = useState(false)
+  const [presentationsStatus, setPresentationsStatus] = useState<PresentationListStatus>('idle')
+  const [presentationsError, setPresentationsError] = useState('')
   const presentationsFetched = useRef(false)
   const [searchQuery, setSearchQuery] = useState('')
   const searchInputRef = useRef<HTMLInputElement>(null)
-  type SortKey = 'created' | 'edited' | 'comments'
-  const [sortBy, setSortBy] = useState<SortKey>('created')
+  const [sortBy, setSortBy] = useState<PresentationSortKey>('created')
   const [sortOpen, setSortOpen] = useState(false)
 
   // Tab state
-  type TabKey = 'mine' | 'shared-by-me' | 'shared-with-me' | 'archived'
   const [activeTab, setActiveTab] = useState<TabKey>('mine')
   const tabCache = useRef<Record<TabKey, any[] | null>>({ mine: null, 'shared-by-me': null, 'shared-with-me': null, archived: null })
 
@@ -526,6 +656,8 @@ export default function CreatePage() {
     // Use cached data if available
     if (!force && tabCache.current[tab]) {
       setPresentations(tabCache.current[tab]!)
+      setPresentationsStatus('ready')
+      setPresentationsError('')
       return
     }
     // For initial mine tab, use the old flag to prevent double fetch
@@ -533,15 +665,34 @@ export default function CreatePage() {
     if (tab === 'mine') presentationsFetched.current = true
 
     setPresentationsLoading(true)
+    setPresentationsStatus('loading')
+    setPresentationsError('')
     try {
       const res = await fetch(`/api/studio/presentations?tab=${tab}`)
-      if (res.ok) {
-        const data = await res.json()
-        const items = data.presentations ?? []
-        tabCache.current[tab] = items
-        setPresentations(items)
+      if (res.status === 401) {
+        const failure = presentationFetchFailure(res.status)
+        setPresentations([])
+        setPresentationsStatus(failure.status)
+        setPresentationsError(failure.message)
+        tabCache.current[tab] = null
+        return
       }
-    } catch { /* silent */ } finally {
+      if (!res.ok) {
+        const message = await readResponseError(res, 'Could not load presentations')
+        const failure = presentationFetchFailure(res.status, message)
+        throw new Error(failure.message)
+      }
+
+      const data = await res.json()
+      const items = data.presentations ?? []
+      tabCache.current[tab] = items
+      setPresentations(items)
+      setPresentationsStatus('ready')
+    } catch (err) {
+      setPresentations([])
+      setPresentationsStatus('error')
+      setPresentationsError(getErrorMessage(err, 'Could not load presentations. Please try again.'))
+    } finally {
       setPresentationsLoading(false)
     }
   }, [])
@@ -595,27 +746,16 @@ export default function CreatePage() {
     }
 
     // Collect slide data from all tabs' caches + current presentations
-    const allDecks = [
+    const allDecks: MergeSourceDeck[] = [
       ...(tabCache.current.mine ?? []),
       ...(tabCache.current['shared-by-me'] ?? []),
       ...(tabCache.current['shared-with-me'] ?? []),
     ]
-    // Deduplicate by id
-    const deckMap = new Map(allDecks.map(d => [d.id, d]))
-    const selectedDecks = [...selectedIds].map(id => deckMap.get(id)).filter(Boolean)
+    const selectedDecks = getSelectedDecksForMerge(selectedIds, allDecks)
 
     if (selectedDecks.length < 2) return
 
-    // Build source material
-    const sourceMaterial = selectedDecks.map((deck: any) =>
-      `=== Deck: "${deck.title}" (${deck.slides?.length ?? 0} slides) ===\n${JSON.stringify(deck.slides ?? [], null, 1)}`
-    ).join('\n\n')
-
-    // Predicted count
-    const slideSizes = selectedDecks.map((d: any) => d.slides?.length ?? 0)
-    const predictedMergeCount = mergeMode === 'narrative'
-      ? Math.min(Math.max(...slideSizes) + 4, 30)
-      : Math.min(slideSizes.reduce((a: number, b: number) => a + b, 0), 40)
+    const predictedMergeCount = predictMergeSlideCount(selectedDecks, mergeMode)
 
     // Close modal, show canvas
     setShowPresentations(false)
@@ -625,9 +765,12 @@ export default function CreatePage() {
     setHint(null)
     setGenerating(true)
     setSlides([])
+    setGeneratedDocument(null)
+    setGeneratedOutline(null)
     setDone(false)
     setShowCanvas(true)
     setSavedId(null)
+    resetSaveState()
     setPredictedCount(predictedMergeCount)
 
     const controller = new AbortController()
@@ -637,18 +780,13 @@ export default function CreatePage() {
       const res = await fetch('/api/studio/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: mergePrompt.trim() || `Merge these ${selectedDecks.length} presentations`,
-          provider,
-          apiKey,
-          model,
-          parallel: true,
-          merge: {
-            mode: mergeMode,
-            sourceIds: [...selectedIds],
-            sourceMaterial,
-          },
-        }),
+        body: JSON.stringify(buildMergeGenerationPayload({
+          selectedIds,
+          selectedDecks,
+          mergePrompt,
+          mergeMode,
+          settings: { provider, apiKey, model },
+        })),
         signal: controller.signal,
       })
 
@@ -660,131 +798,94 @@ export default function CreatePage() {
         return
       }
 
-      const reader = res.body?.getReader()
-      if (!reader) {
-        setError('No response stream')
-        setGenerating(false)
-        setShowCanvas(false)
-        return
-      }
-
-      const decoder = new TextDecoder()
-      let isParallelMode = false
-      let parallelSlides: SlideData[] = []
       let localSavedId: string | null = null
-      let slidesFinalized = false
       let savePromise: Promise<void> | null = null
       let pendingDocument: any = null
+      let pendingOutline: any = null
 
-      const savePresentation = async (slides: SlideData[], doc: any = null) => {
-        const title = slides[0]?.title || mergePrompt.trim().slice(0, 60) || 'Merged Presentation'
-        try {
-          const saveRes = await fetch('/api/studio/presentations', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, prompt: mergePrompt.trim(), slides, document: doc, provider, model }),
-          })
-          if (saveRes.ok) {
-            const saveData = await saveRes.json()
-            localSavedId = saveData.presentation.id
-            setSavedId(localSavedId)
-            if (pendingDocument) {
-              fetch(`/api/studio/presentations/${localSavedId}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ document: pendingDocument }),
-              }).catch(() => {})
-              pendingDocument = null
-            }
-            fetch('/api/studio/translate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ presentationId: localSavedId }),
-            }).catch(() => {})
-          }
-        } catch { /* non-critical */ }
+      const persistMergedSlides = async (slidesToSave: SlideData[], doc: any = null) => {
+        const documentFromStream = pendingDocument
+        const outlineFromStream = pendingOutline
+        const title = createDeckTitle(slidesToSave, mergePrompt, 'Merged Presentation')
+
+        const presentationId = await savePresentationToLibrary({
+          title,
+          promptText: mergePrompt.trim(),
+          slides: slidesToSave,
+          document: doc,
+        })
+
+        if (!presentationId) {
+          saveRetryRef.current = async () => { await persistMergedSlides(slidesToSave, doc) }
+          setSaveRetryAvailable(true)
+          return
+        }
+
+        localSavedId = presentationId
+        if (documentFromStream && !doc) {
+          await patchSavedPresentation(presentationId, { document: documentFromStream }, 'document')
+        }
+        pendingDocument = null
+
+        if (outlineFromStream) {
+          await patchSavedPresentation(presentationId, { outline: outlineFromStream }, 'outline')
+        }
+        pendingOutline = null
+
+        if (!doc && !documentFromStream) {
+          generateDocumentInBackground(presentationId, slidesToSave)
+        }
+        runPostSaveJobs(presentationId, true)
       }
 
-      while (true) {
-        const { done: streamDone, value } = await reader.read()
-        if (streamDone) break
-
-        const chunk = decoder.decode(value, { stream: true })
-        for (const line of chunk.split('\n')) {
-          if (!line.startsWith('data: ')) continue
-          const payload = line.slice(6)
-          if (payload === '[DONE]') continue
-          try {
-            const event = JSON.parse(payload)
-            if (event.hint) { setHint(event.hint); continue }
-            if (event.outline) {
-              isParallelMode = true
-              parallelSlides = event.outline as SlideData[]
-              // Don't reveal thin outline — wait for content
-            } else if (event.batch && typeof event.startIndex === 'number') {
-              isParallelMode = true
-              const batch = event.batch as SlideData[]
-              for (let i = 0; i < batch.length; i++) {
-                parallelSlides[event.startIndex + i] = batch[i]
-              }
-              // Track internally — reveal all at once when ready
-            } else if (event.slidesReady && isParallelMode && !slidesFinalized) {
-              slidesFinalized = true
-              const currentSlides = parallelSlides.filter((s) => s && s.type && s.title)
-              setSlides(currentSlides)
-              setGenerating(false)
-              setDone(true)
-              savePromise = savePresentation(currentSlides)
-            } else if (event.document) {
-              const patchDoc = async () => {
-                if (savePromise) await savePromise
-                if (localSavedId) {
-                  fetch(`/api/studio/presentations/${localSavedId}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ document: event.document }),
-                  }).catch(() => {})
-                } else {
-                  pendingDocument = event.document
-                }
-              }
-              patchDoc()
-            } else if (event.outline) {
-              const patchOutline = async () => {
-                if (savePromise) await savePromise
-                if (localSavedId) {
-                  fetch(`/api/studio/presentations/${localSavedId}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ outline: event.outline }),
-                  }).catch(() => {})
-                }
-              }
-              patchOutline()
-            } else if (event.error) {
-              setError(event.error)
-              setGenerating(false)
-              setShowCanvas(false)
-              return
-            }
-          } catch { /* ignore */ }
+      const patchDocument = async (doc: any) => {
+        setGeneratedDocument(doc)
+        if (savePromise) await savePromise
+        if (localSavedId) {
+          await patchSavedPresentation(localSavedId, { document: doc }, 'document')
+        } else {
+          pendingDocument = doc
         }
       }
 
-      // Finalization
-      if (isParallelMode && !slidesFinalized) {
-        const currentSlides = parallelSlides.filter((s) => s && s.type && s.title)
-        if (currentSlides.length > 0) {
-          setSlides(currentSlides)
+      const patchOutline = async (outline: any) => {
+        setGeneratedOutline(outline)
+        if (savePromise) await savePromise
+        if (localSavedId) {
+          await patchSavedPresentation(localSavedId, { outline }, 'outline')
+        } else {
+          pendingOutline = outline
+        }
+      }
+
+      const result = await consumeGenerationStream(res, {
+        onHint: setHint,
+        onDeckQuality: (quality: any) => {
+          if (typeof quality?.score !== 'number') return
+          if (!quality.passed) setHint(`Deck intelligence is checking this deck: ${quality.score}/100.`)
+        },
+        onSlides: (nextSlides) => setSlides(nextSlides as SlideData[]),
+        onDocument: patchDocument,
+        onOutline: patchOutline,
+        onReady: ({ slides: readySlides, document }) => {
+          setSlides(readySlides as SlideData[])
           setGenerating(false)
           setDone(true)
-          savePresentation(currentSlides)
-        } else {
+          savePromise = persistMergedSlides(readySlides as SlideData[], document ?? null)
+        },
+        onError: (message) => {
+          setError(message)
+          setGenerating(false)
+          setShowCanvas(false)
+        },
+        onEmpty: () => {
           setError('Merge did not produce slides. Please try again.')
           setGenerating(false)
           setShowCanvas(false)
-        }
-      }
+        },
+      })
+
+      if (!result.ok) return
     } catch (err: any) {
       if (err?.name !== 'AbortError') {
         setError(err?.message ?? 'Merge failed')
@@ -792,49 +893,13 @@ export default function CreatePage() {
       setGenerating(false)
       setShowCanvas(false)
     }
-  }, [selectedIds, mergeMode, mergePrompt, provider, apiKey, model])
-
-  // Search: extract all text from a slide for matching
-  const slideText = useCallback((slide: SlideData): string => {
-    const parts = [slide.title, slide.subtitle, slide.body, slide.badge]
-    if (slide.bullets) parts.push(...slide.bullets.map(b => b.text))
-    if (slide.cards) parts.push(...slide.cards.flatMap(c => [c.title, c.body]))
-    if (slide.columns) parts.push(...slide.columns.flatMap(c => [c.heading, c.body, ...(c.bullets?.map(b => b.text) ?? [])]))
-    if (slide.quote) parts.push(slide.quote.text, slide.quote.attribution)
-    return parts.filter(Boolean).join(' ').toLowerCase()
-  }, [])
-
-  // Sort helper
-  const sortDecks = useCallback((decks: any[]) => {
-    return [...decks].sort((a, b) => {
-      if (sortBy === 'comments') return (b.commentCount ?? 0) - (a.commentCount ?? 0)
-      if (sortBy === 'edited') return (b.updatedAt ?? b.createdAt ?? 0) - (a.updatedAt ?? a.createdAt ?? 0)
-      return (b.createdAt ?? 0) - (a.createdAt ?? 0) // 'created' — newest first
-    })
-  }, [sortBy])
+  }, [selectedIds, mergeMode, mergePrompt, provider, apiKey, model, generateDocumentInBackground, patchSavedPresentation, resetSaveState, runPostSaveJobs, savePresentationToLibrary])
 
   // Filtered results
-  const { filteredDecks, matchingSlides } = (() => {
-    const q = searchQuery.trim().toLowerCase()
-    if (!q) return { filteredDecks: sortDecks(presentations), matchingSlides: [] as { deckId: string; deckTitle: string; slideIndex: number; slide: SlideData }[] }
-
-    const decks = presentations.filter(p =>
-      p.title?.toLowerCase().includes(q) ||
-      p.slides?.some((s: SlideData) => slideText(s).includes(q))
-    )
-
-    const slides: { deckId: string; deckTitle: string; slideIndex: number; slide: SlideData }[] = []
-    for (const p of presentations) {
-      if (!p.slides) continue
-      for (let i = 0; i < p.slides.length; i++) {
-        if (slideText(p.slides[i]).includes(q)) {
-          slides.push({ deckId: p.id, deckTitle: p.title, slideIndex: i, slide: p.slides[i] })
-        }
-      }
-    }
-
-    return { filteredDecks: sortDecks(decks), matchingSlides: slides }
-  })()
+  const { filteredDecks, matchingSlides } = useMemo(
+    () => filterPresentationLibrary(presentations, searchQuery, sortBy),
+    [presentations, searchQuery, sortBy],
+  )
 
   const addFiles = useCallback(async (fileList: FileList | File[]) => {
     const remaining = 10 - files.length
@@ -961,7 +1026,7 @@ export default function CreatePage() {
     } finally {
       setGoogleLoading(false)
     }
-  }, [googleUrl, googleWorkspaceConnected])
+  }, [googleUrl, googleWorkspaceConnected, prompt])
 
   const importClickup = useCallback(async () => {
     if (!clickupUrl.trim()) return
@@ -1015,21 +1080,37 @@ export default function CreatePage() {
     setGeneratedDocument(null)
     setGeneratedOutline(null)
     setDone(false)
-  }, [])
+    resetSaveState()
+  }, [resetSaveState])
+
+  const presentationsReady = presentationsStatus === 'ready'
+  const presentationsUnavailable = presentationsStatus === 'error' || presentationsStatus === 'unauthorized'
+  const saveStatusPill = (
+    <SaveStatusPill
+      done={done}
+      status={saveStatus}
+      error={saveError}
+      retryAvailable={saveRetryAvailable}
+      onRetry={retrySave}
+    />
+  )
 
   if (showCanvas) {
     if (generateMode === 'outline') {
       return (
-        <OutlineGenerationView
-          slides={slides}
-          outline={generatedOutline}
-          generating={generating}
-          done={done}
-          savedId={savedId}
-          hint={hint}
-          onCancel={cancelGeneration}
-          onRestart={() => { cancelGeneration(); setTimeout(() => handleGenerate(), 100) }}
-        />
+        <>
+          <OutlineGenerationView
+            slides={slides}
+            outline={generatedOutline}
+            generating={generating}
+            done={done}
+            savedId={savedId}
+            hint={hint}
+            onCancel={cancelGeneration}
+            onRestart={() => { cancelGeneration(); setTimeout(() => handleGenerate(), 100) }}
+          />
+          {saveStatusPill}
+        </>
       )
     }
 
@@ -1040,17 +1121,20 @@ export default function CreatePage() {
         return null
       }
       return (
-        <DocumentGenerationView
-          slides={slides}
-          document={generatedDocument}
-          generating={generating}
-          generatingDoc={done && !generatedDocument}
-          done={done && !!generatedDocument}
-          savedId={savedId}
-          hint={hint}
-          onCancel={cancelGeneration}
-          onRestart={() => { cancelGeneration(); setTimeout(() => handleGenerate(), 100) }}
-        />
+        <>
+          <DocumentGenerationView
+            slides={slides}
+            document={generatedDocument}
+            generating={generating}
+            generatingDoc={done && !generatedDocument}
+            done={done && !!generatedDocument}
+            savedId={savedId}
+            hint={hint}
+            onCancel={cancelGeneration}
+            onRestart={() => { cancelGeneration(); setTimeout(() => handleGenerate(), 100) }}
+          />
+          {saveStatusPill}
+        </>
       )
     }
 
@@ -1072,6 +1156,7 @@ export default function CreatePage() {
             setTimeout(() => handleGenerate(), 100)
           }}
         />
+        {saveStatusPill}
         {/* Coach score badge — shown after generation completes */}
         {done && coachResults && (
           <div className="fixed top-20 right-6 z-[200] animate-in fade-in slide-in-from-right-4 duration-500 max-w-sm">
@@ -1240,13 +1325,13 @@ export default function CreatePage() {
                 <h2 className="font-display font-black text-2xl text-white">
                   Presentations
                 </h2>
-                {!presentationsLoading && presentations.length > 0 && (
+                {presentationsReady && presentations.length > 0 && (
                   <p className="text-sm text-white/40 mt-1">{presentations.length} presentation{presentations.length !== 1 ? 's' : ''}</p>
                 )}
               </div>
               <div className="flex items-center gap-2">
                 {/* Search bar */}
-                {!presentationsLoading && presentations.length > 0 && (
+                {presentationsReady && presentations.length > 0 && (
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/30" />
                     <input
@@ -1269,7 +1354,7 @@ export default function CreatePage() {
                   </div>
                 )}
                 {/* Sort dropdown */}
-                {!presentationsLoading && presentations.length > 1 && (
+                {presentationsReady && presentations.length > 1 && (
                   <div className="relative">
                     <button
                       type="button"
@@ -1290,7 +1375,7 @@ export default function CreatePage() {
                             ['created', 'Newest first'],
                             ['edited', 'Last edited'],
                             ['comments', 'Most comments'],
-                          ] as [SortKey, string][]).map(([key, label]) => (
+                          ] as [PresentationSortKey, string][]).map(([key, label]) => (
                             <button
                               key={key}
                               type="button"
@@ -1317,8 +1402,9 @@ export default function CreatePage() {
                     setMultiSelect(prev => !prev)
                     if (multiSelect) setSelectedIds(new Set())
                   }}
+                  disabled={!presentationsReady || presentations.length === 0}
                   className={cn(
-                    'p-2.5 rounded-full transition-colors',
+                    'p-2.5 rounded-full transition-colors disabled:cursor-not-allowed disabled:opacity-40',
                     multiSelect
                       ? 'bg-turquoise/20 text-turquoise'
                       : 'bg-white/10 hover:bg-white/20 text-white/60 hover:text-white',
@@ -1383,7 +1469,31 @@ export default function CreatePage() {
             )}
 
             {/* Empty state */}
-            {!presentationsLoading && presentations.length === 0 && (
+            {presentationsUnavailable && (
+              <div className="mx-auto max-w-md py-20 text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-red-500/10 text-red-300">
+                  <AlertTriangle className="h-5 w-5" />
+                </div>
+                <h3 className="text-base font-semibold text-white">
+                  {presentationsStatus === 'unauthorized' ? 'Sign in again' : 'Could not load presentations'}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/45">
+                  {presentationsError}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (presentationsStatus === 'unauthorized') router.refresh()
+                    else fetchPresentations(activeTab, true)
+                  }}
+                  className="mt-5 inline-flex min-h-11 items-center justify-center rounded-lg border border-white/10 px-4 text-sm font-semibold text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                >
+                  {presentationsStatus === 'unauthorized' ? 'Refresh session' : 'Retry'}
+                </button>
+              </div>
+            )}
+
+            {presentationsReady && presentations.length === 0 && (
               <div className="text-center py-20">
                 <p className="text-lg text-white/40">
                   {activeTab === 'mine' && 'No presentations yet. Create your first one!'}
@@ -1394,7 +1504,7 @@ export default function CreatePage() {
             )}
 
             {/* No search results */}
-            {!presentationsLoading && presentations.length > 0 && searchQuery && filteredDecks.length === 0 && matchingSlides.length === 0 && (
+            {presentationsReady && presentations.length > 0 && searchQuery && filteredDecks.length === 0 && matchingSlides.length === 0 && (
               <div className="text-center py-20">
                 <p className="text-lg text-white/40">
                   No results for &ldquo;{searchQuery}&rdquo;
@@ -1403,7 +1513,7 @@ export default function CreatePage() {
             )}
 
             {/* Deck grid */}
-            {!presentationsLoading && filteredDecks.length > 0 && (
+            {presentationsReady && filteredDecks.length > 0 && (
               <div>
                 {searchQuery && <h3 className="text-xs uppercase tracking-widest text-white/30 font-mono mb-4">Presentations</h3>}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -1430,7 +1540,7 @@ export default function CreatePage() {
             )}
 
             {/* Matching individual slides */}
-            {!presentationsLoading && searchQuery && matchingSlides.length > 0 && (
+            {presentationsReady && searchQuery && matchingSlides.length > 0 && (
               <div className={filteredDecks.length > 0 ? 'mt-10' : ''}>
                 <h3 className="text-xs uppercase tracking-widest text-white/30 font-mono mb-4">Matching Slides</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -1468,11 +1578,11 @@ export default function CreatePage() {
             )}
 
             {/* Bottom spacer when merge bar visible */}
-            {multiSelect && selectedIds.size >= 2 && <div className="h-24" />}
+            {presentationsReady && multiSelect && selectedIds.size >= 2 && <div className="h-24" />}
           </div>
 
           {/* Merge action bar — sticky to bottom of scrollable modal */}
-          {multiSelect && selectedIds.size >= 2 && (
+          {presentationsReady && multiSelect && selectedIds.size >= 2 && (
             <div className="sticky bottom-0 left-0 right-0 z-[410] bg-slate-900/95 backdrop-blur-md border-t border-white/10">
               <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-4">
                 {/* Selected count with cross-tab context */}
@@ -1553,7 +1663,7 @@ export default function CreatePage() {
         </div>
       )}
 
-      <div className="w-full max-w-2xl space-y-6">
+      <div className="w-full max-w-5xl space-y-5">
         {/* Greeting */}
         <div className="text-center space-y-2 mb-4">
           <h1 className="font-display font-black text-3xl text-foreground">
@@ -1562,19 +1672,44 @@ export default function CreatePage() {
         </div>
 
         {/* Unified input box */}
-        <div
-          className={`bg-white rounded-2xl border transition-all duration-200 shadow-sm ${
-            dragOver
-              ? 'border-concrete ring-2 ring-concrete/30'
-              : 'border-border focus-within:border-concrete'
-          }`}
-          onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
-          onDragLeave={(e) => { e.preventDefault(); setDragOver(false) }}
-          onDrop={(e) => {
-            e.preventDefault(); setDragOver(false)
-            if (e.dataTransfer.files.length > 0) addFiles(e.dataTransfer.files)
-          }}
-        >
+        <div className="relative">
+          {starterPromptLabel && (
+            <div
+              className={cn(
+                'absolute left-0 top-0 z-20 transition-opacity duration-200 ease-out',
+                starterPromptResetting ? 'pointer-events-none opacity-0' : 'opacity-100',
+              )}
+              style={{ transform: 'translate3d(0, calc(-100% - 10px), 0)' }}
+            >
+              <button
+                type="button"
+                onClick={resetStarterPrompt}
+                className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border/70 bg-white/90 px-3 text-xs font-semibold text-muted-foreground shadow-sm backdrop-blur transition-[border-color,background-color,color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-evergreen/30 hover:bg-white hover:text-foreground hover:shadow-md focus-visible:ring-2 focus-visible:ring-evergreen/25"
+                aria-label={`Return to the default input and clear ${starterPromptLabel} starter prompt`}
+                title="Back"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                <span>Back</span>
+              </button>
+            </div>
+          )}
+          <div
+            ref={composerRef}
+            className={cn(
+              'relative bg-white rounded-2xl border shadow-sm transition-[border-color,box-shadow,opacity,transform] duration-300 ease-out',
+              dragOver
+                ? 'border-concrete ring-2 ring-concrete/30'
+                : 'border-border focus-within:border-concrete',
+              starterMorphing && 'starter-composer-fade-out',
+              starterComposerArriving && !starterMorphing && 'starter-composer-arrive',
+            )}
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
+            onDragLeave={(e) => { e.preventDefault(); setDragOver(false) }}
+            onDrop={(e) => {
+              e.preventDefault(); setDragOver(false)
+              if (e.dataTransfer.files.length > 0) addFiles(e.dataTransfer.files)
+            }}
+          >
           {/* Textarea */}
           <textarea
             ref={promptRef}
@@ -1582,7 +1717,11 @@ export default function CreatePage() {
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Describe your presentation..."
-            className="w-full min-h-[80px] px-5 pt-4 pb-2 bg-transparent text-foreground placeholder:text-muted-foreground/50 resize-none focus:outline-none text-base leading-relaxed"
+            className={cn(
+              'w-full min-h-[116px] md:min-h-[132px] px-5 pt-4 pb-2 bg-transparent text-foreground placeholder:text-muted-foreground/50 resize-none focus:outline-none text-base leading-relaxed',
+              starterPromptRevealing && 'starter-prompt-reveal',
+              starterPromptResetting && 'starter-prompt-clear',
+            )}
             autoFocus
           />
 
@@ -1986,6 +2125,20 @@ export default function CreatePage() {
             </div>
           </div>
         </div>
+        </div>
+
+        {!prompt.trim() && files.length === 0 && (
+          <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+            <CreateStarterActions
+              onPromptSelect={selectStarterPrompt}
+              onImport={() => fileInputRef.current?.click()}
+              onMerge={openPresentations}
+              onActionStart={handleStarterActionStart}
+              onActionEnd={handleStarterActionEnd}
+              getMorphTargetRect={getStarterMorphTargetRect}
+            />
+          </div>
+        )}
 
         {/* Hidden file input */}
         <input

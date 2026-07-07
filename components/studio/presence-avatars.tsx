@@ -38,8 +38,8 @@ const POLL_INTERVAL = 3_000 // 3s
 
 export function usePresence(deckId: string | undefined, currentSlide: number) {
   const [state, setState] = useState<PresenceState>({ users: [], locks: {} })
-  const heartbeatRef = useRef<ReturnType<typeof setInterval>>()
-  const pollRef = useRef<ReturnType<typeof setInterval>>()
+  const heartbeatRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   // Heartbeat — tell the server we're here
   const sendHeartbeat = useCallback(async () => {

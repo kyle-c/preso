@@ -52,6 +52,7 @@ export interface ModelSelectorProps {
   onProviderChange: (p: 'anthropic' | 'openrouter') => void
   onApiKeyChange: (key: string) => void
   onModelChange: (model: string) => void
+  userEmail?: string
 }
 
 /* ─────────────────────── localStorage helpers ─────────────────────── */
@@ -69,7 +70,7 @@ const LS = {
  * Falls back silently if the user is not authenticated.
  */
 export function useServerSettings(
-  setProvider: (v: string) => void,
+  setProvider: (v: 'anthropic' | 'openrouter') => void,
   setApiKey: (v: string) => void,
   setModel: (v: string) => void,
   setUserEmail: (v: string) => void,
@@ -83,7 +84,7 @@ export function useServerSettings(
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (!data) return
-        if (data.provider) setProvider(data.provider)
+        if (data.provider === 'anthropic' || data.provider === 'openrouter') setProvider(data.provider)
         if (data.anthropicKey) setApiKey(data.anthropicKey)
         if (data.anthropicModel) setModel(data.anthropicModel)
         if (data.email) setUserEmail(data.email)

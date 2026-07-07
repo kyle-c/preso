@@ -46,7 +46,8 @@ export interface SlideQuoteData {
 }
 
 export interface SlideChartData {
-  type: string
+  type?: string
+  chartType?: string
   data: Record<string, unknown>[]
   xKey?: string
   yKey?: string

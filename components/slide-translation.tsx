@@ -165,7 +165,7 @@ export function useSlideTranslation(
 
     // Observe dynamic content changes (comment popovers, etc.)
     const observer = new MutationObserver(() => {
-      if (busy.current || dead || locale === 'en-US') return
+      if (busy.current || dead) return
       const nodes = collectText(el)
       const newNodes = nodes.filter(n => !originals.current.has(n))
       if (!newNodes.length) return

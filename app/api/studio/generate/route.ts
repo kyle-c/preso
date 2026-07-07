@@ -1,378 +1,42 @@
 import { NextRequest } from 'next/server'
-import { strengthenPrompt, detectIntent } from '@/lib/prompt-strengthener'
-import { formatChartConstraint } from '@/lib/data-viz-intelligence'
+import { detectIntent } from '@/lib/prompt-strengthener'
 import { postProcessSlides } from '@/lib/slide-layout-engine'
 import { analyzeSlides, totalSlideWords } from '@/lib/slide-coach'
 import { getServerSession } from '@/lib/studio-auth'
-import { getBrandKit, serializeBrandForPrompt, FELIX_BRAND_KIT } from '@/lib/brand-kit'
+import { getBrandKit, serializeBrandForPrompt } from '@/lib/brand-kit'
 import { computeUserStyleProfile, selectExemplars, formatProfileForPrompt, formatExemplarsForPrompt } from '@/lib/studio-quality'
-import { getBlueprintEnrichment, selectBlueprints } from '@/lib/training-blueprints'
+import { getBlueprintEnrichment } from '@/lib/training-blueprints'
 import { getExemplarSlides, getAntiExemplarSlides } from '@/lib/studio-db'
+import { generateSchema } from '@/lib/studio-schemas'
 import { parseJSONResponse } from '@/lib/json-parser'
 import { SYSTEM_PROMPT, FAST_OUTLINE_MODELS, OUTLINE_SYSTEM_PROMPT, ONBOARDING_OUTLINE } from '@/lib/prompt-builder'
 import {
   normalizeModel,
   FALLBACK_MODEL,
-  guessImageMediaType,
   modelSupportsVision,
   describeImagesWithVision,
   buildVisionHint,
-  fetchWithTimeout,
-  buildUserContent,
   makeNonStreamingCall as makeNonStreamingCallAdapter,
   type FileAttachment,
-  type ProviderConfig,
 } from '@/lib/provider-adapter'
+import { buildAnthropicPayload, buildOpenRouterPayload } from '@/lib/studio-generate/payloads'
+import { buildBatchPrompt } from '@/lib/studio-generate/batch-prompt'
+import { createSSEStream, prependHintToStream } from '@/lib/studio-generate/sse'
+import type { GenerateBody } from '@/lib/studio-generate/types'
+import {
+  buildDeckBrief,
+  evaluateDeckAgainstBrief,
+  formatDeckBriefForContent,
+  formatDeckBriefForOutline,
+  formatDeckRepairInstructions,
+} from '@/lib/deck-intelligence'
 
 export const runtime = 'nodejs'
 export const maxDuration = 300
 
 // ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-interface GenerateBody {
-  prompt: string
-  files?: FileAttachment[]
-  provider: 'anthropic' | 'google' | 'openrouter'
-  apiKey: string
-  model: string
-  parallel?: boolean
-  /** When true, skip prompt strengthening — used for slide/deck edits */
-  edit?: boolean
-  /** Injected server-side from session — used for style profile + exemplars */
-  userId?: string
-  /** Enriched system prompt with user profile + exemplars (built in POST handler) */
-  enrichedSystemPrompt?: string
-  /** When true, skip slide generation and only produce a document object */
-  documentOnly?: boolean
-  /** When true, reverse-engineer slides into a rich document then distill an outline */
-  reverseEngineer?: boolean
-  /** Existing slides to use for document-only or reverse-engineer generation */
-  slides?: any[]
-  /** Merge mode: combine multiple presentations into one */
-  merge?: {
-    mode: 'narrative' | 'deduplicate'
-    sourceIds: string[]
-    sourceMaterial: string
-  }
-  /** AI edit target: edit document or outline in-place */
-  editTarget?: 'document' | 'outline'
-  /** Current document JSON for document edits */
-  document?: any
-  /** Current outline JSON for outline edits */
-  outline?: any
-  /** Selection context for targeted document edits */
-  selectionContext?: { sectionIndex: number; selectedText: string }
-  /** Template structure to guide slide generation */
-  templateStructure?: {
-    title: string
-    slideCount: number
-    sections: { type: string; title?: string; tone?: string }[]
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Helpers: build request payloads
-// ---------------------------------------------------------------------------
-
-function buildTemplateConstraint(template: GenerateBody['templateStructure']): string {
-  if (!template) return ''
-  const sectionList = template.sections
-    .map((s, i) => `  ${i + 1}. type: "${s.type}"${s.title ? ` — "${s.title}"` : ''}${s.tone ? ` (tone: ${s.tone})` : ''}`)
-    .join('\n')
-  return `\n\n## Template Structure (FOLLOW THIS STRUCTURE)\nGenerate exactly ${template.slideCount} slides following this structure:\n${sectionList}\n\nUse these slide types and ordering as your guide. Fill in content based on the user's prompt while preserving the template structure.`
-}
-
-function buildAnthropicPayload(body: GenerateBody) {
-  // Skip prompt strengthening for edit requests — the prompt already has explicit instructions
-  let promptText = body.edit ? body.prompt : strengthenPrompt(body.prompt).strengthenedPrompt
-  // Append template structure constraint if provided
-  if (body.templateStructure) promptText += buildTemplateConstraint(body.templateStructure)
-  const content: any[] = [{ type: 'text', text: promptText }]
-
-  for (const file of body.files ?? []) {
-    if (file.type === 'image') {
-      const mediaType = guessImageMediaType(file.name)
-      // Strip data URL prefix if present
-      const base64 = file.data.includes(',') ? file.data.split(',')[1] : file.data
-      content.push({
-        type: 'image',
-        source: { type: 'base64', media_type: mediaType, data: base64 },
-      })
-    } else if (file.type === 'pdf') {
-      const base64 = file.data.includes(',') ? file.data.split(',')[1] : file.data
-      content.push({
-        type: 'document',
-        source: { type: 'base64', media_type: 'application/pdf', data: base64 },
-      })
-    } else if (file.type === 'data') {
-      const chartHint = formatChartConstraint(file.data)
-      content.push({
-        type: 'text',
-        text: `\n\n--- Data file: ${file.name} ---\n${file.data}\n--- End of ${file.name} ---\n\nAnalyze this data and create appropriate data visualization slides.${chartHint}`,
-      })
-    }
-  }
-
-  const isExtendedThinking = body.model.includes('sonnet-4-5')
-
-  const payload: any = {
-    model: body.model,
-    max_tokens: isExtendedThinking ? 32000 : 32768,
-    stream: true,
-    system: body.enrichedSystemPrompt || SYSTEM_PROMPT,
-    messages: [{ role: 'user', content }],
-  }
-
-  // Lower temperature for more consistent, higher-quality output
-  if (!isExtendedThinking) {
-    payload.temperature = 0.7
-  }
-
-  // Sonnet 4.5 requires extended thinking to be enabled
-  if (isExtendedThinking) {
-    payload.thinking = {
-      type: 'enabled',
-      budget_tokens: 10000,
-    }
-  }
-
-  return payload
-}
-
-function buildOpenRouterPayload(body: GenerateBody) {
-  let promptText = body.edit ? body.prompt : strengthenPrompt(body.prompt).strengthenedPrompt
-  if (body.templateStructure) promptText += buildTemplateConstraint(body.templateStructure)
-  const content: any[] = [{ type: 'text', text: promptText }]
-
-  for (const file of body.files ?? []) {
-    if (file.type === 'image') {
-      const mediaType = guessImageMediaType(file.name)
-      const dataUrl = file.data.startsWith('data:') ? file.data : `data:${mediaType};base64,${file.data}`
-      content.push({
-        type: 'image_url',
-        image_url: { url: dataUrl },
-      })
-    } else if (file.type === 'pdf') {
-      content.push({
-        type: 'text',
-        text: `[PDF attached: ${file.name}]`,
-      })
-    } else if (file.type === 'data') {
-      const chartHint = formatChartConstraint(file.data)
-      content.push({
-        type: 'text',
-        text: `\n\n--- Data file: ${file.name} ---\n${file.data}\n--- End of ${file.name} ---\n\nAnalyze this data and create appropriate data visualization slides.${chartHint}`,
-      })
-    }
-  }
-
-  return {
-    model: body.model,
-    max_tokens: 32768,
-    stream: true,
-    temperature: 0.7,
-    messages: [
-      { role: 'system', content: body.enrichedSystemPrompt || SYSTEM_PROMPT },
-      { role: 'user', content },
-    ],
-  }
-}
-
-
-// ---------------------------------------------------------------------------
 // Vision pre-processing — describe images via a cheap vision-capable model
 // ---------------------------------------------------------------------------
-
-
-
-/** Wrap a stream with a leading hint SSE event */
-function prependHintToStream(
-  innerStream: ReadableStream<Uint8Array>,
-  hint: string,
-): ReadableStream<Uint8Array> {
-  const encoder = new TextEncoder()
-  return new ReadableStream({
-    async start(controller) {
-      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ hint })}\n\n`))
-      const reader = innerStream.getReader()
-      try {
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-          controller.enqueue(value)
-        }
-      } finally {
-        controller.close()
-      }
-    },
-  })
-}
-
-// ---------------------------------------------------------------------------
-// SSE parsing helpers
-// ---------------------------------------------------------------------------
-
-function createSSEStream(
-  upstreamResponse: Response,
-  provider: 'anthropic' | 'google' | 'openrouter',
-): ReadableStream<Uint8Array> {
-  const encoder = new TextEncoder()
-  const decoder = new TextDecoder()
-
-  return new ReadableStream({
-    async start(controller) {
-      const reader = upstreamResponse.body?.getReader()
-      if (!reader) {
-        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-        controller.close()
-        return
-      }
-
-      let buffer = ''
-
-      try {
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-
-          buffer += decoder.decode(value, { stream: true })
-          const lines = buffer.split('\n')
-          buffer = lines.pop() ?? ''
-
-          for (const line of lines) {
-            if (!line.startsWith('data: ')) continue
-            const data = line.slice(6).trim()
-
-            if (data === '[DONE]') {
-              controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-              controller.close()
-              return
-            }
-
-            try {
-              const parsed = JSON.parse(data)
-              let text: string | undefined
-
-              if (provider === 'anthropic') {
-                // Only extract text deltas, skip thinking deltas
-                if (parsed.type === 'content_block_delta') {
-                  if (parsed.delta?.type === 'text_delta' && parsed.delta?.text) {
-                    text = parsed.delta.text
-                  } else if (parsed.delta?.text && parsed.delta?.type !== 'thinking_delta') {
-                    // Fallback for older API versions without delta.type
-                    text = parsed.delta.text
-                  }
-                }
-                if (parsed.type === 'message_stop') {
-                  controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-                  controller.close()
-                  return
-                }
-              } else {
-                const delta = parsed.choices?.[0]?.delta?.content
-                if (delta) text = delta
-                if (parsed.choices?.[0]?.finish_reason) {
-                  controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-                  controller.close()
-                  return
-                }
-              }
-
-              if (text) {
-                const chunk = JSON.stringify({ text })
-                controller.enqueue(encoder.encode(`data: ${chunk}\n\n`))
-              }
-            } catch {
-              // Ignore non-JSON lines
-            }
-          }
-        }
-
-        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-        controller.close()
-      } catch (err) {
-        console.error('[studio/generate stream]', err)
-        controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify({ error: 'Stream error' })}\n\n`),
-        )
-        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-        controller.close()
-      }
-    },
-  })
-}
-
-// ---------------------------------------------------------------------------
-// Parallel generation: outline → 3 concurrent batch content calls
-// ---------------------------------------------------------------------------
-
-
-
-function buildBatchPrompt(outline: any[], batchIndices: number[], userPrompt?: string, hasFiles = false, intent?: string): string {
-  const outlineStr = JSON.stringify(outline, null, 2)
-  const indices = batchIndices.join(', ')
-
-  // Select per-batch blueprints based on the specific slides in this batch
-  let blueprintHint = ''
-  if (userPrompt) {
-    try {
-      const batchSlides = batchIndices.map(i => outline[i]).filter(Boolean)
-      const bps = selectBlueprints(userPrompt, batchSlides, 6)
-      if (bps.length > 0) {
-        blueprintHint = '\n\nStructural guides for these slides:\n' +
-          bps.map(bp => `- ${bp.name} (→ ${bp.mapsToType}): ${bp.spec}`).join('\n')
-      }
-    } catch { /* non-critical */ }
-  }
-
-  const fileHint = hasFiles
-    ? '\n\nIMPORTANT: The user uploaded source files (PDF/images/data). The content for these slides MUST be derived from the uploaded files — extract the actual text, data, and structure from the source material. Do NOT invent generic content. Recreate the source content using the Félix design system.\n'
-    : ''
-
-  const onboardingHint = intent === 'onboarding'
-    ? `\n\nCRITICAL — ONBOARDING TEMPLATE: This is an onboarding/welcome deck. You MUST follow the "Employee Onboarding (exactly 10 slides)" template from the system prompt EXACTLY. For each slide index, match the corresponding template slide structure:
-- Slide 0 (title, light): Welcome slide — "Bienvenido, [Name]!" with Party Popper illustration. Personalize with the person's name and role from the user prompt.
-- Slide 1 (two-column, light): "Who We Are" — Félix mission + products. Use Félix Illo 1 illustration. Keep the exact Félix mission and product descriptions.
-- Slide 2 (cards, light): "Our Values" — ALL 6 Félix values VERBATIM: User-Obsession, Getting Sh*t Done With Urgency, Extreme Ownership, No-Ego Collaboration, Aim For Insanely Great, Insatiable Curiosity. Use the exact descriptions from the template.
-- Slide 3 (two-column, dark): "Your Role" — Personalized role headline + responsibilities. Use Survey illustration. Left column: narrative about why this role matters. Right column: 6 specific responsibilities.
-- Slide 4 (cards, light): "Meet the Team" — Team member cards with varied titleColor. Include new hire card with ⭐ emoji.
-- Slide 5 (cards, dark): "First 90 Days" — Three phases: Days 1-30 Immerse (#2BF2F1), Days 31-60 Build (#60D06F), Days 61-90 Scale (#F19D38). Each with 5-6 specific tasks.
-- Slide 6 (cards, light): "Your Toolkit" — 8 tool cards (Figma, Notion, Slack, ClickUp, Google Suite, Claude, Omni+Amplitude, role-specific).
-- Slide 7 (two-column, brand): "Our Users" — User personas (María, Roberto, Gloria) with emoji icons. Use Hands/Juntos illustration.
-- Slide 8 (bullets, light): "Your First Week" — Monday through Friday day-by-day schedule with 📅 icons.
-- Slide 9 (closing, dark): Inspirational closing with Rocket Launch illustration. Include Slack channel, manager name, Notion link.
-
-Replace [bracketed placeholders] with content derived from the user's prompt. If the prompt doesn't specify certain details (team members, tools, responsibilities), use plausible defaults for a Félix employee in the specified role.\n`
-    : ''
-
-  const otherIndices = outline.map((_: any, i: number) => i).filter((i: number) => !batchIndices.includes(i))
-  const contextHint = otherIndices.length > 0
-    ? `\nNote: Slides at indices [${otherIndices.join(', ')}] are being generated in parallel. Ensure your slides complement the full narrative — avoid repeating content from other slides' outlines.\n`
-    : ''
-
-  const userContext = userPrompt
-    ? `\nUSER'S ORIGINAL BRIEF:\n${userPrompt}\n\nUse this context to generate rich, specific content that directly addresses the user's intent. Every slide should reflect the subject matter, domain expertise, and goals described above.\n`
-    : ''
-
-  return `You are completing slides for a Félix Pago presentation.
-${userContext}
-Here is the FULL presentation outline (${outline.length} slides):
-${outlineStr}
-${fileHint}${onboardingHint}${contextHint}
-Generate FULL content for slides at indices [${indices}] ONLY.
-
-Produce COMPLETE, PRESENTATION-READY slides. The user's brief above is your source material. Use it to generate specific, substantive content with real data, names, and numbers.
-
-For each slide, keep its type, bg, badge, and title from the outline, then populate ALL content fields per the system prompt rules. Every slide MUST have subtitle + body + type-specific fields (bullets/cards/columns/chart/quote). Section slides need a data-specific subtitle, not a topic label.
-
-Add to every content slide: notes (3-5 sentence speaker notes) and imageUrl (pick from: /illustrations/Party%20Popper.svg, /illustrations/Rocket%20Launch%20-%20Growth%20%2B%20Coin%20-%20Turquoise.svg, /illustrations/F%C3%A9lix%20Illo%201.svg, /illustrations/Dollar%20bills%20%2B%20Coins%20A.svg, /illustrations/Flying%20Dollar%20Bills%20-%20Turquoise.svg, /illustrations/Speech%20Bubbles%20%2B%20Hearts.svg, /illustrations/Hand%20-%20Stars.svg, /illustrations/Fast.svg, /illustrations/Magnifying%20Glass.svg, /illustrations/Survey.svg, /illustrations/Lock.svg, /illustrations/ray.svg).
-${blueprintHint}
-Return ONLY a JSON array of the completed slides (same order as requested). No markdown fences.`
-}
-
-
 // Local shim preserves the old call signature used throughout this file
 async function makeNonStreamingCall(
   body: GenerateBody,
@@ -626,9 +290,18 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
 
       try {
         const isMerge = !!body.merge
-        const { strengthenedPrompt } = strengthenPrompt(body.prompt)
         const intent = isMerge ? 'general' : detectIntent(body.prompt)
         const hasFiles = (body.files ?? []).length > 0
+        const deckBrief = !isMerge
+          ? buildDeckBrief({
+              prompt: body.prompt,
+              documentType: intent,
+              files: body.files,
+              templateSlideCount: body.templateStructure?.slideCount,
+            })
+          : null
+        const deckOutlineContext = deckBrief ? formatDeckBriefForOutline(deckBrief) : ''
+        const deckContentContext = deckBrief ? formatDeckBriefForContent(deckBrief) : ''
 
         // For merge mode, enrich the system prompt with merge-specific instructions
         if (isMerge) {
@@ -686,12 +359,12 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
           } else if (hasFiles) {
             // For outline: use the raw prompt (not strengthened) + file hint — the outline model
             // has its own system prompt. The strengthened prompt's document guidance confuses it.
-            outlinePrompt = body.prompt + '\n\nIMPORTANT: The user has uploaded files. Analyze their content carefully and structure the outline to recreate/adapt their content using the Félix design system. Do NOT default to a generic template — the outline must reflect the actual content in the uploaded files.'
+            outlinePrompt = body.prompt + deckOutlineContext + '\n\nIMPORTANT: The user has uploaded files. Analyze their content carefully and structure the outline to recreate/adapt their content using the Félix design system. Do NOT default to a generic template — the outline must reflect the actual content in the uploaded files.'
           } else {
             // For outline: use the raw prompt, not the strengthened version.
             // The OUTLINE_SYSTEM_PROMPT already has JSON output instructions.
             // Sending document structure guidance causes the model to return markdown instead of JSON.
-            outlinePrompt = body.prompt
+            outlinePrompt = body.prompt + deckOutlineContext
           }
           const outlineFiles = hasFiles ? body.files : undefined
           // Use user's model when files are attached or merging (fast models can't handle large context)
@@ -806,7 +479,6 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
 
         // #10: Dynamic batch sizing — ALL slides get content generation
         // The outline provides structure + hints; content step produces the full slide
-        const allIndices = outline.map((_: any, i: number) => i)
         const batchCount = isMerge
           ? Math.min(6, Math.max(4, Math.ceil(outline.length / 5)))
           : outline.length <= 8 ? 1 : outline.length <= 16 ? 2 : 3
@@ -840,7 +512,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
         await Promise.all(
           batches.map(async (batch) => {
             // Declare outside try so catch can access for retry
-            const batchPrompt = buildBatchPrompt(outline, batch.indices, batchUserPrompt, hasFiles, intent)
+            const batchPrompt = buildBatchPrompt(outline, batch.indices, batchUserPrompt, hasFiles, intent, deckContentContext)
             const tokensPerSlide = isMerge ? 3000 : 3000
             const maxTokens = Math.min(batch.indices.length * tokensPerSlide, 20000)
             const isOpus = body.model.includes('opus')
@@ -977,7 +649,7 @@ function createParallelSSEStream(body: GenerateBody): ReadableStream<Uint8Array>
 Thin slides to fix:
 ${thinSlidesInfo}
 
-${buildBatchPrompt(outline, thinOrigIndices, batchUserPrompt, hasFiles, intent)}
+${buildBatchPrompt(outline, thinOrigIndices, batchUserPrompt, hasFiles, intent, deckContentContext)}
 
 CRITICAL: These slides were flagged for having too little content. You MUST add substantially more detail — specific examples, data points, actionable items, context. Do NOT return thin content again.`
 
@@ -1002,6 +674,77 @@ CRITICAL: These slides were flagged for having too little content. You MUST add 
             }
           } catch (err) {
             console.warn('[studio/generate] Thin-slide retry failed:', err)
+          }
+        }
+
+        if (deckBrief && deckBrief.deckTypeScore > 0) {
+          const deckSlides = allCompletedSlides.filter(s => s && s.type && s.title)
+          let deckEvaluation = evaluateDeckAgainstBrief(deckSlides, deckBrief)
+          emit({
+            deckQuality: {
+              score: deckEvaluation.score,
+              passed: deckEvaluation.passed,
+              deckType: deckEvaluation.deckTypeLabel,
+              findings: deckEvaluation.findings.slice(0, 8),
+            },
+          })
+
+          const shouldRepair = deckEvaluation.score < 70 && deckEvaluation.findings.some(finding => finding.severity === 'error') && deckSlides.length <= 24
+          if (shouldRepair) {
+            try {
+              console.log(`[studio/generate] Deck intelligence repair: score=${deckEvaluation.score}, findings=${deckEvaluation.findings.length}`)
+              emit({ hint: 'Polishing deck structure and evidence...' })
+              const repairPrompt = `Repair this generated deck using the deck intelligence evaluation.
+
+Original prompt:
+${body.prompt}
+
+${formatDeckBriefForContent(deckBrief)}
+
+${formatDeckRepairInstructions(deckEvaluation)}
+
+Current slides:
+${JSON.stringify(deckSlides, null, 1)}
+
+Return ONLY a JSON array with exactly ${deckSlides.length} slides in the same order.
+Preserve each slide's type, bg, badge, and imageUrl when possible.
+Rewrite titles, body copy, bullets, cards, charts, and notes to fix the evaluation issues.
+Do not add unsupported facts. Label assumptions and provenance in notes.`
+
+              const repairText = await makeNonStreamingCall(
+                body,
+                body.enrichedSystemPrompt || SYSTEM_PROMPT,
+                repairPrompt,
+                Math.min(deckSlides.length * 2500, 30000),
+                true,
+                120000,
+                hasFiles ? body.files : undefined,
+              )
+              const repairedSlides = parseJSONResponse(repairText)
+              if (Array.isArray(repairedSlides) && repairedSlides.length === deckSlides.length) {
+                const reprocessed = postProcessSlides(repairedSlides)
+                const repairIndexMap: number[] = []
+                for (let i = 0; i < allCompletedSlides.length; i++) {
+                  if (allCompletedSlides[i] && allCompletedSlides[i].type && allCompletedSlides[i].title) repairIndexMap.push(i)
+                }
+                for (let i = 0; i < reprocessed.length; i++) {
+                  allCompletedSlides[repairIndexMap[i]] = reprocessed[i]
+                }
+                emit({ batch: reprocessed, startIndex: 0 })
+                deckEvaluation = evaluateDeckAgainstBrief(reprocessed, deckBrief)
+                emit({
+                  deckQuality: {
+                    score: deckEvaluation.score,
+                    passed: deckEvaluation.passed,
+                    deckType: deckEvaluation.deckTypeLabel,
+                    repaired: true,
+                    findings: deckEvaluation.findings.slice(0, 8),
+                  },
+                })
+              }
+            } catch (err) {
+              console.warn('[studio/generate] Deck intelligence repair failed:', err)
+            }
           }
         }
 
@@ -1047,7 +790,16 @@ CRITICAL: These slides were flagged for having too little content. You MUST add 
 
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as GenerateBody
+    const payload = await req.json().catch(() => null)
+    const parsed = generateSchema.safeParse(payload)
+
+    if (!parsed.success) {
+      return new Response(JSON.stringify({ error: 'Invalid input', details: parsed.error.flatten() }), {
+        status: 400, headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
+    const body = parsed.data as GenerateBody
     // Normalize model ID — fix short aliases and legacy stored preferences
     body.model = normalizeModel(body.model)
 

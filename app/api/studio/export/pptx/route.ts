@@ -75,7 +75,7 @@ function addBadge(slide: PptxGenJS.Slide, badge: string, y: number, bg: string, 
 
 function addFooter(slide: PptxGenJS.Slide, num: number, total: number, title: string, bg: string, brand: BrandPptx = DEFAULTS) {
   const color = bg === 'dark' ? 'EFEBE7' : '082422'
-  const muted = mutedColor(bg)
+  const muted = mutedColor(bg, brand)
   slide.addText(title, { x: 0.5, y: '92%', w: 2.5, h: 0.3, fontSize: 8, fontFace: FONT_DISPLAY, color, bold: true })
   slide.addText('felixpago.com', { x: 3.5, y: '92%', w: 3, h: 0.3, fontSize: 8, fontFace: FONT_BODY, color: muted, align: 'center' })
   slide.addText(`${num} / ${total}`, { x: 7.5, y: '92%', w: 2, h: 0.3, fontSize: 8, fontFace: FONT_BODY, color: muted, align: 'right' })
@@ -333,7 +333,7 @@ export async function POST(req: NextRequest) {
     const buffer = await pptx.write({ outputType: 'nodebuffer' }) as Buffer
     const filename = (deckTitle || 'presentation').replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '-').toLowerCase()
 
-    return new NextResponse(buffer, {
+    return new NextResponse(new Uint8Array(buffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',

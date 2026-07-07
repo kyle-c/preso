@@ -57,6 +57,54 @@ export const updatePresentationSchema = z.object({
 })
 
 // ---------------------------------------------------------------------------
+// Generation
+// ---------------------------------------------------------------------------
+
+const fileAttachmentSchema = z.object({
+  type: z.enum(['image', 'pdf', 'data']),
+  data: z.string().max(12_000_000),
+  name: z.string().min(1).max(500),
+}).strict()
+
+const templateSectionSchema = z.object({
+  type: z.string().min(1).max(100),
+  title: z.string().max(500).optional(),
+  tone: z.string().max(500).optional(),
+}).strict()
+
+export const generateSchema = z.object({
+  prompt: z.string().max(100_000).optional().default(''),
+  files: z.array(fileAttachmentSchema).max(25).optional(),
+  provider: z.enum(['anthropic', 'google', 'openrouter']).optional(),
+  apiKey: z.string().max(1_000).optional().default(''),
+  model: z.string().max(200).optional().default(''),
+  parallel: z.boolean().optional(),
+  edit: z.boolean().optional(),
+  userId: z.string().max(200).optional(),
+  enrichedSystemPrompt: z.string().max(250_000).optional(),
+  documentOnly: z.boolean().optional(),
+  reverseEngineer: z.boolean().optional(),
+  slides: z.array(z.any()).max(500).optional(),
+  merge: z.object({
+    mode: z.enum(['narrative', 'deduplicate']),
+    sourceIds: z.array(z.string().min(1).max(200)).min(1).max(50),
+    sourceMaterial: z.string().min(1).max(250_000),
+  }).strict().optional(),
+  editTarget: z.enum(['document', 'outline']).optional(),
+  document: z.any().optional(),
+  outline: z.any().optional(),
+  selectionContext: z.object({
+    sectionIndex: z.number().int().min(0).max(10_000),
+    selectedText: z.string().min(1).max(20_000),
+  }).strict().optional(),
+  templateStructure: z.object({
+    title: z.string().min(1).max(500),
+    slideCount: z.number().int().min(1).max(200),
+    sections: z.array(templateSectionSchema).min(1).max(200),
+  }).strict().optional(),
+}).strict()
+
+// ---------------------------------------------------------------------------
 // Share
 // ---------------------------------------------------------------------------
 

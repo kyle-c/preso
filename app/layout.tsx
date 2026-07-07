@@ -5,9 +5,8 @@ import { DSLangProvider } from '@/components/design-system/ds-lang-context'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Felix Pago Design System',
-  description: 'A comprehensive design system for Felix Pago built with shadcn/ui',
-  generator: 'v0.app',
+  title: 'Preso | Felix Studio',
+  description: 'A branded AI presentation studio for creating Felix decks from prompts, documents, and research.',
   icons: {
     icon: '/favicon.png',
     apple: '/apple-icon.png',

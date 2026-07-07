@@ -174,6 +174,27 @@ export interface SlideRendererProps {
 /*                     HELPER UTILITIES                       */
 /* ═══════════════════════════════════════════════════════════ */
 
+/*
+ * TYPOGRAPHIC SCALE — 3 levels only.
+ *
+ * Level 1 (LABEL):    badges, section headers, card headings, stat labels
+ * Level 2 (HEADLINE): slide titles only
+ * Level 3 (BODY):     subtitles, body text, bullets, card bodies, column text
+ *
+ * Every text element on a slide must use exactly one of these three levels.
+ * This guarantees visual consistency across all slide types.
+ */
+const TY = {
+  // Level 1: Labels — small, uppercase, spaced
+  label: 'font-sans text-sm font-semibold uppercase tracking-[0.08em]',
+  // Level 2: Headlines — display font, large, tight
+  headline: 'font-display font-black leading-[0.95] tracking-tight',
+  // Level 3: Body — readable, relaxed
+  body: 'font-sans text-lg leading-relaxed',
+  // Inline bold (within body text) — same font, just heavier
+  bodyBold: 'font-semibold',
+} as const
+
 /** Tailwind text size → CSS px mapping for style tag injection */
 const TAILWIND_SIZES: Record<string, string> = {
   'xs': '12px', 'sm': '14px', 'base': '16px', 'lg': '18px', 'xl': '20px',
@@ -194,7 +215,7 @@ function parseBold(text: string): React.ReactNode {
   const segments = parseInlineContent(text)
   if (segments.length === 1 && segments[0].type === 'text') return text
   return segments.map((seg, i) => {
-    if (seg.type === 'bold') return <strong key={i} className="font-bold">{seg.content}</strong>
+    if (seg.type === 'bold') return <strong key={i} className={TY.bodyBold}>{seg.content}</strong>
     if (seg.type === 'link') return <a key={i} href={seg.url} target="_blank" rel="noopener noreferrer" className="underline decoration-current/30 underline-offset-2 hover:decoration-current/60 transition-colors">{seg.content}</a>
     return <span key={i}>{seg.content}</span>
   })
@@ -407,7 +428,7 @@ function Badge({ children, bg }: { children: React.ReactNode; bg: SlideData['bg'
       ? 'bg-slate-950/15 text-slate-950'
       : 'bg-turquoise text-slate-950'
   return (
-    <span className={cn('inline-block rounded-full px-5 py-1.5 font-sans font-semibold text-sm sm:text-base uppercase tracking-[0.12em]', cls)}>
+    <span className={cn('inline-block rounded-full px-5 py-1.5', TY.label, cls)}>
       {children}
     </span>
   )
@@ -559,7 +580,7 @@ function SlideBullets({ slide, slideIndex }: { slide: SlideData; slideIndex: num
                     slide.bg === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-border shadow-sm',
                   )}
                 >
-                  <h3 className={cn('font-display font-extrabold text-base mb-4', c.text)}>{d.day}</h3>
+                  <h3 className={cn('font-sans text-lg font-semibold mb-4', c.text)}>{d.day}</h3>
                   <ul className="space-y-3">
                     {d.items.map((item, ii) => (
                       <li key={ii} className="flex items-start gap-2.5">
@@ -598,7 +619,7 @@ function SlideBullets({ slide, slideIndex }: { slide: SlideData; slideIndex: num
                   ) : (
                     <span className="w-2.5 h-2.5 rounded-full bg-evergreen flex-shrink-0 mt-2.5" />
                   )}
-                  <span className={cn('text-lg sm:text-xl lg:text-[22px] leading-snug', c.text)}>
+                  <span className={cn(TY.body, c.text)}>
                     {parseBold(bullet.text)}
                   </span>
                 </li>
@@ -646,15 +667,15 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
               {parseBold(slide.title)}
             </h1>
             {slide.subtitle && (
-              <p className={cn('text-xl sm:text-2xl lg:text-3xl leading-snug max-w-xl font-display font-black mb-2', c.text)}>
-                {parseBoldAccent(slide.subtitle, slide.bg)}
+              <p className={cn(TY.body, 'max-w-xl mb-2', c.muted)}>
+                {parseBold(slide.subtitle)}
               </p>
             )}
             {/* First column's body/content rendered as descriptive text under the title */}
             {slide.columns?.[0] && (
               <>
                 {slide.columns[0].heading && (
-                  <h2 className={cn('font-display font-bold text-sm uppercase tracking-widest mb-3', c.muted)}>{slide.columns[0].heading}</h2>
+                  <h2 className={cn('font-sans text-sm font-semibold uppercase tracking-[0.08em] mb-3', c.muted)}>{slide.columns[0].heading}</h2>
                 )}
                 {slide.columns[0].body && (
                   slide.quote ? (
@@ -665,13 +686,13 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
                       'bg-white border-border shadow-sm',
                     )}>
                       {slide.columns[0].body.split('\n\n').map((para, pi) => (
-                        <p key={pi} className={cn('text-base sm:text-lg leading-relaxed', pi > 0 && 'mt-3', c.muted)}>
+                        <p key={pi} className={cn(TY.body, pi > 0 && 'mt-3', c.muted)}>
                           {parseBold(para)}
                         </p>
                       ))}
                     </div>
                   ) : (
-                    <p className={cn('text-lg sm:text-xl leading-relaxed max-w-lg line-clamp-6', c.muted)}>
+                    <p className={cn(TY.body, 'max-w-lg line-clamp-6', c.muted)}>
                       {parseBold(slide.columns[0].body)}
                     </p>
                   )
@@ -685,7 +706,7 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
                         ) : (
                           <span className="w-2 h-2 rounded-full bg-evergreen flex-shrink-0 mt-1.5" />
                         )}
-                        <span className={cn('text-base sm:text-lg leading-snug', c.text)}>
+                        <span className={cn(TY.body, c.text)}>
                           {parseBold(b.text)}
                         </span>
                       </li>
@@ -696,7 +717,7 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
             )}
             {/* Fallback: render slide.body when columns[0] doesn't have body */}
             {!slide.columns?.[0]?.body && slide.body && (
-              <p className={cn('text-lg sm:text-xl leading-relaxed max-w-lg', c.muted)}>
+              <p className={cn(TY.body, 'max-w-lg', c.muted)}>
                 {parseBold(slide.body)}
               </p>
             )}
@@ -734,7 +755,7 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
                       slide.bg === 'brand' ? 'bg-slate-950/10 border-slate-950/10' :
                       'bg-white border-border shadow-sm',
                     )}>
-                      <p className={cn('text-sm leading-relaxed', c.muted)}>
+                      <p className={cn(TY.body, c.muted)}>
                         {parseBold(b.text)}
                       </p>
                     </div>
@@ -745,7 +766,7 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
             {/* Pull quote below body */}
             {slide.quote && (
               <div className="relative pl-5 border-l-4 border-papaya mt-1">
-                <p className={cn('text-lg sm:text-xl font-display font-extrabold leading-snug', c.text)}>
+                <p className={cn(TY.body, 'font-semibold', c.text)}>
                   {parseBold(slide.quote.text)}
                 </p>
                 {slide.quote.attribution && (
@@ -807,8 +828,8 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
                       >
                         <span className={cn('font-display font-black text-3xl leading-none flex-shrink-0 mt-0.5', c.accent)}>{num}</span>
                         <div>
-                          {heading && <h3 className={cn('font-display font-extrabold text-base mb-1', c.text)}>{heading}</h3>}
-                          <p className={cn('text-sm leading-relaxed', c.muted)}>{body}</p>
+                          {heading && <h3 className={cn('font-sans text-lg font-semibold mb-1', c.text)}>{heading}</h3>}
+                          <p className={cn(TY.body, c.muted)}>{body}</p>
                         </div>
                       </div>
                     )
@@ -862,10 +883,10 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
                 'bg-white border-border shadow-sm',
               )}>
                 {col.heading && (
-                  <h2 className={cn('font-display font-bold text-sm uppercase tracking-widest mb-5', c.muted)}>{col.heading}</h2>
+                  <h2 className={cn('font-sans text-sm font-semibold uppercase tracking-[0.08em] mb-5', c.muted)}>{col.heading}</h2>
                 )}
                 {col.body && (
-                  <p className={cn('text-lg sm:text-xl leading-relaxed mb-5', c.text)}>
+                  <p className={cn(TY.body, 'mb-5', c.text)}>
                     {parseBold(col.body)}
                   </p>
                 )}
@@ -892,7 +913,7 @@ function SlideTwoColumn({ slide, slideIndex }: { slide: SlideData; slideIndex: n
                             </svg>
                           </span>
                         )}
-                        <span className={cn('text-base sm:text-lg leading-snug', c.text)}>
+                        <span className={cn(TY.body, c.text)}>
                           {parseBold(b.text)}
                         </span>
                       </li>
@@ -1027,13 +1048,13 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
                           >
                             {phaseMatch[1]}
                           </span>
-                          <h3 className={cn('font-display font-extrabold text-2xl lg:text-3xl leading-snug mb-5', c.text)}>
+                          <h3 className={cn(TY.body, 'font-semibold mb-5', c.text)}>
                             {parseBold(phaseMatch[2])}
                           </h3>
                         </>
                       ) : (
                         <h3
-                          className={cn('font-display font-extrabold leading-snug mb-3', slide.style?.cardSize ? `text-${slide.style.cardSize}` : 'text-lg', c.text)}
+                          className={cn(TY.body, 'font-semibold leading-snug mb-3', c.text)}
                           style={card.titleColor ? { color: card.titleColor } : undefined}
                         >
                           {parseBold(card.title)}
@@ -1048,14 +1069,14 @@ function SlideCards({ slide, slideIndex }: { slide: SlideData; slideIndex: numbe
                                 strokeWidth={1.5}
                                 style={{ color: accentColor }}
                               />
-                              <span className={cn('leading-snug', slide.style?.cardSize ? `text-${slide.style.cardSize}` : 'text-base', c.muted)}>
+                              <span className={cn(TY.body, c.muted)}>
                                 {parseBold(item)}
                               </span>
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className={cn('leading-relaxed', slide.style?.cardSize ? `text-${slide.style.cardSize}` : 'text-sm', c.muted)}>
+                        <p className={cn(TY.body, c.muted)}>
                           {parseBold(card.body)}
                         </p>
                       )}
@@ -1251,7 +1272,7 @@ function SlideChecklist({ slide, slideIndex }: { slide: SlideData; slideIndex: n
                     )}>
                       {isCheck ? '\u2713' : '\u2717'}
                     </span>
-                    <span className={cn('text-lg sm:text-xl lg:text-[22px] leading-snug', c.text)}>
+                    <span className={cn(TY.body, c.text)}>
                       {parseBold(item.text)}
                     </span>
                   </li>
@@ -1321,7 +1342,7 @@ function SlideClosing({ slide, slideIndex }: { slide: SlideData; slideIndex: num
               ))}
             </div>
           ) : slide.subtitle && (
-            <p className={cn('mt-5 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl', c.muted)}>
+            <p className={cn(TY.body, 'mt-5 max-w-2xl', c.muted)}>
               {parseBold(slide.subtitle)}
             </p>
           )}
@@ -1659,8 +1680,6 @@ export function SlideRenderer({ slides: rawSlides, title, deckId, onClose, force
     <div
       className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[190] transition-opacity duration-200"
       style={{ opacity: hoverTop || viewMode !== 'presentation' ? 1 : 0, pointerEvents: hoverTop || viewMode !== 'presentation' ? 'auto' : 'none' }}
-      onMouseEnter={() => setHoverTop(true)}
-      onMouseLeave={() => setHoverTop(false)}
       onMouseEnter={() => setHoverTop(true)}
       onMouseLeave={() => setHoverTop(false)}
     >

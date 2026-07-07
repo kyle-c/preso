@@ -517,7 +517,7 @@ function EditPanel({
 
         <button
           type="button"
-          onClick={onGenerate}
+          onClick={() => onGenerate()}
           disabled={!canGenerate}
           className="w-full py-2.5 bg-turquoise text-slate-950 font-semibold rounded-xl hover:bg-turquoise/90 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2 flex-shrink-0"
         >
@@ -2075,8 +2075,7 @@ Follow Félix design system color accessibility rules. Never leave widows or orp
             const bgClass = s.bg === 'dark'
               ? 'bg-[#082422]' : s.bg === 'brand'
                 ? 'bg-[#2BF2F1]' : 'bg-[#EFEBE7]'
-            const textClass = s.bg === 'dark' || s.bg === 'brand' && false
-              ? 'text-white' : s.bg === 'dark' ? 'text-white' : 'text-[#082422]'
+            const textClass = s.bg === 'dark' ? 'text-white' : 'text-[#082422]'
             return (
               <div className={`w-full h-full ${bgClass} ${textClass} flex items-center justify-center p-8`}>
                 <div className="text-center max-w-[80%]">

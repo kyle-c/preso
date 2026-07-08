@@ -7,6 +7,18 @@
  * and optional auto-fix.
  */
 
+import { countWords } from './slide-utils'
+import {
+  MIN_CARD_BODY_WORDS,
+  MAX_CARD_BODY_WORDS,
+  MIN_BULLET_WORDS,
+  MIN_AVG_BULLET_WORDS,
+  MIN_BODY_WORDS,
+  MIN_COLUMN_WORDS,
+  MIN_SLIDE_TYPE_VARIETY,
+  MIN_ILLUSTRATION_PERCENT,
+} from './quality-thresholds'
+
 interface SlideIssue {
   slideIndex: number
   field: string
@@ -19,10 +31,6 @@ interface ValidationResult {
   issues: SlideIssue[]
   /** Slides with auto-fixes applied (orphan cards split, etc.) */
   fixedSlides: any[] | null
-}
-
-function wordCount(text: string): number {
-  return text.trim().split(/\s+/).filter(Boolean).length
 }
 
 export function validateSlides(slides: any[]): ValidationResult {
@@ -49,28 +57,28 @@ export function validateSlides(slides: any[]): ValidationResult {
       // Card body density
       for (let j = 0; j < slide.cards.length; j++) {
         const card = slide.cards[j]
-        const wc = wordCount(card.body || '')
-        if (wc < 10) {
+        const wc = countWords(card.body || '')
+        if (wc < MIN_CARD_BODY_WORDS) {
           issues.push({
             slideIndex: i,
             field: `cards[${j}].body`,
             severity: 'error',
-            message: `Card "${card.title}" body is only ${wc} words (min 15). Cards need substantive content.`,
+            message: `Card "${card.title}" body is only ${wc} words (min ${MIN_CARD_BODY_WORDS}). Cards need substantive content.`,
           })
         }
-        if (wc > 60) {
+        if (wc > MAX_CARD_BODY_WORDS * 1.5) {
           issues.push({
             slideIndex: i,
             field: `cards[${j}].body`,
             severity: 'warning',
-            message: `Card "${card.title}" body is ${wc} words (max ~40). Use bold lead + bullet points instead of dense paragraphs.`,
+            message: `Card "${card.title}" body is ${wc} words (max ~${MAX_CARD_BODY_WORDS}). Use bold lead + bullet points instead of dense paragraphs.`,
           })
         }
       }
 
       // Card density balance (for 4+ cards)
       if (count >= 4) {
-        const lengths = slide.cards.map((c: any) => wordCount(c.body || ''))
+        const lengths = slide.cards.map((c: any) => countWords(c.body || ''))
         const max = Math.max(...lengths)
         const min = Math.min(...lengths)
         if (max > 0 && min > 0 && max / min > 3) {
@@ -98,38 +106,38 @@ export function validateSlides(slides: any[]): ValidationResult {
       // Check for short bullets
       for (let j = 0; j < slide.bullets.length; j++) {
         const bullet = slide.bullets[j]
-        if (bullet.text && wordCount(bullet.text) < 5) {
+        if (bullet.text && countWords(bullet.text) < MIN_BULLET_WORDS) {
           issues.push({
             slideIndex: i,
             field: `bullets[${j}]`,
             severity: 'warning',
-            message: `Bullet "${bullet.text}" is only ${wordCount(bullet.text)} words. Each should be a complete thought.`,
+            message: `Bullet "${bullet.text}" is only ${countWords(bullet.text)} words. Each should be a complete thought.`,
           })
         }
       }
 
       // Average bullet density
-      const bulletWords = slide.bullets.map((b: any) => wordCount(b.text || ''))
+      const bulletWords = slide.bullets.map((b: any) => countWords(b.text || ''))
       const avgBulletWords = bulletWords.reduce((a: number, b: number) => a + b, 0) / bulletWords.length
-      if (avgBulletWords < 6) {
+      if (avgBulletWords < MIN_AVG_BULLET_WORDS) {
         issues.push({
           slideIndex: i,
           field: 'bullets',
           severity: 'error',
-          message: `Average bullet length is ${Math.round(avgBulletWords)} words (min 6). Bullets need more substance.`,
+          message: `Average bullet length is ${Math.round(avgBulletWords)} words (min ${MIN_AVG_BULLET_WORDS}). Bullets need more substance.`,
         })
       }
     }
 
     // ── Body density on content slides ──
     if (['content', 'bullets', 'cards', 'two-column'].includes(slide.type) && slide.body) {
-      const bodyWc = wordCount(slide.body)
-      if (bodyWc < 15) {
+      const bodyWc = countWords(slide.body)
+      if (bodyWc < MIN_BODY_WORDS) {
         issues.push({
           slideIndex: i,
           field: 'body',
           severity: 'error',
-          message: `Body is only ${bodyWc} words (min 15). Content slides need substantive body text.`,
+          message: `Body is only ${bodyWc} words (min ${MIN_BODY_WORDS}). Content slides need substantive body text.`,
         })
       }
     }
@@ -138,8 +146,8 @@ export function validateSlides(slides: any[]): ValidationResult {
     if (slide.columns && Array.isArray(slide.columns) && slide.columns.length === 2) {
       const col0 = slide.columns[0]
       const col1 = slide.columns[1]
-      const w0 = wordCount((col0.body || '') + (col0.bullets || []).map((b: any) => b.text).join(' '))
-      const w1 = wordCount((col1.body || '') + (col1.bullets || []).map((b: any) => b.text).join(' '))
+      const w0 = countWords((col0.body || '') + (col0.bullets || []).map((b: any) => b.text).join(' '))
+      const w1 = countWords((col1.body || '') + (col1.bullets || []).map((b: any) => b.text).join(' '))
       if (w0 > 0 && w1 > 0 && (w0 / w1 > 4 || w1 / w0 > 4)) {
         issues.push({
           slideIndex: i,
@@ -156,19 +164,19 @@ export function validateSlides(slides: any[]): ValidationResult {
           severity: 'error',
           message: `One column is empty. Both must be populated.`,
         })
-      } else if (w0 < 10 || w1 < 10) {
+      } else if (w0 < MIN_COLUMN_WORDS || w1 < MIN_COLUMN_WORDS) {
         issues.push({
           slideIndex: i,
           field: 'columns',
           severity: 'error',
-          message: `Column has only ${Math.min(w0, w1)} words (min 10). Both columns need substance.`,
+          message: `Column has only ${Math.min(w0, w1)} words (min ${MIN_COLUMN_WORDS}). Both columns need substance.`,
         })
       }
     }
 
     // ── Title length ──
     if (slide.title) {
-      const titleWords = wordCount(slide.title)
+      const titleWords = countWords(slide.title)
       if (titleWords > 10) {
         issues.push({
           slideIndex: i,
@@ -252,19 +260,19 @@ export function validateSlides(slides: any[]): ValidationResult {
 
     // Type variety
     const types = new Set(slides.map((s: any) => s.type))
-    if (types.size < 4 && slides.length >= 8) {
+    if (types.size < MIN_SLIDE_TYPE_VARIETY && slides.length >= 8) {
       issues.push({
         slideIndex: -1,
         field: 'variety',
         severity: 'warning',
-        message: `Only ${types.size} different slide types used. Aim for ≥4 for visual variety.`,
+        message: `Only ${types.size} different slide types used. Aim for ≥${MIN_SLIDE_TYPE_VARIETY} for visual variety.`,
       })
     }
 
     // Illustration coverage
     const withIllos = slides.filter((s: any) => s.imageUrl).length
     const illoPct = withIllos / slides.length
-    if (illoPct < 0.25 && slides.length >= 6) {
+    if (illoPct < MIN_ILLUSTRATION_PERCENT && slides.length >= 6) {
       issues.push({
         slideIndex: -1,
         field: 'imageUrl',

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/studio-auth'
 import { getPresentation } from '@/lib/studio-db'
-import { autoRatePresentation } from '@/lib/slide-quality-loop'
+import { runPresentationQualityRatingJob } from '@/lib/studio-post-save-jobs'
 
 export const runtime = 'nodejs'
 
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
 
-    const result = await autoRatePresentation(presId, pres.slides)
+    const result = await runPresentationQualityRatingJob(pres)
     console.log(`[quality/auto-rate] ${presId}: score=${result.score}, promoted=${result.promoted}, demoted=${result.demoted}`)
 
     return NextResponse.json(result)

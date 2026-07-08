@@ -5,6 +5,8 @@
  * Focuses on product development and common business use cases.
  */
 
+import { buildDeckBrief, formatDeckBriefForPrompt } from './deck-intelligence'
+
 export type DocumentType =
   | 'prd'
   | 'proposal'
@@ -143,10 +145,21 @@ const DOCUMENT_GUIDANCE: Record<DocumentType, string> = {
 }
 
 export function detectIntent(prompt: string): DocumentType {
+  // Weighted scoring: count all keyword matches per intent, pick highest
+  let bestType: DocumentType = 'general'
+  let bestScore = 0
+
   for (const { type, keywords } of INTENT_PATTERNS) {
-    if (keywords.test(prompt)) return type
+    // Count all matches (global flag needed)
+    const globalRegex = new RegExp(keywords.source, 'gi')
+    const matches = prompt.match(globalRegex)
+    if (matches && matches.length > bestScore) {
+      bestScore = matches.length
+      bestType = type
+    }
   }
-  return 'general'
+
+  return bestType
 }
 
 // ---------------------------------------------------------------------------
@@ -233,12 +246,15 @@ export function strengthenPrompt(prompt: string): IntentResult {
 
   const guidance = DOCUMENT_GUIDANCE[type]
   const narrativeConstraint = formatNarrativeConstraint(narrative)
+  const deckBrief = buildDeckBrief({ prompt, documentType: type })
+  const deckTypeGuidance = formatDeckBriefForPrompt(deckBrief)
 
   const strengthenedPrompt = `${prompt}
 
 --- DOCUMENT STRUCTURE GUIDANCE ---
 ${guidance}
 ${narrativeConstraint}
+${deckTypeGuidance}
 
 Generate both a detailed business document AND a visual slide presentation from this prompt.
 
@@ -312,6 +328,7 @@ export function preprocessIntent(
 ): PreprocessedIntent {
   const type = detectIntent(prompt)
   const label = INTENT_PATTERNS.find((p) => p.type === type)?.label ?? 'Presentation'
+  const deckBrief = buildDeckBrief({ prompt, documentType: type, files })
   const topics = extractTopics(prompt)
   const fileSummary = summarizeFiles(files)
 
@@ -320,6 +337,10 @@ export function preprocessIntent(
 
   if (type !== 'general') {
     contextParts.push(`DETECTED INTENT: ${label} (${type})`)
+  }
+
+  if (deckBrief.deckTypeScore > 0) {
+    contextParts.push(`DETECTED DECK FAMILY: ${deckBrief.deckTypeLabel}`)
   }
 
   if (topics.length > 0) {

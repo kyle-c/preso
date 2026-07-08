@@ -18,8 +18,8 @@ const ANTHROPIC_MODELS: ModelEntry[] = [
   { id: 'claude-haiku-4-5-20251001', label: 'Haiku 4.5', cost: '~$0.01', note: 'Fast & cheap', tier: 'budget' },
   { id: 'claude-sonnet-4-20250514', label: 'Sonnet 4', cost: '~$0.03', note: 'Best value', tier: 'value' },
   { id: 'claude-sonnet-4-5-20250514', label: 'Sonnet 4.5', cost: '~$0.03', note: 'Extended thinking', tier: 'value' },
-  { id: 'claude-sonnet-4-6-20250627', label: 'Sonnet 4.6', cost: '~$0.03', note: 'Latest', tier: 'value' },
-  { id: 'claude-opus-4-6-20250627', label: 'Opus 4.6', cost: '~$0.15', note: 'Most capable', tier: 'premium' },
+  { id: 'claude-sonnet-4-6', label: 'Sonnet 4.6', cost: '~$0.03', note: 'Latest', tier: 'value' },
+  { id: 'claude-opus-4-6', label: 'Opus 4.6', cost: '~$0.15', note: 'Most capable', tier: 'premium' },
 ]
 
 const OPENROUTER_MODELS: ModelEntry[] = [
@@ -52,6 +52,7 @@ export interface ModelSelectorProps {
   onProviderChange: (p: 'anthropic' | 'openrouter') => void
   onApiKeyChange: (key: string) => void
   onModelChange: (model: string) => void
+  userEmail?: string
 }
 
 /* ─────────────────────── localStorage helpers ─────────────────────── */
@@ -69,7 +70,7 @@ const LS = {
  * Falls back silently if the user is not authenticated.
  */
 export function useServerSettings(
-  setProvider: (v: string) => void,
+  setProvider: (v: 'anthropic' | 'openrouter') => void,
   setApiKey: (v: string) => void,
   setModel: (v: string) => void,
   setUserEmail: (v: string) => void,
@@ -83,7 +84,7 @@ export function useServerSettings(
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (!data) return
-        if (data.provider) setProvider(data.provider)
+        if (data.provider === 'anthropic' || data.provider === 'openrouter') setProvider(data.provider)
         if (data.anthropicKey) setApiKey(data.anthropicKey)
         if (data.anthropicModel) setModel(data.anthropicModel)
         if (data.email) setUserEmail(data.email)

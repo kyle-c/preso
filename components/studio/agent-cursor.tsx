@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-export type CursorMode = 'working' | 'entering' | 'exiting'
+export type CursorMode = 'working' | 'entering' | 'celebrating' | 'exiting' | 'hidden'
 
 const LABELS = [
   'Layout', 'Content', 'Design', 'Typography', 'Color', 'Animation',

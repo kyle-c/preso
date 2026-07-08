@@ -1548,7 +1548,7 @@ export default function FelixInvestorPage() {
 
   const [tocOpen, setTocOpen] = useState(false)
   const [tocView, setTocView] = useState<'list' | 'cards'>('list')
-  const { comments, commentMode, setCommentMode, addComment, deleteComment, editComment, addReply, deleteReply } = useComments('felix-investor-comments')
+  const { comments, commentMode, setCommentMode, addComment, deleteComment, editComment, flagComment, resolveComment, addReply, deleteReply } = useComments('felix-investor-comments')
   const { locale, setLocale } = useLocale()
   const slideRef = useRef<HTMLDivElement>(null)
   useSlideTranslation(slideRef, locale, current)
@@ -1648,6 +1648,8 @@ export default function FelixInvestorPage() {
             onAddComment={addComment}
             onEditComment={editComment}
             onDeleteComment={deleteComment}
+            onFlagComment={flagComment}
+            onResolveComment={resolveComment}
             onAddReply={addReply}
             onDeleteReply={deleteReply}
             onExitCommentMode={() => setCommentMode(false)}

@@ -167,7 +167,7 @@ export async function GET(req: NextRequest) {
           {/* Cards preview */}
           {hasCards && (
             <div style={{ display: 'flex', gap: '16px', marginTop: '8px' }}>
-              {slide.cards.slice(0, 3).map((card: any, i: number) => (
+              {slide.cards?.slice(0, 3).map((card: any, i: number) => (
                 <div
                   key={i}
                   style={{

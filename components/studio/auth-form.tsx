@@ -15,6 +15,12 @@ const FLOATING_ILLUSTRATIONS = [
   { src: '/illustrations/Speech%20Bubbles%20%2B%20Hearts.svg', className: 'bottom-[40%] right-[10%] w-28 rotate-[-5deg]' },
 ]
 
+const STUDIO_PROMISES = [
+  'Generate decks, outlines, and narrative docs from a prompt or source material.',
+  'Import work from Notion, Google, Amplitude, ClickUp, or local files.',
+  'Save finished drafts into your Studio library for editing and sharing.',
+]
+
 export function AuthForm() {
   const router = useRouter()
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
@@ -90,15 +96,27 @@ export function AuthForm() {
           </div>
 
           <h1 className="font-display font-black text-white text-4xl sm:text-5xl xl:text-6xl leading-[0.95] tracking-tight mb-6">
-            Your next<br />
-            big idea,<br />
-            presented.
+            <span className="sr-only">Your next big idea, presented.</span>
+            <span aria-hidden="true">
+              Your next<br />
+              big idea,<br />
+              presented.
+            </span>
           </h1>
 
-          <p className="text-lg xl:text-xl font-display font-bold text-white/70 leading-snug">
-            AI-powered presentations<br />
-            <span className="text-turquoise">built in seconds.</span>
+          <p className="text-lg xl:text-xl font-display font-bold text-white/70 leading-snug max-w-sm">
+            AI-powered presentation drafts,<br />
+            <span className="text-turquoise">ready for review in Studio.</span>
           </p>
+
+          <div className="mt-8 space-y-3">
+            {STUDIO_PROMISES.map((promise) => (
+              <div key={promise} className="flex items-start gap-3 text-sm text-white/50 leading-relaxed">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-turquoise/70" />
+                <span>{promise}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Right half — form */}
@@ -137,7 +155,7 @@ export function AuthForm() {
                   <button
                     type="button"
                     onClick={() => { setMode('signin'); setError('') }}
-                    className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    className={`min-h-11 flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
                       mode === 'signin'
                         ? 'bg-white/10 text-white'
                         : 'text-white/40 hover:text-white/60'
@@ -148,7 +166,7 @@ export function AuthForm() {
                   <button
                     type="button"
                     onClick={() => { setMode('signup'); setError('') }}
-                    className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    className={`min-h-11 flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
                       mode === 'signup'
                         ? 'bg-white/10 text-white'
                         : 'text-white/40 hover:text-white/60'
@@ -156,6 +174,13 @@ export function AuthForm() {
                   >
                     Sign Up
                   </button>
+                </div>
+
+                <div className="mb-5 rounded-xl border border-turquoise/15 bg-turquoise/[0.06] px-4 py-3">
+                  <p className="text-xs leading-relaxed text-white/50">
+                    Use any valid email to create a Studio account.
+                    External collaborators may need to verify their email before signing in.
+                  </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -169,7 +194,7 @@ export function AuthForm() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Your name"
-                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-turquoise/40 focus:border-turquoise/40 transition-colors"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-turquoise/40 focus:border-turquoise/40 transition-colors"
                       />
                     </div>
                   )}
@@ -182,13 +207,13 @@ export function AuthForm() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@felixpago.com"
+                      placeholder="you@company.com"
                       required
-                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-turquoise/40 focus:border-turquoise/40 transition-colors"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-turquoise/40 focus:border-turquoise/40 transition-colors"
                     />
                     {mode === 'signup' && (
                       <p className="text-xs text-white/30 mt-1.5">
-                        Use your @felixpago.com email or an invited email to sign up
+                        Any valid email works. Felix emails and approved collaborators skip verification.
                       </p>
                     )}
                   </div>
@@ -203,7 +228,7 @@ export function AuthForm() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
                       required
-                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-turquoise/40 focus:border-turquoise/40 transition-colors"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-turquoise/40 focus:border-turquoise/40 transition-colors"
                     />
                   </div>
 
@@ -214,7 +239,7 @@ export function AuthForm() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-2.5 bg-turquoise text-slate-950 font-semibold rounded-xl hover:bg-turquoise/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="min-h-11 w-full py-3 bg-turquoise text-slate-950 font-semibold rounded-xl hover:bg-turquoise/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading
                       ? 'Loading...'

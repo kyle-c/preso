@@ -39,8 +39,8 @@ describe('analyzeSlides', () => {
     expect(densitySuggestion?.severity).toBe('error')
   })
 
-  it('flags slides with 70-100 words as warnings', () => {
-    const body = Array(75).fill('word').join(' ')
+  it('flags slides with 81-100 words as warnings', () => {
+    const body = Array(85).fill('word').join(' ')
     const slides = [makeSlide({ body })]
     const suggestions = analyzeSlides(slides as any)
     const densitySuggestion = suggestions.find(s => s.rule === 'word-density')
@@ -105,7 +105,7 @@ describe('analyzeSlides', () => {
     expect(suggestions.some(s => s.rule === 'missing-notes')).toBe(false)
   })
 
-  it('flags thin content slides with fewer than 20 words', () => {
+  it('flags thin content slides with fewer than 20 words as errors', () => {
     const slides = [makeSlide({ body: 'Just a few words' })]
     const suggestions = analyzeSlides(slides as any)
     const thin = suggestions.find(s => s.rule === 'thin-content')
@@ -113,7 +113,7 @@ describe('analyzeSlides', () => {
   })
 
   it('warns on slides with 20-29 words', () => {
-    const body = Array(25).fill('word').join(' ')
+    const body = Array(22).fill('word').join(' ')
     const slides = [makeSlide({ body })]
     const suggestions = analyzeSlides(slides as any)
     const thin = suggestions.find(s => s.rule === 'thin-content')

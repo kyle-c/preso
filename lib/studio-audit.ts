@@ -9,6 +9,7 @@ export type AuditAction =
   | 'auth.login.failed'
   | 'auth.signup'
   | 'auth.logout'
+  | 'auth.auto_create'
   | 'auth.magic_link.created'
   | 'auth.magic_link.consumed'
   | 'auth.rate_limited'

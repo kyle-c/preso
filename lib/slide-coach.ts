@@ -6,6 +6,17 @@
 /*  Returns actionable suggestions per slide.                  */
 /* ═══════════════════════════════════════════════════════════ */
 
+import { countWords } from './slide-utils'
+import {
+  MAX_COVER_TITLE_WORDS,
+  MAX_CONTENT_TITLE_WORDS,
+  MAX_SLIDE_WORDS_WARNING,
+  MAX_SLIDE_WORDS_ERROR,
+  MAX_CARD_BODY_WORDS,
+  MIN_SLIDE_WORDS_ERROR,
+  MIN_SLIDE_WORDS_WARNING,
+} from './quality-thresholds'
+
 export interface CoachSuggestion {
   slideIndex: number
   severity: 'info' | 'warning' | 'error'
@@ -32,11 +43,6 @@ interface SlideInput {
 // Rules
 // ---------------------------------------------------------------------------
 
-function countWords(text: string | undefined): number {
-  if (!text) return 0
-  return text.split(/\s+/).filter(Boolean).length
-}
-
 export function totalSlideWords(slide: SlideInput): number {
   let count = countWords(slide.title) + countWords(slide.subtitle) + countWords(slide.body)
   for (const b of slide.bullets || []) count += countWords(b.text)
@@ -57,13 +63,13 @@ export function analyzeSlides(slides: SlideInput[]): CoachSuggestion[] {
 
     // ── Title length ──
     const titleWords = countWords(slide.title)
-    if (slide.type === 'title' && titleWords > 6) {
+    if (slide.type === 'title' && titleWords > MAX_COVER_TITLE_WORDS) {
       suggestions.push({
         slideIndex: i, severity: 'warning', rule: 'title-length',
-        message: `Cover title is ${titleWords} words — aim for 6 or fewer for impact.`,
+        message: `Cover title is ${titleWords} words — aim for ${MAX_COVER_TITLE_WORDS} or fewer for impact.`,
         fix: 'Shorten to a punchy headline. Move details to the subtitle.',
       })
-    } else if (titleWords > 12) {
+    } else if (titleWords > MAX_CONTENT_TITLE_WORDS) {
       suggestions.push({
         slideIndex: i, severity: 'info', rule: 'title-length',
         message: `Title is ${titleWords} words — consider tightening for scannability.`,
@@ -72,13 +78,13 @@ export function analyzeSlides(slides: SlideInput[]): CoachSuggestion[] {
 
     // ── Word density ──
     const wordCount = totalSlideWords(slide)
-    if (wordCount > 150) {
+    if (wordCount > MAX_SLIDE_WORDS_ERROR) {
       suggestions.push({
         slideIndex: i, severity: 'error', rule: 'word-density',
         message: `This slide has ${wordCount} words — too dense for a presentation.`,
         fix: 'Split into two slides, or convert dense text to bullet points or a chart.',
       })
-    } else if (wordCount > 120) {
+    } else if (wordCount > MAX_SLIDE_WORDS_WARNING) {
       suggestions.push({
         slideIndex: i, severity: 'warning', rule: 'word-density',
         message: `${wordCount} words on this slide — consider reducing for clarity.`,
@@ -98,10 +104,10 @@ export function analyzeSlides(slides: SlideInput[]): CoachSuggestion[] {
       }
       // Card body density
       for (const card of slide.cards) {
-        if (countWords(card.body) > 40) {
+        if (countWords(card.body) > MAX_CARD_BODY_WORDS) {
           suggestions.push({
             slideIndex: i, severity: 'warning', rule: 'card-density',
-            message: `Card "${card.title}" has ${countWords(card.body)} words — cards should be 20-40 words.`,
+            message: `Card "${card.title}" has ${countWords(card.body)} words — cards should be 20-${MAX_CARD_BODY_WORDS} words.`,
             fix: 'Use structured format: 1 bold sentence + 2-3 short bullet points.',
           })
         }
@@ -159,17 +165,17 @@ export function analyzeSlides(slides: SlideInput[]): CoachSuggestion[] {
 
     // ── Thin content ──
     if (!['title', 'section', 'closing', 'image', 'quote', 'chart'].includes(slide.type)) {
-      if (wordCount < 30) {
+      if (wordCount < MIN_SLIDE_WORDS_ERROR) {
         suggestions.push({
           slideIndex: i, severity: 'error', rule: 'thin-content',
           message: `Only ${wordCount} words — this slide needs more substance.`,
-          fix: 'Add specific details, data points, examples, or actionable items. Every content slide should have at least 50 words.',
+          fix: `Add specific details, data points, examples, or actionable items. Every content slide should have at least ${MIN_SLIDE_WORDS_WARNING} words.`,
         })
-      } else if (wordCount < 50) {
+      } else if (wordCount < MIN_SLIDE_WORDS_WARNING) {
         suggestions.push({
           slideIndex: i, severity: 'warning', rule: 'thin-content',
           message: `Only ${wordCount} words — could use more detail.`,
-          fix: 'Add supporting details or context. Aim for at least 50 words of visible content.',
+          fix: `Add supporting details or context. Aim for at least ${MIN_SLIDE_WORDS_WARNING} words of visible content.`,
         })
       }
     }

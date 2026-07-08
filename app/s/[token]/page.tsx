@@ -124,7 +124,7 @@ export default async function SharedPresentationPage({
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col">
       <SharedPresentationViewer
-        slides={presentation.slides}
+        slides={presentation.slides as any}
         title={presentation.title}
         deckId={presentation.id}
         document={presentation.document}

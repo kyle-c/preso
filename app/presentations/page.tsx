@@ -4,6 +4,22 @@ import Link from 'next/link'
 
 const presentations = [
   {
+    title: 'A World-Class Design Team',
+    description: 'The thesis and bar for shaping the design at Félix — craft as the gate, the eight-dimension bar, individual expectations, and the quality hierarchy.',
+    href: '/world-class-design',
+    slides: 7,
+    color: 'bg-slate',
+    textColor: 'text-papaya',
+  },
+  {
+    title: 'Building a Design Team',
+    description: 'Design org strategy — the ambition, the standard, the principles, the product trio, and how Félix scales without losing the bar.',
+    href: '/improving-design',
+    slides: 9,
+    color: 'bg-evergreen',
+    textColor: 'text-linen',
+  },
+  {
     title: 'Félix Investor Deck',
     description: 'Series C investor presentation — Conversational Finance for the New American Majority, powered by AI\u00A0&\u00A0Stablecoins.',
     href: '/felix-investor',

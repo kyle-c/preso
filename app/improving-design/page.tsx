@@ -647,7 +647,7 @@ export default function ImprovingDesignPresoPage() {
 
   return (
     <div
-      className="h-screen w-screen overflow-hidden relative select-none"
+      className="h-screen w-screen overflow-hidden relative"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >

@@ -46,7 +46,7 @@ function SlideTitle() {
           The thesis and bar for shaping the design at Félix.
         </p>
         <div className="flex flex-wrap gap-2">
-          {['Get the right shit done', 'Build strong relationships', 'Improve the team', 'Technical craft'].map((o) => (
+          {['Getting the right shit done', 'Building strong relationships', 'Improving the team', 'High craft bar'].map((o) => (
             <span key={o} className="inline-flex items-center rounded-full bg-white/5 border border-white/15 px-4 py-1.5 text-xs sm:text-sm font-semibold text-slate-300">
               {o}
             </span>
@@ -76,7 +76,7 @@ function SlideExecSummary() {
           The short version.
         </h1>
         <p className="text-base sm:text-lg text-slate-800 font-medium leading-relaxed max-w-3xl mb-5 lg:mb-7">
-          The abbreviated thesis and bar for shaping the design at Félix.
+          The (abbreviated) thesis and bar for shaping the design at Félix.
         </p>
 
         <div className="flex flex-col max-w-5xl divide-y divide-slate-200/70">
@@ -228,10 +228,10 @@ function SlideBar() {
 /* ── Individual Expectations (linen) ─────────────────────────────── */
 function SlideExpectations() {
   const expectations = [
-    { title: 'Get the right shit done', support: 'Do what we say we\u2019ll do on the problems that matter most, own the outcome, and push through when it gets hard.' },
-    { title: 'Build strong relationships', support: 'Product development is a team sport. Designers stay deeply engaged with their cross-functional partners.' },
-    { title: 'Improve the team', support: 'Brown bags, proactive help, and shaping the team itself. Improving the team means raising the layer the team reaches.' },
-    { title: 'Technical craft', support: 'The skills you were hired for. In the operating rubric, craft is the hierarchy layer your shipped work reliably reaches.' },
+    { title: 'Getting the right shit done', support: 'Do what we say we\u2019ll do on the problems that matter most, own the outcome, and push through when it gets hard.' },
+    { title: 'Building strong relationships', support: 'Product development is a team sport. Designers stay deeply engaged with their cross-functional partners.' },
+    { title: 'Improving the team', support: 'Brown bags, proactive help, and shaping the team itself. Improving the team means raising the layer the team reaches.' },
+    { title: 'High craft bar', support: 'The skills you were hired for. In the operating rubric, craft is the hierarchy layer your shipped work reliably reaches.' },
   ]
 
   return (

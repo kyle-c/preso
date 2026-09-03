@@ -26,6 +26,8 @@ const PUBLIC_ROUTES = new Set([
   '/consumer-payments',
   '/design-org',
   '/improving-design',
+  '/world-class-design',
+  '/world-class-design-v2',
   '/content-design',
   '/content-design-lead',
   '/giselle-presentation',
